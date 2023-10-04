@@ -24,8 +24,8 @@ dependencies:
     specifier: 13.5.4
     version: 13.5.4(eslint@8.50.0)(typescript@5.2.2)
   million:
-    specifier: 2.6.3
-    version: 2.6.3
+    specifier: 2.6.4
+    version: 2.6.4
   next:
     specifier: 13.5.4
     version: 13.5.4(@babel/core@7.22.20)(react-dom@18.2.0)(react@18.2.0)
@@ -2032,8 +2032,8 @@ packages:
       picomatch: 2.3.1
     dev: false
 
-  /million@2.6.3:
-    resolution: {integrity: sha512-/abuJ2tzZXYPO7Z7y0czqcuEJvbhCcDg5yyr88we3VEwl/gcv62JT2Dw67nLUUxphA8sYDbhfSZpc7N8Xwh4Pg==}
+  /million@2.6.4:
+    resolution: {integrity: sha512-voUkdd/jHWrG+7NS+mX49Pat+POKdgGW78V7pYMSrTaOjUitR6ySEcAci8hn17Rsx1IMI3+5w41dkADM1J1ZEg==}
     hasBin: true
     dependencies:
       '@babel/core': 7.22.20
