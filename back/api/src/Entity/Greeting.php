@@ -1,5 +1,7 @@
 <?php
 
+// TODO : remove this file when you're done with the tutorial
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
