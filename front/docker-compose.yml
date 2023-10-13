@@ -2,11 +2,11 @@ version: "3"
 
 services:
   node:
-    build: docker
-    stdin_open: true
-    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
     ports:
       - "3000:3000"
     volumes:
       - ./:/app
-    command: /bin/sh -c "ls && cd app && npm install && npm run dev"
