@@ -9,7 +9,7 @@ services:
       file: back/docker-compose.yml
       service: php
     volumes:
-      - ./back/api:/srv/app
+      - ./back/api:/app
 
   pwa:
     extends:
@@ -17,11 +17,6 @@ services:
       service: pwa
     volumes:
       - ./back/pwa:/srv/app
-
-  caddy:
-    extends:
-      file: back/docker-compose.yml
-      service: caddy
 
   node:
     extends:
