@@ -2,7 +2,7 @@
 
 
 # Versions
-FROM node:20-alpine AS node_upstream
+FROM node:18-alpine AS node_upstream
 
 
 # Base stage for dev and build
@@ -27,8 +27,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Development image
 FROM base as dev
 
-EXPOSE 3001
-ENV PORT 3001
+EXPOSE 3000
+ENV PORT 3000
 ENV HOSTNAME localhost
 
 CMD ["sh", "-c", "pnpm install; pnpm dev"]
@@ -66,9 +66,9 @@ COPY --from=builder --link --chown=1001:1001 /srv/app/.next/static ./.next/stati
 
 USER nextjs
 
-EXPOSE 3001
+EXPOSE 3000
 
-ENV PORT 3001
+ENV PORT 3000
 ENV HOSTNAME localhost
 
 CMD ["node", "server.js"]
