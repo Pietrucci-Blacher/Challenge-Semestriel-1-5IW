@@ -1,9 +1,19 @@
-export default function Input(){
-    return(
-        <>
+export default function Input({ type = "text", placeholder = "", label = "", value = "", onChange = () => { } }) {
+
+    const handleChange = (e) => {
+        onChange(e.target.value)
+    }
+
+
+    return (
         <div>
-            mon composent input
+            <label>{label}:</label>
+            <input
+                type={type}
+                value={value}
+                placeholder={placeholder}
+                onChange={handleChange}
+            />
         </div>
-        </>
     )
 }
