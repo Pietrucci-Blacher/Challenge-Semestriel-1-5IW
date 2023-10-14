@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost'
+const BASE_URL = 'https://localhost/auth'
 
 const login = async (email, password) => {
     const response = await fetch(`${BASE_URL}/login`, {

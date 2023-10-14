@@ -1,25 +1,32 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Login() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    })
+
+    const {handleLogin} = useAuth();
 
     const handleInputEmailChange = (value) => {
-        setEmail(value);
+        setFormData({ ...formData, email: value })
     }
 
     const handleInputPasswordChange = (value) => {
-        setPassword(value);
+        setFormData({ ...formData, password: value })
     }
-    const handleLogin = () => {
+
+    const onLogin = async () => {
+        const { email, password } = formData;
         if (email === "" || password === "") {
             alert("Email and password are required");
             return;
         }
-        console.log("login", email, password)
+        await handleLogin(formData);
     }
     return (
         <>
@@ -32,10 +39,10 @@ export default function Login() {
                 <Link href="/auth/register">Register</Link>
                 <br />
                 <br />
-                <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={password} />
-                <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={email} />
+                <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={formData.password} />
+                <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={formData.email} />
 
-                <Button label="Login" onClick={handleLogin} />
+                <Button label="Login" onClick={onLogin} />
             </h2>
         </>
     )

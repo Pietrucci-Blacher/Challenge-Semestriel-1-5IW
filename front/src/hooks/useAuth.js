@@ -13,9 +13,10 @@ const useAuth = () => {
     // }
     //     , []);
 
-    const handleLogin = useCallback(async (email, password) => {
-        const user = await login(email, password);
-        setUser(user);
+    const handleLogin = useCallback(async (data) => {
+        const { email, password } = data;
+        const {token} = await login(email, password);
+        localStorage.setItem('token', token);
     }, []);
 
     const handleRegister = useCallback(async (data) => {

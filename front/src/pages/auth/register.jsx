@@ -12,7 +12,7 @@ export default function Register() {
         password: "",
     })
     const { firstname, lastname, email, password } = formData;
-    const {handleRegister} = useAuth();
+    const {user, handleRegister} = useAuth();
 
     const handleInputEmailChange = (value) => {
         setFormData({ ...formData, email: value })
@@ -30,12 +30,9 @@ export default function Register() {
         setFormData({ ...formData, lastname: value })
     }
 
-    const onRegister = () => {
-        console.log("register", formData)
-        handleRegister(formData);
+    const onRegister = async() => {
+        await handleRegister(formData);
     }
-
-
     return (
         <>
             <h2>
@@ -49,6 +46,7 @@ export default function Register() {
                     <p>Email: {formData.email}</p>
                     <p>Password: {formData.password}</p>
                 </div>
+
 
                 <Link href="/auth/login">Login</Link>
                 
