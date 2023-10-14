@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(operations: [
     new Get(),
     new GetCollection(),
-    new Post(processor: UserPasswordHasher::class, uriTemplate: '/register'),
+    new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
     new Put(processor: UserPasswordHasher::class),
     new Patch(processor: UserPasswordHasher::class)
 ])]
@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
