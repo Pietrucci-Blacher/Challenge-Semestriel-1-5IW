@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 const useAuth = () => {
     const [user, setUser] = useState(null);
+    const [isLogged, setIsLogged] = useState(false);
 
     // useEffect(async () => {
     //     const token = localStorage.getItem('token');
@@ -16,6 +17,9 @@ const useAuth = () => {
     const handleLogin = useCallback(async (data) => {
         const { email, password } = data;
         const {token} = await login(email, password);
+        if(token) {
+            setIsLogged(true);
+        }
         localStorage.setItem('token', token);
     }, []);
 
@@ -35,7 +39,7 @@ const useAuth = () => {
         console.log("handleMe");
     }, []);
 
-    return { user, handleLogin, handleRegister, handleMe, handleLogout };
+    return { user,isLogged ,handleLogin, handleRegister, handleMe, handleLogout };
 };
 
 export default useAuth;

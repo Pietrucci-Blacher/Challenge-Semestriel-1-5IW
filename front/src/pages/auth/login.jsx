@@ -10,7 +10,7 @@ export default function Login() {
         password: "",
     })
 
-    const {handleLogin} = useAuth();
+    const {isLogged, handleLogin} = useAuth();
 
     const handleInputEmailChange = (value) => {
         setFormData({ ...formData, email: value })
@@ -36,6 +36,8 @@ export default function Login() {
                 <br />
                 <br />
 
+                    {isLogged ? "Logged" : "Not logged"}
+                    <br />
                 <Link href="/auth/register">Register</Link>
                 <br />
                 <br />
