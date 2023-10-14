@@ -5,7 +5,23 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
 
+#[ApiResource(
+    mercure: true,
+    operations: [
+        new GetCollection(),
+        new Post(),
+        new Get(),
+        new Delete(),
+        new Patch(),
+    ],
+)]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
