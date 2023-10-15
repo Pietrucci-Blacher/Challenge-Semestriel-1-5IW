@@ -16,6 +16,8 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            stateless: true
+            entry_point: jwt
             json_login:
                 check_path: /auth/login # The name in routes.yaml is enough for mapping
                 username_path: email
@@ -23,6 +25,9 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
+            refresh_jwt:
+                check_path: /auth/token/refresh # or, you may use the `api_refresh_token` route name
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -36,7 +41,8 @@ security:
         - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/auth/(login|token/refresh), roles: PUBLIC_ACCESS }
+
 
 when@test:
     security:
