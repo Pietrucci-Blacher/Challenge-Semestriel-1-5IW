@@ -23,7 +23,9 @@ use App\Controller\AuthController;
 #[ApiResource(
     mercure: true,
     operations: [
-        new GetCollection(),
+        new GetCollection(
+            // security: "is_granted('ROLE_ADMIN')"
+        ),
         new Post(),
         new Get(),
         new Patch(),
@@ -35,7 +37,7 @@ use App\Controller\AuthController;
     operations: [
         new Get(),
         new Get(
-            name:'auth_me',
+            name: 'auth_me',
             uriTemplate: '/auth/me',
             controller: AuthController::class,
         ),
