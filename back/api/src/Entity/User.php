@@ -20,15 +20,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\AuthController;
 
-#[ApiResource(
-    mercure: true,
-    operations: [
-        new GetCollection(),
-        new Post(),
-        new Get(),
-        new Patch(),
-    ],
-)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
