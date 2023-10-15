@@ -26,7 +26,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
             refresh_jwt:
-                check_path: /auth/token/refresh # or, you may use the `api_refresh_token` route name
+                check_path: /token/refresh # or, you may use the `api_refresh_token` route name
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -41,7 +41,8 @@ security:
         - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/auth/(login|token/refresh), roles: PUBLIC_ACCESS }
+        - { path: ^/auth/(login|register), roles: PUBLIC_ACCESS }
+        - { path: ^/token/refresh, roles: PUBLIC_ACCESS }
 
 
 when@test:
