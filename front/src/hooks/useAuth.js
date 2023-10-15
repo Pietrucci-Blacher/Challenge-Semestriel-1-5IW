@@ -1,4 +1,4 @@
-import { login, register } from '@/services/auth';
+import { getCurrentUser, login, register } from '@/services/auth';
 import { useState, useEffect, useCallback } from 'react';
 
 const useAuth = () => {
@@ -25,8 +25,7 @@ const useAuth = () => {
 
     const handleRegister = useCallback(async (data) => {
         const { firstname, lastname, email, password } = data;
-        const user = await register(firstname, lastname, email, password);
-        setUser(user);
+        await register(firstname, lastname, email, password);
     }, []);
 
     const handleLogout = useCallback(() => {
@@ -36,10 +35,15 @@ const useAuth = () => {
 
 
     const handleMe = useCallback(async () => {
-        console.log("handleMe");
+        const token = localStorage.getItem('token');
+        if (token) {
+            const user = await getCurrentUser();
+            setUser(user);
+            return user;
+        }
     }, []);
 
-    return { user,isLogged ,handleLogin, handleRegister, handleMe, handleLogout };
+    return { user, isLogged, handleLogin, handleRegister, handleMe, handleLogout };
 };
 
 export default useAuth;
