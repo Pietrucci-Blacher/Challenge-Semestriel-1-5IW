@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import useAuth from "@/hooks/useAuth";
+import createToast from "@/services/toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -25,10 +26,16 @@ export default function Login() {
     const onLogin = async () => {
         const { email, password } = formData;
         if (email === "" || password === "") {
-            alert("Email and password are required");
+            createToast("error", "Email and password are required");
             return;
         }
-        await handleLogin(formData);
+        try {
+            await handleLogin(formData);
+        }
+        catch (error) {
+            createToast("error", error.message);
+        }
+
     }
 
     useEffect(() => {

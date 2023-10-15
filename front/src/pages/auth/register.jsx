@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import createToast from "@/services/toast";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -31,7 +32,13 @@ export default function Register() {
     }
 
     const onRegister = async() => {
-        await handleRegister(formData);
+        try 
+        {
+            await handleRegister(formData);
+        }
+        catch (error) {
+            createToast("error", error.detail);
+        }
     }
     return (
         <>
