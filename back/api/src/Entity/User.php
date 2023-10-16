@@ -18,16 +18,24 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\AuthController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ApiResource(operations: [
-    new Get(),
-    new GetCollection(),
-    new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
-    new Put(processor: UserPasswordHasher::class),
-    new Patch(processor: UserPasswordHasher::class)
-])]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Get(
+            name:'auth_me',
+            uriTemplate: '/auth/me',
+            controller: AuthController::class,
+        ),
+        new GetCollection(),
+        new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
+        new Put(processor: UserPasswordHasher::class),
+        new Patch(processor: UserPasswordHasher::class)
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[Groups(['user:read'])]
@@ -41,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50)]
     private ?string $lastname = null;
-    
+
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
