@@ -1,0 +1,30 @@
+on:
+  pull_request:
+
+jobs:
+  ci-back:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+
+
+  ci-front:
+    needs: ci-back
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
