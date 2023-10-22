@@ -19,6 +19,9 @@ jobs:
   ci-front:
     needs: ci-back
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: front
 
     steps:
       - name: Checkout
@@ -28,3 +31,24 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: latest
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Install Playwright dependencies
+        run: pnpm dlx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm run test:e2e
+
+      - name: Run Vitest tests
+        run: pnpm run test
