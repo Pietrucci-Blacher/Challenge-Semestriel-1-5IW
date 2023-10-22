@@ -15,7 +15,6 @@ jobs:
           php-version: '8.2'
 
 
-
   ci-front:
     needs: ci-back
     runs-on: ubuntu-latest
