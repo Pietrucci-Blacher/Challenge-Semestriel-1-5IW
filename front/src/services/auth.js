@@ -1,31 +1,17 @@
-const BASE_URL = 'https://localhost/auth'
+import httpClient from "./httpClient";
+
+
 
 const login = async (email, password) => {
-    const response = await fetch(`${BASE_URL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    return data;
+    return await httpClient.post('auth/login', { email, password });
 };
 
 const register = async (lastname, firstname, email, password) => {
-    const response = await fetch(`${BASE_URL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lastname, firstname, email, password }),
-    });
-    const data = await response.json();
-    return data;
+    return await httpClient.post('auth/register', { lastname, firstname, email, password })
 };
 
-const getCurrentUser = async (token) => {
-    const response = await fetch(`${BASE_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    return data;
+const me = async () => {
+    return await httpClient.get('auth/me')
 };
 
-export { login, register, getCurrentUser };
+export { login, register, me };

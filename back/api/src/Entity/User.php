@@ -26,7 +26,7 @@ use App\Controller\AuthController;
     operations: [
         new Get(),
         new Get(
-            name:'auth_me',
+            name: 'auth_me',
             uriTemplate: '/auth/me',
             controller: AuthController::class,
         ),
