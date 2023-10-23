@@ -10,7 +10,7 @@ const useAccount = () => {
         };
 
         fetchData();
-    }, []);
+    }, [handleMe]);
     
     // if(!user) throw new Error("Account is null");
     return {account: user};

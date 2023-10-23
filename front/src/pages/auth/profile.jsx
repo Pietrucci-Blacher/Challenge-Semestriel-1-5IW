@@ -1,6 +1,6 @@
 import useAccount from '@/hooks/useAccount';
 
-export default function profile() {
+export default function Profile() {
 
     const { account } = useAccount();
 
