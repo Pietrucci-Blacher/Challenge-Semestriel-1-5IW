@@ -43,7 +43,7 @@ export default function Login() {
             router.push("/auth/profile");
         }
     }
-        , [isLogged])
+        , [isLogged,router])
     return (
         <>
             <h2>
