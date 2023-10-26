@@ -5,14 +5,15 @@ namespace App\Entity;
 use App\Repository\ScheduleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    mercure: true,
     operations: [
         new GetCollection(),
         new Post(),
@@ -27,6 +28,7 @@ class Schedule
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    /* #[Groups(['read'])] */
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
@@ -38,9 +40,13 @@ class Schedule
     private ?AvailableSlot $slot = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
+    /* #[Groups(['read'])] */
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
+    /* #[Groups(['read'])] */
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int

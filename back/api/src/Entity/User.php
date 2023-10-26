@@ -87,6 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
     private Collection $schedules;
 
+    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Teacher::class)]
+    private Collection $teachers;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -96,6 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
+        $this->teachers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -345,5 +349,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Teacher>
+     */
+    public function getTeachers(): Collection
+    {
+        return $this->teachers;
+    }
+
+    public function addTeacher(Teacher $teacher): static
+    {
+        if (!$this->teachers->contains($teacher)) {
+            $this->teachers->add($teacher);
+            $teacher->setTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacher(Teacher $teacher): static
+    {
+        if ($this->teachers->removeElement($teacher)) {
+            // set the owning side to null (unless already changed)
+            if ($teacher->getTeacher() === $this) {
+                $teacher->setTeacher(null);
+            }
+        }
+
+        return $this;
     }
 }

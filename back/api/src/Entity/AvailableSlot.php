@@ -6,6 +6,7 @@ use App\Repository\AvailableSlotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
@@ -13,7 +14,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 
 #[ApiResource(
-    mercure: true,
     operations: [
         new GetCollection(),
         new Post(),
@@ -35,9 +35,11 @@ class AvailableSlot
     private ?Service $service = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -47,7 +49,12 @@ class AvailableSlot
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\OneToOne(mappedBy: 'slot', cascade: ['persist', 'remove'])]
+    #[ApiProperty(writable: false)]
     private ?Schedule $schedule = null;
+
+    #[ORM\ManyToOne(inversedBy: 'availableSlots')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Teacher $teacher = null;
 
     public function getId(): ?int
     {
@@ -127,6 +134,18 @@ class AvailableSlot
         }
 
         $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?Teacher
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?Teacher $teacher): static
+    {
+        $this->teacher = $teacher;
 
         return $this;
     }

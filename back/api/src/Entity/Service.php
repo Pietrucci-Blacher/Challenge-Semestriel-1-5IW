@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
@@ -43,9 +44,12 @@ class Service
     private ?User $author = null;
 
     #[ORM\Column]
+    /* #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])] */
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
@@ -60,11 +64,17 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Teacher::class)]
+    private Collection $teachers;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->availableSlots = new ArrayCollection();
+        $this->teachers = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -228,6 +238,36 @@ class Service
             // set the owning side to null (unless already changed)
             if ($availableSlot->getService() === $this) {
                 $availableSlot->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Teacher>
+     */
+    public function getTeachers(): Collection
+    {
+        return $this->teachers;
+    }
+
+    public function addTeacher(Teacher $teacher): static
+    {
+        if (!$this->teachers->contains($teacher)) {
+            $this->teachers->add($teacher);
+            $teacher->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacher(Teacher $teacher): static
+    {
+        if ($this->teachers->removeElement($teacher)) {
+            // set the owning side to null (unless already changed)
+            if ($teacher->getService() === $this) {
+                $teacher->setService(null);
             }
         }
 
