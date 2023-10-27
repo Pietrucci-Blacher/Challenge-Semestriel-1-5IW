@@ -11,15 +11,12 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class MeController  extends AbstractController
 {
-    public function __construct(private Security $security)
-    {
-    }
 
 
     public function __invoke()
     {
         /** @var User $user */
-        $user = $this->security->getUser();
+        $user = $this->getUser();
 
         return $user;
     }

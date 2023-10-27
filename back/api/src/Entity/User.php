@@ -343,6 +343,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
 
     /**
      * @see UserInterface
@@ -353,7 +357,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function isIsActive(): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->is_active;
     }

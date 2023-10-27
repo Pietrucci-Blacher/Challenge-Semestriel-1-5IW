@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231027214035 extends AbstractMigration
+final class Version20231027231200 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,7 +24,6 @@ final class Version20231027214035 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE comment_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE payment_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE refresh_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE reset_password_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE schedule_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE service_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -44,8 +43,6 @@ final class Version20231027214035 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN payment.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE refresh_tokens (id INT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_9BACE7E1C74F2195 ON refresh_tokens (refresh_token)');
-        $this->addSql('CREATE TABLE reset_password (id INT NOT NULL, token VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, expires_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('COMMENT ON COLUMN reset_password.expires_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE schedule (id INT NOT NULL, scheduler_id INT NOT NULL, slot_id INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_5A3811FBA9D0F7D9 ON schedule (scheduler_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5A3811FB59E5119C ON schedule (slot_id)');
@@ -77,7 +74,6 @@ final class Version20231027214035 extends AbstractMigration
         $this->addSql('DROP SEQUENCE comment_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE payment_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE refresh_tokens_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE reset_password_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE schedule_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE service_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
@@ -93,7 +89,6 @@ final class Version20231027214035 extends AbstractMigration
         $this->addSql('DROP TABLE comment');
         $this->addSql('DROP TABLE payment');
         $this->addSql('DROP TABLE refresh_tokens');
-        $this->addSql('DROP TABLE reset_password');
         $this->addSql('DROP TABLE schedule');
         $this->addSql('DROP TABLE service');
         $this->addSql('DROP TABLE "user"');
