@@ -28,7 +28,6 @@ class Schedule
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    /* #[Groups(['read'])] */
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
@@ -41,13 +40,17 @@ class Schedule
 
     #[ORM\Column]
     #[ApiProperty(writable: false)]
-    /* #[Groups(['read'])] */
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     #[ApiProperty(writable: false)]
-    /* #[Groups(['read'])] */
     private ?\DateTimeImmutable $updatedAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

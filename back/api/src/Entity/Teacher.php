@@ -41,6 +41,7 @@ class Teacher
     #[ORM\JoinColumn(nullable: false)]
     private ?Service $service = null;
 
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 

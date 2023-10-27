@@ -55,15 +55,19 @@ class Service
     #[ORM\Column]
     private ?float $price = null;
 
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Payment::class)]
     private Collection $payments;
 
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Comment::class)]
     private Collection $comments;
 
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Teacher::class)]
     private Collection $teachers;
 

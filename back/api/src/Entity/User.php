@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
@@ -56,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
+    #[ApiProperty(writable: false)]
     private array $roles = [];
 
     /**
@@ -70,24 +72,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
+    #[ApiProperty(writable: false)]
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
+    #[ApiProperty(writable: false)]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[ApiProperty(writable: false)]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
+    #[ApiProperty(writable: false)]
     private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Teacher::class)]
+    #[ApiProperty(writable: false)]
     private Collection $teachers;
 
     public function __construct()

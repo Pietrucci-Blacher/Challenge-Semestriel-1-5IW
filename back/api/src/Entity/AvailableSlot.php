@@ -56,6 +56,12 @@ class AvailableSlot
     #[ORM\JoinColumn(nullable: false)]
     private ?Teacher $teacher = null;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
