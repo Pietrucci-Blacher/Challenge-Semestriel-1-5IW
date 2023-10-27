@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Controller\AuthController;
+use App\Controller\Auth\MeController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -26,12 +26,15 @@ use App\Controller\AuthController;
     operations: [
         new Get(),
         new Get(
-            name: 'auth_me',
             uriTemplate: '/auth/me',
-            controller: AuthController::class,
+            controller: MeController::class,
+            name: 'auth_me',
         ),
         new GetCollection(),
-        new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
+        new Post(
+            uriTemplate: '/auth/register',
+            processor: UserPasswordHasher::class
+        ),
         new Put(processor: UserPasswordHasher::class),
         new Patch(processor: UserPasswordHasher::class)
     ]
@@ -86,6 +89,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
     private Collection $schedules;
+
+    #[ORM\Column]
+    private ?bool $is_active = false;
 
     public function __construct()
     {
@@ -345,5 +351,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): static
+    {
+        $this->is_active = $is_active;
+
+        return $this;
     }
 }
