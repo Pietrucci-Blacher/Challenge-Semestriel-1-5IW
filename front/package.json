@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "dev:mail": "email dev --dir src/emails"
+    "dev:mail": "email dev --dir src/emails --port 8080",
+    "dev:export-email": "email export --dir ../back/api/templates/mails"
   },
   "dependencies": {
     "@react-email/components": "0.0.6",
