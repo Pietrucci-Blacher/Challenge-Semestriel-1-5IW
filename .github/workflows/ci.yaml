@@ -37,7 +37,7 @@ jobs:
 
       - name: Start services
         working-directory: ./back
-        run:  docker compose up --wait --no-build &
+        run:  docker compose up --wait --no-build |
               docker logs -f back-php-1
 
       - name: Check HTTP reachability
