@@ -8,10 +8,19 @@ import { useEffect, useState } from "react";
 
 export default function Login() {
     const [formData, setFormData] = useState({
-        email: "",
-        password: "",
+        firstname: "email@email.com",
+        lastname: "email@email.com",
+        email: "email@email.com",
+        password: "email@email.com"
     })
     const router = useRouter();
+
+    useEffect(() => {
+        if (localStorage) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('refreshToken')
+        }
+    }, []);
 
     const { isLogged, token, refreshToken, handleLogin } = useAuth();
 
@@ -35,15 +44,18 @@ export default function Login() {
         catch (error) {
             createToast("error", error.message);
         }
-
     }
 
     useEffect(() => {
-        if (isLogged === true) {
-            router.push("/auth/profile");
-        }
-    }
-        , [isLogged,router])
+        const goToProfilePage = async () => {
+            if (isLogged) {
+                await router.push("/auth/profile");
+            }
+        };
+
+        goToProfilePage();
+    }, [isLogged]);
+
     return (
         <>
             <h2>
@@ -70,13 +82,15 @@ export default function Login() {
                     </span>
                 </div>
                 <br />
-                <Link href="/auth/register">Register</Link>
-                <br />
-                <br />
                 <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={formData.email} />
                 <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={formData.password} />
 
                 <Button label="Login" onClick={onLogin} />
+                <br/>
+                <Link href="/auth/register">Register</Link>
+                <br/>
+                <br/>
+                <Link href="/reset-password/ask">Forgot Password</Link>
             </h2>
         </>
     )
