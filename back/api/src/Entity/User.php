@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Controller\AuthController;
+use App\Controller\Auth\MeController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -27,7 +27,7 @@ use App\Controller\AuthController;
         new Get(),
         new GetCollection(
             uriTemplate: '/auth/me',
-            controller: AuthController::class,
+            controller: MeController::class,
             name: 'auth_me',
         ),
         new GetCollection(),
