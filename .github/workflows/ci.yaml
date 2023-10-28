@@ -21,9 +21,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
-      - name: Log in to Docker Registry
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build Docker images
         uses: docker/bake-action@v4
         with:
@@ -41,6 +38,9 @@ jobs:
       - name: Start services
         working-directory: ./back
         run: docker compose up --wait --no-build
+
+      - name: Logs docker
+        run: docker logs back-php-1
 
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
