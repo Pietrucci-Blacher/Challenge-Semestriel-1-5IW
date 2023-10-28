@@ -6,13 +6,13 @@ const httpClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 5000
+    timeout: 15000
 });
 
 
 httpClient.interceptors.request.use(
     (config) => {
-        const jwtToken = localStorage.getItem('token');
+        const jwtToken = localStorage.getItem('token') ?? false;
         if (jwtToken) {
             config.headers['Authorization'] = `Bearer ${jwtToken}`;
         }
@@ -24,7 +24,7 @@ httpClient.interceptors.request.use(
 );
 
 const handleResponseSucces = (response) => {
-    return response.data;
+    return response?.data;
 }
 
 const handleResponseError = async (error) => {
@@ -39,8 +39,8 @@ const handleResponseError = async (error) => {
             return Promise.reject(error);
         }
         const response = await axios.post('https://localhost/token/refresh', { refresh_token: refreshToken });
-        const newJwtToken = response.data?.token;
-        const newRefreshToken = response.data?.refresh_token;
+        const newJwtToken = response?.data?.token;
+        const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {
             localStorage.setItem('token', newJwtToken);
             localStorage.setItem('refreshToken', newRefreshToken);
@@ -64,7 +64,7 @@ const makeRequest = async (method, url, data, config) => {
             ...config,
         });
     } catch (error) {
-        throw error.response.data;
+        throw error.response?.data;
     } finally {
     }
 };

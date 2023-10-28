@@ -19,20 +19,20 @@ use ApiPlatform\Metadata\Put;
 use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Controller\AuthController;
+use App\Controller\Auth\MeController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
         new Get(),
-        new Get(
-            name: 'auth_me',
+        new GetCollection(
             uriTemplate: '/auth/me',
-            controller: AuthController::class,
+            controller: MeController::class,
+            name: 'auth_me',
         ),
         new GetCollection(),
-        new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
+        new Post(uriTemplate: '/auth/register', processor: UserPasswordHasher::class),
         new Put(processor: UserPasswordHasher::class),
         new Patch(processor: UserPasswordHasher::class)
     ]
@@ -67,6 +67,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Groups(['user:create', 'user:update'])]
     private ?string $password = null;
+
+    #[ORM\Column]
+    private ?bool $is_active = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
@@ -386,6 +389,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $teacher->setTeacher(null);
             }
         }
+
+        return $this;
+    }
+    public function getIsActive(): ?bool
+    {
+        return $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): static
+    {
+        $this->is_active = $is_active;
 
         return $this;
     }

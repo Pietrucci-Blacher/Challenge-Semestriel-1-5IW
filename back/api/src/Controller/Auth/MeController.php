@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,17 +9,14 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 
 
 #[AsController]
-class AuthController  extends AbstractController
+class MeController  extends AbstractController
 {
-    public function __construct(private Security $security)
-    {
-    }
 
 
     public function __invoke()
     {
         /** @var User $user */
-        $user = $this->security->getUser();
+        $user = $this->getUser();
 
         return $user;
     }
