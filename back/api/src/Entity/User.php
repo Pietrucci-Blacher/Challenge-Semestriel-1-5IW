@@ -25,13 +25,13 @@ use App\Controller\AuthController;
 #[ApiResource(
     operations: [
         new Get(),
-        new Get(
-            name: 'auth_me',
+        new GetCollection(
             uriTemplate: '/auth/me',
             controller: AuthController::class,
+            name: 'auth_me',
         ),
         new GetCollection(),
-        new Post(processor: UserPasswordHasher::class, uriTemplate: '/auth/register'),
+        new Post(uriTemplate: '/auth/register', processor: UserPasswordHasher::class),
         new Put(processor: UserPasswordHasher::class),
         new Patch(processor: UserPasswordHasher::class)
     ]
