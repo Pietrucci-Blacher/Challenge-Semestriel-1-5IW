@@ -79,7 +79,6 @@ jobs:
       - name: Build Docker images
         uses: docker/build-push-action@v3
         with:
-          context: ./front
           file: ./front/docker-compose.yml
           tags: ${{ github.ref }}
           push: true
