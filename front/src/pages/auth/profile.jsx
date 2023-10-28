@@ -1,4 +1,5 @@
 import useAccount from '@/hooks/useAccount';
+import Link from "next/link";
 
 export default function Profile() {
 
@@ -18,6 +19,9 @@ export default function Profile() {
                 role {account?.roles}
                 <br />                
               </div>
+
+            <Link href="/auth/logout">Logout</Link>
+
         </>
     )
 }

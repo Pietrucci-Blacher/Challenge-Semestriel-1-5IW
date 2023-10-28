@@ -7,10 +7,10 @@ import createToast from "@/services/toast";
 
 export default function Register() {
     const [formData, setFormData] = useState({
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
+        firstname: "email@email.com",
+        lastname: "email@email.com",
+        email: "email@email.com",
+        password: "email@email.com",
     })
     const { firstname, lastname, email, password } = formData;
     const {user, handleRegister} = useAuth();
