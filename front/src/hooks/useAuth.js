@@ -1,4 +1,4 @@
-import { me, login, register } from '@/services/auth';
+import { me, login, register } from '@/services/authService';
 import { useState, useCallback } from 'react';
 
 const useAuth = () => {
@@ -44,6 +44,7 @@ const useAuth = () => {
     const handleLogout = useCallback(() => {
         setUser(null);
         localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
     }, []);
 
 

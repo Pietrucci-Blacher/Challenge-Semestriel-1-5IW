@@ -1,4 +1,4 @@
-export default function Input({ type = "text", placeholder = "", label = "", value = "", onChange = () => { } }) {
+export default function Input({ type = "text", placeholder = "", label = "", name = "", value = "", onChange = () => { }, required = false}) {
 
     const handleChange = (e) => {
         onChange(e.target.value)
@@ -13,6 +13,7 @@ export default function Input({ type = "text", placeholder = "", label = "", val
                 value={value}
                 placeholder={placeholder}
                 onChange={handleChange}
+                required={required}
             />
         </div>
     )
