@@ -33,7 +33,7 @@ class UserProvider implements UserProviderInterface
         if (!$user->getIsActive()) {
             throw new CustomUserMessageAuthenticationException("Your account is not active.");
         }
-
+        
         return $user;
     }
 
