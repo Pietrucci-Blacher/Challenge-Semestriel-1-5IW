@@ -31,8 +31,8 @@ jobs:
           pull: true
           load: true
           files: |
-            docker-compose.yaml
-            docker-compose.override.yaml
+            docker-compose.yml
+            docker-compose.override.yml
           set: |
             *.cache-from=type=gha,scope=${{github.ref}}
             *.cache-from=type=gha,scope=refs/heads/main
