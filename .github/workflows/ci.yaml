@@ -21,6 +21,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
+      - name: Log in to Docker Registry
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker images
         uses: docker/bake-action@v4
         with:
@@ -36,7 +39,7 @@ jobs:
             *.cache-to=type=gha,scope=${{github.ref}},mode=max
 
       - name: Start services
-        run: docker compose up --wait
+        run: docker compose up --wait --no-build
 
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
@@ -62,37 +65,35 @@ jobs:
   ci-front:
     needs: ci-back
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: front
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
         with:
-          version: latest
+            path: |
+                ~/.docker
+            key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+            restore-keys: |
+                ${{ runner.os }}-docker-
 
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - name: Build Docker images
+        uses: docker/bake-action@v4
         with:
-          node-version: '21.x'
-          cache: 'pnpm'
-          cache-dependency-path: 'front/pnpm-lock.yaml'
+            workdir: ./front
+            pull: true
+            load: true
+            files: |
+                docker-compose.yml
+            set: |
+                *.cache-from=type=gha,scope=${{github.ref}}
+                *.cache-from=type=gha,scope=refs/heads/main
+                *.cache-to=type=gha,scope=${{github.ref}},mode=max
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm run build
-
-      - name: Install Playwright dependencies
-        run: pnpm dlx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: pnpm run test:e2e
-
-      - name: Run Vitest tests
-        run: pnpm run test
+      - name: Start services
+        run: docker compose up --wait
