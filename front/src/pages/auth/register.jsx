@@ -2,10 +2,13 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useState } from "react";
-import useAuth from "@/hooks/useAuth";
+import { useAuthContext} from "@/providers/AuthProvider";
 import createToast from "@/services/toast";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Register() {
+    const { login, logout, register } = useAuth();
+
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
         lastname: "email@email.com",
@@ -13,7 +16,6 @@ export default function Register() {
         password: "email@email.com",
     })
     const { firstname, lastname, email, password } = formData;
-    const {user, handleRegister} = useAuth();
 
     const handleInputEmailChange = (value) => {
         setFormData({ ...formData, email: value })
@@ -31,10 +33,11 @@ export default function Register() {
         setFormData({ ...formData, lastname: value })
     }
 
-    const onRegister = async() => {
+    const handleSubmit = async(event) => {
+        event.preventDefault()
         try 
         {
-            await handleRegister(formData);
+            await register(formData);
         }
         catch (error) {
             createToast("error", error.detail);
@@ -56,13 +59,19 @@ export default function Register() {
 
 
                 <Link href="/auth/login">Login</Link>
-                
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <Input label="firstname" type="firstname" placeholder="firstname" onChange={handleInputFirstnameChange} value={firstname} />
+                        <Input label="lastname" type="lastname" placeholder="lastname" onChange={handleInputLastnameChange} value={lastname} />
+                        <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={email} />
+                        <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={password} />
+                    </div>
+
+                    <Button label="S'inscrire"/>
+
+                </form>
                 <br />
-                <Input label="firstname" type="firstname" placeholder="firstname" onChange={handleInputFirstnameChange} value={firstname} />
-                <Input label="lastname" type="lastname" placeholder="lastname" onChange={handleInputLastnameChange} value={lastname} />
-                <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={email} />
-                <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={password} />
-                <Button label="S'inscrire" onClick={onRegister}/>
+
 
             </h2>
         </>
