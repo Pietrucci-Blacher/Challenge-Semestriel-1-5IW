@@ -23,6 +23,11 @@ services:
       file: front/docker-compose.yml
       service: node
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9090:8080
 
 
 volumes:
