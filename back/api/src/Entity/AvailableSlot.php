@@ -59,6 +59,15 @@ class AvailableSlot
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+    
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
