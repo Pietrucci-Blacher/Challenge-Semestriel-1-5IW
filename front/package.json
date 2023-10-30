@@ -8,13 +8,18 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "dev:mail": "email dev --dir src/emails --port 8080",
+    "dev:export-email": "email export --dir ../back/api/templates/mails"
   },
   "dependencies": {
+    "@react-email/components": "0.0.6",
+    "@react-email/tailwind": "^0.0.9",
     "axios": "^1.5.1",
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-email": "1.9.3",
     "react-toastify": "^9.0.8"
   },
   "devDependencies": {
