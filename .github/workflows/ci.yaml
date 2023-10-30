@@ -37,8 +37,7 @@ jobs:
 
       - name: Start services
         working-directory: ./back
-        run: |
-          docker-compose up --detach
+        run: docker compose up --wait --no-build
 
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
