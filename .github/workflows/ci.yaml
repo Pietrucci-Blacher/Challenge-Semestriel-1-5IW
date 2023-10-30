@@ -24,7 +24,7 @@ jobs:
       - name: Build Docker images
         uses: docker/bake-action@v4
         with:
-            workdir: ./back
+            workdir: back
             pull: true
             load: true
             files: |
