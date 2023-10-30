@@ -19,7 +19,7 @@
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-email": "1.9.3",
+    "react-email": "1.9.5",
     "react-toastify": "^9.0.8"
   },
   "devDependencies": {
