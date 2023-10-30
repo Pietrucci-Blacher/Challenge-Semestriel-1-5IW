@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.8"
 
 # Development environment override
 services:
@@ -21,7 +21,6 @@ services:
     extra_hosts:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
-
   pwa:
     build:
       context: ./pwa
