@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,40 +23,62 @@ use App\Controller\Auth\MeController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['user:read']],
+            security: 'is_granted("ROLE_USER") and object == user',
+            securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
         new GetCollection(
             uriTemplate: '/auth/me',
             controller: MeController::class,
+            security: 'is_granted("IS_AUTHENTICATED_FULLY")',
             name: 'auth_me',
         ),
-        new GetCollection(),
-        new Post(uriTemplate: '/auth/register', processor: UserPasswordHasher::class),
-        new Put(processor: UserPasswordHasher::class),
-        new Patch(processor: UserPasswordHasher::class)
+        new GetCollection(
+            security: 'is_granted("ROLE_USER")',
+        ),
+        new Post(
+            uriTemplate: '/auth/register',
+            processor: UserPasswordHasher::class),
+        new Put(
+            security: 'is_granted("ROLE_USER") and object == user',
+            securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
+            processor: UserPasswordHasher::class
+        ),
+        new Patch(
+            security: 'is_granted("ROLE_USER") and object == user',
+            securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
+            processor: UserPasswordHasher::class
+        )
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'auth:me'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read', 'user:write', 'auth:me'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['user:read', 'user:write', 'auth:me'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
+    #[Groups(['user:read', 'user:write', 'auth:me'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['user:read', 'auth:me'])]
     private array $roles = [];
 
     /**
@@ -70,24 +93,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $is_active = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups('user:read')]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
+    #[Groups('user:read')]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups('user:read')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
+    #[Groups('user:read')]
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
+    #[Groups('user:read')]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[Groups('user:read')]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
+    #[Groups('user:read')]
     private Collection $schedules;
 
     public function __construct()
@@ -97,8 +127,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->comments = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

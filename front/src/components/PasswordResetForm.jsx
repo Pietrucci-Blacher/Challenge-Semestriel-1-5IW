@@ -16,6 +16,8 @@ export default function PasswordResetForm({ onSubmit }) {
 
         setError('');
         onSubmit(password);
+        setPassword('')
+        setConfirmPassword('')
     };
 
     return (

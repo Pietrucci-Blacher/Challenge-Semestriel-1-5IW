@@ -1,12 +1,17 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import useAuth from "@/hooks/useAuth";
 import createToast from "@/services/toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import {useAuthContext} from "@/providers/AuthProvider";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Login() {
+
+    const { user, isLogged } = useAuthContext();
+    const { login, logout, register } = useAuth();
+
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
         lastname: "email@email.com",
@@ -15,14 +20,7 @@ export default function Login() {
     })
     const router = useRouter();
 
-    useEffect(() => {
-        if (localStorage) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('refreshToken')
-        }
-    }, []);
 
-    const { isLogged, token, refreshToken, handleLogin } = useAuth();
 
     const handleInputEmailChange = (value) => {
         setFormData({ ...formData, email: value })
@@ -39,7 +37,7 @@ export default function Login() {
             return;
         }
         try {
-            await handleLogin(formData);
+            await login(formData);
         }
         catch (error) {
             createToast("error", error.message);
@@ -48,13 +46,13 @@ export default function Login() {
 
     useEffect(() => {
         const goToProfilePage = async () => {
-            if (isLogged) {
+            if (isLogged === true && user !== null) {
                 await router.push("/auth/profile");
             }
         };
 
         goToProfilePage();
-    }, [isLogged]);
+    }, [user, isLogged]);
 
     return (
         <>
@@ -67,20 +65,7 @@ export default function Login() {
                 {isLogged ? "Logged" : "Not logged"}
                 <br />
                 <br />
-                <div >
-                    token ::
-                    <span style={{ fontSize: '14px' }}>
-                        {token}
-                    </span>
-                </div>
-                <br />
-                <div>
 
-                    refreshToken ::
-                    <span style={{ fontSize: '14px' }}>
-                        {refreshToken}
-                    </span>
-                </div>
                 <br />
                 <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange} value={formData.email} />
                 <Input label="Password" type="Password" placeholder="Password" onChange={handleInputPasswordChange} value={formData.password} />
