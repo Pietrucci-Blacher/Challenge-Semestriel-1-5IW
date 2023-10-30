@@ -1,24 +1,19 @@
-import useAccount from '@/hooks/useAccount';
-import Link from "next/link";
-import useAuth from "@/hooks/useAuth";
 import {useEffect} from "react";
-import {router} from "next/client";
+import {useRouter} from "next/router";
 
-export default function Profile() {
-
-
-    const {handleLogout} = useAuth()
+export default function Logout() {
+    const router = useRouter();
 
     useEffect(() => {
-        handleLogout()
-        router.push('/')
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
     }, []);
-
+    router.push('/')
     return (
         <>
-
-            <Link href="/auth/logout">Logout</Link>
+            <div>profile role </div>
 
         </>
     )
+
 }

@@ -1,59 +1,34 @@
-import { me, login, register } from '@/services/authService';
-import { useState, useCallback } from 'react';
+import { fetchCurrentUser, loginService, registerService } from "@/services/authService";
+import {useAuthContext} from "@/providers/AuthProvider";
 
-const useAuth = () => {
-    const [user, setUser] = useState(null);
-    const [isLogged, setIsLogged] = useState(false);
-    const [token, setToken] = useState(null);
-    const [refreshToken, setRefreshToken] = useState(null);
+export const useAuth = () => {
+    const { setUser, setIsLogged } = useAuthContext();
 
-    // useEffect(async () => {
-    //     const token = localStorage.getItem('token');
-    //     if (token) {
-    //         const user = await handleMe();
-    //         setUser(user);
-    //     }
-    // }
-    //     , []);
-
-    const handleLogin = useCallback(async (data) => {
-        const { email, password } = data;
+    const login = async (credentials) => {
         try {
-            const response = await login(email, password);
-            const token = response?.token;
-            const refreshToken = response?.refresh_token;
-            if (token.length > 0 && refreshToken.length > 0) {
-                setIsLogged(true);
-                setToken(token);
-                setRefreshToken(refreshToken);
-                localStorage.setItem('token', token);
-                localStorage.setItem('refreshToken', refreshToken);
-            }
+            const response = await loginService(credentials);
+            const token = response.token
+            const refreshToken = response.refresh_token
+            localStorage.setItem('token', token)
+            localStorage.setItem('refreshToken', refreshToken)
+            const user = await fetchCurrentUser()
+            setIsLogged(true);
+            setUser(user);
         } catch (error) {
-            // TODO: handle error
-            throw error;
+            console.error('Erreur de connexion', error);
         }
+    };
 
-    }, []);
+    const register = async (payload) => {
+        await registerService(payload);
+        // Logique supplémentaire si nécessaire
+    };
 
-    const handleRegister = useCallback(async (data) => {
-        const { firstname, lastname, email, password } = data;
-        await register(firstname, lastname, email, password);
-    }, []);
-
-    const handleLogout = useCallback(() => {
+    const logout = async () => {
+        // Logique de déconnexion
+        setIsLogged(false);
         setUser(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-    }, []);
+    };
 
-
-    const handleMe = useCallback(async () => {
-        const user = await me();
-        setUser(user);
-    }, []);
-
-    return { user, isLogged, token, refreshToken, handleLogin, handleRegister, handleMe, handleLogout };
+    return { login, register, logout };
 };
-
-export default useAuth;
