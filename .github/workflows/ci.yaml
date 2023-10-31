@@ -50,15 +50,6 @@ jobs:
       - name: Check PWA reachability
         run: "curl -vk -o /dev/null -H 'Accept: text/html' https://localhost"
 
-      - name: Create test database
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
-
-      - name: Generate migrations files
-        run: docker compose exec -T php bin/console -e test make:migration --no-interaction
-
-      - name: Run migrations
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-
       - name: Run PHPUnit tests
         run: docker compose exec -T php bin/phpunit
 
