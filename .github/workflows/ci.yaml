@@ -98,7 +98,7 @@ jobs:
 
       - name: Docker logs
         working-directory: ./front
-        run: docker logs node
+        run: docker logs front-node
 
       - name: Build
         run: docker compose exec -T node pnpm run build
