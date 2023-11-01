@@ -81,7 +81,6 @@ jobs:
         with:
           workdir: front
           pull: true
-          targets: builder
           load: true
           files: |
             docker-compose.yml
