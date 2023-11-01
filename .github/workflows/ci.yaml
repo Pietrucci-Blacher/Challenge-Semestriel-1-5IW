@@ -93,6 +93,9 @@ jobs:
         working-directory: front
         run: docker compose up --wait --build
 
+      - name: List dockers containers
+        run: docker ps -a
+
       - name: Docker logs
         working-directory: front
         run: docker logs node
