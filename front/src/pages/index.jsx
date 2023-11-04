@@ -5,7 +5,6 @@ export default function Index(){
         <>
         <div>
             home
-            
             <br />
             <Link href="/auth/login">Login</Link>
 

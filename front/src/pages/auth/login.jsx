@@ -1,14 +1,15 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import createToast from "@/services/toast";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {useAuthContext} from "@/providers/AuthProvider";
 import {useAuth} from "@/hooks/useAuth";
+import {useToast} from "@/hooks/useToast";
+
 
 export default function Login() {
-
+    const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();
     const { login, logout, register } = useAuth();
 
@@ -31,7 +32,8 @@ export default function Login() {
     }
 
     const onLogin = async () => {
-        const { email, password } = formData;
+        createToastMessage('error', 'Set yourself freeqsdqsdsdqqdsqsdqsdqdsqsd.')
+/*        const { email, password } = formData;
         if (email === "" || password === "") {
             createToast("error", "Email and password are required");
             return;
@@ -41,7 +43,7 @@ export default function Login() {
         }
         catch (error) {
             createToast("error", error.message);
-        }
+        }*/
     }
 
     useEffect(() => {

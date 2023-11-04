@@ -3,11 +3,12 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useState } from "react";
 import { useAuthContext} from "@/providers/AuthProvider";
-import createToast from "@/services/toast";
 import {useAuth} from "@/hooks/useAuth";
+import {useToast} from "@/hooks/useToast";
 
 export default function Register() {
     const { login, logout, register } = useAuth();
+    const { createToastMessage } = useToast();
 
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
@@ -40,7 +41,7 @@ export default function Register() {
             await register(formData);
         }
         catch (error) {
-            createToast("error", error.detail);
+            createToastMessage("error", error.detail);
         }
     }
     return (
