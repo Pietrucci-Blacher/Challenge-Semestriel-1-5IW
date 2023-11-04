@@ -1,17 +1,16 @@
-import {useEffect} from 'react';
-import 'react-toastify/dist/ReactToastify.css';
-import {ToastContainer} from 'react-toastify';
 import {AuthProvider} from "@/providers/AuthProvider";
+import '@/styles/globals.css'
+import {ToastProvider} from "@/providers/ToastProvider";
 
 function MyApp({Component, pageProps}) {
 
     return (
         <>
-            <ToastContainer/>
-            <AuthProvider>
-
-                <Component {...pageProps} />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider>
+                    <Component {...pageProps} />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 }

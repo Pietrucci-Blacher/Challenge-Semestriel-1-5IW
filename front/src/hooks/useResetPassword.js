@@ -4,7 +4,6 @@ import {
     checkResetTokenRequest,
     updatePasswordRequest
 } from "@/services/forgotPasswordService";
-import createToast from "@/services/toast";
 
 export function useResetPassword() {
     const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +14,6 @@ export function useResetPassword() {
         try {
             await askResetPasswordRequest(email)
             setIsLoading(false);
-            createToast('success', 'Vous allez recevoir un email si votre compte existe')
         } catch (err) {
             setIsLoading(false);
         }

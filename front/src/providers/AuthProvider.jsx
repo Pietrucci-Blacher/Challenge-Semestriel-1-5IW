@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         verifyUser();
-        console.log("chiiiil", children)
     }, []);
     const verifyUser = async () => {
         try {
