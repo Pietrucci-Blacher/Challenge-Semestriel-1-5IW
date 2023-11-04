@@ -1,4 +1,3 @@
-// useToast.js
 import { useContext } from 'react';
 import { ToastContext } from '@/providers/ToastProvider';
 
