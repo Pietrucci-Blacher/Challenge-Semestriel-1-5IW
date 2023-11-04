@@ -1,8 +1,6 @@
-// ToastProvider.js
 import React, {createContext, useCallback, useState} from 'react';
 import {Toast} from 'flowbite-react';
 import {HiCheck, HiExclamation, HiX} from 'react-icons/hi';
-import {HiFire} from "react-icons/hi";
 import {FiInfo} from "react-icons/fi";
 import {FaTelegramPlane} from 'react-icons/fa';
 import {MdLoop} from 'react-icons/md';
@@ -34,16 +32,18 @@ export const ToastProvider = ({children}) => {
 
     const Icon = listOfIcons.hasOwnProperty(toastProps.type) ? listOfIcons[toastProps.type] : listOfIcons["default"]
     const classForIcon = listOfClasses.hasOwnProperty(toastProps.type) ? listOfClasses[toastProps.type] : listOfClasses["default"]
+
     const createToastMessage = useCallback(( type = 'info', message) => {
         setToastProps({show: true, message, type});
-
         setTimeout(() => {
             setToastProps((prev) => ({...prev, show: false}));
         }, 5000);
     }, []);
+
     const hiddeToast = () => {
         setToastProps((prev) => ({...prev, show: false}));
     }
+
     return (
         <ToastContext.Provider value={{createToastMessage}}>
             {children}
