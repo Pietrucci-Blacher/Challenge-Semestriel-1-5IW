@@ -22,7 +22,6 @@ class MeController  extends AbstractController
         $this->serializer = $serializer;
     }
 
-
     public function __invoke(): Response
     {
         /** @var User $user */

@@ -135,6 +135,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private Collection $teachers;
 
+    #[ORM\OneToOne(mappedBy: 'newUser', cascade: ['persist', 'remove'])]
+    private ?ActivationCode $activationCode = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -442,6 +445,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    public function getActivationCode(): ?ActivationCode
+    {
+        return $this->activationCode;
+    }
+
+    public function setActivationCode(ActivationCode $activationCode): static
+    {
+        // set the owning side of the relation if necessary
+        if ($activationCode->getNewUser() !== $this) {
+            $activationCode->setNewUser($this);
+        }
+
+        $this->activationCode = $activationCode;
 
         return $this;
     }
