@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     mercure: true,
@@ -24,38 +25,55 @@ use ApiPlatform\Metadata\Patch;
     ],
 )]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['comment:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['comment:read', 'comments:write'])]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Groups(['comment:read', 'comments:write'])]
     private ?float $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['comment:read', 'comment:write'])]
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['comment:read', 'comment:write'])]
     private ?Service $service = null;
 
     #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['comment:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['comment:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
 

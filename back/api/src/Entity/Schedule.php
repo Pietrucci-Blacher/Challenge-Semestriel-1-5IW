@@ -23,32 +23,47 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
 )]
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Schedule
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['schedule:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['schedule:read', 'schedule:write'])]
     private ?User $scheduler = null;
 
     #[ORM\OneToOne(inversedBy: 'schedule', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['schedule:read', 'schedule:write'])]
     private ?AvailableSlot $slot = null;
 
     #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['schedule:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['schedule:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
 

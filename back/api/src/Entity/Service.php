@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     mercure: true,
@@ -25,50 +26,61 @@ use ApiPlatform\Metadata\Patch;
         new Patch(),
     ],
 )]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['service:read', 'service:write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['service:read', 'service:write'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read', 'service:write'])]
     private ?User $author = null;
 
     #[ORM\Column]
-    /* #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])] */
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['service:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['service:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    #[Groups(['service:read', 'service:write'])]
     private ?float $price = null;
 
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Payment::class)]
+    #[Groups(['service:read'])]
     private Collection $payments;
 
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Comment::class)]
+    #[Groups(['service:read'])]
     private Collection $comments;
 
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
+    #[Groups(['service:read'])]
     private Collection $availableSlots;
 
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Teacher::class)]
+    #[Groups(['service:read'])]
     private Collection $teachers;
 
     public function __construct()
@@ -78,6 +90,15 @@ class Service
         $this->availableSlots = new ArrayCollection();
         $this->teachers = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -61,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -78,6 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
+    #[ApiProperty(writable: false)]
     #[Groups(['user:read', 'auth:me'])]
     private array $roles = [];
 
@@ -90,6 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     private ?bool $is_active = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -97,30 +101,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Teacher::class)]
+    #[ApiProperty(writable: false)]
     #[Groups('user:read')]
     private Collection $teachers;
 

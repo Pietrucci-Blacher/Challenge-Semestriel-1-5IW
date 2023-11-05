@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     operations: [
@@ -23,37 +24,45 @@ use ApiPlatform\Metadata\Patch;
     ],
 )]
 #[ORM\Entity(repositoryClass: AvailableSlotRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class AvailableSlot
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['availableSlots:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'availableSlots')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['availableSlots:read', 'availableSlots:write'])]
     private ?Service $service = null;
 
     #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['availableSlots:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['availableSlots:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['availableSlots:read', 'availableSlots:write'])]
     private ?\DateTimeInterface $beginDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['availableSlots:read', 'availableSlots:write'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\OneToOne(mappedBy: 'slot', cascade: ['persist', 'remove'])]
-    #[ApiProperty(writable: false)]
+    #[Groups(['availableSlots:read'])]
     private ?Schedule $schedule = null;
 
     #[ORM\ManyToOne(inversedBy: 'availableSlots')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['availableSlots:read', 'availableSlots:write'])]
     private ?Teacher $teacher = null;
 
     public function __construct()

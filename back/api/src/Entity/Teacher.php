@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     mercure: true,
@@ -26,37 +27,53 @@ use ApiPlatform\Metadata\Patch;
     ],
 )]
 #[ORM\Entity(repositoryClass: TeacherRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Teacher
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['teacher:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'teachers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['teacher:read', 'teacher:write'])]
     private ?User $teacher = null;
 
     #[ORM\ManyToOne(inversedBy: 'teachers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['teacher:read', 'teacher:write'])]
     private ?Service $service = null;
 
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: AvailableSlot::class)]
+    #[Groups(['teacher:read'])]
     private Collection $availableSlots;
 
     #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['teacher:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    /* #[ApiProperty(writable: false)] */
+    #[Groups(['teacher:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
         $this->availableSlots = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(PreUpdateEventArgs $event): void {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
