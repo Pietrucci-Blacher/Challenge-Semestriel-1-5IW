@@ -3,6 +3,7 @@ import DataTable from "@/components/DataTable";
 
 export default function Index() {
     return (
+        <>
         <div>
             home
 
@@ -19,5 +20,6 @@ export default function Index() {
                 itemsPerPage={10}
             />
         </div>
+</>
     );
 }
