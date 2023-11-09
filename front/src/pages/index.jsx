@@ -4,7 +4,6 @@ import DataTable from "@/components/DataTable";
 
 export default function Index() {
     return (
-        <>
         <div>
             <Badge color="info">Hello</Badge>
 
@@ -21,6 +20,5 @@ export default function Index() {
                 itemsPerPage={10}
             />
         </div>
-</>
     );
 }
