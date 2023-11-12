@@ -21,15 +21,11 @@ class InjectUserInfoDenormalizer implements DenormalizerInterface
         $isUpdateOperation = isset($context['object_to_populate']);
         $object = $this->normalizer->denormalize($data, $type, $format, $context);
         if (!$isUpdateOperation){
+            $object = $this->normalizer->denormalize($data, $type, $format, $context);
             $user = $this->security->getUser();
-
-            // Parcourir les propriétés de l'objet
             $reflectionClass = new ReflectionClass($type);
             foreach ($reflectionClass->getProperties() as $property) {
-                $attributes = $property->getAttributes(UserField::class);
-
-                // Si la propriété a l'attribut UserField et que l'utilisateur est présent
-                if (!empty($attributes) && $user) {
+                if (!empty($property->getAttributes(UserField::class)) && $user) {
                     $property->setAccessible(true);
                     $property->setValue($object, $user);
                 }
@@ -41,7 +37,13 @@ class InjectUserInfoDenormalizer implements DenormalizerInterface
 
     public function supportsDenormalization($data, $type, $format = null): bool
     {
-        return true;
-
+        $reflectionClass = new ReflectionClass($type);
+        foreach ($reflectionClass->getProperties() as $property) {
+            if (!empty($property->getAttributes(UserField::class))) {
+                return true;
+            }
+        }
+        return false;
     }
+
 }

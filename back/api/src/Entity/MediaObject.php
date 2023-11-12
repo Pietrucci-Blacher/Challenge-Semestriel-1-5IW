@@ -1,6 +1,7 @@
 <?php
-// api/src/Entity/MediaObject.php
+
 namespace App\Entity;
+
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -52,11 +53,14 @@ class MediaObject
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups(['media_object:read'])]
     public ?string $contentUrl = null;
+
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
     #[Assert\NotNull(groups: ['media_object_create'])]
     public ?File $file = null;
+
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
+
     public function getId(): ?int
     {
         return $this->id;
