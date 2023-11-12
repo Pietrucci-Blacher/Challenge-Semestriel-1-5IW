@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import {normalize} from "@/utils/data";
 
 function DataTable({ endpoint, title, itemsPerPage }) {
     const [data, setData] = useState([]);
@@ -21,13 +22,29 @@ function DataTable({ endpoint, title, itemsPerPage }) {
             const columns = Object.keys(firstItem);
             setColumns(columns);
 
+            // Set the default sorting column to "id" if it's not already set
+            const validSortColumn = sortColumn && columns.includes(sortColumn) ? sortColumn : "id";
+
             const sorted = [...data].sort((a, b) => {
-                return a[sortColumn].localeCompare(b[sortColumn]);
+                const valueA = a[validSortColumn];
+                const valueB = b[validSortColumn];
+
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return valueA.localeCompare(valueB);
+                } else if (typeof valueA === "number" && typeof valueB === "number") {
+                    return valueA - valueB;
+                } else {
+                    // Handle other types or fallback to a default behavior
+                    return 0;
+                }
             });
 
             setSortedData(sorted);
+            setSortColumn(validSortColumn);
         }
     }, [data, sortColumn, searchTerm]);
+
+
 
     const fetchData = async (url) => {
         try {
@@ -38,21 +55,24 @@ function DataTable({ endpoint, title, itemsPerPage }) {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            console.log(response.data);
-            setData(response.data);
+
+            console.log("Response data:", response.data);
+
+            const normalizedData = normalize(response.data);
+            setData(normalizedData);
         } catch (error) {
+            console.error("Error fetching data:", error);
             // Handle error
         }
     };
 
-    const handleSort = (column) => {
-        const sorted = [...sortedData].sort((a, b) => {
-            return a[column].localeCompare(b[column]);
-        });
 
+
+
+    const handleSort = (column) => {
         setSortColumn(column);
-        setSortedData(sorted);
     };
+
 
     const handleSearch = (event) => {
         const searchTerm = event.target.value.toLowerCase();
