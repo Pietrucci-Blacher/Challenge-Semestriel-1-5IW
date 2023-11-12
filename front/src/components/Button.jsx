@@ -1,9 +1,8 @@
 import React from 'react'
+import { Button as FlowbiteButton} from 'flowbite-react';
 
-export default function Button({label = "", onClick = () => { }}) {
+export default function Button({label = "", onClick = () => {}, ...props}) {
   return (
-    <div>
-      <button onClick={onClick}>{label}</button>
-    </div>
+      <FlowbiteButton onClick={onClick} type="submit">{label}</FlowbiteButton>
   )
 }

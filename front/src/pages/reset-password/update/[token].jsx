@@ -2,11 +2,12 @@ import {useRouter} from 'next/router';
 import {useEffect, useState} from "react";
 import {useResetPassword} from "@/hooks/useResetPassword";
 import PasswordResetForm from "@/components/PasswordResetForm";
-import createToast from "@/services/toast";
+import {useToast} from "@/hooks/useToast";
 
 export default function UpdatePassword() {
     const router = useRouter();
     const {token} = router.query;
+    const { createToastMessage } = useToast();
 
     const {isTokenValid, isLoading, checkResetToken, updatePassword} = useResetPassword()
 
@@ -23,7 +24,7 @@ export default function UpdatePassword() {
     const handlePasswordReset = async (newPassword) => {
         const result = await updatePassword(token, newPassword)
         if (result === false){
-            createToast('error', 'error durant la mise a jour de votre password')
+            createToastMessage('error', 'error durant la mise a jour de votre password')
         }
         if (result === true){
             await router.push('/auth/login')
