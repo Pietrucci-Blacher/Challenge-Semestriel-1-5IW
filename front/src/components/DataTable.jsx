@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import {normalize} from "@/utils/data";
+import { normalize } from "@/utils/data";
 
-function DataTable({ endpoint, title, itemsPerPage }) {
+const DataTable = ({ endpoint, title, itemsPerPage }) => {
     const [data, setData] = useState([]);
     const [sortedData, setSortedData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -17,12 +17,10 @@ function DataTable({ endpoint, title, itemsPerPage }) {
 
     useEffect(() => {
         if (data && data.length > 0) {
-            // Extract columns from the first item in the data array
             const firstItem = data[0];
             const columns = Object.keys(firstItem);
             setColumns(columns);
 
-            // Set the default sorting column to "id" if it's not already set
             const validSortColumn = sortColumn && columns.includes(sortColumn) ? sortColumn : "id";
 
             const sorted = [...data].sort((a, b) => {
@@ -34,7 +32,6 @@ function DataTable({ endpoint, title, itemsPerPage }) {
                 } else if (typeof valueA === "number" && typeof valueB === "number") {
                     return valueA - valueB;
                 } else {
-                    // Handle other types or fallback to a default behavior
                     return 0;
                 }
             });
@@ -43,8 +40,6 @@ function DataTable({ endpoint, title, itemsPerPage }) {
             setSortColumn(validSortColumn);
         }
     }, [data, sortColumn, searchTerm]);
-
-
 
     const fetchData = async (url) => {
         try {
@@ -66,13 +61,9 @@ function DataTable({ endpoint, title, itemsPerPage }) {
         }
     };
 
-
-
-
     const handleSort = (column) => {
         setSortColumn(column);
     };
-
 
     const handleSearch = (event) => {
         const searchTerm = event.target.value.toLowerCase();
@@ -82,9 +73,7 @@ function DataTable({ endpoint, title, itemsPerPage }) {
             setSortedData(data);
         } else {
             const filteredData = data.filter((item) =>
-                Object.values(item).some(
-                    (value) => value.toLowerCase().includes(searchTerm)
-                )
+                Object.values(item).some((value) => value.toLowerCase().includes(searchTerm))
             );
             setSortedData(filteredData);
         }
@@ -131,7 +120,7 @@ function DataTable({ endpoint, title, itemsPerPage }) {
                 {paginatedData.map((row) => (
                     <tr
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                        key={row.id} // Use a unique identifier, like "id"
+                        key={row.id}
                     >
                         <td className="w-4 p-4">
                             <div className="flex items-center">
@@ -163,19 +152,25 @@ function DataTable({ endpoint, title, itemsPerPage }) {
                 </tbody>
             </table>
             <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing <span className="font-semibold text-gray-900 dark:text-white">{startIndex + 1}-{startIndex + paginatedData.length}</span> of <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span>
-                </span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+          Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">{startIndex + 1}-{startIndex + paginatedData.length}</span> of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span>
+        </span>
                 <ul className="inline-flex -space-x-px text-sm h-8">
                     <li>
-                        <a href="#" className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover-bg-gray-100 hover-text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover-bg-700 dark:hover-text-white">
+                        <a
+                            href="#"
+                            className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover-bg-gray-100 hover-text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark-hover-bg-700 dark-hover-text-white"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
                             Previous
                         </a>
                     </li>
                     {Array.from({ length: Math.ceil(data.length / itemsPerPage) }).map((_, pageIndex) => (
                         <li key={`page-${pageIndex + 1}`}>
-
-                        <a
+                            <a
                                 href="#"
                                 className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 ${
                                     currentPage === pageIndex + 1
@@ -189,7 +184,12 @@ function DataTable({ endpoint, title, itemsPerPage }) {
                         </li>
                     ))}
                     <li>
-                        <a href="#" className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover-bg-gray-100 hover-text-gray-700 dark-bg-gray-800 dark-border-gray-700 dark-text-gray-400 dark-hover-bg-700 dark-hover-text-white">
+                        <a
+                            href="#"
+                            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover-bg-gray-100 hover-text-gray-700 dark-bg-gray-800 dark-border-gray-700 dark-text-gray-400 dark-hover-bg-700 dark-hover-text-white"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+                        >
                             Next
                         </a>
                     </li>
@@ -197,7 +197,7 @@ function DataTable({ endpoint, title, itemsPerPage }) {
             </nav>
         </div>
     );
-}
+};
 
 DataTable.propTypes = {
     endpoint: PropTypes.string.isRequired,
