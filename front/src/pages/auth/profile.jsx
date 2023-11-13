@@ -1,7 +1,8 @@
 import { useAuthContext} from "@/providers/AuthProvider";
 import {useEffect, useState} from "react";
 import Input from "@/components/Input";
-import Button from "@/components/Button";
+import GenericButton from "@/components/GenericButton";
+import {Button as FlowbiteButton} from 'flowbite-react';
 import PasswordResetForm from "@/components/PasswordResetForm";
 import useUserAccount from "@/hooks/useUserAccount";
 import Link from "next/link";
@@ -54,7 +55,7 @@ export default function Profile() {
                             <Input label="Email" type="email" placeholder="Email" onChange={handleEmailChange}
                                    value={formData.email}/>
                         </div>
-                        <Button label="Update Profile"/>
+                        <GenericButton label="Update Profile"/>
                     </form>
                     <PasswordResetForm onSubmit={handlePasswordResetSubmit}/>
                 </>
@@ -71,6 +72,10 @@ export default function Profile() {
             ) : (
                 <div>Chargement</div>
             )}
+
+            <FlowbiteButton as={Link} href="/provider/apply"  outline gradientDuoTone="cyanToBlue">
+                Faire une  demande pour devenir prestataire
+            </FlowbiteButton>
         </>
     )
 

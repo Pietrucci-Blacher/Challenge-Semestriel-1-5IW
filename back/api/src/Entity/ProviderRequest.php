@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Attributes\UserField;
+use App\Repository\ProviderRequestRepository;
 use App\Repository\ServiceProviderRequestRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -19,47 +20,50 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+
+#[ORM\Entity(repositoryClass: ProviderRequestRepository::class)]
 #[Vich\Uploadable]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\Entity(repositoryClass: ServiceProviderRequestRepository::class)]
 #[ApiResource(
     operations: [
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
-            normalizationContext: ['groups' => ['service_provider_request:read']],
-            denormalizationContext: ['groups' => ['service_provider_request:create']]
+            normalizationContext: ['groups' => ['provider_request:read']],
+            denormalizationContext: ['groups' => ['provider_request:create']]
         ),
         new Put(
-            normalizationContext: ['groups' => ['service_provider_request:read']],
-            denormalizationContext: ['groups' => ['service_provider_request:update']]
+            normalizationContext: ['groups' => ['provider_request:read']],
+            denormalizationContext: ['groups' => ['provider_request:update']]
         ),
         new Patch(
-            normalizationContext: ['groups' => ['service_provider_request:read']],
-            denormalizationContext: ['groups' => ['service_provider_request:update']]
+            normalizationContext: ['groups' => ['provider_request:read']],
+            denormalizationContext: ['groups' => ['provider_request:update']]
         ),
         new Get(),
         new GetCollection()
-    ]
+    ],
+    normalizationContext: ['groups' => ['provider_request:read']]
 )]
-class ServiceProviderRequest
+class ProviderRequest
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["provider_request:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["service_provider_request:read", "service_provider_request:update"])]
+    #[Groups(["provider_request:read", "provider_request:update"])]
     #[Assert\Choice(choices: ['pending', 'approved', 'rejected'], message: 'Invalid status')]
     private ?string $status = 'pending';
 
     #[ORM\Column(length: 255)]
-    #[Groups(["service_provider_request:read", "service_provider_request:create"])]
+    #[Groups(["provider_request:read", "provider_request:create"])]
     private ?string $kbis = null;
 
     #[UserField('createdBy')]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(["service_provider_request:read", "service_provider_request:create"])]
+    #[Groups(["provider_request:read", "provider_request:create"])]
     private ?User $createdBy = null;
 
     #[ApiProperty(openapiContext: [
@@ -68,20 +72,30 @@ class ServiceProviderRequest
     ])]
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
     #[Assert\NotNull(groups: ['media_object_create'])]
-    #[Groups(["service_provider_request:create"])]
+    #[Groups(["provider_request:create"])]
     public ?File $file = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["service_provider_request:create"])]
+    #[Groups(["provider_request:read"])]
     public ?string $filePath = null;
 
     #[ORM\Column]
-    #[Groups('user:read')]
+    #[Groups('provider_request:read')]
     private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups('user:read')]
+    #[Groups('provider_request:read')]
     private ?\DateTimeImmutable $updatedAt;
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
 
     public function __construct()
     {

@@ -1,8 +1,8 @@
-import { fetchCurrentUser, loginService, registerService } from "@/services/authService";
+import {fetchCurrentUser, loginService, registerService} from "@/services/authService";
 import {useAuthContext} from "@/providers/AuthProvider";
 
 export const useAuth = () => {
-    const { setUser, setIsLogged } = useAuthContext();
+    const {setUser, setIsLogged} = useAuthContext();
 
     const login = async (credentials) => {
         try {
@@ -15,13 +15,13 @@ export const useAuth = () => {
             setIsLogged(true);
             setUser(user);
         } catch (error) {
-            console.error('Erreur de connexion', error);
+            console.error(`Erreur de connexion : ${error.message}`)
+            throw `Erreur de connexion : ${error.message}`
         }
     };
 
     const register = async (payload) => {
         await registerService(payload);
-        // Logique supplémentaire si nécessaire
     };
 
     const logout = async () => {
@@ -30,5 +30,5 @@ export const useAuth = () => {
         setUser(null);
     };
 
-    return { login, register, logout };
+    return {login, register, logout};
 };
