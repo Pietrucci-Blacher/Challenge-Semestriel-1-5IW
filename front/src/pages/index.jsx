@@ -1,17 +1,17 @@
 import Link from "next/link";
+import { Badge } from "flowbite-react";
 import DataTable from "@/components/DataTable";
 
 export default function Index() {
     return (
-        <>
         <div>
-            home
+            <Badge color="info">Hello</Badge>
 
-            <br />
+            <br/>
             <Link href="/auth/login">Login</Link>
 
-            <br />
-            <br />
+            <br/>
+            <br/>
             <Link href="/auth/register">Register</Link>
 
             <DataTable
@@ -20,6 +20,5 @@ export default function Index() {
                 itemsPerPage={10}
             />
         </div>
-</>
     );
 }
