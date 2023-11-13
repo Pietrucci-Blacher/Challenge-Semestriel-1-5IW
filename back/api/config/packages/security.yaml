@@ -45,7 +45,12 @@ security:
         - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-
+        
+    role_hierarchy:
+        ROLE_USER:        []
+        ROLE_TEACHER:     [ROLE_USER]
+        ROLE_PROVIDER:    [ROLE_USER, ROLE_TEACHER]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_TEACHER, ROLE_PROVIDER, ROLE_ALLOWED_TO_SWITCH]
 
 
 when@test:
