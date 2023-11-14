@@ -19,8 +19,8 @@ class InjectUserInfoDenormalizer implements DenormalizerInterface
     public function denormalize($data, $type, $format = null, array $context = [])
     {
         $isUpdateOperation = isset($context['object_to_populate']);
+        $object = $this->normalizer->denormalize($data, $type, $format, $context);
         if (!$isUpdateOperation){
-            $object = $this->normalizer->denormalize($data, $type, $format, $context);
             $user = $this->security->getUser();
             $reflectionClass = new ReflectionClass($type);
             foreach ($reflectionClass->getProperties() as $property) {
