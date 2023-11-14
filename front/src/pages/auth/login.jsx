@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -21,7 +21,6 @@ export default function Login() {
     })
     const router = useRouter();
 
-
     const handleInputEmailChange = (value) => {
         setFormData({...formData, email: value})
     }
@@ -34,13 +33,13 @@ export default function Login() {
         event.preventDefault()
         const {email, password} = formData;
         if (email === "" || password === "") {
-            createToast("error", "Email and password are required");
+            createToastMessage("error", "Email and password are required");
             return;
         }
         try {
             await login(formData);
         } catch (error) {
-            createToast("error", error.message);
+            createToastMessage("error", error);
         }
     }
 
@@ -76,7 +75,7 @@ export default function Login() {
                         <Input label="Password" type="Password" placeholder="Password"
                                onChange={handleInputPasswordChange} value={formData.password}/>
                     </div>
-                    <Button label="Login"/>
+                    <GenericButton label="Login"/>
                 </form>
 
                 <br/>
