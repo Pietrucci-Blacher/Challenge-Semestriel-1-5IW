@@ -65,7 +65,7 @@ export default function Profile() {
 
 
             {userProfile ? (<>
-                    <div> Date de creation d'account :{userProfile.createdAt} </div>
+                    <div> Date de creation d&apos;account :{userProfile.createdAt} </div>
                     {userProfile?.updatedAt ? (<div> {}updatedAt :{userProfile?.updatedAt} </div>) : ''}
 
                 </>

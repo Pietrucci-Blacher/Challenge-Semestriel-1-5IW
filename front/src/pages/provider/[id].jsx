@@ -13,7 +13,7 @@ export default function Request() {
     const {id} = router.query;
     useEffect(() => {
         getRequest({id})
-    }, []);
+    }, [getRequest, id]);
 
     useEffect(() => {
         console.log("request", request)
@@ -57,7 +57,7 @@ export default function Request() {
                         <span>Email: {request?.createdBy?.email}</span>
                     </div>
                     <div>
-                        <h5>Information de l'organisme</h5>
+                        <h5>Information de l&apos;organisme</h5>
                         <span>Numero Kbis: {request?.kbis}</span>
                         <FlowbiteButton as={Link} href={`http://localhost/media/${request?.filePath}`}>
                             Voir le Kbis en format PDF
