@@ -21,6 +21,8 @@ use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Auth\MeController;
+use App\Controller\Auth\ActivateController;
+use App\Action\Auth\SendConfirmationEmail;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -31,6 +33,11 @@ use App\Controller\Auth\MeController;
             normalizationContext: ['groups' => ['user:read']],
             security: 'is_granted("ROLE_USER") and object == user',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
+        new Get(
+            uriTemplate: '/activate/{activationCode}',
+            requirements: ['activationCode' => '\w+'],
+            controller: ActivateController::class,
         ),
         new GetCollection(
             uriTemplate: '/auth/me',
@@ -43,7 +50,9 @@ use App\Controller\Auth\MeController;
         ),
         new Post(
             uriTemplate: '/auth/register',
-            processor: UserPasswordHasher::class),
+            processor: UserPasswordHasher::class,
+            controller: SendConfirmationEmail::class
+        ),
         new Put(
             security: 'is_granted("ROLE_USER") and object == user',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
@@ -135,8 +144,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private Collection $teachers;
 
-    #[ORM\OneToOne(mappedBy: 'newUser', cascade: ['persist', 'remove'])]
-    private ?ActivationCode $activationCode = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $activationCode = null;
 
     public function __construct()
     {
@@ -449,20 +458,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getActivationCode(): ?ActivationCode
+    public function getActivationCode(): ?string
     {
         return $this->activationCode;
     }
 
-    public function setActivationCode(ActivationCode $activationCode): static
+    public function setActivationCode(?string $activationCode): static
     {
-        // set the owning side of the relation if necessary
-        if ($activationCode->getNewUser() !== $this) {
-            $activationCode->setNewUser($this);
-        }
-
         $this->activationCode = $activationCode;
 
         return $this;
+    }
+
+    public function generateCode(): string
+    {
+        $code = bin2hex(random_bytes(32));
+        $this->activationCode = $code;
+
+        return $code;
     }
 }

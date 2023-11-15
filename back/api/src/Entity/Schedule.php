@@ -11,15 +11,31 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\ScheduleController;
 
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Post(),
+        /* new Post(), */
+        new Post(
+            security: 'is_granted("ROLE_USER")',
+            controller: ScheduleController::class,
+        ),
         new Get(),
-        new Delete(),
-        new Patch(),
+        new Delete(
+            security: 'is_granted("ROLE_USER") and object.getScheduler() == user',
+            securityMessage: 'Seule la personne ayant créé la réservation peut le supprimer.',
+        ),
+        new Patch(
+            security: 'is_granted("ROLE_USER") and object.getScheduler() == user',
+            securityMessage: 'Seule la personne ayant créé la réservation peut la modifier.',
+        ),
+        new Put(
+            security: 'is_granted("ROLE_USER") and object.getScheduler() == user',
+            securityMessage: 'Seule la personne ayant créé la réservation peut la modifier.',
+        ),
     ],
 )]
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
