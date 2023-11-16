@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
@@ -20,24 +21,32 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['user:read']],
-            security: 'is_granted("ROLE_PROVIDER") and object.getOwner() == user',
+            normalizationContext: ['groups' => ['establishment:read']],
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
             security: 'is_granted("ROLE_PROVIDER")',
-            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
+        /* new GetCollection( */
+        /*     uriTemplate: '/establishments_me', */
+        /*     security: 'is_granted("ROLE_PROVIDER")', */
+        /*     securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.', */
+        /* ), */
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Put(
-            security: 'is_granted("ROLE_PROVIDER") and object.getOwner() == user',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos établissements.',
         ),
         new Patch(
-            security: 'is_granted("ROLE_PROVIDER") and object.getOwner() == user',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos établissements.',
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            securityMessage: 'Vous ne pouvez supprimer que vos établissements.',
         )
     ]
 )]
@@ -46,36 +55,36 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('user:read')]
+    #[Groups('establishment:read')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?User $owner = null;
 
     #[ORM\Column]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 5, nullable: true)]
-    #[Groups('user:read', 'user:write')]
+    #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $zipCode = null;
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class)]
