@@ -2,9 +2,11 @@ import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/useToast";
+import { useEstablishment } from "@/hooks/useEstablishment";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
+    const { create } = useEstablishment();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -38,7 +40,16 @@ export default function CreateEstablishment() {
             return;
         }
 
-        console.log("submit create", { name, street, city, zipCode });
+        try {
+            await create({
+                name,
+                street,
+                city,
+                zipCode,
+            });
+        } catch (error) {
+            createToastMessage("error", error);
+        }
     };
 
     return (
