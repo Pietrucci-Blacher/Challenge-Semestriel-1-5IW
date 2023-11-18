@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
+    const {t} = useTranslation('loginPage');
     const {login} = useAuth();
     const { t} = useTranslation('loginPage');
 
