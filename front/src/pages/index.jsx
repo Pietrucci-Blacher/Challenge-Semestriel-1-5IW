@@ -1,19 +1,11 @@
 import Link from "next/link";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import nextI18NextConfig from "../../next-i18next.config";
-import {useTranslation} from "react-i18next";
-
-
 
 export default function Index(){
-    const { t , i18n} = useTranslation("common");
-    const changeTo = i18n.language === "fr" ? "en" : "fr";
 
 
     const clientSideLanguageChange = (newLocale) => {
         i18n.changeLanguage(newLocale);
     }
-
     return (
         <div>
             {t('home')}
