@@ -6,11 +6,10 @@ import {Button as FlowbiteButton} from 'flowbite-react';
 import PasswordResetForm from "@/components/PasswordResetForm";
 import useUserAccount from "@/hooks/useUserAccount";
 import Link from "next/link";
-import {useRouter} from "next/router";
 
 export default function Profile() {
     const { user, verifyUser, fetchUser } = useAuthContext();
-    const { userProfile, updateProfile, loading } = useUserAccount(user?.id);
+    const { userProfile, updateProfile } = useUserAccount(user?.id);
     const [formData, setFormData] = useState({ ...userProfile });
 
     useEffect(() => {

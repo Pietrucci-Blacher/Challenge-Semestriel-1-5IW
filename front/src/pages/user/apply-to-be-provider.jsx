@@ -2,7 +2,6 @@ import {FileInput, Label} from "flowbite-react";
 import Input from "@/components/Input";
 import {useState} from "react";
 import GenericButton from "@/components/GenericButton";
-import httpClient from "@/services/httpClient";
 import useRequestsProvider from "@/hooks/useRequestsProvider";
 import {useToast} from "@/hooks/useToast";
 
@@ -12,7 +11,6 @@ export default function ApplyToBeProvider() {
     const {createToastMessage} = useToast()
     const [kbis, setKbis] = useState("")
     const [file, setFile] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
     const handleFileChange = (e) => {
         const file = e.target.files[0]; // Récupérer le premier fichier
         setFile(file); // Mettre à jour l'état avec ce fichier

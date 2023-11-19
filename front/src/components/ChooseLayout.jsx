@@ -4,7 +4,6 @@ import AdminLayout from "@/layouts/AdminLayout";
 import UserLayout from "@/layouts/UserLayout";
 import ProviderLayout from "@/layouts/ProviderLayout";
 import DefaultLayout from "@/layouts/DefaultLayout";
-import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import {Flowbite} from "flowbite-react";
 import {useEffect} from "react";

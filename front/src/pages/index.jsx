@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Cookie from "js-cookie";
 
 export default function Index(){
 

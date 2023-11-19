@@ -1,6 +1,5 @@
 import {useState} from "react";
-import {Button, DarkThemeToggle} from "flowbite-react";
-import {HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards} from "react-icons/hi";
+import {HiChartPie, HiViewBoards} from "react-icons/hi";
 import {Sidebar as FlowbiteSidebar} from "flowbite-react";
 import {BiBuoy} from "react-icons/bi";
 

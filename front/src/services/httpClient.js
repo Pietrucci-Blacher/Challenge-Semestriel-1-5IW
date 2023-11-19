@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookie from 'js-cookie';
 
 
 const httpClient = axios.create({
@@ -25,9 +24,7 @@ httpClient.interceptors.request.use(
 );
 
 const handleResponseSuccess = (response) => {
-    const result = response?.data;
-
-    return result
+    return response?.data
 }
 
 const handleResponseError = async (error) => {

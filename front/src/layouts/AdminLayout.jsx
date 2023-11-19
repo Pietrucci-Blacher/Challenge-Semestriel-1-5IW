@@ -1,5 +1,5 @@
 import Sidebar from "@/components/Sidebar";
-import {HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards} from "react-icons/hi";
+import {HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards} from "react-icons/hi";
 
 const AdminLayout = ({children}) => {
 
