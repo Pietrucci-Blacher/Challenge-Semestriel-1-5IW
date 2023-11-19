@@ -1,8 +1,6 @@
 import {
     fetchCurrentUser,
     getUserFromSession,
-    loginService,
-    registerService,
     storeUserInSession
 } from "@/services/authService";
 

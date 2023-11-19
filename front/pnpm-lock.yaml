@@ -23,6 +23,9 @@ dependencies:
   i18next:
     specifier: ^23.7.6
     version: 23.7.6
+  js-cookie:
+    specifier: ^3.0.5
+    version: 3.0.5
   next:
     specifier: 14.0.3
     version: 14.0.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
@@ -3520,6 +3523,11 @@ packages:
       editorconfig: 1.0.4
       glob: 8.1.0
       nopt: 6.0.0
+    dev: false
+
+  /js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
     dev: false
 
   /js-tokens@4.0.0:

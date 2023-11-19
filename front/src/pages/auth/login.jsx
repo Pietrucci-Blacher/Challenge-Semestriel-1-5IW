@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
-    const {login, logout, register} = useAuth();
+    const {login} = useAuth();
     const { t} = useTranslation('loginPage');
 
     const [formData, setFormData] = useState({

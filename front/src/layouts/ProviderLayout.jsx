@@ -1,5 +1,5 @@
 import Sidebar from "@/components/Sidebar";
-import {HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards} from "react-icons/hi";
+import {HiChartPie, HiInbox, HiShoppingBag, HiTable} from "react-icons/hi";
 
 const sidebarContent = [
     {icon: HiChartPie, text: "Dashboard", href: "#", label: "Pro", labelColor: "gray"},

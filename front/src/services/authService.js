@@ -1,5 +1,4 @@
 import httpClient from "./httpClient";
-import Cookie from "js-cookie";
 
 const loginService = async ({email, password}) => {
     return await httpClient.post('auth/login', {email, password});

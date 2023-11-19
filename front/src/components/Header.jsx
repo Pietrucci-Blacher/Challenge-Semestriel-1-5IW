@@ -3,7 +3,7 @@ import Image from "next/image";
 import {useAuthContext} from "@/providers/AuthProvider";
 
 export default function Header() {
-    const {user, isLogged} = useAuthContext();
+    const {user} = useAuthContext();
     return (
         <header className="sticky top-0 z-20">
             <Navbar fluid rounded>
