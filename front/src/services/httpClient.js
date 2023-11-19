@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookie from 'js-cookie';
 
 
 const httpClient = axios.create({
@@ -12,7 +13,7 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(
     (config) => {
-        const jwtToken = localStorage.getItem('token') ?? false;
+        const jwtToken = sessionStorage.getItem('token');
         if (jwtToken) {
             config.headers['Authorization'] = `Bearer ${jwtToken}`;
         }
@@ -23,8 +24,10 @@ httpClient.interceptors.request.use(
     }
 );
 
-const handleResponseSucces = (response) => {
-    return response?.data;
+const handleResponseSuccess = (response) => {
+    const result = response?.data;
+
+    return result
 }
 
 const handleResponseError = async (error) => {
@@ -34,7 +37,7 @@ const handleResponseError = async (error) => {
     if (status === 401 && message === 'Expired JWT Token' && !originalRequest._retry) {
         console.log('Expired JWT Token');
         originalRequest._retry = true;
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = ses('refreshToken');
         if (!refreshToken) {
             return Promise.reject(error);
         }
@@ -42,8 +45,8 @@ const handleResponseError = async (error) => {
         const newJwtToken = response?.data?.token;
         const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {
-            localStorage.setItem('token', newJwtToken);
-            localStorage.setItem('refreshToken', newRefreshToken);
+            sessionStorage.setItem('token', newJwtToken);
+            sessionStorage.setItem('refreshToken', newRefreshToken);
             originalRequest.headers['Authorization'] = `Bearer ${newJwtToken}`;
             return httpClient(originalRequest);
         }
@@ -51,7 +54,7 @@ const handleResponseError = async (error) => {
     return Promise.reject(error);
 }
 
-httpClient.interceptors.response.use(handleResponseSucces, handleResponseError);
+httpClient.interceptors.response.use(handleResponseSuccess, handleResponseError);
 
 
 const makeRequest = async (method, url, data, config) => {
@@ -105,5 +108,6 @@ httpClient.patch = async function (url, data, config) {
 httpClient.delete = async function (url, config) {
     return makeRequest('delete', url, null, config);
 };
+
 
 export default httpClient;

@@ -47,8 +47,8 @@ export default function Login() {
 
     useEffect(() => {
         const goToProfilePage = async () => {
-            if (isLogged === true && user !== null) {
-                await router.push("/auth/profile");
+            if (isLogged === true && user) {
+                await router.push("/profile");
             }
         };
 

@@ -1,19 +1,15 @@
+"use client"
 import {useEffect} from "react";
 import {useRouter} from "next/router";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Logout() {
     const router = useRouter();
-
+    const {logout} = useAuth()
     useEffect(() => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('refreshToken')
+        logout()
+        router.push('/')
     }, []);
-    router.push('/')
-    return (
-        <>
-            <div>profile role </div>
 
-        </>
-    )
 
 }

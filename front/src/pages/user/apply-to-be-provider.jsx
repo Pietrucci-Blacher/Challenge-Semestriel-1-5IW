@@ -7,7 +7,7 @@ import useRequestsProvider from "@/hooks/useRequestsProvider";
 import {useToast} from "@/hooks/useToast";
 
 
-export default function Apply() {
+export default function ApplyToBeProvider() {
     const {applyToBeProvider} = useRequestsProvider()
     const {createToastMessage} = useToast()
     const [kbis, setKbis] = useState("")
