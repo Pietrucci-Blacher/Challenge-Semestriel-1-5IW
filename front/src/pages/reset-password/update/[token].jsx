@@ -16,11 +16,11 @@ export default function UpdatePassword() {
         if (token) {
             checkResetToken(token)
         }
-    }, [token]);
+    }, [checkResetToken, token]);
 
     useEffect(() => {
         if (isTokenValid === false) router.push('/')
-    }, [isTokenValid]);
+    }, [isTokenValid, router]);
 
     const handlePasswordReset = async (newPassword) => {
         const result = await updatePassword(token, newPassword)
