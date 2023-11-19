@@ -1,4 +1,6 @@
 import httpClient from "./httpClient";
+import Cookie from "js-cookie";
+
 const loginService = async ({email, password}) => {
     return await httpClient.post('auth/login', {email, password});
 };
@@ -8,12 +10,34 @@ const registerService = async ({lastname, firstname, email, password}) => {
 };
 
 const fetchCurrentUser = async () => {
-    if (localStorage.getItem('token')) return await httpClient.get('auth/me')
+    return await httpClient.get('auth/me');
 };
 
 const refreshToken = async (refreshToken) => {
     return await httpClient.post('/token/refresh', {refresh_token: refreshToken})
 };
 
+const getUserFromSession = () => {
+    const userStr = sessionStorage.getItem('user');
+    if (!userStr) return null;
 
-export {loginService, registerService, fetchCurrentUser, refreshToken};
+    const userWithExpiry = JSON.parse(userStr);
+    const now = new Date();
+
+    if (now.getTime() > userWithExpiry.expiresAt) {
+        sessionStorage.removeItem('user');
+        return null;
+    }
+    return userWithExpiry;
+};
+const storeUserInSession = (user) => {
+    if (user) {
+        const now = new Date();
+        const userWithExpiry = {
+            ...user, expiresAt: now.getTime() + 120000,
+        };
+        sessionStorage.setItem('user', JSON.stringify(userWithExpiry));
+    }
+};
+
+export {loginService, registerService, fetchCurrentUser, refreshToken, storeUserInSession, getUserFromSession};

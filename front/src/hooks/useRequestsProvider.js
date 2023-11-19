@@ -13,7 +13,6 @@ export default function useRequestsProvider() {
     }
 
     const getListOfRequests = async () =>{
-
         const response = await getListOfRequestsService()
         setRequests(response["hydra:member"])
     }
@@ -21,7 +20,6 @@ export default function useRequestsProvider() {
     const getRequest = async (payload) =>{
         const response = await getRequestService(payload)
         setRequest(response)
-        console.log(response)
     }
 
     const approveRequest = async (payload) =>{
