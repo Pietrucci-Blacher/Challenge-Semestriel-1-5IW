@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,6 +53,10 @@ use App\Controller\Auth\MeController;
             security: 'is_granted("ROLE_USER") and object == user',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
             processor: UserPasswordHasher::class
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
+            securityMessage: 'Vous ne pouvez supprimer que votre propre compte ou un administrateur peut supprimer un utilisateur.'
         )
     ]
 )]

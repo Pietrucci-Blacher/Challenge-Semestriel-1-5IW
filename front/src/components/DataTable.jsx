@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
-import { normalize } from "@/utils/data";
+import { useDatatable } from "@/hooks/useDatatable";
 
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [data, setData] = useState([]);
@@ -14,10 +13,14 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [selectedColumns, setSelectedColumns] = useState(selectableColumns || []);
     const [selectedRow, setSelectedRow] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
+    const datatableInstance = useDatatable();
 
     useEffect(() => {
-        fetchData(endpoint);
-    }, [endpoint]);
+        if (datatableInstance) {
+            const normalizedData = datatableInstance.fetchData(endpoint);
+            setData(normalizedData);
+        }
+    }, [datatableInstance, endpoint]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -44,23 +47,6 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         }
     }, [data, sortColumn, sortOrder, searchTerm, selectedColumns]);
 
-    const fetchData = async (url) => {
-        try {
-            if (!localStorage.getItem("token")) throw new Error("No token");
-            const response = await axios.get(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-
-            const normalizedData = normalize(response.data);
-            setData(normalizedData);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            // Handle error
-        }
-    };
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -74,7 +60,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                     });
                     console.log(response.data);
                     const normalizedData = normalize(response.data);
-                    setUserDetails(response.data);
+                    setUserDetails(normalizedData);
                 } catch (error) {
                     console.error("Error fetching user details:", error);
                     // Handle error
