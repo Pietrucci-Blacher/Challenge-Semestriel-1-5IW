@@ -40,6 +40,8 @@ export default function Profile() {
 
     return (
         <>
+            <Link href="/">Accueil</Link>
+            <br/>
             <Link href="/auth/logout">Logout</Link>
             <div>profile role {user?.roles}</div>
             {user ? (

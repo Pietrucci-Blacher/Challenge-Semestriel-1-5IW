@@ -12,6 +12,8 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [columns, setColumns] = useState([]);
     const [selectedColumns, setSelectedColumns] = useState(selectableColumns || []);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
         fetchData(endpoint);
@@ -60,6 +62,29 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         }
     };
 
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (selectedRow !== null) {
+                try {
+                    const response = await axios.get(`https://localhost/users/${selectedRow}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    console.log(response.data);
+                    const normalizedData = normalize(response.data);
+                    setUserDetails(response.data);
+                } catch (error) {
+                    console.error("Error fetching user details:", error);
+                    // Handle error
+                }
+            }
+        };
+
+        fetchUserDetails();
+    }, [selectedRow]);
+
     const handleSort = (column) => {
         if (column === sortColumn) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -85,6 +110,10 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         setSelectedColumns(updatedSelectedColumns);
     };
 
+    const handleRowClick = (userId) => {
+        setSelectedRow((prevSelectedRow) => (prevSelectedRow === userId ? null : userId));
+    };
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
@@ -97,6 +126,21 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <h2 className="text-lg font-medium text-gray-900 dark:text-white">{title}</h2>
+            <div
+                className={`transition-all duration-300 ${
+                    selectedRow !== null ? 'max-h-40 overflow-hidden' : 'max-h-0'
+                }`}
+            >
+                {userDetails ? (
+                    <div>
+                        <h3>User Details</h3>
+                        <p>User ID: {userDetails.id}</p>
+                        {/* Add more details based on your data structure */}
+                    </div>
+                ) : (
+                    <p>Loading user details...</p>
+                )}
+            </div>
             <div className="flex items-center justify-between mb-4">
                 <div className="relative w-40">
                     <input
@@ -150,38 +194,38 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                 <span className="ml-1">{column}</span>
                                 {sortColumn === column && (
                                     <span className="ml-1">
-                                            {sortOrder === "asc" ? (
-                                                <svg
-                                                    className="w-4 h-4 text-gray-400 inline-block"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M5 10l7-7m0 0l7 7m-7-7v18"
-                                                    ></path>
-                                                </svg>
-                                            ) : (
-                                                <svg
-                                                    className="w-4 h-4 text-gray-400 inline-block"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                                                    ></path>
-                                                </svg>
-                                            )}
-                                        </span>
+                                        {sortOrder === "asc" ? (
+                                            <svg
+                                                className="w-4 h-4 text-gray-400 inline-block"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M5 10l7-7m0 0l7 7m-7-7v18"
+                                                ></path>
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="w-4 h-4 text-gray-400 inline-block"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                                                ></path>
+                                            </svg>
+                                        )}
+                                    </span>
                                 )}
                             </div>
                         </th>
@@ -194,8 +238,13 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                 <tbody>
                 {paginatedData.map((row) => (
                     <tr
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        className={`${
+                            selectedRow === row.id
+                                ? "bg-blue-100 text-blue-600 dark:bg-blue-700 dark:text-white"
+                                : "bg-white dark:bg-gray-800"
+                        } border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600`}
                         key={row.id}
+                        onClick={() => handleRowClick(row.id)}
                     >
                         <td className="w-4 p-4">
                             <div className="flex items-center">
@@ -211,7 +260,9 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                         </td>
                         {columns.map((column) => (
                             <td
-                                className={`px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white`}
+                                className={`${
+                                    selectedRow === row.id ? "font-bold" : ""
+                                } px-6 py-4 whitespace-nowrap dark:text-white`}
                                 key={column}
                             >
                                 {row[column]}
