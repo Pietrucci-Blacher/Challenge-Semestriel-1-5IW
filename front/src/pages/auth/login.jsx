@@ -53,7 +53,7 @@ export default function Login() {
         };
 
         goToProfilePage();
-    }, [user, isLogged]);
+    }, [user, isLogged, router]);
 
     return (
         <h2>
