@@ -18,19 +18,17 @@ final class UserPasswordHasher implements ProcessorInterface
      */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        if (!$data->getPassword()) {
+        if (!$data->getPlainPassword()) {
             return $this->processor->process($data, $operation, $uriVariables, $context);
         }
+
         $hashedPassword = $this->passwordHasher->hashPassword(
             $data,
-            $data->getPassword()
+            $data->getPlainPassword()
         );
         $data->setPassword($hashedPassword);
         $data->eraseCredentials();
 
-
-//        $email = new Email();
-//        $email->sendEmail("maxime.pietrucci@gmail.com", $data->getEmail(), 'Welcome to Resend', 'Welcome to Resend');
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }
 }

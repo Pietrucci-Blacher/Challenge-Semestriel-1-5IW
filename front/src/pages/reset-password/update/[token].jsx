@@ -1,15 +1,16 @@
 import {useRouter} from 'next/router';
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useResetPassword} from "@/hooks/useResetPassword";
 import PasswordResetForm from "@/components/PasswordResetForm";
 import {useToast} from "@/hooks/useToast";
 
 export default function UpdatePassword() {
+    console.log("ok")
     const router = useRouter();
     const {token} = router.query;
     const { createToastMessage } = useToast();
 
-    const {isTokenValid, isLoading, checkResetToken, updatePassword} = useResetPassword()
+    const {isTokenValid, checkResetToken, updatePassword} = useResetPassword()
 
     useEffect(() => {
         if (token) {

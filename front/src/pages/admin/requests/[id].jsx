@@ -15,9 +15,6 @@ export default function Request() {
         getRequest({id})
     }, [getRequest, id]);
 
-    useEffect(() => {
-        console.log("request", request)
-    }, [request]);
 
     const handleApproveRequest = () => {
         try {
