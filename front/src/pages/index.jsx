@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export default function Index(){
 
@@ -6,7 +7,7 @@ export default function Index(){
     const clientSideLanguageChange = (newLocale) => {
         i18n.changeLanguage(newLocale);
     }
-    
+
     return (
         <div>
             {t('home')}
