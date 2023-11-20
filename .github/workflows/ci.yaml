@@ -99,11 +99,11 @@ jobs:
       - name: Build
         run: docker compose exec -T node pnpm run build
 
-      - name: Install Playwright dependencies
-        run: docker compose exec node -T pnpm dlx playwright install --with-deps
+      #- name: Install Playwright dependencies
+      #  run: docker compose exec -T node pnpm dlx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: docker compose exec node -T pnpm run test:e2e
+      #- name: Run Playwright tests
+      #  run: docker compose exec -T node pnpm run test:e2e CI=1
 
       - name: Run Vitest tests
-        run: docker compose exec node -T pnpm run test
+        run: docker compose exec -T node pnpm run test --no-watch

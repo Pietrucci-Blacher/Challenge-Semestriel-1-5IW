@@ -9,7 +9,7 @@ export default function Logout() {
     useEffect(() => {
         logout()
         router.push('/')
-    }, []);
+    }, [logout, router]);
 
 
 }
