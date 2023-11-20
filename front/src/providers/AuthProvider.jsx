@@ -4,30 +4,31 @@ import {
     storeUserInSession
 } from "@/services/authService";
 
-import {useState, useEffect, createContext, useContext} from 'react';
+import {useState, useEffect, createContext, useContext, useCallback} from 'react';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(undefined);
     const [isLogged, setIsLogged] = useState(undefined);
-    const verifyUser = async () => {
-        console.log("called")
+    const verifyUser = useCallback(async () => {
+        console.log("called");
         let storedUser = getUserFromSession();
         if (!storedUser) {
-            console.log("cc")
+            console.log("cc");
             try {
-                await fetchUser()
+                await fetchUser();
             } catch (error) {
                 console.error('Erreur lors de la vérification', error);
-                setUser(null)
-                setIsLogged(false)
+                setUser(null);
+                setIsLogged(false);
             }
         } else {
             setUser(storedUser);
             setIsLogged(true);
         }
-    };
+    }, [setUser, setIsLogged]);
+
     const fetchUser = async () => {
         try {
             const fetchedUser = await fetchCurrentUser();
@@ -40,7 +41,7 @@ export const AuthProvider = ({children}) => {
     }
     useEffect(() => {
         verifyUser();
-    }, []);
+    }, [verifyUser]);
     return (
         <AuthContext.Provider value={{user, setUser, isLogged, setIsLogged, verifyUser, fetchUser}}>
             {children}

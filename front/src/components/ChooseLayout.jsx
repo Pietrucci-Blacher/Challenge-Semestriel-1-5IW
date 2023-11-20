@@ -39,10 +39,7 @@ const ChooseLayout = ({children}) => {
                 }
             }
         }
-        ,
-        [user, path]
-    )
-    ;
+    }, [user, path, needsAuth, isLogged, router]);
 
     let Layout;
 
@@ -69,8 +66,8 @@ const ChooseLayout = ({children}) => {
                             </Layout>
                         </div>
                     </div>
-                </Flowbite>
-            </>
+                </div>
+            </Flowbite>
         );
     }
     return (
