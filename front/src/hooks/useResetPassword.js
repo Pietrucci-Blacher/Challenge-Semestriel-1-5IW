@@ -22,12 +22,10 @@ export function useResetPassword() {
     async function checkResetToken(token) {
         setIsLoading(true);
         try {
-            const response = await checkResetTokenRequest(token)
-            console.log("re", response)
+            await checkResetTokenRequest(token)
             setIsLoading(false);
             setIsTokenValid(true);
         } catch (err) {
-            createToast('error', 'Error recuperation token')
             setIsLoading(false);
             setIsTokenValid(false);
         }
@@ -36,8 +34,7 @@ export function useResetPassword() {
     async function updatePassword(token, newPassword) {
         setIsLoading(true);
         try {
-            const response = await updatePasswordRequest(token, newPassword)
-            createToast('success', 'Vous avez bien modifié votre password')
+            await updatePasswordRequest(token, newPassword)
             return true
         } catch (err) {
             return  false

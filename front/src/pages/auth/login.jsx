@@ -11,7 +11,7 @@ import {useToast} from "@/hooks/useToast";
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
-    const {login, logout, register} = useAuth();
+    const {login} = useAuth();
 
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
@@ -45,8 +45,8 @@ export default function Login() {
 
     useEffect(() => {
         const goToProfilePage = async () => {
-            if (isLogged === true && user !== null) {
-                await router.push("/auth/profile");
+            if (isLogged === true && user) {
+                await router.push("/profile");
             }
         };
 
