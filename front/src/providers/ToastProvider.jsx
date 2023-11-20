@@ -48,8 +48,8 @@ export const ToastProvider = ({children}) => {
         <ToastContext.Provider value={{createToastMessage}}>
             {children}
             {toastProps.show && (
-                <div className="fixed top-0 right-0 p-4 m-4 mr-8">
-                    <Toast>
+                <div className="fixed top-10 right-0 z-20 p-4">
+                    <Toast className="mt-4">
                         <div
                             className={classForIcon}>
                             <Icon className="h-5 w-5"/>
