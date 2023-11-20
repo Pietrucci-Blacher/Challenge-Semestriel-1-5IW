@@ -8,9 +8,17 @@ import useUserAccount from "@/hooks/useUserAccount";
 import Link from "next/link";
 
 export default function Profile() {
-    const { user, isLogged } = useAuthContext();
-    const { userProfile, updateProfile, loading } = useUserAccount(user.id);
+    const { user, verifyUser, fetchUser } = useAuthContext();
+    const { userProfile, updateProfile } = useUserAccount(user?.id);
     const [formData, setFormData] = useState({ ...userProfile });
+
+    useEffect(() => {
+        if (!user) {
+            verifyUser();
+        } else {
+            setFormData({ ...userProfile });
+        }
+    }, [user, userProfile, verifyUser]);
 
     const handleFirstNameChange = (value) => {
         setFormData({...formData, firstname: value})
@@ -25,6 +33,7 @@ export default function Profile() {
     const handleProfileUpdateSubmit = async (event) => {
         event.preventDefault()
         await updateProfile(formData);
+        fetchUser()
     }
 
     const handlePasswordResetSubmit = async (password) => {
@@ -35,14 +44,13 @@ export default function Profile() {
         setFormData({ ...userProfile });
     }, [userProfile]);
 
-    // TODO
-    // Add history for payments etc...
-
-
+    if (!user) {
+        return <div>Chargement...</div>;
+    }
     return (
         <>
             <Link href="/auth/logout">Logout</Link>
-            <div>profile role {user?.roles}</div>
+            <h2>profile role {user?.roles}</h2>
             {user ? (
                 <>
                     <form onSubmit={handleProfileUpdateSubmit}>
@@ -65,7 +73,7 @@ export default function Profile() {
 
 
             {userProfile ? (<>
-                    <div> Date de creation d'account :{userProfile.createdAt} </div>
+                    <div> Date de creation d&apos;account :{userProfile.createdAt} </div>
                     {userProfile?.updatedAt ? (<div> {}updatedAt :{userProfile?.updatedAt} </div>) : ''}
 
                 </>
@@ -73,7 +81,7 @@ export default function Profile() {
                 <div>Chargement</div>
             )}
 
-            <FlowbiteButton as={Link} href="/provider/apply"  outline gradientDuoTone="cyanToBlue">
+            <FlowbiteButton as={Link} href="/apply-to-be-provider"  outline gradientDuoTone="cyanToBlue">
                 Faire une  demande pour devenir prestataire
             </FlowbiteButton>
         </>

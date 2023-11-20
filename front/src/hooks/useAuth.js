@@ -6,11 +6,13 @@ export const useAuth = () => {
 
     const login = async (credentials) => {
         try {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('refreshToken');
             const response = await loginService(credentials);
             const token = response.token
             const refreshToken = response.refresh_token
-            localStorage.setItem('token', token)
-            localStorage.setItem('refreshToken', refreshToken)
+            sessionStorage.setItem('token', token, {expires: 1});
+            sessionStorage.setItem('refreshToken', refreshToken, {expires: 7});
             const user = await fetchCurrentUser()
             setIsLogged(true);
             setUser(user);
@@ -24,10 +26,12 @@ export const useAuth = () => {
         await registerService(payload);
     };
 
-    const logout = async () => {
-        // Logique de déconnexion
+    const logout = () => {
+        sessionStorage.removeItem('user')
         setIsLogged(false);
         setUser(null);
+        sessionStorage.removeItem("token")
+        sessionStorage.removeItem("refreshToken")
     };
 
     return {login, register, logout};

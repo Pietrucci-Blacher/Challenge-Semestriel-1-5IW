@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState, useCallback } from "react";
 import httpClient from "@/services/httpClient";
 
 const useUserAccount = (userId) => {
@@ -6,7 +6,7 @@ const useUserAccount = (userId) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const loadUserProfile = async () => {
+    const loadUserProfile = useCallback(async () => {
         setLoading(true);
         try {
             const account = await httpClient.get(`/users/${userId}`);
@@ -16,7 +16,7 @@ const useUserAccount = (userId) => {
             setError(err);
             setLoading(false);
         }
-    };
+    }, [userId]);
 
     const updateProfile = async (updatedData) => {
         setLoading(true);
@@ -31,11 +31,15 @@ const useUserAccount = (userId) => {
     };
 
     useEffect(() => {
-        if (userId) {
-            loadUserProfile();
-        }
-    }, [userId]);
-    // if(!user) throw new Error("Account is null");
+        const fetchData = async () => {
+            if (userId) {
+                await loadUserProfile();
+            }
+        };
+
+        fetchData();
+    }, [userId, loadUserProfile]);
+
     return { userProfile, updateProfile, loading, error };
 }
 

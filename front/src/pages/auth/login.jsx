@@ -11,7 +11,7 @@ import {useToast} from "@/hooks/useToast";
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
-    const {login, logout, register} = useAuth();
+    const {login} = useAuth();
 
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
@@ -45,45 +45,43 @@ export default function Login() {
 
     useEffect(() => {
         const goToProfilePage = async () => {
-            if (isLogged === true && user !== null) {
-                await router.push("/auth/profile");
+            if (isLogged === true && user) {
+                await router.push("/profile");
             }
         };
 
         goToProfilePage();
-    }, [user, isLogged]);
+    }, [user, isLogged, router]);
 
     return (
-        <>
-            <h2>
-                login
-                <br/>
-                <br/>
-                <br/>
+        <h2>
+            Login
+            <br/>
+            <br/>
+            <br/>
 
-                {isLogged ? "Logged" : "Not logged"}
-                <br/>
-                <br/>
+            {isLogged ? "Logged" : "Not logged"}
+            <br/>
+            <br/>
 
-                <br/>
-                <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmitLogin}>
-                    <div>
-                        <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange}
-                               value={formData.email}/>
-                    </div>
-                    <div>
-                        <Input label="Password" type="Password" placeholder="Password"
-                               onChange={handleInputPasswordChange} value={formData.password}/>
-                    </div>
-                    <GenericButton label="Login"/>
-                </form>
+            <br/>
+            <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmitLogin}>
+                <div>
+                    <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange}
+                           value={formData.email}/>
+                </div>
+                <div>
+                    <Input label="Password" type="Password" placeholder="Password"
+                           onChange={handleInputPasswordChange} value={formData.password}/>
+                </div>
+                <GenericButton label="Login"/>
+            </form>
 
-                <br/>
-                <Link href="/auth/register">Register</Link>
-                <br/>
-                <br/>
-                <Link href="/reset-password/ask">Forgot Password</Link>
-            </h2>
-        </>
+            <br/>
+            <Link href="/auth/register">Register</Link>
+            <br/>
+            <br/>
+            <Link href="/reset-password/ask">Forgot Password</Link>
+        </h2>
     )
 }

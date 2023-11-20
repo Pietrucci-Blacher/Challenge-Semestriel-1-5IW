@@ -8,7 +8,7 @@ export default function Index() {
 
     useEffect(() => {
         getListOfRequests();
-    }, []);
+    }, [getListOfRequests]);
 
     return (
         <>
@@ -26,7 +26,7 @@ export default function Index() {
                     <tr key={request.id}>
                         <td>{request.status}</td>
                         <td>{request.createdAt}</td>
-                        <td><FlowbiteButton as={Link} href={`provider/${request.id}`}>
+                        <td><FlowbiteButton as={Link} href={`requests/${request.id}`}>
                             Voir en detail
                         </FlowbiteButton></td>
                     </tr>
