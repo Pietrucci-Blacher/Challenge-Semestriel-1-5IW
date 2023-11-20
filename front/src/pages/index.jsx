@@ -6,6 +6,7 @@ export default function Index(){
     const clientSideLanguageChange = (newLocale) => {
         i18n.changeLanguage(newLocale);
     }
+    
     return (
         <div>
             {t('home')}
