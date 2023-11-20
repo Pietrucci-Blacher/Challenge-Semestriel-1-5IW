@@ -1,8 +1,28 @@
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import { useEstablishment } from "@/hooks/useEstablishment";
+import { useEffect } from "react";
 
 export default function ShowEstablishment() {
     const router = useRouter();
-    const {id} = router.query;
+    const { id } = router.query;
+    const { establishment, getEstablishment } = useEstablishment();
 
-    return <div>Establishment {id}</div>;
+    useEffect(() => {
+        getEstablishment(id);
+    });
+
+    return (
+        <>
+            {establishment ? (
+                <div>
+                    <h1>{establishment.name}</h1>
+                    <p>{establishment.street}</p>
+                    <p>{establishment.city}</p>
+                    <p>{establishment.zipCode}</p>
+                </div>
+            ) : (
+                "Chargement..."
+            )}
+        </>
+    );
 }

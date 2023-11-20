@@ -1,18 +1,13 @@
-import { createEstablishment } from "@/services/establishmentService";
-import { useAuthContext } from "@/providers/AuthProvider";
+import { getEstablishmentById } from "@/services/establishmentService";
+import {useState} from "react";
 
 export const useEstablishment = () => {
-    const { user } = useAuthContext();
+    const [establishment, setEstablishment] = useState(null);
 
-    const create = ({ name, street, city, zipCode }) => {
-        return createEstablishment({
-            owner: `/users/${user.id}`,
-            name,
-            street,
-            city,
-            zipCode,
-        });
+    const getEstablishment = async (id) => {
+        const response = await getEstablishmentById(id);
+        setEstablishment(response);
     };
 
-    return { create };
-}
+    return { establishment, getEstablishment };
+};

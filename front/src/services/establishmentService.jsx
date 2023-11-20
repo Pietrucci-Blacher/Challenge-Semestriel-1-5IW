@@ -1,11 +1,14 @@
 import httpClient from "./httpClient";
 
-export const createEstablishment = ({ owner, name, street, city, zipCode }) => {
+export const createEstablishment = ({ name, street, city, zipCode }) => {
     return httpClient.post("/establishments", {
-        owner,
         name,
         street,
         city,
         zipCode,
     });
 };
+
+export const getEstablishmentById = (id) => {
+    return httpClient.get(`/establishments/${id}`);
+}

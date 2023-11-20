@@ -3,10 +3,13 @@ import Input from "@/components/Input";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useEstablishment } from "@/hooks/useEstablishment";
+import { useRouter } from "next/router";
+import { createEstablishment } from "@/services/establishmentService";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
     const { create } = useEstablishment();
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -41,12 +44,19 @@ export default function CreateEstablishment() {
         }
 
         try {
-            await create({
+            const establishment = await createEstablishment({
                 name,
                 street,
                 city,
                 zipCode,
             });
+
+            if (!establishment) {
+                createToastMessage("error", "Une erreur est survenue");
+                return;
+            }
+
+            router.push(`/establishment/${establishment.id}`);
         } catch (error) {
             createToastMessage("error", error);
         }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EstablishmentRepository;
+use App\Attributes\UserField;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,7 +27,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
-            security: 'is_granted("ROLE_PROVIDER")',
+            security: 'is_granted("ROLE_ADMIN")',
         ),
         /* new GetCollection( */
         /*     uriTemplate: '/establishments_me', */
@@ -59,6 +60,7 @@ class Establishment
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
+    #[UserField('owner')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?User $owner = null;
