@@ -92,8 +92,6 @@ jobs:
       - name: Start services
         working-directory: front
         run: docker compose up --wait --build
-        env:
-          NODE_ENV: production
 
       - name: Install dependencies
         run: docker compose exec -T node pnpm install
@@ -108,4 +106,4 @@ jobs:
       #  run: docker compose exec -T node pnpm run test:e2e CI=1
 
       - name: Run Vitest tests
-        run: docker compose exec -T node pnpm run test
+        run: docker compose exec -T node pnpm run test --no-watch
