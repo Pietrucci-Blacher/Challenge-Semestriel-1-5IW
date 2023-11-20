@@ -105,7 +105,7 @@ jobs:
       - name: Run Playwright tests
         run: docker compose exec -T node pnpm run test:e2e
         env:
-          CI: 'true'
+          CI: true
 
       - name: Run Vitest tests
         run: docker compose exec -T node pnpm run test
