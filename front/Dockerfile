@@ -10,7 +10,7 @@ FROM node_upstream AS base
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # hadolint ignore=DL3018
-RUN apk add --no-cache libc6-compat
+RUN apt-get update && apt-get install -y libc6-compat && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
