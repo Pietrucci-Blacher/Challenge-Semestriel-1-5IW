@@ -38,6 +38,7 @@ export default function Register() {
         event.preventDefault()
         try {
             await register(formData);
+            createToastMessage("success", "Votre compte a bien été crée");
         } catch (error) {
             console.log(error)
             if (error.status !== 500) {

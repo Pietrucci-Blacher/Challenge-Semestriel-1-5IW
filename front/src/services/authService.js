@@ -5,7 +5,8 @@ const loginService = async ({email, password}) => {
 };
 
 const registerService = async ({lastname, firstname, email, password}) => {
-    return await httpClient.post('auth/register', {lastname, firstname, email, password})
+    const plainPassword = password
+    return await httpClient.post('auth/register', {lastname, firstname, email, plainPassword})
 };
 
 const fetchCurrentUser = async () => {
