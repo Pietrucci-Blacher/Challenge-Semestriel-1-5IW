@@ -16,11 +16,18 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use App\Controller\Provider\GetCollectionEstablishment;
 
 #[ORM\Entity(repositoryClass: EstablishmentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            uriTemplate: '/establishments/me',
+            security: 'is_granted("ROLE_PROVIDER")',
+            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
+            controller: GetCollectionEstablishment::class,
+        ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
@@ -29,11 +36,6 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
         ),
-        /* new GetCollection( */
-        /*     uriTemplate: '/establishments_me', */
-        /*     security: 'is_granted("ROLE_PROVIDER")', */
-        /*     securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.', */
-        /* ), */
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
         ),
