@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use App\Controller\Provider\GetCollectionEstablishment;
+use ApiPlatform\OpenApi\Model;
 
 #[ORM\Entity(repositoryClass: EstablishmentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -27,6 +28,24 @@ use App\Controller\Provider\GetCollectionEstablishment;
             security: 'is_granted("ROLE_PROVIDER")',
             securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
             controller: GetCollectionEstablishment::class,
+            openapi: new Model\Operation(
+                summary: 'Retrieves the establishments of the current provider.',
+                responses: [
+                    '200' => [
+                        'description' => 'Retrieves the establishments of the current provider.',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'array',
+                                    'items' => [
+                                        '$ref' => '#/components/schemas/Establishment',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ),
         ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
