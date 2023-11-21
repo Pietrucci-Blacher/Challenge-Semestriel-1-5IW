@@ -60,6 +60,9 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Establishment $establishment = null;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -230,6 +233,18 @@ class Service
                 $availableSlot->setService(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEstablishment(): ?Establishment
+    {
+        return $this->establishment;
+    }
+
+    public function setEstablishment(?Establishment $establishment): static
+    {
+        $this->establishment = $establishment;
 
         return $this;
     }
