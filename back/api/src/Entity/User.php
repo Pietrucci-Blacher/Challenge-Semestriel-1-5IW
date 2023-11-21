@@ -122,6 +122,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 //    #[Groups('user:read')]
     private Collection $schedules;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
+    private Collection $establishments;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -130,6 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
+        $this->establishments = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -411,6 +415,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Establishment>
+     */
+    public function getEstablishments(): Collection
+    {
+        return $this->establishments;
+    }
+
+    public function addEstablishment(Establishment $establishment): static
+    {
+        if (!$this->establishments->contains($establishment)) {
+            $this->establishments->add($establishment);
+            $establishment->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstablishment(Establishment $establishment): static
+    {
+        if ($this->establishments->removeElement($establishment)) {
+            // set the owning side to null (unless already changed)
+            if ($establishment->getOwner() === $this) {
+                $establishment->setOwner(null);
+            }
+        }
 
         return $this;
     }

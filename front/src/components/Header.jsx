@@ -5,7 +5,7 @@ import {useAuthContext} from "@/providers/AuthProvider";
 export default function Header() {
     const {user} = useAuthContext();
     return (
-        <header className="sticky top-0 z-20">
+        <header className="sticky top-0">
             <Navbar fluid rounded>
                 <Navbar.Brand href="/">
                     <Image
