@@ -28,15 +28,14 @@ const ChooseLayout = ({children}) => {
     const [isAccessAllowed, setIsAccessAllowed] = useState(false);
 
     useEffect(() => {
-            if (user === null && needsAuth && !isLogged) {
-                router.push('/auth/login');
+        if (user === null && needsAuth && !isLogged) {
+            router.push('/auth/login');
 
-            } else if (user && needsAuth) {
-                const hasAccess = canAccessTo(path, user.roles);
-                setIsAccessAllowed(hasAccess);
-                if (!hasAccess) {
-                    router.push('/404');
-                }
+        } else if (user && needsAuth) {
+            const hasAccess = canAccessTo(path, user.roles);
+            setIsAccessAllowed(hasAccess);
+            if (!hasAccess) {
+                router.push('/404');
             }
         }
     }, [user, path, needsAuth, isLogged, router]);
@@ -66,8 +65,8 @@ const ChooseLayout = ({children}) => {
                             </Layout>
                         </div>
                     </div>
-                </div>
-            </Flowbite>
+                </Flowbite>
+            </>
         );
     }
     return (
