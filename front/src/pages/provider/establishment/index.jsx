@@ -56,7 +56,7 @@ export default function CreateEstablishment() {
                 return;
             }
 
-            router.push(`/establishment/${establishment.id}`);
+            router.push(`/provider/establishment/${establishment.id}`);
         } catch (error) {
             createToastMessage("error", error);
         }
