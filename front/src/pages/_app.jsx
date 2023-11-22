@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:front/src/pages/_app.jsx
 import {AuthProvider} from "@/providers/AuthProvider";
 import '@/styles/globals.css'
 import {ToastProvider} from "@/providers/ToastProvider";
