@@ -23,15 +23,12 @@ dependencies:
   i18next:
     specifier: ^23.7.6
     version: 23.7.6
-  js-cookie:
-    specifier: ^3.0.5
-    version: 3.0.5
   next:
     specifier: 14.0.3
     version: 14.0.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
   next-i18next:
     specifier: ^15.0.0
-    version: 15.0.0(i18next@23.7.6)(next@14.0.2)(react-i18next@13.4.1)(react@18.2.0)
+    version: 15.0.0(i18next@23.7.6)(next@14.0.3)(react-i18next@13.4.1)(react@18.2.0)
   react:
     specifier: ^18
     version: 18.2.0
@@ -3525,11 +3522,6 @@ packages:
       nopt: 6.0.0
     dev: false
 
-  /js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
-    dev: false
-
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -3850,7 +3842,7 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next-i18next@15.0.0(i18next@23.7.6)(next@14.0.2)(react-i18next@13.4.1)(react@18.2.0):
+  /next-i18next@15.0.0(i18next@23.7.6)(next@14.0.3)(react-i18next@13.4.1)(react@18.2.0):
     resolution: {integrity: sha512-9iGEU4dt1YCC5CXh6H8YHmDpmeWKjxES6XfoABxy9mmfaLLJcqS92F56ZKmVuZUPXEOLtgY/JtsnxsHYom9J4g==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -3865,7 +3857,7 @@ packages:
       hoist-non-react-statics: 3.3.2
       i18next: 23.7.6
       i18next-fs-backend: 2.3.0
-      next: 14.0.2(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      next: 14.0.3(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-i18next: 13.4.1(i18next@23.7.6)(react-dom@18.2.0)(react@18.2.0)
     dev: false
