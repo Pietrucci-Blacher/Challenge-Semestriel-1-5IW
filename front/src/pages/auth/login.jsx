@@ -6,14 +6,14 @@ import {useEffect, useState} from "react";
 import {useAuthContext} from "@/providers/AuthProvider";
 import {useAuth} from "@/hooks/useAuth";
 import {useToast} from "@/hooks/useToast";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
     const {login} = useAuth();
-    const {t} = useTranslation('loginPage');
+    const {t, i18n} = useTranslation('loginPage');
 
     const [formData, setFormData] = useState({
         firstname: "email@email.com",

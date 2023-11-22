@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config";
-import {useTranslation} from "react-i18next";
+import {useTranslation} from "next-i18next";
 
 
 
