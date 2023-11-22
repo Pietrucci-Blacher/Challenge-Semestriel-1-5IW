@@ -6,12 +6,14 @@ import {useEffect, useState} from "react";
 import {useAuthContext} from "@/providers/AuthProvider";
 import {useAuth} from "@/hooks/useAuth";
 import {useToast} from "@/hooks/useToast";
+import { useTranslation } from "react-i18next";
 
 
 export default function Login() {
     const {createToastMessage} = useToast();
     const {user, isLogged} = useAuthContext();
     const {login} = useAuth();
+    const {t} = useTranslation('loginPage');
 
     const [formData, setFormData] = useState({
         firstname: "email@email.com",
@@ -55,7 +57,7 @@ export default function Login() {
 
     return (
         <h2>
-            Login
+            {t('login')}
             <br/>
             <br/>
             <br/>
@@ -64,18 +66,18 @@ export default function Login() {
             <br/>
             <br/>
 
-            <br/>
-            <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmitLogin}>
-                <div>
-                    <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange}
-                           value={formData.email}/>
-                </div>
-                <div>
-                    <Input label="Password" type="Password" placeholder="Password"
-                           onChange={handleInputPasswordChange} value={formData.password}/>
-                </div>
-                <GenericButton label="Login"/>
-            </form>
+                <br/>
+                <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmitLogin}>
+                    <div>
+                        <Input label="Email" type="email" placeholder="Email" onChange={handleInputEmailChange}
+                               value={formData.email}/>
+                    </div>
+                    <div>
+                        <Input label="Password" type="Password" placeholder="Password"
+                               onChange={handleInputPasswordChange} value={formData.password}/>
+                    </div>
+                    <GenericButton label="Login"/>
+                </form>
 
             <br/>
             <Link href="/auth/register">Register</Link>
