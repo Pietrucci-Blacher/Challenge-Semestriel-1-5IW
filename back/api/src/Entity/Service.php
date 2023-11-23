@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Put;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,14 +16,26 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 
 #[ApiResource(
-    mercure: true,
     operations: [
         new GetCollection(),
-        new Post(),
+        new Post(
+            security: 'is_granted("ROLE_PROVIDER")',
+        ),
         new Get(),
-        new Delete(),
-        new Patch(),
+        new Put(
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            securityMessage: 'Vous ne pouvez modifier que vos services.',
+        ),
+        new Patch(
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            securityMessage: 'Vous ne pouvez modifier que vos services.',
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            securityMessage: 'Vous ne pouvez supprimer que vos services.',
+        )
     ],
+    mercure: true,
 )]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
