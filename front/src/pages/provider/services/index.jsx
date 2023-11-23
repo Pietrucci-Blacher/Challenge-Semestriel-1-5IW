@@ -1,10 +1,11 @@
 import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
-import Textarea from "@/components/TextArea";
 import { useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/router";
 import useService from "@/hooks/useService";
+import dynamic from "next/dynamic";
+import TextArea from "@/components/TextArea";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
@@ -31,9 +32,8 @@ export default function CreateEstablishment() {
     };
 
     const handleInputPriceChange = (value) => {
-        setFormData({ ...formData, price: value });
+        setFormData({ ...formData, price: parseInt(value) });
     };
-
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
@@ -41,6 +41,7 @@ export default function CreateEstablishment() {
 
         if (!title || !description || !body || !price) {
             createToastMessage("error", "Veuillez remplir tous les champs");
+            return;
         }
 
         try {
@@ -87,11 +88,14 @@ export default function CreateEstablishment() {
                         onChange={handleInputDescriptionChange}
                     />
                 </div>
+                {/*<div>
+                    <TextEditor label={"Corps du Texte"}/>
+                </div>*/}
                 <div>
-                    <Textarea
-                        label="Corps du texte"
-                        className="border border-gray-300 rounded-md p-2"
-                        placeholder="Entrer un texte"
+                    <TextArea
+                        label="Corps du Texte"
+                        type="text"
+                        placeholder="Entrer un corps de texte"
                         value={formData.body}
                         onChange={handleInputBodyChange}
                     />
@@ -106,7 +110,9 @@ export default function CreateEstablishment() {
                         onChange={handleInputPriceChange}
                     />
                 </div>
-                <GenericButton label="Creer un Service" />
+                <div>
+                    <GenericButton label="Creer un Service" />
+                </div>
             </form>
         </div>
     );
