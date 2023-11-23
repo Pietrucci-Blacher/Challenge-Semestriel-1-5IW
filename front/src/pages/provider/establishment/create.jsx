@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import { useEstablishment } from "@/hooks/useEstablishment";
 import { useRouter } from "next/router";
 import { createEstablishment } from "@/services/establishmentService";
+import { Button as FlowbiteButton, Table } from "flowbite-react";
+import Link from "next/link";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
@@ -106,6 +108,9 @@ export default function CreateEstablishment() {
                 </div>
                 <GenericButton label="Creer un etablisement" />
             </form>
+            <FlowbiteButton className="my-2" as={Link} href="/provider/establishment/">
+                Retour
+            </FlowbiteButton>
         </div>
     );
 }

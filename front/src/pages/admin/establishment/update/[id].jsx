@@ -60,7 +60,6 @@ export default function UpdateEstablishment() {
         }
 
         try {
-            console.log("id", id);
             const establishment = await updateEstablishment(id, {
                 name,
                 street,
@@ -73,7 +72,7 @@ export default function UpdateEstablishment() {
                 return;
             }
 
-            router.push(`/provider/establishment/${establishment.id}`);
+            router.push(`/admin/establishment/${establishment.id}`);
         } catch (error) {
             createToastMessage("error", error);
         }
@@ -127,7 +126,7 @@ export default function UpdateEstablishment() {
             <FlowbiteButton
                 className="my-2"
                 as={Link}
-                href={`/provider/establishment/${id}`}
+                href={`/admin/establishment/${id}`}
             >
                 Retour
             </FlowbiteButton>

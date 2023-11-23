@@ -15,10 +15,16 @@ export const useEstablishment = () => {
         setEstablishments(response);
     };
 
+    const getAllEstablishments = async () => {
+        const response = await service.getAllEstablishments();
+        setEstablishments(response);
+    };
+
     return {
         establishment,
         getEstablishmentById,
         establishments,
         getMyEstablishments,
+        getAllEstablishments,
     };
 };

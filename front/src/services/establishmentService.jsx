@@ -39,6 +39,7 @@ export const updateEstablishment = (id, content) => {
 /**
  * Get all establishments for admin only
  */
-export const getAllEstablishments = () => {
-    return httpClient.get("/establishments");
+export const getAllEstablishments = async () => {
+    const result = await httpClient.get("/establishments");
+    return result["hydra:member"];
 };
