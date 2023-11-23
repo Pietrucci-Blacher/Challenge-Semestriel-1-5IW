@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDatatable } from "@/hooks/useDatatable";
+import axios from "axios";
+import { normalize } from "@/utils/data";
 
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [data, setData] = useState([]);
@@ -11,16 +13,14 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [columns, setColumns] = useState([]);
     const [selectedColumns, setSelectedColumns] = useState(selectableColumns || []);
+    const [selectedRows, setSelectedRows] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
     const datatableInstance = useDatatable();
 
     useEffect(() => {
-        if (datatableInstance) {
-            const normalizedData = datatableInstance.fetchData(endpoint);
-            setData(normalizedData);
-        }
-    }, [datatableInstance, endpoint]);
+        fetchData(endpoint);
+    }, [endpoint]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -47,29 +47,39 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         }
     }, [data, sortColumn, sortOrder, searchTerm, selectedColumns]);
 
+    const fetchData = async (url) => {
+        try {
+            if (!localStorage.getItem("token")) throw new Error("No token");
+            const response = await axios.get(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const normalizedData = normalize(response.data);
+            setData(normalizedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle error
+        }
+    };
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (selectedRow !== null) {
                 try {
-                    const response = await axios.get(`https://localhost/users/${selectedRow}`, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    });
-                    console.log(response.data);
-                    const normalizedData = normalize(response.data);
+                    const response = await datatableInstance.fetchUserData(selectedRow);
+                    const normalizedData = JSON.parse(response.data);
                     setUserDetails(normalizedData);
                 } catch (error) {
                     console.error("Error fetching user details:", error);
-                    // Handle error
                 }
             }
         };
 
         fetchUserDetails();
-    }, [selectedRow]);
+    }, [datatableInstance, selectedRow]);
 
     const handleSort = (column) => {
         if (column === sortColumn) {
@@ -100,6 +110,55 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         setSelectedRow((prevSelectedRow) => (prevSelectedRow === userId ? null : userId));
     };
 
+    const handleDelete = async (userId) => {
+        try {
+            await datatableInstance.deleteUser(userId);
+
+            setData((prevData) => prevData.filter((row) => row.id !== userId));
+
+            if (selectedRow === userId) {
+                setSelectedRow(null);
+                setUserDetails(null);
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+        }
+    };
+
+    const handleDeleteSelected = async () => {
+        try {
+            await Promise.all(selectedRows.map((userId) => datatableInstance.deleteUser(userId)));
+
+            // Assuming `fetchData` updates the data from the server
+            fetchData(endpoint);
+
+            // Clear selected rows
+            setSelectedRows([]);
+        } catch (error) {
+            console.error("Error deleting selected users:", error);
+        }
+    };
+
+    const handleBan = async (userId) => {
+        // Placeholder for handling ban
+        console.log(`User ${userId} banned`);
+    };
+
+    const handleBanSelected = async () => {
+        try {
+            // Placeholder for handling ban
+            await Promise.all(selectedRows.map((userId) => handleBan(userId)));
+
+            // Assuming `fetchData` updates the data from the server
+            fetchData(endpoint);
+
+            // Clear selected rows
+            setSelectedRows([]);
+        } catch (error) {
+            console.error("Error banning selected users:", error);
+        }
+    };
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
@@ -114,7 +173,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
             <h2 className="text-lg font-medium text-gray-900 dark:text-white">{title}</h2>
             <div
                 className={`transition-all duration-300 ${
-                    selectedRow !== null ? 'max-h-40 overflow-hidden' : 'max-h-0'
+                    selectedRow !== null ? "max-h-40 overflow-hidden" : "max-h-0"
                 }`}
             >
                 {userDetails ? (
@@ -159,11 +218,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                 <tr>
                     <th scope="col" className="p-4">
                         <div className="flex items-center">
-                            <input
-                                id="checkbox-all-search"
-                                type="checkbox"
-                                className="hidden"
-                            />
+                            <input id="checkbox-all-search" type="checkbox" className="hidden" />
                             <label htmlFor="checkbox-all-search" className="sr-only">
                                 checkbox
                             </label>
@@ -180,38 +235,38 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                 <span className="ml-1">{column}</span>
                                 {sortColumn === column && (
                                     <span className="ml-1">
-                                        {sortOrder === "asc" ? (
-                                            <svg
-                                                className="w-4 h-4 text-gray-400 inline-block"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                                                ></path>
-                                            </svg>
-                                        ) : (
-                                            <svg
-                                                className="w-4 h-4 text-gray-400 inline-block"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                                                ></path>
-                                            </svg>
-                                        )}
-                                    </span>
+                      {sortOrder === "asc" ? (
+                          <svg
+                              className="w-4 h-4 text-gray-400 inline-block"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                          >
+                              <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                              ></path>
+                          </svg>
+                      ) : (
+                          <svg
+                              className="w-4 h-4 text-gray-400 inline-block"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                          >
+                              <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                              ></path>
+                          </svg>
+                      )}
+                    </span>
                                 )}
                             </div>
                         </th>
@@ -222,6 +277,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                 </tr>
                 </thead>
                 <tbody>
+
                 {paginatedData.map((row) => (
                     <tr
                         className={`${
@@ -255,23 +311,66 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                             </td>
                         ))}
                         <td className="px-6 py-4">
-                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            <a
+                                href="#"
+                                className="font-medium mr-2 text-blue-600 dark:text-blue-500 hover:underline"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleEditUser(row.id);
+                                }}
+                            >
                                 Edit
+                            </a>
+                            <a
+                                href="#"
+                                className="font-medium mr-2 text-blue-600 dark:text-blue-500 hover:underline"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleBan(row.id);
+                                }}
+                            >
+                                Ban
+                            </a>
+                            <a
+                                href="#"
+                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleDelete(row.id);
+                                }}
+                            >
+                                Delete
                             </a>
                         </td>
                     </tr>
                 ))}
                 </tbody>
+                {selectedRows.length > 0 && (
+                    <div className="flex mb-4">
+                        <button
+                            className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
+                            onClick={handleDeleteSelected}
+                        >
+                            Delete Selected
+                        </button>
+                        <button
+                            className="bg-yellow-500 text-white px-4 py-2 rounded"
+                            onClick={handleBanSelected}
+                        >
+                            Ban Selected
+                        </button>
+                    </div>
+                )}
             </table>
             <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing{" "}
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                        {startIndex + 1}-{startIndex + paginatedData.length}
-                    </span>{" "}
-                    of{" "}
-                    <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span>
-                </span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+          Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+            {startIndex + 1}-{startIndex + paginatedData.length}
+          </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">{data.length}</span>
+        </span>
                 <ul className="inline-flex -space-x-px text-sm h-8">
                     <li>
                         <a

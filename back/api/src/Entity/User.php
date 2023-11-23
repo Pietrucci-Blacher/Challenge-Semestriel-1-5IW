@@ -29,7 +29,7 @@ use App\Controller\Auth\MeController;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['user:read']],
-            security: 'is_granted("ROLE_USER") and object == user',
+            security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
         ),
         new GetCollection(

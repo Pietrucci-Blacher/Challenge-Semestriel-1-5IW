@@ -16,7 +16,7 @@ const editUserService = async (id, data) => {
 }
 
 const deleteUserService = async (id) => {
-    return await httpClient.delete('delete', {id})
+    return await httpClient.delete(`users/${id}`)
 }
 
 
