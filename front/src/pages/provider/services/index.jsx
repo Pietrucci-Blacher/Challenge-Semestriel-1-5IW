@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/router";
 import useService from "@/hooks/useService";
 import TextArea from "@/components/TextArea";
+import {Textarea} from "flowbite-react";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
@@ -31,8 +32,9 @@ export default function CreateEstablishment() {
     };
 
     const handleInputPriceChange = (value) => {
-        setFormData({ ...formData, price: parseInt(value) });
+        setFormData({ ...formData, price: value });
     };
+
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
@@ -40,7 +42,6 @@ export default function CreateEstablishment() {
 
         if (!title || !description || !body || !price) {
             createToastMessage("error", "Veuillez remplir tous les champs");
-            return;
         }
 
         try {
@@ -91,10 +92,10 @@ export default function CreateEstablishment() {
                     <TextEditor label={"Corps du Texte"}/>
                 </div>*/}
                 <div>
-                    <TextArea
-                        label="Corps du Texte"
-                        type="text"
-                        placeholder="Entrer un corps de texte"
+                    <Textarea
+                        label="Corps du texte"
+                        className="border border-gray-300 rounded-md p-2"
+                        placeholder="Entrer un texte"
                         value={formData.body}
                         onChange={handleInputBodyChange}
                     />
