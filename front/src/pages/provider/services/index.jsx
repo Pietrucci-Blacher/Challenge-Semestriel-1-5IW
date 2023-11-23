@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/router";
 import useService from "@/hooks/useService";
-import dynamic from "next/dynamic";
 import TextArea from "@/components/TextArea";
 
 export default function CreateEstablishment() {
