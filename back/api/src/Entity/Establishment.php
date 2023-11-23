@@ -53,6 +53,7 @@ use ApiPlatform\OpenApi\Model;
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
+            normalizationContext: ['groups' => ['establishment:read']],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Post(

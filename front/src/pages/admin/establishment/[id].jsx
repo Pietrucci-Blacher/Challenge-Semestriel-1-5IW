@@ -19,7 +19,7 @@ export default function ShowEstablishment() {
     const handleDelete = async (event) => {
         try {
             await deleteEstablishment(id);
-            router.push("/provider/establishment");
+            router.push("/admin/establishment");
         } catch (error) {
             createToastMessage("error", "Une erreur est survenue");
         }
@@ -28,9 +28,13 @@ export default function ShowEstablishment() {
     const renderEstablishment = establishment ? (
         <div>
             <h1>{establishment.name}</h1>
-            <p>{establishment.street}</p>
-            <p>{establishment.city}</p>
-            <p>{establishment.zipCode}</p>
+            <p>Rue: {establishment.street}</p>
+            <p>Ville: {establishment.city}</p>
+            <p>Code postal: {establishment.zipCode}</p>
+            <p>
+                Propriétaire: {establishment.owner.firstname}{" "}
+                {establishment.owner.lastname}
+            </p>
         </div>
     ) : (
         "Chargement..."
@@ -43,14 +47,14 @@ export default function ShowEstablishment() {
             <FlowbiteButton
                 className="my-2"
                 as={Link}
-                href={`/provider/establishment/update/${id}`}
+                href={`/admin/establishment/update/${id}`}
             >
                 Modifier
             </FlowbiteButton>
             <FlowbiteButton
                 className="my-2"
                 as={Link}
-                href="/provider/establishment"
+                href="/admin/establishment"
             >
                 Retour
             </FlowbiteButton>
