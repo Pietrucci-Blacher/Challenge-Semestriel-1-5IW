@@ -76,6 +76,9 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Establishment $establishment = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $body = null;
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -258,6 +261,18 @@ class Service
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
+
+    public function setBody(string $body): static
+    {
+        $this->body = $body;
 
         return $this;
     }

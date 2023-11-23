@@ -6,7 +6,7 @@ import {
     deleteServiceRequest,
 } from '@/services/serviceService'
 
-export  const useService = () => {
+const useService = () => {
     const createService = async (service) => {
         try {
             await createServiceRequest(service);
@@ -46,4 +46,14 @@ export  const useService = () => {
             console.error("Error fetching all services: ", e);
         }
     };
+
+    return {
+        createService,
+        updateService,
+        deleteService,
+        getService,
+        getAllServices
+    };
 }
+
+export default useService;

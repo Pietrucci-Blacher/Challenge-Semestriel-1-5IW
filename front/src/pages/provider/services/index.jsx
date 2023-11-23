@@ -1,21 +1,21 @@
 import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
-import { useEffect, useState } from "react";
+import Textarea from "@/components/TextArea";
+import { useState } from "react";
 import { useToast } from "@/hooks/useToast";
-import { useEstablishment } from "@/hooks/useEstablishment";
 import { useRouter } from "next/router";
-import { createEstablishment } from "@/services/establishmentService";
 import useService from "@/hooks/useService";
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
-    const { create } = useService();
+    const { createService } = useService();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
         title: "",
         description: "",
         body: "",
+        price: 0,
     });
 
     const handleInputTitleChange = (value) => {
@@ -30,30 +30,33 @@ export default function CreateEstablishment() {
         setFormData({ ...formData, body: value });
     };
 
+    const handleInputPriceChange = (value) => {
+        setFormData({ ...formData, price: value });
+    };
+
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { name, street, city, zipCode } = formData;
+        const { title, description, body, price } = formData;
 
-        if (!name || !street || !city || !zipCode) {
+        if (!title || !description || !body || !price) {
             createToastMessage("error", "Veuillez remplir tous les champs");
-            return;
         }
 
         try {
-            const establishment = await createEstablishment({
-                name,
-                street,
-                city,
-                zipCode,
+            const services = await createService({
+                title,
+                description,
+                body,
+                price,
             });
 
-            if (!establishment) {
+            if (!services) {
                 createToastMessage("error", "Une erreur est survenue");
                 return;
             }
 
-            await router.push(`/provider/establishment/${establishment.id}`);
+            await router.push(`/provider/services/${services.id}`);
         } catch (error) {
             createToastMessage("error", error);
         }
@@ -72,37 +75,38 @@ export default function CreateEstablishment() {
                         type="text"
                         placeholder="Entrer un titre"
                         value={formData.title}
-                        onChange={handleInputNameChange}
+                        onChange={handleInputTitleChange}
                     />
                 </div>
                 <div>
                     <Input
-                        label="Rue"
+                        label="Description"
                         type="text"
-                        placeholder="Entrer une rue"
-                        value={formData.street}
-                        onChange={handleInputStreetChange}
+                        placeholder="Entrer une description"
+                        value={formData.description}
+                        onChange={handleInputDescriptionChange}
+                    />
+                </div>
+                <div>
+                    <Textarea
+                        label="Corps du texte"
+                        className="border border-gray-300 rounded-md p-2"
+                        placeholder="Entrer un texte"
+                        value={formData.body}
+                        onChange={handleInputBodyChange}
                     />
                 </div>
                 <div>
                     <Input
-                        label="Ville"
-                        type="text"
-                        placeholder="Entrer une ville"
-                        value={formData.city}
-                        onChange={handleInputCityChange}
+                        label="Prix"
+                        type="number"
+                        placeholder="Entrer un prix"
+                        value={formData.price}
+                        min="0"
+                        onChange={handleInputPriceChange}
                     />
                 </div>
-                <div>
-                    <Input
-                        label="Code postal"
-                        type="text"
-                        placeholder="Entrer un code postal"
-                        value={formData.zipCode}
-                        onChange={handleInputZipCodeChange}
-                    />
-                </div>
-                <GenericButton label="Creer un etablisement" />
+                <GenericButton label="Creer un Service" />
             </form>
         </div>
     );
