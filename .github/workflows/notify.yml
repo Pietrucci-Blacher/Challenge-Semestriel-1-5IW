@@ -18,4 +18,4 @@ jobs:
             color: "#88D9E6"
             username: "Review Pelo Bot"
             avatar_url: "https://cdn.discordapp.com/attachments/1151784787057594428/1152126946789052436/image.png?ex=65321c55&is=651fa755&hm=88684c0f5b1c9aa5251f160c5a649525f98d047644cc3e81e64fa5f2b4681049&"
-            message: "Nouvelle PR: ${{ github.event.pull_request.title }}"
+            message: ":loudspeaker: **Nouvelle PR: ${{ github.event.pull_request.title }}** : ${{ github.event.pull_request.html_url }}"
