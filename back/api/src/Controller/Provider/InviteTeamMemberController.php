@@ -59,7 +59,7 @@ class InviteTeamMemberController extends AbstractController
             throw new \Exception("Seuls les propriétaires peuvent ajouter des membres à l\'établissement.");
         }
         $teamMember = new TeamMember();
-        $teamMember->setEtablishement($establishment);
+        $teamMember->setEstablishment($establishment);
         $teamMember->setMember($user);
 
         $this->entityManager->persist($teamMember);

@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'invite_team_member'
         ),
         new Get(
-            security: 'is_granted("ROLE_ADMIN") or (object.getMember() == user) or (object.getEtablishement().getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (object.getMember() == user) or (object.getEstablishment().getOwner() == user)',
             securityMessage: 'Access interdit.',
         ),
         new Patch(
@@ -58,14 +58,14 @@ class TeamMember
         return $this->id;
     }
 
-    public function getEtablishement(): ?Establishment
+    public function getEstablishment(): ?Establishment
     {
-        return $this->etablishement;
+        return $this->establishment;
     }
 
-    public function setEtablishement(?Establishment $etablishement): static
+    public function setEstablishment(?Establishment $etablishement): static
     {
-        $this->etablishement = $etablishement;
+        $this->establishment = $etablishement;
 
         return $this;
     }

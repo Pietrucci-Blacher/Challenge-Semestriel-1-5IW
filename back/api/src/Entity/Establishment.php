@@ -114,10 +114,14 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class)]
     private Collection $services;
 
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
+    private Collection $teamMembers;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->services = new ArrayCollection();
+        $this->teamMembers = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -243,6 +247,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($service->getEstablishment() === $this) {
                 $service->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeamMember>
+     */
+    public function getTeamMembers(): Collection
+    {
+        return $this->teamMembers;
+    }
+
+    public function addTeamMember(TeamMember $teamMember): static
+    {
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamMember(TeamMember $teamMember): static
+    {
+        if ($this->teamMembers->removeElement($teamMember)) {
+            // set the owning side to null (unless already changed)
+            if ($teamMember->getEstablishment() === $this) {
+                $teamMember->setEstablishment(null);
             }
         }
 
