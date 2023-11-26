@@ -125,6 +125,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
     private Collection $establishments;
 
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamMember::class, orphanRemoval: true)]
+    private Collection $teamMembers;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -134,6 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
         $this->establishments = new ArrayCollection();
+        $this->teamMembers = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -443,6 +447,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($establishment->getOwner() === $this) {
                 $establishment->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeamMember>
+     */
+    public function getTeamMembers(): Collection
+    {
+        return $this->teamMembers;
+    }
+
+    public function addTeamMember(TeamMember $teamMember): static
+    {
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamMember(TeamMember $teamMember): static
+    {
+        if ($this->teamMembers->removeElement($teamMember)) {
+            // set the owning side to null (unless already changed)
+            if ($teamMember->getMember() === $this) {
+                $teamMember->setMember(null);
             }
         }
 
