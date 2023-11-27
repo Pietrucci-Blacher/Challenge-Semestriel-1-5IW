@@ -50,20 +50,44 @@ export default function Register() {
     }
     return (
         <>
-            <h2>
-                Register
-                <br/>
-                <br/>
-                <br/>
-                <div>
-                    <p>Firstname: {formData.firstname}</p>
-                    <p>Lastname: {formData.lastname}</p>
-                    <p>Email: {formData.email}</p>
-                    <p>Password: {formData.password}</p>
+            <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-lg">
+                    <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
+                    Inscription
+                    </h1>
+                    <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
+                    Inscrivez-vous pour proposer/rechercher des cours à domicile !
+                    </p>
+                
+                <form
+                    className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+                    onSubmit={handleSubmit}>
+                    <p className="text-center text-lg font-medium">Créer votre compte</p>
+                    <div className="relative">
+                        <Input label="firstname" type="firstname" placeholder="Entrer votre prénom" 
+                        onChange={handleInputFirstnameChange} value={formData.firstname}  />
+                    </div>
+                    <div className="relative">
+                        <Input label="lastname" type="lastname" placeholder="Entrer votre nom" 
+                        onChange={handleInputLastnameChange} value={formData.lastname} />
+                    </div>
+                    <div className="relative">
+                        <Input label="Email" type="email" placeholder="Entrer votre email" 
+                        onChange={handleInputEmailChange} value={formData.email} />                  </div>
+                    <div className="relative">
+                        <Input label="Password" type="Password" placeholder="Password"
+                        onChange={handleInputPasswordChange} value={password}/>
+                    </div>
+                    <GenericButton label="Inscription" />
+                        <p className="text-center text-sm text-gray-500">
+                        Vous posedez déjà un compte ?
+                            <Link href="/auth/login" className="underline">Connexion</Link>
+                        </p>
+                </form>
                 </div>
-
-
-                <Link href="/auth/login">Login</Link>
+            </div>
+                {/* <Link href="/auth/login">Login</Link>
+                
                 <form onSubmit={handleSubmit}>
                     <div>
                         <Input label="firstname" type="firstname" placeholder="firstname"
@@ -77,12 +101,9 @@ export default function Register() {
                     </div>
 
                     <GenericButton label="S'inscrire"/>
-
-                </form>
+                </form> */}
                 <br/>
-
-
-            </h2>
+            
         </>
     )
 }
