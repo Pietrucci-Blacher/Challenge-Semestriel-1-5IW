@@ -1,5 +1,4 @@
-import axios from "axios";
-import { normalize } from "@/utils/data";
+import {useState} from "react";
 import {
     banUnbanUserService,
     deleteUserService,
@@ -7,21 +6,26 @@ import {
     getUserService,
     getUsersService
 } from "@/services/datatableService";
+import {normalize} from "@/utils/data";
 
 export const useDatatable = () => {
+    const [data, setData] = useState([]);
+    const [userDetails, setUserDetails] = useState(null);
     const fetchAllUsersData = async () => {
         try {
-            await getUsersService();
+            const response = await getUsersService();
+            setData(normalize(response));
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching users:", error);
         }
     };
 
     const fetchUserData = async (id) => {
         try {
-            await getUserService(id);
+            const response = await getUserService(id);
+            setUserDetails(response);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching user:", error);
         }
     };
 
@@ -52,12 +56,13 @@ export const useDatatable = () => {
 
 
 
-    // Return an object with the fetchData function
     return {
         fetchAllUsersData,
         fetchUserData,
         banUser,
         editUser,
-        deleteUser
+        deleteUser,
+        userDetails,
+        data,
     };
 };
