@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\Put;
+use App\Attributes\UserField;
 use App\Repository\ServiceRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -53,13 +55,14 @@ class Service
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[UserField('author')]
     private ?User $author = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
     private ?float $price = null;
@@ -84,6 +87,8 @@ class Service
         $this->payments = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->availableSlots = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -127,24 +132,24 @@ class Service
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
