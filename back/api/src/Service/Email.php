@@ -12,6 +12,7 @@ use App\Entity\User;
 class Email {
     private BrevoConfiguration $config;
     private TransactionalEmailsApi $apiInstance;
+    private static string $emailFrom = 'teddy.gauthier@outlook.com';
 
     public function __construct()
     {
@@ -51,48 +52,53 @@ class Email {
 
     public function sendWelcomeEmail(string $emailTo, string $name)
     {
-        $emailFrom = $_ENV['EMAIL_FROM'];
         $subject = 'Bienvenue';
         $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM';
-
-        $this->sendEmail($emailFrom, $emailTo, $subject, $body);
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
     public function sendResetPasswordEmail(string $emailTo, string $name, string $token)
     {
-        $emailFrom = $_ENV['EMAIL_FROM'];
         $subject = 'Réinitialisation de mot de passe';
         $body = 'Bonjour '.$name.',<br><br> Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="https://localhost/auth/reset-password/validate/'.$token.'">Réinitialiser le mot de passe</a>';
-
-        $this->sendEmail($emailFrom, $emailTo, $subject, $body);
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
-    public function sendNewProviderEmail(array $adminEmails, string $name, int $requestId)
+    public function sendRequestProviderEmail(array $adminEmails, string $name)
     {
-        $emailFrom = $_ENV['EMAIL_FROM'];
         $subject = 'Nouvelle demande prestataire';
-        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name.'. <br><br> <a href="https://localhost/provider-request/'.$requestId.'">Voir la demande</a>';
+        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name;
 
         foreach($adminEmails as $emailTo) {
-            $this->sendEmail($emailFrom, $emailTo, $subject, $body);
+            $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
         }
     }
 
-    public function sendNewProviderConfimationEmail(string $emailTo, string $name)
+    public function sendProviderConfimationEmail(string $emailTo, string $name)
     {
-        $emailFrom = $_ENV['EMAIL_FROM'];
         $subject = 'Demande prestataire';
         $body = 'Bonjour '.$name.',<br><br> Votre demande prestataire a bien été prise en compte.';
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
+    }
 
-        $this->sendEmail($emailFrom, $emailTo, $subject, $body);
+    public function sendProviderAcceptedEmail(string $emailTo, string $name)
+    {
+        $subject = 'Demande prestataire';
+        $body = 'Bonjour '.$name.',<br><br> Votre demande prestataire a été acceptée.';
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
+    }
+
+    public function sendProviderRefusedEmail(string $emailTo, string $name)
+    {
+        $subject = 'Demande prestataire';
+        $body = 'Bonjour '.$name.',<br><br> Votre demande prestataire a été refusée.';
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
     public function sendReservationEmail(string $emailTo, string $name)
     {
-        $emailFrom = $_ENV['EMAIL_FROM'];
         $subject = 'Réservation';
         $body = 'Bonjour '.$name.',<br><br> Votre réservation a bien été prise en compte.';
-
-        $this->sendEmail($emailFrom, $emailTo, $subject, $body);
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 }
