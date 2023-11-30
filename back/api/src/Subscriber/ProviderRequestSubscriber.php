@@ -18,16 +18,13 @@ final class ProviderRequestSubscriber implements EventSubscriberInterface
     private Email $email;
     private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;
-    private Security $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        Security $security
     ) {
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
-        $this->security = $security;
         $this->email = new Email();
     }
 
@@ -67,12 +64,13 @@ final class ProviderRequestSubscriber implements EventSubscriberInterface
         }
 
         if ($statusCode === 201 && $method === "POST") {
-            /* $id = $currentData->getId(); */
+            $content = json_decode($response->getContent(), false);
+            $user = $content->createdBy;
+            /* $requestId = $content->id; */
             /* $admins = $this->userRepository->findByRole("ROLE_ADMIN"); */
-            $user = $this->security->getUser();
 
-            /* $this->email->sendRequestProviderEmail($admins, $user, $id); */
-            $this->email->sendProviderConfimationEmail($user->getEmail(), $user->getFirstname());
+            /* $this->email->sendRequestProviderEmail($admins, $user->name, $requestId); */
+            $this->email->sendProviderConfimationEmail($user->email, $user->firstname);
         }
     }
 }

@@ -64,10 +64,10 @@ class Email {
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
-    public function sendRequestProviderEmail(array $adminEmails, string $name)
+    public function sendRequestProviderEmail(array $adminEmails, string $name, string $requestId)
     {
         $subject = 'Nouvelle demande prestataire';
-        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name;
+        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name.'.<br><br> Pour la consulter, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="https://localhost:8080/admin/requests/'.$requestId.'">Consulter la demande</a>';
 
         foreach($adminEmails as $emailTo) {
             $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
