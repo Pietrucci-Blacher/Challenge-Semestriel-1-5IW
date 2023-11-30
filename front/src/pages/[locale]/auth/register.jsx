@@ -2,7 +2,6 @@ import Link from "next/link";
 import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
 import {useState} from "react";
-import {useAuthContext} from "@/providers/AuthProvider";
 import {useAuth} from "@/hooks/useAuth";
 import {useToast} from "@/hooks/useToast";
 
@@ -63,7 +62,7 @@ export default function Register() {
                 </div>
 
 
-                <Link href="/auth/login">Login</Link>
+                <Link href="/[locale]/auth/login">Login</Link>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <Input label="firstname" type="firstname" placeholder="firstname"

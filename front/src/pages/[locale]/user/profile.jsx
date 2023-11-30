@@ -49,7 +49,7 @@ export default function Profile() {
     }
     return (
         <>
-            <Link href="/auth/logout">Logout</Link>
+            <Link href="/[locale]/auth/logout">Logout</Link>
             <h2>profile role {user?.roles}</h2>
             {user ? (
                 <>

@@ -80,10 +80,10 @@ export default function Login() {
                 </form>
 
             <br/>
-            <Link href="/auth/register">Register</Link>
+            <Link href="/[locale]/auth/register">Register</Link>
             <br/>
             <br/>
-            <Link href="/reset-password/ask">Forgot Password</Link>
+            <Link href="/[locale]/reset-password/ask">Forgot Password</Link>
         </h2>
     )
 }
