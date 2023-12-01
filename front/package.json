@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@react-email/components": "0.0.11",
-    "@react-email/tailwind": "^0.0.12",
+    "@react-email/tailwind": "^0.0.13",
     "axios": "^1.5.1",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.7.0",

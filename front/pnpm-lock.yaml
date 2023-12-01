@@ -9,8 +9,8 @@ dependencies:
     specifier: 0.0.11
     version: 0.0.11(@types/react@18.2.37)(react@18.2.0)
   '@react-email/tailwind':
-    specifier: ^0.0.12
-    version: 0.0.12(react@18.2.0)
+    specifier: ^0.0.13
+    version: 0.0.13(react@18.2.0)
   axios:
     specifier: ^1.5.1
     version: 1.5.1
@@ -1801,6 +1801,16 @@ packages:
       tw-to-css: 0.0.12
     transitivePeerDependencies:
       - ts-node
+    dev: false
+
+  /@react-email/tailwind@0.0.13(react@18.2.0):
+    resolution: {integrity: sha512-uC/nSBau//LYq0ZJea5jO9ZNyLvgJ04Wl9wx63jw26ye+f2nKqQ2gO9OQcpNrEzSvjQXlUXa5rpV/9ZtMGSJHA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: 18.2.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@react-email/text@0.0.6(react@18.2.0):
