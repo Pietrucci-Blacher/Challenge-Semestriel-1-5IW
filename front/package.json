@@ -13,8 +13,8 @@
     "dev:export-email": "email export --dir ../back/api/templates/mails"
   },
   "dependencies": {
-    "@react-email/components": "0.0.11",
-    "@react-email/tailwind": "^0.0.12",
+    "@react-email/components": "0.0.12",
+    "@react-email/tailwind": "^0.0.13",
     "axios": "^1.5.1",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.7.0",
@@ -23,7 +23,7 @@
     "next-i18next": "^15.0.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-email": "1.9.5",
+    "react-email": "1.10.0",
     "react-i18next": "^13.4.1"
   },
   "devDependencies": {
