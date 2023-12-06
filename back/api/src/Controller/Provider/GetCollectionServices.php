@@ -26,10 +26,15 @@ class GetCollectionServices extends AbstractController {
         $this->serializer = $serializer;
     }
 
-    public function __invoke(): Response
-    {
+    public function __invoke(): Response {
         $user = $this->security->getUser();
+
+        if (!$user) {
+            return new Response(null, Response::HTTP_FORBIDDEN);
+        }``
         $services = $this->serviceRepository->findServicesByCurrentUser($user);
         $data = $this->serializer->serialize($services, 'json', ['groups' => ['service:read']]);
-        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);    }
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+
+    }
 }
