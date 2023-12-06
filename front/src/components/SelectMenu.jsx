@@ -16,7 +16,8 @@ export default function SelectMenu({ label, options, id, onChange, ...props }) {
                     <Label htmlFor={id || "select"} value={label} />
                 </div>
             )}
-            <Select {...props} id={id} onChange={handleSelectChange}>
+            <Select {...props} id={id} onChange={handleSelectChange} required>
+                <option value="">Select {label}</option>
                 {options.map((option) => (
                     <option key={String(option.value)} value={String(option.value)}>
                         {option.label}

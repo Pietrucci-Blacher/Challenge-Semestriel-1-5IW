@@ -48,7 +48,7 @@ use ApiPlatform\OpenApi\Model;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_ADMIN")',
+            //security: 'is_granted("ROLE_ADMIN") ',
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
@@ -115,13 +115,12 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'services')]
-    #[Groups(['service:read', 'service:write'])]
-    private ?Establishment $establishment = null;
-
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['service:read', 'service:write'])]
     private ?string $body = null;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Establishment $establishment = null;
 
     public function __construct()
     {
@@ -293,18 +292,6 @@ class Service
         return $this;
     }
 
-    public function getEstablishment(): ?Establishment
-    {
-        return $this->establishment;
-    }
-
-    public function setEstablishment(?Establishment $establishment): static
-    {
-        $this->establishment = $establishment;
-
-        return $this;
-    }
-
     public function getBody(): ?string
     {
         return $this->body;
@@ -313,6 +300,18 @@ class Service
     public function setBody(string $body): static
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    public function getEstablishment(): ?Establishment
+    {
+        return $this->establishment;
+    }
+
+    public function setEstablishment(?Establishment $establishment): static
+    {
+        $this->establishment = $establishment;
 
         return $this;
     }

@@ -33,6 +33,8 @@ export default function ListServices() {
         ))
         : "Chargement en cours";
 
+    console.log(services);
+
     return (
         <>
             <Table hoverable>

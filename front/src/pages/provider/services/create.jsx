@@ -65,11 +65,13 @@ export default function CreateService() {
         }
 
         try {
+            const establishment = `/establishments/${establishment_id}`
+
             const services = await createService({
                 title,
                 description,
                 price,
-                establishment_id,
+                establishment,
                 body
             });
 

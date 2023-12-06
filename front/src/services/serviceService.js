@@ -13,12 +13,12 @@ const getAllServicesRequest = async () => {
     return result["hydra:member"];
 }
 
-const createServiceRequest = ({title, description, price, establishment_id, body}) => {
+const createServiceRequest = ({title, description, price, establishment, body}) => {
     return httpClient.post('services', {
         title,
         description,
         price,
-        establishment_id,
+        establishment,
         body,
     });
 }
