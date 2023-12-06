@@ -21,6 +21,16 @@ class TeamMemberRepository extends ServiceEntityRepository
         parent::__construct($registry, TeamMember::class);
     }
 
+    public function findOneByUserAndEstablishment($userId, $establishmentId) : ?TeamMember
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.member = :userId')
+            ->andWhere('t.establishment = :establishmentId')
+            ->setParameter('userId', $userId)
+            ->setParameter('establishmentId', $establishmentId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 //    /**
 //     * @return TeamMember[] Returns an array of TeamMember objects
 //     */
