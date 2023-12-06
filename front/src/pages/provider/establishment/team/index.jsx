@@ -72,17 +72,9 @@ export default function Team() {
                                   establishment={establishment} key={establishment?.id}/>
                     ))}
                 </div>
-                <div>
-                    <h3>
-                        Inviter un professeur a rajoindre votre etablissement
-                    </h3>
-                    <section>
-
-                    </section>
-                </div>
             </div>
             <Modal show={showModal} onClose={closeModal} size="sm">
-                <Modal.Header>Confirmer la supression</Modal.Header>
+                <Modal.Header>Inviter un professeur a rajoindre votre etablissement</Modal.Header>
                 <Modal.Body>
                     <form className="flex flex-col gap-4 " onSubmit={handleSubmitAddMember}>
                         <div>
