@@ -36,7 +36,8 @@ class GetCollectionServices extends AbstractController {
         $services = $this->serviceRepository->findBy([
             'author' => $user->getId()
         ]);
-        $data = $this->serializer->serialize($services, 'json');
+
+        $data = $this->serializer->serialize($services, 'json', ['groups' => ['service:read']]);
 
         return new Response($data, Response::HTTP_OK, [
             'Content-Type' => 'application/json'
