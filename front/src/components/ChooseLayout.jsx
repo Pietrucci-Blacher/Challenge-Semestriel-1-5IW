@@ -53,20 +53,18 @@ const ChooseLayout = ({children}) => {
     }
     if (!needsAuth) {
         return (
-            <>
-                <Flowbite>
-                    <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
-                        <div>
-                            <Header/>
-                        </div>
-                        <div className="flex flex-row">
-                            <Layout>
-                                {children}
-                            </Layout>
-                        </div>
+            <Flowbite>
+                <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
+                    <div>
+                        <Header/>
                     </div>
-                </Flowbite>
-            </>
+                    <div className="flex flex-row">
+                        <Layout>
+                            {children}
+                        </Layout>
+                    </div>
+                </div>
+            </Flowbite>
         );
     }
     return (

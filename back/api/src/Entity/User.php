@@ -64,11 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'service:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'service:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -107,19 +107,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
-//    #[Groups('user:read')]
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
-//    #[Groups('user:read')]
     private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
-//    #[Groups('user:read')]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
-//    #[Groups('user:read')]
     private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]

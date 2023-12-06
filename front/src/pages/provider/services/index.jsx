@@ -1,118 +1,59 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
-import useService from "@/hooks/useService";
-import TextArea from "@/components/TextArea";
+import { useService } from "@/hooks/useService";
+import { useEffect } from "react";
+import { Button as FlowbiteButton, Table } from "flowbite-react";
+import Link from "next/link";
 
-export default function CreateEstablishment() {
-    const { createToastMessage } = useToast();
-    const { createService } = useService();
-    const router = useRouter();
+export default function ListServices() {
+    const { services, getAllMyServices } = useService();
 
-    const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        body: "",
-        price: 0,
-    });
+    useEffect(() => {
+        getAllMyServices();
+    }, []);
 
-    const handleInputTitleChange = (value) => {
-        setFormData({ ...formData, title: value });
-    };
-
-    const handleInputDescriptionChange = (value) => {
-        setFormData({ ...formData, description: value });
-    };
-
-    const handleInputBodyChange = (value) => {
-        setFormData({ ...formData, body: value });
-    };
-
-    const handleInputPriceChange = (value) => {
-        setFormData({ ...formData, price: parseInt(value) });
-    };
-
-    const handleSubmitCreate = async (event) => {
-        event.preventDefault();
-        const { title, description, body, price } = formData;
-
-        if (!title || !description || !body || !price) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
-            return;
-        }
-
-        try {
-            const services = await createService({
-                title,
-                description,
-                body,
-                price,
-            });
-
-            if (!services) {
-                createToastMessage("error", "Une erreur est survenue");
-                return;
-            }
-
-            await router.push(`/provider/services/${services.id}`);
-        } catch (error) {
-            createToastMessage("error", error);
-        }
-    };
+    const renderServices = services
+        ? services.map((service) => (
+            <Table.Row key={service.id}>
+                <Table.Cell>{service.title}</Table.Cell>
+                <Table.Cell>{service.description}</Table.Cell>
+                <Table.Cell>{service.body}</Table.Cell>
+                <Table.Cell>{service.price}</Table.Cell>
+                <Table.Cell>{service.establishment_id}</Table.Cell>
+                <Table.Cell>
+                    {service.author.firstname} {service.author.lastname}
+                </Table.Cell>
+                <Table.Cell>
+                    <a
+                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                        href={`/provider/services/${service.id}`}
+                    >
+                        Voir
+                    </a>
+                </Table.Cell>
+            </Table.Row>
+        ))
+        : "Chargement en cours";
 
     return (
-        <div>
-            <h1>Create</h1>
-            <form
-                className="flex max-w-md flex-col gap-4"
-                onSubmit={handleSubmitCreate}
+        <>
+            <Table hoverable>
+                <Table.Head>
+                    <Table.HeadCell>Titre</Table.HeadCell>
+                    <Table.HeadCell>Description</Table.HeadCell>
+                    <Table.HeadCell>Body</Table.HeadCell>
+                    <Table.HeadCell>Prix</Table.HeadCell>
+                    <Table.HeadCell>Etablissement</Table.HeadCell>
+                    <Table.HeadCell>Auteur</Table.HeadCell>
+                    <Table.HeadCell>Actions</Table.HeadCell>
+                </Table.Head>
+                <Table.Body>{renderServices}</Table.Body>
+            </Table>
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href="/provider/services/create"
             >
-                <div>
-                    <Input
-                        label="Titre"
-                        type="text"
-                        placeholder="Entrer un titre"
-                        value={formData.title}
-                        onChange={handleInputTitleChange}
-                    />
-                </div>
-                <div>
-                    <Input
-                        label="Description"
-                        type="text"
-                        placeholder="Entrer une description"
-                        value={formData.description}
-                        onChange={handleInputDescriptionChange}
-                    />
-                </div>
-                {/*<div>
-                    <TextEditor label={"Corps du Texte"}/>
-                </div>*/}
-                <div>
-                    <TextArea
-                        label="Corps du Texte"
-                        type="text"
-                        placeholder="Entrer un corps de texte"
-                        value={formData.body}
-                        onChange={handleInputBodyChange}
-                    />
-                </div>
-                <div>
-                    <Input
-                        label="Prix"
-                        type="number"
-                        placeholder="Entrer un prix"
-                        value={formData.price}
-                        min="0"
-                        onChange={handleInputPriceChange}
-                    />
-                </div>
-                <div>
-                    <GenericButton label="Creer un Service" />
-                </div>
-            </form>
-        </div>
+                Créer un service
+            </FlowbiteButton>
+        </>
     );
 }

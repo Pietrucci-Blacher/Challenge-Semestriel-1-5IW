@@ -1,15 +1,19 @@
 import {
     fetchServiceRequest,
+    fetchMyServicesRequest,
     getAllServicesRequest,
     createServiceRequest,
     updateServiceRequest,
     deleteServiceRequest,
 } from '@/services/serviceService'
+import {useState} from "react";
 
-const useService = () => {
-    const createService = async (service) => {
+export const useService = () => {
+    const [service, setService] = useState(null);
+    const [services, setServices] = useState(null);
+    const createService = async (data) => {
         try {
-            await createServiceRequest(service);
+            return await createServiceRequest(data);
         } catch (e) {
             console.error("Error creating service: ", e);
         }
@@ -17,7 +21,7 @@ const useService = () => {
 
     const updateService = async (service) => {
         try {
-            await updateServiceRequest(service);
+            return await updateServiceRequest(service);
         } catch (e) {
             console.error("Error updating service: ", e);
         }
@@ -33,27 +37,41 @@ const useService = () => {
 
     const getService = async (service) => {
         try {
-            await fetchServiceRequest(service);
+            const response = await fetchServiceRequest(service);
+            setService(response)
         } catch (e) {
             console.error("Error fetching service: ", e);
         }
     };
 
+    const getAllMyServices = async () => {
+        try {
+            const response = await fetchMyServicesRequest();
+            setServices(response)
+        } catch (e) {
+            console.error("Error fetching all yours services: ", e);
+        }
+    };
+
     const getAllServices = async () => {
         try {
-            await getAllServicesRequest();
+            const response = await getAllServicesRequest();
+            console.log(response);
+            setServices(response)
         } catch (e) {
             console.error("Error fetching all services: ", e);
         }
     };
 
     return {
+        service,
+        services,
         createService,
         updateService,
         deleteService,
         getService,
-        getAllServices
+        getAllServices,
+        getAllMyServices
     };
 }
 
-export default useService;

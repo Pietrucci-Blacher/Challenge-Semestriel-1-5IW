@@ -1,26 +1,35 @@
 import httpClient from "@/services/httpClient";
 
-const fetchServiceRequest = async (id) => {
-    return await httpClient.get(`services/${id}`)
+const fetchServiceRequest = (id) => {
+    return httpClient.get(`services/${id}`)
+}
+
+const fetchMyServicesRequest = () => {
+    return httpClient.get('services/me')
 }
 
 const getAllServicesRequest = async () => {
-    return await httpClient.get(`services`)
+    const result = await httpClient.get('services');
+    return result["hydra:member"];
 }
 
-const createServiceRequest = async (data) => {
-    return await httpClient.post(`services`, data)
+const createServiceRequest = ({title, description, price, establishment_id, body}) => {
+    return httpClient.post('services', {
+        title,
+        description,
+        price,
+        establishment_id,
+        body,
+    });
 }
 
-const updateServiceRequest = async (id, data) => {
-    return await httpClient.put(`services/${id}`, data)
+const updateServiceRequest = (id, data) => {
+    return httpClient.put(`services/${id}`, data)
 }
 
-const deleteServiceRequest = async (id) => {
-    return await httpClient.delete(`services/${id}`)
+const deleteServiceRequest = (id) => {
+    return httpClient.delete(`services/${id}`)
 }
 
 
-
-
-export { fetchServiceRequest, getAllServicesRequest, createServiceRequest, updateServiceRequest, deleteServiceRequest}
+export { fetchServiceRequest, fetchMyServicesRequest, getAllServicesRequest, createServiceRequest, updateServiceRequest, deleteServiceRequest }

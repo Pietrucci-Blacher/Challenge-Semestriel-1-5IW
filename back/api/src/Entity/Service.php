@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Put;
 use App\Attributes\UserField;
+use App\Controller\Provider\GetCollectionServices;
 use App\Repository\ServiceRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,24 +17,57 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\OpenApi\Model;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/services/me',
+            controller: GetCollectionServices::class,
+            openapi: new Model\Operation(
+                responses: [
+                    '200' => [
+                        'description' => 'Retrieves the services of the current provider.',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'array',
+                                    'items' => [
+                                        '$ref' => '#/components/schemas/Service',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                summary: 'Retrieves the services of the current provider.',
+            ),
+            security: 'is_granted("ROLE_PROVIDER")',
+            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['service:read']],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
         ),
-        new Get(),
+        new Get(
+            normalizationContext: ['groups' => ['service:read']],
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
+            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
+        ),
         new Put(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
         ),
         new Patch(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
         ),
         new Delete(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez supprimer que vos services.',
         )
     ],
@@ -45,17 +79,21 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['service:read', 'service:write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['service:read', 'service:write'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
     #[UserField('author')]
+    #[Groups(['service:read', 'service:write'])]
     private ?User $author = null;
 
     #[ORM\Column]
@@ -65,6 +103,7 @@ class Service
     private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
+    #[Groups(['service:read', 'service:write'])]
     private ?float $price = null;
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Payment::class)]
@@ -76,10 +115,12 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: AvailableSlot::class)]
     private Collection $availableSlots;
 
-    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'services')]
+    #[Groups(['service:read', 'service:write'])]
     private ?Establishment $establishment = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['service:read', 'service:write'])]
     private ?string $body = null;
 
     public function __construct()
@@ -188,11 +229,9 @@ class Service
 
     public function removePayment(Payment $payment): static
     {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getService() === $this) {
-                $payment->setService(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->payments->removeElement($payment) && $payment->getService() === $this) {
+            $payment->setService(null);
         }
 
         return $this;
@@ -218,11 +257,9 @@ class Service
 
     public function removeComment(Comment $comment): static
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getService() === $this) {
-                $comment->setService(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->comments->removeElement($comment) && $comment->getService() === $this) {
+            $comment->setService(null);
         }
 
         return $this;
@@ -248,11 +285,9 @@ class Service
 
     public function removeAvailableSlot(AvailableSlot $availableSlot): static
     {
-        if ($this->availableSlots->removeElement($availableSlot)) {
-            // set the owning side to null (unless already changed)
-            if ($availableSlot->getService() === $this) {
-                $availableSlot->setService(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->availableSlots->removeElement($availableSlot) && $availableSlot->getService() === $this) {
+            $availableSlot->setService(null);
         }
 
         return $this;
