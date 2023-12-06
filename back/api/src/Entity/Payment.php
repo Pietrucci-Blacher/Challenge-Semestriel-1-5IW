@@ -37,10 +37,6 @@ class Payment
     #[ORM\JoinColumn(nullable: false)]
     private ?User $buyer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'payments')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Service $service = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $paymentDate = null;
 
@@ -75,18 +71,6 @@ class Payment
     public function setBuyer(?User $buyer): static
     {
         $this->buyer = $buyer;
-
-        return $this;
-    }
-
-    public function getService(): ?Service
-    {
-        return $this->service;
-    }
-
-    public function setService(?Service $service): static
-    {
-        $this->service = $service;
 
         return $this;
     }

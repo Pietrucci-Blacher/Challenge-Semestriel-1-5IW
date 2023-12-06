@@ -40,9 +40,6 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Service $service = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -90,19 +87,6 @@ class Comment
 
         return $this;
     }
-
-    public function getService(): ?Service
-    {
-        return $this->service;
-    }
-
-    public function setService(?Service $service): static
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

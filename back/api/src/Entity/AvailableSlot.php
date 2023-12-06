@@ -29,11 +29,6 @@ class AvailableSlot
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'availableSlots')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Service $service = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -53,19 +48,6 @@ class AvailableSlot
     {
         return $this->id;
     }
-
-    public function getService(): ?Service
-    {
-        return $this->service;
-    }
-
-    public function setService(?Service $service): static
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

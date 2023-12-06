@@ -106,8 +106,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
-    private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
     private Collection $payments;
@@ -260,36 +258,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Service>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getAuthor() === $this) {
-                $service->setAuthor(null);
-            }
-        }
 
         return $this;
     }

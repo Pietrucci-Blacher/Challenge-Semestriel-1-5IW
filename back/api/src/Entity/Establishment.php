@@ -84,7 +84,7 @@ class Establishment
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     #[UserField('owner')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'service:read'])]
     private ?User $owner = null;
 
     #[ORM\Column]
@@ -111,7 +111,9 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $zipCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class)]
+
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
 
