@@ -1,26 +1,41 @@
 {
-  "name": "challenge-stack-front",
+  "name": "front",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest",
+    "test:e2e": "playwright test",
+    "dev:mail": "email dev --dir src/emails --port 8080",
+    "dev:export-email": "email export --dir ../back/api/templates/mails"
   },
   "dependencies": {
-    "@types/node": "20.8.4",
-    "@types/react": "18.2.28",
-    "@types/react-dom": "18.2.13",
-    "autoprefixer": "10.4.16",
-    "eslint": "8.51.0",
-    "eslint-config-next": "13.5.4",
-    "million": "2.6.4",
-    "next": "13.5.4",
-    "postcss": "8.4.31",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
+    "@react-email/components": "0.0.12",
+    "@react-email/tailwind": "^0.0.13",
+    "axios": "^1.5.1",
+    "flowbite": "^2.0.0",
+    "flowbite-react": "^0.7.0",
+    "i18next": "^23.7.6",
+    "next": "14.0.3",
+    "next-i18next": "^15.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-email": "1.10.0",
+    "react-i18next": "^13.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.39.0",
+    "@types/node": "^20.8.6",
+    "@vitejs/plugin-react": "^4.1.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "jsdom": "^23.0.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "vitest": "^1.0.0"
   }
 }

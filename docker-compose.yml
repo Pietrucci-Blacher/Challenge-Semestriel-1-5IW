@@ -1,0 +1,37 @@
+services:
+  database:
+    extends:
+      file: back/docker-compose.yml
+      service: database
+
+  php:
+    extends:
+      file: back/docker-compose.yml
+      service: php
+    volumes:
+      - ./back/api:/app
+
+  pwa:
+    extends:
+      file: back/docker-compose.yml
+      service: pwa
+    volumes:
+      - ./back/pwa:/srv/app
+
+  node:
+    extends:
+      file: front/docker-compose.yml
+      service: node
+
+  adminer:
+    image: adminer
+    ports:
+      - 9090:8080
+
+
+volumes:
+  php_socket:
+  caddy_data:
+  caddy_config:
+  ###> doctrine/doctrine-bundle ###
+  db_data:
