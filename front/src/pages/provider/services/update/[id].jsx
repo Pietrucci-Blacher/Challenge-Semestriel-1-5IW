@@ -82,7 +82,6 @@ export default function UpdateService() {
                 establishment_id,
                 body
             });
-            console.log(services);
 
             if (!services) {
                 createToastMessage("error", "Une erreur est survenue");

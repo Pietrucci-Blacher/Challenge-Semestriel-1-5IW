@@ -56,7 +56,6 @@ export const useService = () => {
     const getAllServices = async () => {
         try {
             const response = await getAllServicesRequest();
-            console.log(response);
             setServices(response)
         } catch (e) {
             console.error("Error fetching all services: ", e);
