@@ -38,18 +38,20 @@ class TeamMember
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['establishment:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'teamMembers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Establishment $etablishement = null;
+    private ?Establishment $establishment = null;
 
     #[ORM\ManyToOne(inversedBy: 'teamMembers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['establishment:read'])]
     private ?User $member = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["team_member:update"])]
+    #[Groups(["team_member:update", 'establishment:read'])]
     #[Assert\Choice(choices: ['pending', 'approved', 'rejected'], message: 'Invalid status')]
     private ?string $status = 'pending';
 
@@ -63,9 +65,9 @@ class TeamMember
         return $this->establishment;
     }
 
-    public function setEstablishment(?Establishment $etablishement): static
+    public function setEstablishment(?Establishment $establishment): static
     {
-        $this->establishment = $etablishement;
+        $this->establishment = $establishment;
 
         return $this;
     }

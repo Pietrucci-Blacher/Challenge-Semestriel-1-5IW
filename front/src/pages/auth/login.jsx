@@ -65,6 +65,9 @@ export default function Login() {
             {isLogged ? "Logged" : "Not logged"}
             <br/>
             <br/>
+            <div>
+                ossama.dahbi@gmail.com
+            </div>
 
                 <br/>
                 <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmitLogin}>

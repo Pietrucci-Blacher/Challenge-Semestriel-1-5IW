@@ -24,18 +24,21 @@ class GetCollectionEstablishment extends AbstractController {
     }
 
     public function __invoke(): Response {
-        $user = $this->security->getUser();
+        try {
+            $user = $this->security->getUser();
 
-        if (!$user)
-            return new Response(null, Response::HTTP_FORBIDDEN);
+            if (!$user) {
+                return new Response(null, Response::HTTP_FORBIDDEN);
+            }
 
-        $establishments = $this->establishmentRepository->findBy([
-            'owner' => $user->getId()
-        ]);
-        $data = $this->serializer->serialize($establishments, 'json');
+            $establishments = $this->establishmentRepository->findBy(['owner' => $user->getId()]);
+            $data = $this->serializer->serialize($establishments, 'json', ['groups' => ['establishment:read']]);
 
-        return new Response($data, Response::HTTP_OK, [
-            'Content-Type' => 'application/json'
-        ]);
+            return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        } catch (\Exception $e) {
+            // Vous pouvez logger l'exception ici ou renvoyer un message d'erreur personnalisé
+            return new Response("Erreur lors de la récupération des établissements: " . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
 }

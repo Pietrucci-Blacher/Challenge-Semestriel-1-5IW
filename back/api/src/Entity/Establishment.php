@@ -25,11 +25,8 @@ use ApiPlatform\OpenApi\Model;
     operations: [
         new GetCollection(
             uriTemplate: '/establishments/me',
-            security: 'is_granted("ROLE_PROVIDER")',
-            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
             controller: GetCollectionEstablishment::class,
             openapi: new Model\Operation(
-                summary: 'Retrieves the establishments of the current provider.',
                 responses: [
                     '200' => [
                         'description' => 'Retrieves the establishments of the current provider.',
@@ -45,7 +42,11 @@ use ApiPlatform\OpenApi\Model;
                         ],
                     ],
                 ],
+                summary: 'Retrieves the establishments of the current provider.',
             ),
+            normalizationContext: ['groups' => ['establishment:read']],
+            security: 'is_granted("ROLE_PROVIDER")',
+            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
         ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
@@ -115,6 +116,7 @@ class Establishment
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
+    #[Groups(['establishment:read'])]
     private Collection $teamMembers;
 
     public function __construct()
