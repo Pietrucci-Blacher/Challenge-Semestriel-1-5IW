@@ -31,7 +31,7 @@ class GetCollectionServices extends AbstractController {
 
         if (!$user) {
             return new Response(null, Response::HTTP_FORBIDDEN);
-        }``
+        }
         $services = $this->serviceRepository->findServicesByCurrentUser($user);
         $data = $this->serializer->serialize($services, 'json', ['groups' => ['service:read']]);
         return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
