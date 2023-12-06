@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -126,6 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $establishments;
 
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamMember::class, orphanRemoval: true)]
+    #[Groups('user:read')]
     private Collection $teamMembers;
 
     public function __construct()

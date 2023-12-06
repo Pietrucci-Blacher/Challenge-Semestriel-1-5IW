@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\Provider\InviteTeamMemberController;
+use App\Controller\Provider\ReSendNotificationMemberController;
 use App\Dto\InviteTeamMemberDto;
+use App\Dto\ReSendNotificationMemberDto;
 use App\Repository\TeamMemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -17,6 +20,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
 #[ApiResource(
     operations: [
+        new Post(
+            uriTemplate: '/team_members/resend_notification',
+            controller: ReSendNotificationMemberController::class,
+            input: ReSendNotificationMemberDto::class,
+            name: 'resend_notification'
+        ),
         new Post(
             controller: InviteTeamMemberController::class,
             input: InviteTeamMemberDto::class,
@@ -30,6 +39,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => ['team_member:update']],
             security: 'object.getMember() == user',
             securityMessage: 'Access interdit.'
+        ),
+        new Delete(
+            security: 'object.getEstablishment().getOwner() == user',
+            securityMessage: 'Access interdit.'
         )
     ]
 )]
@@ -38,20 +51,23 @@ class TeamMember
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['establishment:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'teamMembers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Establishment $etablishement = null;
+    #[Groups(['establishment:read', 'user:read'])]
+    private ?Establishment $establishment = null;
 
     #[ORM\ManyToOne(inversedBy: 'teamMembers')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['establishment:read', 'user:read'])]
     private ?User $member = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["team_member:update"])]
-    #[Assert\Choice(choices: ['pending', 'approved', 'rejected'], message: 'Invalid status')]
-    private ?string $status = 'pending';
+    #[Groups(["team_member:update", 'establishment:read','user:read'])]
+    #[Assert\Choice(choices: ['Pending', 'Approved', 'Declined'], message: 'Invalid status')]
+    private ?string $status = 'Pending';
 
     public function getId(): ?int
     {
@@ -63,9 +79,9 @@ class TeamMember
         return $this->establishment;
     }
 
-    public function setEstablishment(?Establishment $etablishement): static
+    public function setEstablishment(?Establishment $establishment): static
     {
-        $this->establishment = $etablishement;
+        $this->establishment = $establishment;
 
         return $this;
     }
