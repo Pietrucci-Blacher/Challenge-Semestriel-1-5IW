@@ -8,10 +8,6 @@ import {
 
 export const useTeamMember = () => {
     const addMemberToTeam = async (payload) => {{
-        return
-        return await addMemberToTeamService(payload)
-        return await addMemberToTeamService(payload)
-        return await addMemberToTeamService(payload)
         return await addMemberToTeamService(payload)
     }
 
