@@ -21,7 +21,6 @@ export const useEstablishment = () => {
         setEstablishments(null);
         setEstablishments(response);
     };
-    
     return {
         establishment,
         getEstablishmentById,
