@@ -37,8 +37,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(
             denormalizationContext: ['groups' => ['team_member:update']],
-            security: 'object.getMember() == user',
-            securityMessage: 'Access interdit.'
+            security: "object.getMember() == user and object.getStatus() == 'Pending'",
+            securityMessage: 'Error lors de la mise a jour de votre demande'
         ),
         new Delete(
             security: 'object.getEstablishment().getOwner() == user',
