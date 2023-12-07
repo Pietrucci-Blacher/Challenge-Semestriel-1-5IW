@@ -3,8 +3,9 @@
 namespace App\Serializer;
 
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use App\Attributes\UserField;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
@@ -16,6 +17,9 @@ class InjectUserInfoDenormalizer implements DenormalizerInterface
         protected ObjectNormalizer $normalizer
     ) {}
 
+    /**
+     * @throws ReflectionException
+     */
     public function denormalize($data, $type, $format = null, array $context = [])
     {
         $isUpdateOperation = isset($context['object_to_populate']);
@@ -34,6 +38,9 @@ class InjectUserInfoDenormalizer implements DenormalizerInterface
     }
 
 
+    /**
+     * @throws ReflectionException
+     */
     public function supportsDenormalization($data, $type, $format = null): bool
     {
         $reflectionClass = new ReflectionClass($type);
