@@ -5,7 +5,6 @@ export const useEstablishment = () => {
     const [establishment, setEstablishment] = useState(null);
     const [establishments, setEstablishments] = useState(null);
 
-
     const getEstablishmentById = async (id) => {
         const response = await service.getEstablishmentById(id);
         setEstablishment(response);
