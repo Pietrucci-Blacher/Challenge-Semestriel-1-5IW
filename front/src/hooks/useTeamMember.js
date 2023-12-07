@@ -1,16 +1,9 @@
 import {
     acceptInviteService,
-    addMemberToTeamService, declineInviteService,
+    addMemberToTeamService,
+    declineInviteService,
     reInviteMemberToTeamService,
-    reInviteMemberToTeamService,M
-    removeMemberFromTeamServiceremoveMemberFromTeamServiceremoveMemberFromTeamServiceremoveMemberFromTeamServiceremoveMembremoveemberFromTeamServiceremoveMemberFromTeamService
-    removeMemberFromTeamServiceremoveMemberFromTeamServiceerFromTeamServiceremoveMemberFromTeamService
-    removeMemberFromTeamServiceremoveMemberFromTeamService
-    removeMemberFromTeamServiceremoveMemberFromTeamService
-    removeMemberFromTeamServiceremoveMemberFromTeamService
-    removeMemberFromTeamServiceremoveMemberFromTeamService
-}
-} from "@/services/teamMember";
+    removeMemberFromTeamService,
 } from "@/services/teamMember";
 
 export const useTeamMember = () => {
