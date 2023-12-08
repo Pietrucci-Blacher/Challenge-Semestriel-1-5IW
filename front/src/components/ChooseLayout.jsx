@@ -30,8 +30,8 @@ const ChooseLayout = ({children}) => {
     useEffect(() => {
         if (user === null && needsAuth && !isLogged) {
             router.push('/auth/login');
-
-        } else if (user && needsAuth) {
+        }
+        else if (user && needsAuth) {
             const hasAccess = canAccessTo(path, user.roles);
             setIsAccessAllowed(hasAccess);
             if (!hasAccess) {

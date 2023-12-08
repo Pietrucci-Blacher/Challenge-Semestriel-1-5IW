@@ -25,11 +25,8 @@ use ApiPlatform\OpenApi\Model;
     operations: [
         new GetCollection(
             uriTemplate: '/establishments/me',
-            security: 'is_granted("ROLE_PROVIDER")',
-            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
             controller: GetCollectionEstablishment::class,
             openapi: new Model\Operation(
-                summary: 'Retrieves the establishments of the current provider.',
                 responses: [
                     '200' => [
                         'description' => 'Retrieves the establishments of the current provider.',
@@ -45,7 +42,10 @@ use ApiPlatform\OpenApi\Model;
                         ],
                     ],
                 ],
+                summary: 'Retrieves the establishments of the current provider.',
             ),
+            security: 'is_granted("ROLE_PROVIDER")',
+            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
         ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
@@ -96,7 +96,7 @@ class Establishment
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write',  'user:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -111,13 +111,14 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $zipCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class)]
-    private Collection $services;
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
+    #[Groups(['establishment:read'])]
+    private Collection $teamMembers;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->services = new ArrayCollection();
+        $this->teamMembers = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -220,29 +221,29 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, TeamMember>
      */
-    public function getServices(): Collection
+    public function getTeamMembers(): Collection
     {
-        return $this->services;
+        return $this->teamMembers;
     }
 
-    public function addService(Service $service): static
+    public function addTeamMember(TeamMember $teamMember): static
     {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setEstablishment($this);
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setEstablishment($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeTeamMember(TeamMember $teamMember): static
     {
-        if ($this->services->removeElement($service)) {
+        if ($this->teamMembers->removeElement($teamMember)) {
             // set the owning side to null (unless already changed)
-            if ($service->getEstablishment() === $this) {
-                $service->setEstablishment(null);
+            if ($teamMember->getEstablishment() === $this) {
+                $teamMember->setEstablishment(null);
             }
         }
 
