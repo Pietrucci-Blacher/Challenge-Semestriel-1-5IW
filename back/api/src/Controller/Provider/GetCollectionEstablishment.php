@@ -33,7 +33,6 @@ class GetCollectionEstablishment extends AbstractController {
 
             $establishments = $this->establishmentRepository->findBy(['owner' => $user->getId()]);
             $data = $this->serializer->serialize($establishments, 'json', ['groups' => ['establishment:read']]);
-
             return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
         } catch (\Exception $e) {
             // Vous pouvez logger l'exception ici ou renvoyer un message d'erreur personnalisé

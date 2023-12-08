@@ -44,7 +44,6 @@ use ApiPlatform\OpenApi\Model;
                 ],
                 summary: 'Retrieves the establishments of the current provider.',
             ),
-            normalizationContext: ['groups' => ['establishment:read']],
             security: 'is_granted("ROLE_PROVIDER")',
             securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
         ),
@@ -112,9 +111,6 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $zipCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class)]
-    private Collection $services;
-
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
     #[Groups(['establishment:read'])]
     private Collection $teamMembers;
@@ -122,7 +118,6 @@ class Establishment
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->services = new ArrayCollection();
         $this->teamMembers = new ArrayCollection();
     }
 
@@ -221,36 +216,6 @@ class Establishment
     public function setZipCode(?string $zipCode): static
     {
         $this->zipCode = $zipCode;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Service>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getEstablishment() === $this) {
-                $service->setEstablishment(null);
-            }
-        }
 
         return $this;
     }

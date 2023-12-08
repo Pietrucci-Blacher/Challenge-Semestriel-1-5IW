@@ -73,7 +73,7 @@ export default function Profile() {
                             <div>
                                 <h2>Mes demandes en attentes pour rejoindre des etablissements</h2>
                                 {pendingRequests.map((request) => (
-                                    <div>
+                                    <div key={request.id}>
                                         <span>{request.establishment.name}</span>
                                         <span>{request.status}</span>
                                         <Button onClick={()=>acceptDemand(request.id)}>Accepter la demande</Button>

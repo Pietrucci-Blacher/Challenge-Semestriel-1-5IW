@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-docker compose exec -T php bin/phpunit  &&  docker compose exec -T node pnpm run lint

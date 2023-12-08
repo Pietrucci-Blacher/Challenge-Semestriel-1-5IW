@@ -7,7 +7,7 @@ import {
 } from "@/services/teamMember";
 
 export const useTeamMember = () => {
-    const addMemberToTeam = async (payload) => {{
+    const addMemberToTeam = async (payload) => {
         return await addMemberToTeamService(payload)
     }
 
