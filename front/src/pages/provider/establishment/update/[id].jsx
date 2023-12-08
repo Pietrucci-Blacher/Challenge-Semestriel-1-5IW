@@ -60,7 +60,6 @@ export default function UpdateEstablishment() {
         }
 
         try {
-            console.log("id", id);
             const establishment = await updateEstablishment(id, {
                 name,
                 street,

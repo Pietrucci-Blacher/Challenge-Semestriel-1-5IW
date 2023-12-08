@@ -106,13 +106,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
-//    #[Groups('user:read')]
-    private Collection $services;
-
-    #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
-//    #[Groups('user:read')]
-    private Collection $payments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
 //    #[Groups('user:read')]
@@ -125,15 +118,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
     private Collection $establishments;
 
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamMember::class, orphanRemoval: true)]
+    #[Groups('user:read')]
+    private Collection $teamMembers;
+
     public function __construct()
     {
-        $this->services = new ArrayCollection();
-        $this->payments = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
         $this->establishments = new ArrayCollection();
+        $this->teamMembers = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -269,66 +265,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Service>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getAuthor() === $this) {
-                $service->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setBuyer($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getBuyer() === $this) {
-                $payment->setBuyer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Comment>
      */
     public function getComments(): Collection
@@ -443,6 +379,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($establishment->getOwner() === $this) {
                 $establishment->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeamMember>
+     */
+    public function getTeamMembers(): Collection
+    {
+        return $this->teamMembers;
+    }
+
+    public function addTeamMember(TeamMember $teamMember): static
+    {
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamMember(TeamMember $teamMember): static
+    {
+        if ($this->teamMembers->removeElement($teamMember)) {
+            // set the owning side to null (unless already changed)
+            if ($teamMember->getMember() === $this) {
+                $teamMember->setMember(null);
             }
         }
 

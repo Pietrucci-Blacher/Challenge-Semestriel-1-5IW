@@ -13,7 +13,6 @@ const AdminLayout = ({children}) => {
     ]
     return (
         <>
-
             <Sidebar content={sidebarContent}/>
             <main className="p-6">
                 {children}
