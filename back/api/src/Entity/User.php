@@ -124,7 +124,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
