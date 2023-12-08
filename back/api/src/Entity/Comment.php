@@ -40,7 +40,6 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -87,6 +86,7 @@ class Comment
 
         return $this;
     }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

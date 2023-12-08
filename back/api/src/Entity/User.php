@@ -64,11 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'service:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'service:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -107,27 +107,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'buyer', targetEntity: Payment::class)]
-    private Collection $payments;
-
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+//    #[Groups('user:read')]
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
+//    #[Groups('user:read')]
     private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
     private Collection $establishments;
 
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamMember::class, orphanRemoval: true)]
+    #[Groups('user:read')]
+    private Collection $teamMembers;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
-        $this->payments = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
         $this->establishments = new ArrayCollection();
+        $this->teamMembers = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -263,36 +266,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setBuyer($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getBuyer() === $this) {
-                $payment->setBuyer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Comment>
      */
     public function getComments(): Collection
@@ -407,6 +380,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($establishment->getOwner() === $this) {
                 $establishment->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeamMember>
+     */
+    public function getTeamMembers(): Collection
+    {
+        return $this->teamMembers;
+    }
+
+    public function addTeamMember(TeamMember $teamMember): static
+    {
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamMember(TeamMember $teamMember): static
+    {
+        if ($this->teamMembers->removeElement($teamMember)) {
+            // set the owning side to null (unless already changed)
+            if ($teamMember->getMember() === $this) {
+                $teamMember->setMember(null);
             }
         }
 
