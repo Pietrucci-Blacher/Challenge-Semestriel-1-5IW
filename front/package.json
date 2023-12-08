@@ -8,22 +8,21 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "test:e2e": "playwright test",
-    "dev:mail": "email dev --dir src/emails --port 8080",
-    "dev:export-email": "email export --dir ../back/api/templates/mails"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@react-email/components": "0.0.12",
-    "@react-email/tailwind": "^0.0.13",
+    "@editorjs/editorjs": "^2.28.2",
+    "@editorjs/header": "^2.8.1",
+    "@editorjs/list": "^1.9.0",
     "axios": "^1.5.1",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.7.0",
     "i18next": "^23.7.6",
     "next": "14.0.4",
     "next-i18next": "^15.0.0",
+    "prop-types": "^15.8.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-email": "1.10.0",
     "react-i18next": "^13.4.1"
   },
   "devDependencies": {
@@ -36,6 +35,6 @@
     "jsdom": "^23.0.0",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
-    "vitest": "^1.0.0"
+    "vitest": "^0.34.6"
   }
 }

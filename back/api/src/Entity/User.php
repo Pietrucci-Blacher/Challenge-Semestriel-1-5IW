@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -263,7 +263,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Comment>
