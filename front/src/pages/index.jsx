@@ -2,6 +2,7 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config";
 import {useTranslation} from "next-i18next";
+import Feedback from "@/components/Feedback";
 
 
 
@@ -27,6 +28,8 @@ export default function Index(){
             <Link href="/" locale={changeTo}>
                 <button>{t('change-locale', { changeTo })}</button>
             </Link>
+
+            <Feedback/>
         </div>
     )
 }
