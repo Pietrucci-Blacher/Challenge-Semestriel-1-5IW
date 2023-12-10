@@ -115,10 +115,14 @@ class Establishment
     #[Groups(['establishment:read'])]
     private Collection $teamMembers;
 
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Employee::class)]
+    private Collection $employees;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->teamMembers = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -244,6 +248,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($teamMember->getEstablishment() === $this) {
                 $teamMember->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employee>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employee $employee): static
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employee $employee): static
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getEstablishment() === $this) {
+                $employee->setEstablishment(null);
             }
         }
 

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Attributes\UserField;
 use App\Repository\ScheduleRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
@@ -12,14 +14,19 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 
 #[ApiResource(
-    mercure: true,
     operations: [
-        new GetCollection(),
-        new Post(),
+        new GetCollection(
+            security: 'is_granted("ROLE_ADMIN") or (object.getEmployee() == user) or (object.getEstablishment().getOwner() == user)',
+            securityMessage: 'Access interdit.',
+        ),
+        new Post(
+            security: 'is_granted("ROLE_TEACHER")',
+        ),
         new Get(),
         new Delete(),
         new Patch(),
     ],
+    mercure: true,
 )]
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
 class Schedule
@@ -29,53 +36,68 @@ class Schedule
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $startTime = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $endTime = null;
+
     #[ORM\ManyToOne(inversedBy: 'schedules')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $scheduler = null;
+    #[UserField('employee')]
+    private ?Employee $employee = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[ORM\Column(length: 255)]
+    private ?string $reason = "Not provided";
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getScheduler(): ?User
+    public function getStartTime(): ?\DateTimeImmutable
     {
-        return $this->scheduler;
+        return $this->startTime;
     }
 
-    public function setScheduler(?User $scheduler): static
+    public function setStartTime(\DateTimeImmutable $startTime): static
     {
-        $this->scheduler = $scheduler;
+        $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getEndTime(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->endTime;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setEndTime(\DateTimeImmutable $endTime): static
     {
-        $this->createdAt = $createdAt;
+        $this->endTime = $endTime;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getEmployee(): ?Employee
     {
-        return $this->updatedAt;
+        return $this->employee;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setEmployee(?Employee $employee): static
     {
-        $this->updatedAt = $updatedAt;
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(string $reason): static
+    {
+        $this->reason = $reason;
 
         return $this;
     }

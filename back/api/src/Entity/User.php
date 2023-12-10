@@ -111,10 +111,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 //    #[Groups('user:read')]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
-//    #[Groups('user:read')]
-    private Collection $schedules;
-
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
     private Collection $establishments;
 
@@ -122,14 +118,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private Collection $teamMembers;
 
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Employee::class)]
+    private Collection $employees;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->birthdate = new \DateTimeImmutable();
         $this->establishments = new ArrayCollection();
         $this->teamMembers = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -295,35 +294,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Schedule>
-     */
-    public function getSchedules(): Collection
-    {
-        return $this->schedules;
-    }
-
-    public function addSchedule(Schedule $schedule): static
-    {
-        if (!$this->schedules->contains($schedule)) {
-            $this->schedules->add($schedule);
-            $schedule->setScheduler($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSchedule(Schedule $schedule): static
-    {
-        if ($this->schedules->removeElement($schedule)) {
-            // set the owning side to null (unless already changed)
-            if ($schedule->getScheduler() === $this) {
-                $schedule->setScheduler(null);
-            }
-        }
-
-        return $this;
-    }
-    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -409,6 +379,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($teamMember->getMember() === $this) {
                 $teamMember->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employee>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employee $employee): static
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employee $employee): static
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getEmployee() === $this) {
+                $employee->setEmployee(null);
             }
         }
 
