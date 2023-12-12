@@ -1,6 +1,6 @@
 import httpClient from "./httpClient";
 
-const BASE_URL = "team_members"
+const BASE_URL = "team_invitations"
 const addMemberToTeamService = async (payload) => {
     const {email, establishment} = payload
     return await httpClient.post(`${BASE_URL}`, {email, establishment})
@@ -8,7 +8,7 @@ const addMemberToTeamService = async (payload) => {
 
 const reInviteMemberToTeamService = async (payload) => {
     const {teamMemberId} = payload
-    return await httpClient.post(`${BASE_URL}/resend_notification`, {teamMemberId})
+    return await httpClient.get(`${BASE_URL}/${teamMemberId}/resend_notification`)
 };
 
 const acceptInviteService = async ({id, status}) => {

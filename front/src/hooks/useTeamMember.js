@@ -4,7 +4,7 @@ import {
     declineInviteService,
     reInviteMemberToTeamService,
     removeMemberFromTeamService,
-} from "@/services/teamMember";
+} from "@/services/team";
 
 export const useTeamMember = () => {
     const addMemberToTeam = async (payload) => {

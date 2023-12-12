@@ -1,14 +1,16 @@
 import * as service from "@/services/establishmentService";
-import { useState } from "react";
+import {useCallback, useState} from "react";
 
 export const useEstablishment = () => {
     const [establishment, setEstablishment] = useState(null);
     const [establishments, setEstablishments] = useState(null);
+    const [establishmentId , setEstablishmentId] = useState(null)
 
-    const getEstablishmentById = async (id) => {
+    const getEstablishmentById = useCallback(async (id) => {
         const response = await service.getEstablishmentById(id);
         setEstablishment(response);
-    };
+        setEstablishmentId(id)
+    }, [establishmentId])
 
     const getMyEstablishments = async () => {
         setEstablishments(null);

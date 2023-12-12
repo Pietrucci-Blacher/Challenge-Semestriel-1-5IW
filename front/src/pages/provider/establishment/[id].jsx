@@ -1,20 +1,20 @@
-import { useRouter } from "next/router";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useEffect } from "react";
-import { Button as FlowbiteButton } from "flowbite-react";
+import {useRouter} from "next/router";
+import {useEstablishment} from "@/hooks/useEstablishment";
+import {useEffect} from "react";
+import {Button as FlowbiteButton} from "flowbite-react";
 import Link from "next/link";
 import GenericButton from "@/components/GenericButton";
-import { deleteEstablishment } from "@/services/establishmentService";
-import { useToast } from "@/hooks/useToast";
+import {deleteEstablishment} from "@/services/establishmentService";
+import {useToast} from "@/hooks/useToast";
 
 export default function ShowEstablishment() {
     const router = useRouter();
-    const { id } = router.query;
-    const { establishment, getEstablishmentById } = useEstablishment();
+    const {id} = router.query;
+    const {establishment, getEstablishmentById} = useEstablishment();
 
     useEffect(() => {
         getEstablishmentById(id);
-    }, [id]);
+    }, [getEstablishmentById, id]);
 
     const handleDelete = async (event) => {
         try {
@@ -25,21 +25,19 @@ export default function ShowEstablishment() {
         }
     };
 
-    const renderEstablishment = establishment ? (
-        <div>
-            <h1>{establishment.name}</h1>
-            <p>{establishment.street}</p>
-            <p>{establishment.city}</p>
-            <p>{establishment.zipCode}</p>
-        </div>
-    ) : (
-        "Chargement..."
-    );
 
     return (
         <>
-            <div>{renderEstablishment}</div>
-            <GenericButton onClick={handleDelete} label="Supprimer" />
+            <>{establishment && (
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{establishment.name}</h1>
+                    <p>{establishment.street}</p>
+                    <p>{establishment.city}</p>
+                    <p>{establishment.zipCode}</p>
+                </div>
+            )}</>
+
+            <GenericButton onClick={handleDelete} label="Supprimer"/>
             <FlowbiteButton
                 className="my-2"
                 as={Link}
