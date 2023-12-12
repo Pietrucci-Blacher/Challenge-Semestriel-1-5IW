@@ -6,13 +6,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\Provider\InviteTeamInvitationController;
 use App\Controller\Provider\ReSendNotificationEmployeeController;
 use App\Dto\InviteTeamInvitationDto;
 use App\Repository\TeamInvitationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -48,6 +48,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'resend_notification_to_employee'
         ),
     ]
+)]
+#[ApiResource(
+    uriTemplate: '/establishments/{establishmentId}/team_invitations',
+    operations: [ new GetCollection() ],
+    uriVariables: [
+        'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
+    ],
 )]
 #[ORM\HasLifecycleCallbacks]
 class TeamInvitation

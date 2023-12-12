@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Link;
 use App\Repository\EstablishmentRepository;
 use App\Attributes\UserField;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,7 +45,7 @@ use ApiPlatform\OpenApi\Model;
                 ],
                 summary: 'Retrieves the establishments of the current provider.',
             ),
-            security: 'is_granted("ROLE_PROVIDER")',
+//            security: 'is_granted("ROLE_PROVIDER")',
             securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
         ),
         new Get(
@@ -54,7 +55,7 @@ use ApiPlatform\OpenApi\Model;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN")',
+//            security: 'is_granted("ROLE_ADMIN")',
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
@@ -72,6 +73,14 @@ use ApiPlatform\OpenApi\Model;
             securityMessage: 'Vous ne pouvez supprimer que vos établissements.',
         )
     ]
+)]
+#[ApiResource(
+    uriTemplate: '/users/{userId}/establishments',
+    operations: [ new GetCollection() ],
+    uriVariables: [
+        'userId' => new Link(toProperty: 'owner', fromClass: Establishment::class),
+    ],
+    security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
 )]
 class Establishment
 {
@@ -111,18 +120,14 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?string $zipCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
-    #[Groups(['establishment:read'])]
-    private Collection $teamMembers;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Employee::class)]
-    private Collection $employees;
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class)]
+    private Collection $teamInvitations;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->teamMembers = new ArrayCollection();
-        $this->employees = new ArrayCollection();
+        $this->teamInvitations = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -225,59 +230,29 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, TeamMember>
+     * @return Collection<int, TeamInvitation>
      */
-    public function getTeamMembers(): Collection
+    public function getTeamInvitations(): Collection
     {
-        return $this->teamMembers;
+        return $this->teamInvitations;
     }
 
-    public function addTeamMember(TeamMember $teamMember): static
+    public function addTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if (!$this->teamMembers->contains($teamMember)) {
-            $this->teamMembers->add($teamMember);
-            $teamMember->setEstablishment($this);
+        if (!$this->teamInvitations->contains($teamInvitation)) {
+            $this->teamInvitations->add($teamInvitation);
+            $teamInvitation->setEstablishment($this);
         }
 
         return $this;
     }
 
-    public function removeTeamMember(TeamMember $teamMember): static
+    public function removeTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if ($this->teamMembers->removeElement($teamMember)) {
+        if ($this->teamInvitations->removeElement($teamInvitation)) {
             // set the owning side to null (unless already changed)
-            if ($teamMember->getEstablishment() === $this) {
-                $teamMember->setEstablishment(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Employee>
-     */
-    public function getEmployees(): Collection
-    {
-        return $this->employees;
-    }
-
-    public function addEmployee(Employee $employee): static
-    {
-        if (!$this->employees->contains($employee)) {
-            $this->employees->add($employee);
-            $employee->setEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEmployee(Employee $employee): static
-    {
-        if ($this->employees->removeElement($employee)) {
-            // set the owning side to null (unless already changed)
-            if ($employee->getEstablishment() === $this) {
-                $employee->setEstablishment(null);
+            if ($teamInvitation->getEstablishment() === $this) {
+                $teamInvitation->setEstablishment(null);
             }
         }
 
