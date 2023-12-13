@@ -7,6 +7,7 @@ use App\Attributes\UserField;
 //use App\Controller\Teacher\AddSchedule;
 //use App\Controller\Teacher\GetMySchedules;
 //use App\Controller\Teacher\GetScheduleByEmployee;
+use App\Controller\Schedules\GetSchedulesByUserAndEstablishment;
 use App\Dto\Teacher\AddScheduleDto;
 use App\Repository\ScheduleRepository;
 use DateTime;
@@ -18,12 +19,31 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ApiResource(
     operations: [
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/schedules',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'assignedTo', fromClass: Schedule::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/establishments/{establishmentId}/schedules',
+            uriVariables: [
+                'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
+            ],
+            normalizationContext: ['groups' => ['schedule:read']],
+        ),
+        new GetCollection(
+            uriTemplate: '/establishments/{establishmentId}/users/{userId}/schedules',
+            controller: GetSchedulesByUserAndEstablishment::class
+
+        ),
         new Post(
             security: 'is_granted("ROLE_TEACHER")',
             securityMessage: 'Access interdit.',
@@ -34,14 +54,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     ],
     mercure: true,
 )]
-#[ApiResource(
-    uriTemplate: '/users/{userId}/schedules',
-    operations: [ new GetCollection() ],
-    uriVariables: [
-        'userId' => new Link(toProperty: 'assignedTo', fromClass: Schedule::class),
-    ],
-    security: " is_granted('ROLE_PROVIDER') or is_granted('VIEW_MY_RESOURCES', request)"
-)]
 #[ORM\Entity(repositoryClass: ScheduleRepository::class)]
 class Schedule
 {
@@ -51,16 +63,26 @@ class Schedule
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['schedule:read'])]
     private ?string $reason = "Not provided";
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
     #[UserField('assignedTo')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['schedule:read'])]
     private ?User $assignedTo = null;
 
+    #[ORM\ManyToOne(inversedBy: 'schedules')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['schedule:read'])]
+    private ?Establishment $establishment = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['schedule:read'])]
     private ?\DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['schedule:read'])]
     private ?\DateTimeInterface $endTime = null;
 
     public function getId(): ?int
@@ -125,7 +147,6 @@ class Schedule
         $startTime = $this->startTime;
         $endTime = $this->endTime;
         $currentDate = new \DateTime();
-
         if ($startTime <= $currentDate) {
             $context->buildViolation('Le startTime doit être dans le futur ' )
                 ->atPath('startTime')
@@ -137,5 +158,17 @@ class Schedule
                 ->atPath('startTime')
                 ->addViolation();
         }
+    }
+
+    public function getEstablishment(): ?Establishment
+    {
+        return $this->establishment;
+    }
+
+    public function setEstablishment(?Establishment $establishment): static
+    {
+        $this->establishment = $establishment;
+
+        return $this;
     }
 }
