@@ -21,7 +21,6 @@ class UserOwnedResourceVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
-        dd($subject);
         switch ($attribute) {
             case self::VIEW_MY_RESOURCES:
                 if($user->getId() == $subject->attributes->get("userId")){

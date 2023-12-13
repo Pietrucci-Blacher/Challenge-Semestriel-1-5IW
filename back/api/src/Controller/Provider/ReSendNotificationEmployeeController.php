@@ -4,15 +4,15 @@ namespace App\Controller\Provider;
 
 
 
-use App\Entity\Employee;
+use App\Entity\TeamInvitation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReSendNotificationEmployeeController  extends AbstractController
 {
-    public function __invoke(Employee $employee): Response
+    public function __invoke(TeamInvitation $teamInvitation): Response
     {
-        $employeeEmail = $employee->getEmployee()->getEmail();
+        $employeeEmail = $teamInvitation->getMember()->getEmail();
 
         // TODO:
         // Envoyer un mail à l'utilisateur pour lui informer

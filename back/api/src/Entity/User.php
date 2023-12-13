@@ -65,11 +65,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -108,17 +108,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
 //    #[Groups('user:read')]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class, orphanRemoval: true)]
     private Collection $establishments;
 
-    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class)]
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
-    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class)]
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
 
     public function __construct()
@@ -397,7 +397,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->schedules->contains($schedule)) {
             $this->schedules->add($schedule);
-            $schedule->setAssignedTo($this);
+            $schedule->setAssigned($this);
         }
 
         return $this;
@@ -407,8 +407,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->schedules->removeElement($schedule)) {
             // set the owning side to null (unless already changed)
-            if ($schedule->getAssignedTo() === $this) {
-                $schedule->setAssignedTo(null);
+            if ($schedule->getAssigned() === $this) {
+                $schedule->setAssigned(null);
             }
         }
 

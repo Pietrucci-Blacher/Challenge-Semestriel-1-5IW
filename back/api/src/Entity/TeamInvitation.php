@@ -22,6 +22,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/establishments/{establishmentId}/team_invitations',
+            uriVariables: [
+                'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
+            ],
+            normalizationContext: ['groups' => ['team_invitation:read']]
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/team_invitations',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'member', fromClass: User::class),
+            ],
+            normalizationContext: ['groups' => ['team_invitation:read']],
+        ),
         new Post(
             controller: InviteTeamInvitationController::class,
             input: InviteTeamInvitationDto::class,
@@ -49,32 +63,28 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ]
 )]
-#[ApiResource(
-    uriTemplate: '/establishments/{establishmentId}/team_invitations',
-    operations: [ new GetCollection() ],
-    uriVariables: [
-        'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
-    ],
-)]
 #[ORM\HasLifecycleCallbacks]
 class TeamInvitation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['establishment:read', 'team_invitation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'teamInvitations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['establishment:read', 'team_invitation:read'])]
     private ?User $member = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Choice(choices: ['Pending', 'Approved', 'Rejected'], message: 'Invalid status')]
-    #[Groups(["team_invitation:update", 'establishment:read','user:read'])]
+    #[Groups(["team_invitation:update", 'establishment:read', 'user:read', 'team_invitation:read', 'schedule:read'])]
     private ?string $joinRequestStatus = "Pending";
 
     #[ORM\ManyToOne(inversedBy: 'teamInvitations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['establishment:read', 'team_invitation:read'])]
     private ?Establishment $establishment = null;
 
     #[ORM\Column]
@@ -89,12 +99,14 @@ class TeamInvitation
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist(): void {
+    public function onPrePersist(): void
+    {
         $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $event): void {
+    public function onPreUpdate(PreUpdateEventArgs $event): void
+    {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
