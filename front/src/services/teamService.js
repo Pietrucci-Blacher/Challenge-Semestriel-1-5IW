@@ -23,11 +23,22 @@ const removeMemberFromTeamService = async ({id}) => {
     return await httpClient.delete(`${BASE_URL}/${id}`)
 };
 
+const getEstablishmentTeamInvitationService = async (establishmentId) => {
+    const response = await httpClient.get(`establishments/${establishmentId}/${BASE_URL}`)
+    return response["hydra:member"] ?? [];
+};
+
+const getUserInvitationService = async (userId) => {
+    return await httpClient.get(`users/${userId}/${BASE_URL}`)
+};
+
 
 export {
     addMemberToTeamService,
     reInviteMemberToTeamService,
     acceptInviteService,
     declineInviteService,
-    removeMemberFromTeamService
+    removeMemberFromTeamService,
+    getEstablishmentTeamInvitationService,
+    getUserInvitationService
 }
