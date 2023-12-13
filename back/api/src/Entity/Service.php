@@ -15,6 +15,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\OpenApi\Model;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\User\SearchService;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ApiResource(
     operations: [
@@ -44,7 +47,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_PROVIDER") ',
+            security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
@@ -71,6 +74,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['service:read']],
     mercure: true,
 )]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'description' => 'partial'])]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -95,7 +99,8 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?string $body = null;
 
-    #[ORM\ManyToOne(inversedBy: 'services')]
+    /* #[ORM\ManyToOne(inversedBy: 'services')] */
+    #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['service:read', 'service:write'])]
     private ?Establishment $establishment = null;

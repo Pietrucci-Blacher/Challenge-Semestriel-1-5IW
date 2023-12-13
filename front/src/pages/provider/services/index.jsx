@@ -18,9 +18,9 @@ export default function ListServices() {
                 <Table.Cell>{service.body}</Table.Cell>
                 <Table.Cell>{service.price}</Table.Cell>
                 <Table.Cell>{service.establishment_id}</Table.Cell>
-                <Table.Cell>
+                {/*<Table.Cell>
                     {service.author.firstname} {service.author.lastname}
-                </Table.Cell>
+                </Table.Cell>*/}
                 <Table.Cell>
                     <a
                         className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
@@ -44,7 +44,7 @@ export default function ListServices() {
                     <Table.HeadCell>Body</Table.HeadCell>
                     <Table.HeadCell>Prix</Table.HeadCell>
                     <Table.HeadCell>Etablissement</Table.HeadCell>
-                    <Table.HeadCell>Auteur</Table.HeadCell>
+                    {/*<Table.HeadCell>Auteur</Table.HeadCell>*/}
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body>{renderServices}</Table.Body>

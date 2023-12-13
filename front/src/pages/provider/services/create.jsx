@@ -51,7 +51,8 @@ export default function CreateService() {
 
 
     const handleInputPriceChange = (value) => {
-        setFormData({ ...formData, price: parseInt(value) });
+        // setFormData({ ...formData, price: parseInt(value) });
+        setFormData({ ...formData, price: value });
     };
 
     const handleSubmitCreate = async (event) => {

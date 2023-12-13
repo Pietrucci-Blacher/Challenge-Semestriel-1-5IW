@@ -1,7 +1,7 @@
 import {Label, Textarea } from 'flowbite-react';
 import PropTypes from 'prop-types';
 
-export default function TextArea({ label, type, value, placeholder, onChange, required}) {
+export default function TextArea({ label, type, value, placeholder, onChange, required, id}) {
 
     const handleChange = (e) => {
         onChange(e.target.value)
@@ -19,6 +19,7 @@ export default function TextArea({ label, type, value, placeholder, onChange, re
                 placeholder={placeholder}
                 onChange={handleChange}
                 required={required}
+                id={id}
             />
         </div>
     )
@@ -31,5 +32,6 @@ TextArea.propTypes = {
     value: PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
-    required: PropTypes.bool
+    required: PropTypes.bool,
+    id: PropTypes.string
 }

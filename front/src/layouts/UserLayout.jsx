@@ -13,7 +13,7 @@ const UserLayout = ({children}) => {
     return (
         <>
             <Sidebar content={sidebarContent}/>
-            <main className=" p-6">
+            <main className="p-6 w-full">
                 {children}
             </main>
         </>

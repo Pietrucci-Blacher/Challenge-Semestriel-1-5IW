@@ -31,6 +31,16 @@ class ServiceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function searchServices(string $search)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.title LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Service[] Returns an array of Service objects
 //     */

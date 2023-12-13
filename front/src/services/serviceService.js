@@ -8,8 +8,16 @@ const fetchMyServicesRequest = () => {
     return httpClient.get('services/me')
 }
 
-const getAllServicesRequest = async () => {
-    const result = await httpClient.get('services');
+const getAllServicesRequest = async (filter) => {
+    console.log('filter', filter);
+    const param = Object.keys(filter)
+        .map(key => `${key}=${filter[key]}`)
+        .join('&');
+
+    console.log('param', param);
+
+    const query = param ? `?${param}` : '';
+    const result = await httpClient.get(`services${query}`);
     return result["hydra:member"];
 }
 
@@ -31,5 +39,11 @@ const deleteServiceRequest = (id) => {
     return httpClient.delete(`services/${id}`)
 }
 
-
-export { fetchServiceRequest, fetchMyServicesRequest, getAllServicesRequest, createServiceRequest, updateServiceRequest, deleteServiceRequest }
+export {
+    fetchServiceRequest,
+    fetchMyServicesRequest,
+    getAllServicesRequest,
+    createServiceRequest,
+    updateServiceRequest,
+    deleteServiceRequest,
+}

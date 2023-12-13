@@ -5,6 +5,7 @@ import {
     createServiceRequest,
     updateServiceRequest,
     deleteServiceRequest,
+    searchServiceRequest,
 } from '@/services/serviceService'
 import {useState} from "react";
 
@@ -53,12 +54,21 @@ export const useService = () => {
         }
     };
 
-    const getAllServices = async () => {
+    const getAllServices = async (filter) => {
         try {
-            const response = await getAllServicesRequest();
+            const response = await getAllServicesRequest(filter);
             setServices(response)
         } catch (e) {
             console.error("Error fetching all services: ", e);
+        }
+    };
+
+    const searchService = async (search) => {
+        try {
+            const response = await searchServiceRequest(search);
+            setServices(response)
+        } catch (e) {
+            console.error("Error searching service: ", e);
         }
     };
 
