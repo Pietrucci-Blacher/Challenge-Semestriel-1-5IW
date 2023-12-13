@@ -1,14 +1,22 @@
 import {useEstablishment} from "@/hooks/useEstablishment";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import {Button as FlowbiteButton, Table} from "flowbite-react";
 import Link from "next/link";
+import {useAuthContext} from "@/providers/AuthProvider";
 
 export default function ListEstablishment() {
+    const {user} = useAuthContext();
     const {establishments, getMyEstablishments} = useEstablishment();
 
     useEffect(() => {
-        getMyEstablishments();
-    }, []);
+        const {id} = user
+        if (!id) return
+        getMyEstablishments(id);
+    }, [user, getMyEstablishments]);
+
+    useEffect(() => {
+        console.log(establishments)
+    }, [establishments]);
 
     const renderEstablishments = establishments ? establishments.map((establishment) => (
             <Table.Row key={establishment.id}>
