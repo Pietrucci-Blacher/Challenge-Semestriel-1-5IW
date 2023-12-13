@@ -5,6 +5,7 @@ export const useEstablishment = () => {
     const [establishment, setEstablishment] = useState(null);
     const [establishments, setEstablishments] = useState(null);
     const [establishmentId , setEstablishmentId] = useState(null)
+    const [userId , setUserId] = useState(null)
 
     const getEstablishmentById = useCallback(async (id) => {
         const response = await service.getEstablishmentById(id);
@@ -12,11 +13,13 @@ export const useEstablishment = () => {
         setEstablishmentId(id)
     }, [establishmentId])
 
-    const getMyEstablishments = async () => {
+    const getMyEstablishments = useCallback(async (userId) => {
         setEstablishments(null);
-        const response = await service.getMyEstablishments();
-        setEstablishments(response);
-    };
+        const response = await service.getMyEstablishments(userId);
+        const establishments = response["hydra:member"]
+        setEstablishments(establishments);
+        setUserId(userId);
+    }, [userId])
 
     const getAllEstablishments = async () => {
         const response = await service.getAllEstablishments();

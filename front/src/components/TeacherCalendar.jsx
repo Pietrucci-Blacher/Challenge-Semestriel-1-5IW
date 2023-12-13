@@ -2,26 +2,25 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import {Fragment, useEffect, useState} from 'react'
-import {Dialog, Transition} from "@headlessui/react";
-import {CheckIcon, ExclamationTriangleIcon} from "@heroicons/react/20/solid";
+import {Fragment, useCallback, useEffect, useState} from 'react'
 import {Button, Label, Modal, TextInput} from "flowbite-react";
 import {useAuthContext} from "@/providers/AuthProvider";
-import {useEmployeeSchedule} from "@/hooks/useEmployeeSchedule";
+import {useSchedule} from "@/hooks/useSchedule";
 
-export default function TeacherCalendar() {
+export default function TeacherCalendar({establishmentId}) {
     const {user} = useAuthContext();
     const {
-        schedule,
-        userSchedules,
-        getUserSchedules,
+        schedules,
+        getSchedulesByUserAndEstablishment,
         addSchedule,
         updateSchedule,
         deleteSchedule,
-    } = useEmployeeSchedule()
+    } = useSchedule()
     const [openModal, setOpenModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [currentSchedule, setCurrentSchedule] = useState(null)
+    const [points, setPoints] = useState([])
+    const [establishment,setEstablishment] = useState(null)
     const [newSchedule, setNewSchedule] = useState({
         title: '',
         start: '',
@@ -29,11 +28,44 @@ export default function TeacherCalendar() {
         id: 0,
     })
 
+    const getPoint = (schedule) => {
+        if (!schedule) return
+        const point = {
+            id: '',
+            title: '',
+            start: '',
+            end: '',
+        };
+        point["id"] = schedule["id"];
+        point["title"] = schedule["reason"];
+        let start = new Date(schedule["startTime"]);
+        start.setHours(start.getHours() - 1);
+        point["start"] = start.toISOString();
+        let end = new Date(schedule["endTime"]);
+        end.setHours(end.getHours() - 1);
+        point["end"] = end.toISOString();
+        return point;
+    }
+
+
     useEffect(() => {
-        if  (user?.id){
-            getUserSchedules(user?.id)
+        const userId = user?.id
+        if (userId && establishmentId) {
+            setEstablishment(establishmentId)
+            getSchedulesByUserAndEstablishment({userId, establishmentId })
         }
-    }, [user,getUserSchedules]);
+    }, [user, establishmentId]);
+
+    useEffect(() => {
+        const points = []
+        schedules.forEach((element) => {
+            points.push(getPoint(element))
+        })
+        setPoints(points)
+    }, [schedules]);
+
+
+
 
     const convertDateToString = (dateTime) => {
         if (!dateTime) return
@@ -63,17 +95,19 @@ export default function TeacherCalendar() {
         setCurrentSchedule({...currentSchedule, title: value})
     }
 
-    async function handleCreateSchedule(e) {
+    const handleCreateSchedule = useCallback(async (e) => {
         e.preventDefault()
-        await addSchedule(newSchedule)
+        const scheduleToCreate = {...newSchedule, establishment}
+        await addSchedule(scheduleToCreate)
         setNewSchedule({
             title: '',
             start: '',
             allDay: false,
+            establishment: establishment,
             id: 0
         })
         setShowCreateModal(false)
-    }
+    }, [establishment, newSchedule]);
 
     function handleSelect(scheduleToCreate) {
         const newSchedule = {
@@ -89,8 +123,8 @@ export default function TeacherCalendar() {
     async function handleUpdateScheduleTime(schedule) {
         const id = schedule.event.id
         const currentSchedule = {
-            startTime:schedule.event.startStr,
-            endTime:schedule.event.endStr,
+            startTime: schedule.event.startStr,
+            endTime: schedule.event.endStr,
         }
         await updateSchedule(id, currentSchedule)
     }
@@ -112,118 +146,124 @@ export default function TeacherCalendar() {
 
     return (
         <>
+            {establishmentId && (
+                <>
+                    <FullCalendar
+                        events={points}
+                        locale={"fr"}
+                        initialView="timeGridWeek"
+                        slotMinTime="08:00:00"
+                        slotMaxTime="19:00:00"
+                        allDaySlot={false}
+                        nowIndicator={true}
+                        editable={true}
+                        droppable={true}
+                        selectable={true}
+                        selectMirror={true}
+                        plugins={[
+                            dayGridPlugin,
+                            interactionPlugin,
+                            timeGridPlugin
+                        ]}
+                        headerToolbar={{
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'resourceTimelineWook, dayGridMonth,timeGridWeek'
+                        }}
+                        eventClick={handleEventClick}
+                        select={handleSelect}
+                        eventDrop={handleUpdateScheduleTime}
+                        eventResize={handleUpdateScheduleTime}
+                    />
 
-            <FullCalendar
-                events={userSchedules}
-                locale={"fr"}
-                initialView="timeGridWeek"
-                slotMinTime="08:00:00"
-                slotMaxTime="19:00:00"
-                allDaySlot={false}
-                nowIndicator={true}
-                editable={true}
-                droppable={true}
-                selectable={true}
-                selectMirror={true}
-                plugins={[
-                    dayGridPlugin,
-                    interactionPlugin,
-                    timeGridPlugin
-                ]}
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'resourceTimelineWook, dayGridMonth,timeGridWeek'
-                }}
-                eventClick={handleEventClick}
-                select={handleSelect}
-                eventDrop={handleUpdateScheduleTime}
-                eventResize={handleUpdateScheduleTime}
-            />
+                    {currentSchedule && <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
+                        <Modal.Header>Gerer le creneau {currentSchedule?.title} </Modal.Header>
+                        <Modal.Body>
+                            <div className="space-y-6">
+                                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                    Vous pouvez soit mettre à jour votre crenaux ou le
+                                    supprimer {currentSchedule?.startStr}
+                                </p>
+                                <div>
 
-            {currentSchedule && <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header>Gerer le creneau {currentSchedule?.title} </Modal.Header>
-                <Modal.Body>
-                    <div className="space-y-6">
-                        <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            Vous pouvez soit mettre à jour votre crenaux ou le supprimer {currentSchedule?.startStr}
-                        </p>
-                        <div>
-
-                            <div className="flex flex-row justify-between">
-                                <div className="w-1/2 mr-1">
-                                    <div className="mb-2 block">
-                                        <Label value={`Date debut : ${convertDateToString(newSchedule?.start)}`}/>
+                                    <div className="flex flex-row justify-between">
+                                        <div className="w-1/2 mr-1">
+                                            <div className="mb-2 block">
+                                                <Label
+                                                    value={`Date debut : ${convertDateToString(newSchedule?.start)}`}/>
+                                            </div>
+                                        </div>
+                                        <div className="w-1/2 ml-1">
+                                            <div className="mb-2 block">
+                                                <Label value={`Date fin : ${convertDateToString(newSchedule?.end)}`}/>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="w-1/2 ml-1">
-                                    <div className="mb-2 block">
-                                        <Label value={`Date fin : ${convertDateToString(newSchedule?.end)}`}/>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div className="mt-4">
-                                <div className="mb-2 block">
-                                    <Label htmlFor="title" value="Title"/>
-                                </div>
-                                <TextInput id="title" type="text" placeholder="Titre du creneau" required
-                                           value={currentSchedule?.title}
-                                           onChange={(handleUpdateReasonInput)}/>
-                            </div>
-                        </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleUpdateScheduleReason}>Mettre à jour</Button>
-                    <Button color="gray" onClick={handleDeleteSchedule}>
-                        Supprimer
-                    </Button>
-                </Modal.Footer>
-            </Modal>}
-
-
-            <Modal show={showCreateModal} onClose={() => setShowCreateModal(false)}>
-                <Modal.Header>Crer un schedule</Modal.Header>
-                <Modal.Body>
-                    <div className="space-y-6">
-                        <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            Vous etes sur le point de créer un nouveau
-                        </p>
-                        <div>
-
-                            <div className="flex flex-row justify-between">
-                                <div className="w-1/2 mr-1">
-                                    <div className="mb-2 block">
-                                        <Label value={`Date debut : ${convertDateToString(newSchedule?.start)}`}/>
-                                    </div>
-                                </div>
-                                <div className="w-1/2 ml-1">
-                                    <div className="mb-2 block">
-                                        <Label value={`Date fin : ${convertDateToString(newSchedule?.end)}`}/>
+                                    <div className="mt-4">
+                                        <div className="mb-2 block">
+                                            <Label htmlFor="title" value="Title"/>
+                                        </div>
+                                        <TextInput id="title" type="text" placeholder="Titre du creneau" required
+                                                   value={currentSchedule?.title}
+                                                   onChange={(handleUpdateReasonInput)}/>
                                     </div>
                                 </div>
                             </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={handleUpdateScheduleReason}>Mettre à jour</Button>
+                            <Button color="gray" onClick={handleDeleteSchedule}>
+                                Supprimer
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                    }
 
-                            <div className="mt-4">
-                                <div className="mb-2 block">
-                                    <Label htmlFor="reason" value="Raison"/>
+
+                    <Modal dismissible show={showCreateModal} onClose={() => setShowCreateModal(false)}>
+                        <Modal.Header>Crer un schedule</Modal.Header>
+                        <Modal.Body>
+                            <div className="space-y-6">
+                                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                    Vous etes sur le point de créer un nouveau
+                                </p>
+                                <div>
+
+                                    <div className="flex flex-row justify-between">
+                                        <div className="w-1/2 mr-1">
+                                            <div className="mb-2 block">
+                                                <Label
+                                                    value={`Date debut : ${convertDateToString(newSchedule?.start)}`}/>
+                                            </div>
+                                        </div>
+                                        <div className="w-1/2 ml-1">
+                                            <div className="mb-2 block">
+                                                <Label value={`Date fin : ${convertDateToString(newSchedule?.end)}`}/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-4">
+                                        <div className="mb-2 block">
+                                            <Label htmlFor="reason" value="Raison"/>
+                                        </div>
+                                        <TextInput id="reason" type="text" placeholder="Raison de ce creneau" required
+                                                   value={newSchedule.title} onChange={handleAddReason}/>
+                                    </div>
                                 </div>
-                                <TextInput id="reason" type="text" placeholder="Raison de ce creneau" required
-                                           value={newSchedule.title} onChange={handleAddReason}/>
                             </div>
-                        </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleCreateSchedule}>Creer</Button>
-                    <Button color="gray" onClick={() => setOpenModal(false)}>
-                        Annuler
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={handleCreateSchedule}>Creer</Button>
+                            <Button color="gray" onClick={() => setShowCreateModal(false)}>
+                                Annuler
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>
+            )}
         </>
+
     )
 }

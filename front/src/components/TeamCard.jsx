@@ -3,12 +3,13 @@ import {Button} from 'flowbite-react';
 import {HiTrash, HiMail} from 'react-icons/hi';
 import {useState} from "react";
 
-export function TeamCard({establishment, onReinviteMember, onRemoveMember}) {
-    const {teamMembers, ...establishmentInfo} = establishment
+export function TeamCard({members, onReinviteMember, onRemoveMember}) {
+    console.log("members", members)
+    return
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [memberIdToDelete, setMemberIdToDelete] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null)
-    const getUserToDelete = (memberId) => teamMembers.find((team) => team.id === memberId)
+    const getUserToDelete = (memberId) => members.find((team) => team.id === memberId)
 
     const openConfirmModal = (memberId) => {
         const userToDelete = getUserToDelete(memberId)
@@ -23,7 +24,6 @@ export function TeamCard({establishment, onReinviteMember, onRemoveMember}) {
     };
 
     const deleteMember = () => {
-        console.log("called")
         onRemoveMember(memberIdToDelete)
         closeConfirmModal()
     }
@@ -37,7 +37,7 @@ export function TeamCard({establishment, onReinviteMember, onRemoveMember}) {
                 <div className="flow-root">
                     <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                         {
-                            teamMembers.length > 0 ? teamMembers.map((element, index) => (
+                            members.length > 0 ? members.map((element, index) => (
                                 <li className="py-3 sm:py-4" key={index}>
                                     <div className="flex items-center space-x-4">
                                         <div className="min-w-0 flex-1">

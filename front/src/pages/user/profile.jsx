@@ -8,10 +8,10 @@ import useUserAccount from "@/hooks/useUserAccount";
 import Link from "next/link";
 import {HiAdjustments, HiClipboardList, HiUserCircle} from "react-icons/hi";
 import {MdDashboard} from "react-icons/md";
-import {useTeamMember} from "@/hooks/useTeamMember";
+import {useTeam} from "@/hooks/useTeam";
 
 export default function Profile() {
-    const {acceptInvite, declineInvite} = useTeamMember()
+    const {acceptInvite, declineInvite} = useTeam()
     const {user, verifyUser, fetchUser} = useAuthContext();
     const {userProfile, updateProfile} = useUserAccount(user?.id);
     const [formData, setFormData] = useState({...userProfile});
