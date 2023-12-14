@@ -33,10 +33,6 @@ class Schedule
     #[ORM\JoinColumn(nullable: false)]
     private ?User $scheduler = null;
 
-    #[ORM\OneToOne(inversedBy: 'schedule', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?AvailableSlot $slot = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -56,18 +52,6 @@ class Schedule
     public function setScheduler(?User $scheduler): static
     {
         $this->scheduler = $scheduler;
-
-        return $this;
-    }
-
-    public function getSlot(): ?AvailableSlot
-    {
-        return $this->slot;
-    }
-
-    public function setSlot(AvailableSlot $slot): static
-    {
-        $this->slot = $slot;
 
         return $this;
     }

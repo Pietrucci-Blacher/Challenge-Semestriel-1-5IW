@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Service;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,6 +22,15 @@ class ServiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Service::class);
     }
 
+    public function findServicesByCurrentUser(User $user)
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.establishment', 'e')
+            ->where('e.owner = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Service[] Returns an array of Service objects
 //     */

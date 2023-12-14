@@ -32,13 +32,12 @@ const handleResponseError = async (error) => {
     const status = error?.response.status;
     const message = error?.response?.data?.message;
     if (status === 401 && message === 'Expired JWT Token' && !originalRequest._retry) {
-        console.log('Expired JWT Token');
         originalRequest._retry = true;
-        const refreshToken = ses('refreshToken');
+        const refreshToken = sessionStorage.getItem('refreshToken');
         if (!refreshToken) {
             return Promise.reject(error);
         }
-        const response = await axios.post('https://localhost/token/refresh', { refresh_token: refreshToken });
+        const response = await axios.post('https://localhost/token/refresh', {refresh_token: refreshToken});
         const newJwtToken = response?.data?.token;
         const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {
@@ -74,7 +73,7 @@ httpClient.get = async function (url, config) {
 };
 
 httpClient.post = async function (url, data, config) {
-    const headers = { ...config?.headers };
+    const headers = {...config?.headers};
     config = {
         ...config,
         headers
@@ -84,7 +83,7 @@ httpClient.post = async function (url, data, config) {
 };
 
 httpClient.put = async function (url, data, config) {
-    const headers = { ...config?.headers };
+    const headers = {...config?.headers};
     config = {
         ...config,
         headers
@@ -94,7 +93,7 @@ httpClient.put = async function (url, data, config) {
 };
 
 httpClient.patch = async function (url, data, config) {
-    const headers = { ...config?.headers };
+    const headers = {...config?.headers};
     config = {
         ...config,
         headers
