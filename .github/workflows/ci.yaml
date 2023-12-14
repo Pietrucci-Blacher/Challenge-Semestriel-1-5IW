@@ -55,55 +55,41 @@ jobs:
 
   ci-front:
     runs-on: ubuntu-latest
+    needs: ci-back
+    strategy:
+      matrix:
+        node-version: [ 21 ]
     defaults:
       run:
         working-directory: front
-    needs: ci-back
+
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
         with:
-          path: |
-            ~/.docker
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
+          version: 8
 
-      - name: Build Docker images
-        uses: docker/bake-action@v4
+      - name: Set up npm
+        uses: actions/setup-node@v4
         with:
-          workdir: front
-          pull: true
-          load: true
-          files: |
-            docker-compose.yml
-          set: |
-            *.cache-from=type=gha,scope=${{github.ref}}
-            *.cache-from=type=gha,scope=refs/heads/main
-            *.cache-to=type=gha,scope=${{github.ref}},mode=max
-
-      - name: Start services
-        working-directory: front
-        run: docker compose up --wait --build
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: docker compose exec -T node pnpm install
+        run: pnpm install
 
       - name: Build
-        run: docker compose exec -T node pnpm run build
+        run: pnpm run build
 
-      #- name: Install Playwright dependencies
-      #  run: docker compose exec -T node pnpm dlx playwright install --with-deps
+      - name: Install Playwright dependencies
+        run: pnpm dlx playwright install --with-deps
 
-      #- name: Run Playwright tests
-      #  run: docker compose exec -T node pnpm run test:e2e CI=1
+      - name: Run Playwright tests
+        run: pnpm run test:e2e CI=1
 
       - name: Run Vitest tests
-        run: docker compose exec -T node pnpm run test --no-watch
+        run: pnpm run test --no-watch
