@@ -34,18 +34,16 @@ export default function ListAllEstablishment() {
         : "Chargement en cours";
 
     return (
-        <>
-            <Table>
-                <Table.Head>
-                    <Table.HeadCell>Nom</Table.HeadCell>
-                    <Table.HeadCell>Rue</Table.HeadCell>
-                    <Table.HeadCell>Ville</Table.HeadCell>
-                    <Table.HeadCell>Code postal</Table.HeadCell>
-                    <Table.HeadCell>Propriétaire</Table.HeadCell>
-                    <Table.HeadCell>Actions</Table.HeadCell>
-                </Table.Head>
-                <Table.Body>{renderEstablishments}</Table.Body>
-            </Table>
-        </>
+        <Table>
+            <Table.Head>
+                <Table.HeadCell>Nom</Table.HeadCell>
+                <Table.HeadCell>Rue</Table.HeadCell>
+                <Table.HeadCell>Ville</Table.HeadCell>
+                <Table.HeadCell>Code postal</Table.HeadCell>
+                <Table.HeadCell>Propriétaire</Table.HeadCell>
+                <Table.HeadCell>Actions</Table.HeadCell>
+            </Table.Head>
+            <Table.Body>{renderEstablishments}</Table.Body>
+        </Table>
     );
 }

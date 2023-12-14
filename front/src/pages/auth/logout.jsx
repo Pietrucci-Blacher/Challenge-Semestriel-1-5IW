@@ -10,6 +10,4 @@ export default function Logout() {
         logout()
         router.push('/')
     }, [logout, router]);
-
-
 }

@@ -11,15 +11,16 @@ export const useEstablishment = () => {
     };
 
     const getMyEstablishments = async () => {
+        setEstablishments(null);
         const response = await service.getMyEstablishments();
         setEstablishments(response);
     };
 
     const getAllEstablishments = async () => {
         const response = await service.getAllEstablishments();
+        setEstablishments(null);
         setEstablishments(response);
     };
-
     return {
         establishment,
         getEstablishmentById,
