@@ -13,8 +13,8 @@ export const getEstablishmentById = (id) => {
     return httpClient.get(`/establishments/${id}`);
 };
 
-export const getMyEstablishments = () => {
-    return httpClient.get("/establishments/me");
+export const getMyEstablishments = (userId) => {
+    return httpClient.get(`users/${userId}/establishments`);
 };
 
 export const deleteEstablishment = (id) => {

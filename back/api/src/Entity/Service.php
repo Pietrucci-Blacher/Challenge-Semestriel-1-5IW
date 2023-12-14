@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -19,28 +20,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: '/services/me',
-            controller: GetCollectionServices::class,
-            openapi: new Model\Operation(
-                responses: [
-                    '200' => [
-                        'description' => 'Retrieves the establishments of the current provider.',
-                        'content' => [
-                            'application/json' => [
-                                'schema' => [
-                                    'type' => 'array',
-                                    'items' => [
-                                        '$ref' => '#/components/schemas/Establishment',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                summary: 'Retrieves the establishments of the current provider.',
-            ),
-            security: 'is_granted("ROLE_PROVIDER")',
-            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
+            uriTemplate: '/establishments/{establishmentId}/services',
+            uriVariables: [
+                'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
+            ]
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['service:read']],
@@ -95,9 +78,9 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?string $body = null;
 
+    #[Groups(['service:read', 'service:write'])]
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['service:read', 'service:write'])]
     private ?Establishment $establishment = null;
 
 
