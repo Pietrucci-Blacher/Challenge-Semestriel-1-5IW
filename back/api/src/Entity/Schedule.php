@@ -41,8 +41,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         ),
         new GetCollection(
             uriTemplate: '/establishments/{establishmentId}/users/{userId}/schedules',
-            controller: GetSchedulesByUserAndEstablishment::class
-
+            controller: GetSchedulesByUserAndEstablishment::class,
+            normalizationContext: ['groups' => ['schedule:read']]
         ),
         new Post(
             security: 'is_granted("ROLE_TEACHER")',
@@ -60,6 +60,7 @@ class Schedule
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['schedule:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

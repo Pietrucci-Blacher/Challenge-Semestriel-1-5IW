@@ -58,10 +58,10 @@ use App\Controller\Auth\MeController;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[Groups(['user:read', 'auth:me'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:read', 'auth:me','team_invitation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -75,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'team_invitation:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
