@@ -1,6 +1,6 @@
-import {useResetPassword} from "@/hooks/useResetPassword";
-import {useState} from "react";
-import Input from "@/components/Input";
+import { useResetPassword } from '@/hooks/useResetPassword';
+import { useState } from 'react';
+import Input from '@/components/Input';
 
 export default function AskResetPassword() {
     const [email, setEmail] = useState('');
@@ -16,14 +16,23 @@ export default function AskResetPassword() {
             <h1>Mot de passe oublié</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <Input label="Email" type="email" placeholder="Email" onChange={setEmail} value={email} required/>
+                    <Input
+                        label="Email"
+                        type="email"
+                        placeholder="Email"
+                        onChange={setEmail}
+                        value={email}
+                        required
+                    />
                 </div>
 
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Envoi en cours...' : 'Réinitialiser le mot de passe'}
+                    {isLoading
+                        ? 'Envoi en cours...'
+                        : 'Réinitialiser le mot de passe'}
                 </button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
-    )
+    );
 }
