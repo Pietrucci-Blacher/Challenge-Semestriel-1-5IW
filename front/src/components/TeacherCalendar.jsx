@@ -21,6 +21,7 @@ export default function TeacherCalendar({establishmentId}) {
     const [currentSchedule, setCurrentSchedule] = useState(null)
     const [points, setPoints] = useState([])
     const [establishment,setEstablishment] = useState(null)
+    const [userId, setUserId] = useState(null)
     const [newSchedule, setNewSchedule] = useState({
         title: '',
         start: '',
@@ -51,6 +52,7 @@ export default function TeacherCalendar({establishmentId}) {
     useEffect(() => {
         const userId = user?.id
         if (userId && establishmentId) {
+            setUserId(userId)
             setEstablishment(establishmentId)
             getSchedulesByUserAndEstablishment({userId, establishmentId })
         }
@@ -58,6 +60,7 @@ export default function TeacherCalendar({establishmentId}) {
 
     useEffect(() => {
         const points = []
+        console.log("called")
         schedules.forEach((element) => {
             points.push(getPoint(element))
         })
@@ -99,6 +102,7 @@ export default function TeacherCalendar({establishmentId}) {
         e.preventDefault()
         const scheduleToCreate = {...newSchedule, establishment}
         await addSchedule(scheduleToCreate)
+        getSchedulesByUserAndEstablishment({userId, establishmentId })
         setNewSchedule({
             title: '',
             start: '',

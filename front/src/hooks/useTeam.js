@@ -17,8 +17,8 @@ export const useTeam = () => {
         return await addMemberToTeamService(payload)
     }
 
-    const reInviteMemberToTeam = async (payload) => {
-        return await reInviteMemberToTeamService(payload)
+    const reInviteMemberToTeam = async (memberId) => {
+        return await reInviteMemberToTeamService(memberId)
     }
 
     const acceptInvite = async (payload) => {
@@ -39,7 +39,7 @@ export const useTeam = () => {
         const data = await getEstablishmentTeamInvitationService(establishmentId)
         setEstablishmentTeam(data)
         setEstablishmentId(establishmentId)
-    }, [establishmentId])
+    }, [])
 
     const getUserApprovedInvitation = useCallback(async (userId) => {
         const data = await getUserInvitationService(userId)

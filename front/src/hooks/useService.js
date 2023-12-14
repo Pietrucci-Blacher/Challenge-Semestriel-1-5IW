@@ -72,7 +72,7 @@ export const useService = () => {
         } catch (e) {
             console.error("Error fetching all services: ", e);
         }
-    }, [establishmentId])
+    }, [])
 
     return {
         service,

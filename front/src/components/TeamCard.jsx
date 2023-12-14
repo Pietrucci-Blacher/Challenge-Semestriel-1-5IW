@@ -4,8 +4,7 @@ import {HiTrash, HiMail} from 'react-icons/hi';
 import {useState} from "react";
 
 export function TeamCard({members, onReinviteMember, onRemoveMember}) {
-    console.log("members", members)
-    return
+
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [memberIdToDelete, setMemberIdToDelete] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null)
@@ -29,50 +28,56 @@ export function TeamCard({members, onReinviteMember, onRemoveMember}) {
     }
     return (
         <>
-            <Card className="max-w-lg w-1/2 mx-4 mb-8">
-                <div className="flex items-center justify-between">
-                    <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Equipe
-                        pour {establishment?.name}</h5>
-                </div>
-                <div className="flow-root">
-                    <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {
-                            members.length > 0 ? members.map((element, index) => (
-                                <li className="py-3 sm:py-4" key={index}>
-                                    <div className="flex items-center space-x-4">
-                                        <div className="min-w-0 flex-1">
-                                            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                                                {element.member.lastname} {element.member.firstname}
-                                            </p>
-                                            <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-                                                {element.member.email}
-                                            </p>
-                                        </div>
-                                        <Badge color={
-                                            element.status === 'Pending' ? 'warning' :
-                                                element.status === 'Approved' ? 'success' :
-                                                    element.status === 'Declined' ? 'failure' :
-                                                        'info'
-                                        }>
-                                            {element.status}
-                                        </Badge>
-                                        <Button>
-                                            <HiMail onClick={()=> onReinviteMember(element.id)}/>
+            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                {
+                    members.length > 0 ? members.map((element, index) => (
+                        <li className="py-3 sm:py-4" key={index}>
+                            <div className="flex items-center space-x-8">
+                                <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                                        {element.member.lastname} {element.member.firstname}
+                                    </p>
+                                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                                        {element.member.email}
+                                    </p>
+                                </div>
+                                <Badge color={
+                                    element.joinRequestStatus === 'Pending' ? 'warning' :
+                                        element.joinRequestStatus === 'Approved' ? 'success' :
+                                            element.joinRequestStatus === 'Declined' ? 'failure' :
+                                                'info'
+                                }>
+                                    {element.joinRequestStatus}
+                                </Badge>
+                                {element.joinRequestStatus === 'Pending' ? (
+                                        <Button.Group>
+                                            <Button color="gray" onClick={() => onReinviteMember(element.id)}>
+                                                <HiMail className="mr-3 h-4 w-4"/>
+                                                Relancer
+                                            </Button>
+                                            <Button color="gray" onClick={() => openConfirmModal(element.id)}>
+                                                <HiTrash className="mr-3 h-4 w-4"/>
+                                                Messages
+                                            </Button>
+                                        </Button.Group>
+                                    ) :
+                                    (
+                                        <Button color="gray" onClick={() => openConfirmModal(element.id)}>
+                                            <HiTrash className="mr-3 h-4 w-4"/>
+                                            Messages
                                         </Button>
-                                        <Button onClick={() => openConfirmModal(element.id)}>
-                                            <HiTrash/>
-                                        </Button>
-                                    </div>
-                                </li>
-                            )) : (
-                                <li className="py-3 sm:py-4">
-                                    Pas de membre
-                                </li>
-                            )
-                        }
-                    </ul>
-                </div>
-            </Card>
+                                    )}
+
+
+                            </div>
+                        </li>
+                    )) : (
+                        <li className="py-3 sm:py-4">
+                            Pas de membre
+                        </li>
+                    )
+                }
+            </ul>
             <Modal show={showConfirmModal} onClose={closeConfirmModal}>
                 <Modal.Header>Confirmer la supression</Modal.Header>
                 <Modal.Body>

@@ -18,12 +18,10 @@ export const useSchedule = () => {
             reason: newSchedule["title"],
             startTime: newSchedule["start"],
             endTime: newSchedule["end"],
-            establishment: newSchedule["establishment"],
+            establishment: `/establishments/${newSchedule["establishment"]}`,
         }
         const response = await addScheduleService(payload)
-        getUserSchedules(userId)
     }, [userId]);
-
 
     const updateSchedule = useCallback(async (id, payload) => {
         const schedule = await updateScheduleService(id, payload)
@@ -48,6 +46,7 @@ export const useSchedule = () => {
 
     const getUserSchedules = useCallback(async (userId) => {
         try {
+            setSchedules([]);
             const data = await getUserSchedulesService({userId})
             const schedulesData = data["hydra:member"] ?? []
             setUserId(userId)
@@ -59,6 +58,7 @@ export const useSchedule = () => {
 
     const getEstablishmentSchedules = useCallback(async (establishmentId) => {
         try {
+            setSchedules([]);
             const data = await getEstablishmentSchedulesService({establishmentId})
             const schedulesData = data["hydra:member"] ?? []
             setSchedules(schedulesData);
@@ -66,7 +66,7 @@ export const useSchedule = () => {
         } catch (error) {
             console.error('Erreur lors de la récupération des indisponibilités:', error);
         }
-    }, [establishmentId]);
+    }, []);
 
     const getSchedulesByUserAndEstablishment = useCallback(async ({ establishmentId,userId }) => {
         try {

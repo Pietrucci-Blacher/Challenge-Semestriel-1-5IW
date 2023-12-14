@@ -11,7 +11,7 @@ export const useEstablishment = () => {
         const response = await service.getEstablishmentById(id);
         setEstablishment(response);
         setEstablishmentId(id)
-    }, [establishmentId])
+    }, [])
 
     const getMyEstablishments = useCallback(async (userId) => {
         setEstablishments(null);

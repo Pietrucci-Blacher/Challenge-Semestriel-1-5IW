@@ -6,9 +6,8 @@ const addMemberToTeamService = async (payload) => {
     return await httpClient.post(`${BASE_URL}`, {email, establishment})
 };
 
-const reInviteMemberToTeamService = async (payload) => {
-    const {teamMemberId} = payload
-    return await httpClient.get(`${BASE_URL}/${teamMemberId}/resend_notification`)
+const reInviteMemberToTeamService = async (memberId) => {
+    return await httpClient.get(`${BASE_URL}/${memberId}/resend_notification`)
 };
 
 const acceptInviteService = async ({id, status}) => {
