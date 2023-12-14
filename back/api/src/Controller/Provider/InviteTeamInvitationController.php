@@ -2,11 +2,11 @@
 
 namespace App\Controller\Provider;
 
-use App\Dto\InviteTeamMemberDto;
-use App\Entity\TeamMember;
+use App\Dto\InviteTeamInvitationDto;
+use App\Entity\TeamInvitation;
 use App\Entity\User;
 use App\Repository\EstablishmentRepository;
-use App\Repository\TeamMemberRepository;
+use App\Repository\TeamInvitationRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,27 +14,26 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-
-class InviteTeamMemberController extends AbstractController
+class InviteTeamInvitationController extends AbstractController
 {
     private EstablishmentRepository $establishmentRepository;
     private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
     private Security $security;
     private AuthorizationCheckerInterface $authorizationChecker;
-    private TeamMemberRepository $teamMemberRepository;
+    private TeamInvitationRepository $teamInvitationRepository;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, Security $security, EstablishmentRepository $establishmentRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, TeamMemberRepository $teamMemberRepository)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, Security $security, EstablishmentRepository $establishmentRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, TeamInvitationRepository $teamInvitationRepository)
     {
         $this->establishmentRepository = $establishmentRepository;
-        $this->teamMemberRepository = $teamMemberRepository;
+        $this->teamInvitationRepository = $teamInvitationRepository;
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
         $this->security = $security;
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function __invoke(InviteTeamMemberDto $inviteTeamMemberDto)
+    public function __invoke(InviteTeamInvitationDto $inviteTeamInvitationDto)
     {
         /** @var User $owner */
         $owner = $this->getUser();
@@ -43,12 +42,12 @@ class InviteTeamMemberController extends AbstractController
             return new Response(null, Response::HTTP_FORBIDDEN);
         }
 
-        $email = $inviteTeamMemberDto->email;
+        $email = $inviteTeamInvitationDto->email;
         $user = $this->userRepository->findOneByEmail($email);
         if (!$user) {
             throw new \Exception("Utilisateur non trouvé, verifier s'il est bien inscrit");
         }
-        $establishmentUri = $inviteTeamMemberDto->establishment;
+        $establishmentUri = $inviteTeamInvitationDto->establishment;
         $establishmentId = basename($establishmentUri);
         $establishment = $this->establishmentRepository->find($establishmentId);
 
@@ -63,18 +62,18 @@ class InviteTeamMemberController extends AbstractController
             throw new \Exception("Seuls les propriétaires peuvent ajouter des membres à l\'établissement.");
         }
 
-        $existingTeamMember = $this->teamMemberRepository->findOneByUserAndEstablishment($user->getId(), $establishment->getId());
-        if ($existingTeamMember) {
+        $existingTeamInvitation = $this->teamInvitationRepository->findOneByUserAndEstablishment($user->getId(), $establishment->getId());
+        if ($existingTeamInvitation) {
             throw new \Exception("Cet utilisateur est déjà membre de l'établissement.");
         }
-        $teamMember = new TeamMember();
-        $teamMember->setEstablishment($establishment);
-        $teamMember->setMember($user);
+        $teamInvitation = new TeamInvitation();
+        $teamInvitation->setEstablishment($establishment);
+        $teamInvitation->setMember($user);
 
-        $this->entityManager->persist($teamMember);
+        $this->entityManager->persist($teamInvitation);
         $this->entityManager->flush();
         // TODO:
         // Envoyer un mail à l'utilisateur pour lui informer
-        return $teamMember;
+        return $teamInvitation;
     }
 }
