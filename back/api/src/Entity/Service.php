@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\User\SearchService;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 
 #[ApiResource(
     operations: [
@@ -51,6 +52,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
+            /* inputFormats: ['multipart' => ['multipart/form-data']], */
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
@@ -60,10 +62,12 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new Put(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
+            /* inputFormats: ['multipart' => ['multipart/form-data']], */
         ),
         new Patch(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
+            /* inputFormats: ['multipart' => ['multipart/form-data']], */
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
@@ -75,6 +79,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     mercure: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'description' => 'partial'])]
+#[ApiFilter(RangeFilter::class, properties: ['price'])]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -91,9 +96,9 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     #[Groups(['service:read', 'service:write'])]
-    private ?string $price = null;
+    private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['service:read', 'service:write'])]
@@ -135,12 +140,12 @@ class Service
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 

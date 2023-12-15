@@ -1,4 +1,5 @@
 import httpClient from "@/services/httpClient";
+import { urlParameters } from "@/utils/utils";
 
 const fetchServiceRequest = (id) => {
     return httpClient.get(`services/${id}`)
@@ -8,15 +9,8 @@ const fetchMyServicesRequest = () => {
     return httpClient.get('services/me')
 }
 
-const getAllServicesRequest = async (filter) => {
-    console.log('filter', filter);
-    const param = Object.keys(filter)
-        .map(key => `${key}=${filter[key]}`)
-        .join('&');
-
-    console.log('param', param);
-
-    const query = param ? `?${param}` : '';
+const getAllServicesRequest = async (filter = {}) => {
+    const query = urlParameters(filter);
     const result = await httpClient.get(`services${query}`);
     return result["hydra:member"];
 }

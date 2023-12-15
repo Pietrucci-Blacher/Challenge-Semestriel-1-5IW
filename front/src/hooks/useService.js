@@ -63,15 +63,6 @@ export const useService = () => {
         }
     };
 
-    const searchService = async (search) => {
-        try {
-            const response = await searchServiceRequest(search);
-            setServices(response)
-        } catch (e) {
-            console.error("Error searching service: ", e);
-        }
-    };
-
     return {
         service,
         services,

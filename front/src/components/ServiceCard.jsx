@@ -1,18 +1,14 @@
 import { Card } from "flowbite-react";
 
 export default function ServiceCard({
-    title = '',
-    imgSrc = '',
-    imgAlt = '',
-    className = '',
-    price = '',
+    title = "",
+    imgSrc = "",
+    imgAlt = "",
+    className = "",
+    price = "",
 }) {
     return (
-        <Card
-            className={className}
-            imgAlt={imgAlt}
-            imgSrc={imgSrc}
-        >
+        <Card className={className} imgAlt={imgAlt} imgSrc={imgSrc}>
             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 {title}
             </h5>
