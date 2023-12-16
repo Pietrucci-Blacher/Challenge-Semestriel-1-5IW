@@ -35,20 +35,18 @@ export default function ListServices() {
         setFormData({ ...formData, maxPrice: parseInt(value) || 0});
     };
 
+    // imgSrc="https://www.logolynx.com/images/logolynx/12/127ea6d2d0a5b4d1605c37802b13c82c.png"
     const renderCard = services
         ? services.map((service, key) => (
               <ServiceCard
                   key={key}
                   title={service.title}
                   price={service.price}
-                  imgSrc="https://www.logolynx.com/images/logolynx/12/127ea6d2d0a5b4d1605c37802b13c82c.png"
-                  imgAlt="test"
+                  imgSrc={service.image}
+                  imgAlt="image"
               />
           ))
         : null;
-
-    const labelMinPrice = `Prix minimum: ${formData.minPrice}€`;
-    const labelMaxPrice = `Prix maximum: ${formData.maxPrice}€`;
 
     return (
         <>
@@ -70,14 +68,14 @@ export default function ListServices() {
                 <Modal.Body>
                     <Slider
                         id="minPrice"
-                        label={labelMinPrice}
+                        label={`Prix minimum: ${formData.minPrice}€`}
                         value={formData.minPrice}
                         max="3000"
                         onChange={handleSliderMinPriceChange}
                     />
                     <Slider
                         id="maxPrice"
-                        label={labelMaxPrice}
+                        label={`Prix maximum: ${formData.maxPrice}€`}
                         value={formData.maxPrice}
                         max="3000"
                         onChange={handleSliderMaxPriceChange}

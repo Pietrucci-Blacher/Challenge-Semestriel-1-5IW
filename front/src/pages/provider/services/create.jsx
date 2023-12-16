@@ -1,9 +1,9 @@
 import GenericButton from "@/components/GenericButton";
 import Input from "@/components/Input";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/router";
-import { Button as FlowbiteButton} from "flowbite-react";
+import { Button as FlowbiteButton, FileInput } from "flowbite-react";
 import Link from "next/link";
 import TextArea from "@/components/TextArea";
 import {useService} from "@/hooks/useService";
@@ -15,6 +15,7 @@ export default function CreateService() {
     const { createService } = useService();
     const router = useRouter();
     const { establishments, getMyEstablishments } = useEstablishment();
+    const [image, setImage] = useState(null);
 
 
     useEffect(() => {
@@ -28,6 +29,11 @@ export default function CreateService() {
         establishment_id: 0,
         price: 0,
     });
+
+    const handleFileChange = (event) => {
+        const image = event.target.files[0];
+        setImage(image);
+    };
 
     const handleInputTitleChange = (value) => {
         setFormData({ ...formData, title: value });
@@ -56,7 +62,6 @@ export default function CreateService() {
         event.preventDefault();
         const { title, description, price, establishment_id, body} = formData;
 
-
         if (!title || !description || !price || !establishment_id || !body) {
             createToastMessage("error", "Veuillez remplir tous les champs");
             return;
@@ -65,13 +70,15 @@ export default function CreateService() {
         try {
             const establishment = `/establishments/${establishment_id}`
 
-            const services = await createService({
-                title,
-                description,
-                price,
-                establishment,
-                body
-            });
+            const data = new FormData();
+            data.append('image', image);
+            data.append('title', title);
+            data.append('description', description);
+            data.append('price', price);
+            data.append('establishment', establishment)
+            data.append('body', body)
+
+            const services = await createService(data);
 
             if (!services) {
                 createToastMessage("error", "Une erreur est survenue");
@@ -140,6 +147,9 @@ export default function CreateService() {
                         min="0"
                         onChange={handleInputPriceChange}
                     />
+                </div>
+                <div>
+                    <FileInput id="file" helperText="Envoyer une image" onChange={handleFileChange}/>
                 </div>
                 <div>
                     <GenericButton label="Creer un Service" />

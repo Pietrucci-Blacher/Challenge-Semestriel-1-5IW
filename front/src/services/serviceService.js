@@ -15,15 +15,21 @@ const getAllServicesRequest = async (filter = {}) => {
     return result["hydra:member"];
 }
 
-const createServiceRequest = ({title, description, price, establishment, body}) => {
-    return httpClient.post('services', {
-        title,
-        description,
-        price,
-        establishment,
-        body,
+const createServiceRequest = (payload) => {
+    return httpClient.post('services', payload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
     });
 }
+
+// const createServiceRequest = ({title, description, price, establishment, body}) => {
+//     return httpClient.post('services', {
+//         title,
+//         description,
+//         price,
+//         establishment,
+//         body,
+//     });
+// }
 
 const updateServiceRequest = (id, data) => {
     return httpClient.put(`services/${id}`, data)

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -19,7 +20,12 @@ use App\Controller\User\SearchService;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\HttpFoundation\File\File;
 
+#[Vich\Uploadable]
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -52,7 +58,9 @@ use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
-            /* inputFormats: ['multipart' => ['multipart/form-data']], */
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            normalizationContext: ['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:write']]
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
@@ -86,6 +94,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -98,6 +107,7 @@ class Service
 
     #[ORM\Column]
     #[Groups(['service:read', 'service:write'])]
+    #[Context(['disable_type_enforcement' => true])]
     private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -110,6 +120,18 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?Establishment $establishment = null;
 
+    #[ApiProperty(openapiContext: [
+        'type' => 'string',
+        'format' => 'binary'
+    ])]
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")]
+    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Groups(['service:write'])]
+    public ?File $image = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['service:read'])]
+    public ?string $imagePath = null;
 
     public function getId(): ?int
     {
