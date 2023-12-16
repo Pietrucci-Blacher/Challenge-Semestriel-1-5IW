@@ -15,21 +15,16 @@ const getAllServicesRequest = async (filter = {}) => {
     return result["hydra:member"];
 }
 
+const getEstablishmentServicesRequest = async (establishmentId) => {
+    const result = await httpClient.get(`establishments/${establishmentId}/services`);
+    return result["hydra:member"];
+}
+
 const createServiceRequest = (payload) => {
     return httpClient.post('services', payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 }
-
-// const createServiceRequest = ({title, description, price, establishment, body}) => {
-//     return httpClient.post('services', {
-//         title,
-//         description,
-//         price,
-//         establishment,
-//         body,
-//     });
-// }
 
 const updateServiceRequest = (id, data) => {
     return httpClient.put(`services/${id}`, data)
@@ -43,7 +38,8 @@ export {
     fetchServiceRequest,
     fetchMyServicesRequest,
     getAllServicesRequest,
+    getEstablishmentServicesRequest,
     createServiceRequest,
     updateServiceRequest,
-    deleteServiceRequest,
+    deleteServiceRequest
 }

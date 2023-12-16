@@ -5,11 +5,13 @@ import {
     createServiceRequest,
     updateServiceRequest,
     deleteServiceRequest,
-    searchServiceRequest,
+    getEstablishmentServicesRequest,
 } from '@/services/serviceService'
-import {useState} from "react";
+import {useCallback, useState} from "react";
 
 export const useService = () => {
+    const [establishmentId, setEstablishmentId] = useState(null);
+    const [establishmentServices, setEstablishmentServices] = useState([]);
     const [service, setService] = useState(null);
     const [services, setServices] = useState(null);
     const createService = async (data) => {
@@ -62,16 +64,28 @@ export const useService = () => {
             console.error("Error fetching all services: ", e);
         }
     };
+    const getEstablishmentServices = useCallback(async (establishmentId) => {
+        try {
+            const response = await getEstablishmentServicesRequest(establishmentId);
+            console.log("resp, ", response)
+            setEstablishmentServices(response)
+            setEstablishmentId(establishmentId)
+        } catch (e) {
+            console.error("Error fetching all services: ", e);
+        }
+    }, [])
 
     return {
         service,
         services,
+        establishmentServices,
         createService,
         updateService,
         deleteService,
         getService,
         getAllServices,
-        getAllMyServices
+        getAllMyServices,
+        getEstablishmentServices
     };
 }
 

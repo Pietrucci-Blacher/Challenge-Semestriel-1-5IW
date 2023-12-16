@@ -13,7 +13,7 @@ const ProviderLayout = ({children}) => {
     return (
         <>
             <Sidebar content={sidebarContent}/>
-            <main className="p-6 w-full">
+            <main className="p-6 flex-grow  w-full">
                 {children}
             </main>
         </>
