@@ -12,6 +12,7 @@ import {useCallback, useState} from "react";
 export const useService = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
     const [establishmentServices, setEstablishmentServices] = useState([]);
+    const [servicesPerEstablishment, setServicesPerEstablishment] = useState([]);
     const [service, setService] = useState(null);
     const [services, setServices] = useState(null);
     const createService = async (data) => {
@@ -75,17 +76,33 @@ export const useService = () => {
         }
     }, [])
 
+    const getGetServicesPerEstablishment = useCallback(async (establishmentIds) => {
+        try {
+            const promises = establishmentIds.map(async (establishmentId) => {
+                const response = await getEstablishmentServicesRequest(establishmentId);
+                return response
+            })
+            const services = await Promise.all(promises)
+            console.log("resp, ", services);
+            setServicesPerEstablishment(services);
+        } catch (e) {
+            console.error("Error fetching all services: ", e);
+        }
+    }, [])
+
     return {
         service,
         services,
         establishmentServices,
+        servicesPerEstablishment,
         createService,
         updateService,
         deleteService,
         getService,
         getAllServices,
         getAllMyServices,
-        getEstablishmentServices
+        getEstablishmentServices,
+        getGetServicesPerEstablishment,
     };
 }
 

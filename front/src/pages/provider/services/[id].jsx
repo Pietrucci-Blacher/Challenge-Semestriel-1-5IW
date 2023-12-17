@@ -6,6 +6,7 @@ import Link from "next/link";
 import GenericButton from "@/components/GenericButton";
 import {useService} from "@/hooks/useService";
 import {deleteServiceRequest} from "@/services/serviceService";
+import { convertDataToHtml } from "@/utils/utils";
 
 export default function ShowService() {
     const router = useRouter();
@@ -30,7 +31,7 @@ export default function ShowService() {
         <div>
             <h1>{service.title}</h1>
             <p>{service.description}</p>
-            <p>{service.body}</p>
+            <p>{convertDataToHtml(service.body.blocks)}</p>
             <p>{service.price}</p>
         </div>
     ) : (

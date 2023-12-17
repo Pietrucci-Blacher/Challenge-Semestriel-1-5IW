@@ -6,26 +6,31 @@ import { useRouter } from "next/router";
 import { Button as FlowbiteButton, FileInput } from "flowbite-react";
 import Link from "next/link";
 import TextArea from "@/components/TextArea";
-import {useService} from "@/hooks/useService";
+import { useService } from "@/hooks/useService";
 import SelectMenu from "@/components/SelectMenu";
-import {useEstablishment} from "@/hooks/useEstablishment";
+import { useEstablishment } from "@/hooks/useEstablishment";
+import dynamic from "next/dynamic";
+import { useAuthContext } from "@/providers/AuthProvider";
+const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 export default function CreateService() {
+    const { user } = useAuthContext();
     const { createToastMessage } = useToast();
     const { createService } = useService();
     const router = useRouter();
     const { establishments, getMyEstablishments } = useEstablishment();
     const [image, setImage] = useState(null);
-
+    const [editorData, setEditorData] = useState();
 
     useEffect(() => {
-        getMyEstablishments();
-    }, []);
+        const {id} = user
+        if (!id) return
+        getMyEstablishments(id);
+    }, [user, getMyEstablishments]);
 
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        body: "",
         establishment_id: 0,
         price: 0,
     });
@@ -44,13 +49,13 @@ export default function CreateService() {
     };
 
     const handleInputBodyChange = (value) => {
-        setFormData({ ...formData, body: value });
+        setEditorData(value);
     };
 
     const handleSelectChangeEtablishment = (selectedValue) => {
         setFormData({
             ...formData,
-            establishment_id: parseInt(selectedValue) || null
+            establishment_id: parseInt(selectedValue) || null,
         });
     };
 
@@ -60,23 +65,24 @@ export default function CreateService() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id, body} = formData;
+        const { title, description, price, establishment_id } = formData;
 
-        if (!title || !description || !price || !establishment_id || !body) {
+        if (!title || !description || !price || !establishment_id || !editorData?.blocks?.length) {
             createToastMessage("error", "Veuillez remplir tous les champs");
             return;
         }
 
         try {
-            const establishment = `/establishments/${establishment_id}`
+            const establishment = `/establishments/${establishment_id}`;
+            const body = JSON.stringify(editorData);
 
             const data = new FormData();
-            data.append('image', image);
-            data.append('title', title);
-            data.append('description', description);
-            data.append('price', price);
-            data.append('establishment', establishment)
-            data.append('body', body)
+            data.append("image", image);
+            data.append("title", title);
+            data.append("description", description);
+            data.append("price", price);
+            data.append("establishment", establishment);
+            data.append("body", body);
 
             const services = await createService(data);
 
@@ -116,25 +122,23 @@ export default function CreateService() {
                         onChange={handleInputDescriptionChange}
                     />
                 </div>
-                {/*<div>
-                    <TextEditor label={"Corps du Texte"}/>
-                </div>*/}
-                <div>
-                    <TextArea
-                        label="Corps du Texte"
-                        type="text"
-                        placeholder="Entrer un corps de texte"
-                        value={formData.body}
-                        onChange={handleInputBodyChange}
-                    />
-                </div>
+                <Editor
+                    data={editorData}
+                    onChange={handleInputBodyChange}
+                    editorblock="editorjs"
+                    label="Corps du Texte"
+                />
                 <div>
                     <SelectMenu
                         label="Establishment"
-                        options={establishments ? establishments.map((establishment) => ({
-                            label: establishment.name,
-                            value: establishment.id,
-                        })) : []}
+                        options={
+                            establishments
+                                ? establishments.map((establishment) => ({
+                                      label: establishment.name,
+                                      value: establishment.id,
+                                  }))
+                                : []
+                        }
                         onChange={handleSelectChangeEtablishment}
                     />
                 </div>
@@ -149,16 +153,23 @@ export default function CreateService() {
                     />
                 </div>
                 <div>
-                    <FileInput id="file" helperText="Envoyer une image" onChange={handleFileChange}/>
+                    <FileInput
+                        id="file"
+                        helperText="Envoyer une image"
+                        onChange={handleFileChange}
+                    />
                 </div>
                 <div>
                     <GenericButton label="Creer un Service" />
                 </div>
             </form>
-            <FlowbiteButton className="my-2" as={Link} href="/provider/services/">
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href="/provider/services/"
+            >
                 Retour
             </FlowbiteButton>
         </div>
     );
 }
-

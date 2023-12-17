@@ -93,9 +93,9 @@ class Service
     #[Context(['disable_type_enforcement' => true])]
     private ?float $price = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: 'json')]
     #[Groups(['service:read', 'service:write'])]
-    private ?string $body = null;
+    private ?array $body = [];
 
     /* #[ORM\ManyToOne(inversedBy: 'services')] */
     #[ORM\ManyToOne()]
@@ -157,12 +157,12 @@ class Service
         return $this;
     }
 
-    public function getBody(): ?string
+    public function getBody(): ?array
     {
         return $this->body;
     }
 
-    public function setBody(string $body): static
+    public function setBody(array $body): static
     {
         $this->body = $body;
 

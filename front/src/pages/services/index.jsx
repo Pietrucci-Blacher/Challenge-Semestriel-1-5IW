@@ -35,14 +35,13 @@ export default function ListServices() {
         setFormData({ ...formData, maxPrice: parseInt(value) || 0});
     };
 
-    // imgSrc="https://www.logolynx.com/images/logolynx/12/127ea6d2d0a5b4d1605c37802b13c82c.png"
     const renderCard = services
         ? services.map((service, key) => (
               <ServiceCard
                   key={key}
                   title={service.title}
                   price={service.price}
-                  imgSrc={service.image}
+                  imgSrc={`https://localhost/media/${service.imagePath}`}
                   imgAlt="image"
               />
           ))
