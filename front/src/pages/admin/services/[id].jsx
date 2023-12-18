@@ -4,6 +4,7 @@ import { Button as FlowbiteButton } from "flowbite-react";
 import Link from "next/link";
 import GenericButton from "@/components/GenericButton";
 import {useService} from "@/hooks/useService";
+import { convertDataToHtml } from "@/utils/utils";
 
 export default function ShowService() {
     const router = useRouter();
@@ -27,11 +28,8 @@ export default function ShowService() {
         <div>
             <h1>{service.title}</h1>
             <p>Description: {service.description}</p>
-            <p>Prix: {service.city}</p>
-            <p>
-                Propriétaire: {service.author.firstname}{" "}
-                {service.author.lastname}
-            </p>
+            <p>Prix: {service.price}</p>
+            <p>{convertDataToHtml(service.body.blocks)}</p>
         </div>
     ) : (
         "Chargement..."

@@ -1,3 +1,11 @@
+import React from 'react';
+
+/**
+ * Create url parameters from filter object
+ *
+ * @param {object} filter - filter object
+ * @returns {string} parameters string
+ */
 export const urlParameters = (filter) => {
     const param = Object.keys(filter)
         .filter(key => !['minPrice', 'maxPrice'].includes(key) && filter[key])
@@ -14,39 +22,28 @@ export const urlParameters = (filter) => {
     return allParams ? `?${allParams}` : '';
 }
 
-// TODO : to improve
+/**
+ * convert EditorJS data to React HTML
+ *
+ * @param {object} blocks - EditorJS data
+ * @returns {React} React HTML
+ */
 export const convertDataToHtml = (blocks) => {
-    let convertedHtml = "";
-
-    blocks.map(block => {
-        switch (block.type) {
-            case "header":
-                convertedHtml += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
-                break;
-            case "embded":
-                convertedHtml += `<div><iframe width="560" height="315" src="${block.data.embed}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-                break;
-            case "paragraph":
-                convertedHtml += `<p>${block.data.text}</p>`;
-                break;
-            case "delimiter":
-                convertedHtml += "<hr />";
-                break;
-            case "image":
-                convertedHtml += `<img class="img-fluid" src="${block.data.file.url}" title="${block.data.caption}" /><br /><em>${block.data.caption}</em>`;
-                break;
-            case "list":
-                convertedHtml += "<ul>";
-                block.data.items.forEach(function(li) {
-                    convertedHtml += `<li>${li}</li>`;
-                });
-                convertedHtml += "</ul>";
-                break;
-            default:
-                console.log("Unknown block type", block.type);
-                break;
+    const convertedHtml = blocks.map((block, key) => {
+        if (block.type === "header") {
+            return React.createElement(`h${block.data.level}`, null, block.data.text);
+        } else if (block.type === "paragraph") {
+            return <p key={key}>{block.data.text}</p>;
+        } else if (block.type === "delimiter") {
+            return <hr key={key} />;
+        } else if (block.type === "image") {
+            return <img key={key} src={block.data.file.url} alt={block.data.caption} />;
+        } else if (block.type === "list") {
+            const listItems = block.data.items.map((item, i) => <li key={i}>{item}</li>);
+            return <ul key={key}>{listItems}</ul>;
         }
     });
 
-    return convertedHtml;
+    return <div className="editor-html">{convertedHtml}</div>;
 }
+

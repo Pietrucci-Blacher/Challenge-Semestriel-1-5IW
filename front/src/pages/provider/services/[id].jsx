@@ -31,8 +31,8 @@ export default function ShowService() {
         <div>
             <h1>{service.title}</h1>
             <p>{service.description}</p>
-            <p>{convertDataToHtml(service.body.blocks)}</p>
             <p>{service.price}</p>
+            <p>{convertDataToHtml(service.body.blocks)}</p>
         </div>
     ) : (
         "Chargement..."

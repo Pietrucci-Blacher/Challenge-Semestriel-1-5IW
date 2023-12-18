@@ -53,12 +53,13 @@ use Symfony\Component\HttpFoundation\File\File;
         new Put(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
-            /* inputFormats: ['multipart' => ['multipart/form-data']], */
         ),
         new Patch(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
             inputFormats: ['multipart' => ['multipart/form-data']],
+            normalizationContext: ['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:write']]
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
