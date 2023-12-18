@@ -58,7 +58,7 @@ use Symfony\Component\HttpFoundation\File\File;
         new Patch(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez modifier que vos services.',
-            /* inputFormats: ['multipart' => ['multipart/form-data']], */
+            inputFormats: ['multipart' => ['multipart/form-data']],
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',

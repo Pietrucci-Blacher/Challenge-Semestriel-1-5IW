@@ -31,18 +31,15 @@ const Editor = ({ data, onChange, editorblock, label }) => {
             }
         };
     }, []);
+    // useEffect(() => {
+    //     ref?.current?.api?.blocks?.render(data);
+    // }, [data])
     return (
         <>
-            <label className="text-sm" for={editorblock}>{label}</label>
+            <label className="text-sm" htmlFor={editorblock}>{label}</label>
             <div id={editorblock} />
         </>
     );
-    // return (
-    //     <div className="editor">
-    //         <label for={editorblock}>{label}</label>
-    //         <div id={editorblock} />
-    //     </div>
-    // );
 };
 
 export default memo(Editor);

@@ -39,14 +39,14 @@ export const useService = () => {
         }
     };
 
-    const getService = async (service) => {
+    const getService = useCallback(async (service) => {
         try {
             const response = await fetchServiceRequest(service);
             setService(response)
         } catch (e) {
             console.error("Error fetching service: ", e);
         }
-    };
+    }, []);
 
     const getAllMyServices = async () => {
         try {

@@ -15,6 +15,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {MdDashboard} from "react-icons/md";
+import { convertDataToHtml } from "@/utils/utils";
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -187,7 +188,7 @@ export default function ShowEstablishment() {
                                 <p className="text-xl font-bold">Service {index + 1}</p>
                                 <p>Title: {service.title}</p>
                                 <p>Prix: {service.price}</p>
-                                <p>Body: {service.body}</p>
+                                <p>Body: {convertDataToHtml(service.body.blocks)}</p>
                                 <p>Description: {service.description}</p>
                             </div>
                         )) : (

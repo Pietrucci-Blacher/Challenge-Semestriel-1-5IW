@@ -122,12 +122,14 @@ export default function CreateService() {
                         onChange={handleInputDescriptionChange}
                     />
                 </div>
-                <Editor
-                    data={editorData}
-                    onChange={handleInputBodyChange}
-                    editorblock="editorjs"
-                    label="Corps du Texte"
-                />
+                <div>
+                    <Editor
+                        data={editorData}
+                        onChange={handleInputBodyChange}
+                        editorblock="editorjs"
+                        label="Corps du Texte"
+                    />
+                </div>
                 <div>
                     <SelectMenu
                         label="Establishment"
