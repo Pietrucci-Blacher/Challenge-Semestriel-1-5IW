@@ -3,5 +3,5 @@ export default function Provider() {
         <>
             <h2>Provider</h2>
         </>
-    )
+    );
 }

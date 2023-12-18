@@ -1,7 +1,7 @@
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useEffect } from "react";
-import { Button as FlowbiteButton, Table } from "flowbite-react";
-import Link from "next/link";
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useEffect } from 'react';
+import { Button as FlowbiteButton, Table } from 'flowbite-react';
+import Link from 'next/link';
 
 export default function ListAllEstablishment() {
     const { establishments, getAllEstablishments } = useEstablishment();
@@ -18,7 +18,7 @@ export default function ListAllEstablishment() {
                   <Table.Cell>{establishment.city}</Table.Cell>
                   <Table.Cell>{establishment.zipCode}</Table.Cell>
                   <Table.Cell>
-                      {establishment.owner.firstname}{" "}
+                      {establishment.owner.firstname}{' '}
                       {establishment.owner.lastname}
                   </Table.Cell>
                   <Table.Cell>
@@ -31,7 +31,7 @@ export default function ListAllEstablishment() {
                   </Table.Cell>
               </Table.Row>
           ))
-        : "Chargement en cours";
+        : 'Chargement en cours';
 
     return (
         <Table>
