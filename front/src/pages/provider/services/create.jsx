@@ -1,14 +1,14 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import {useEffect, useState} from "react";
-import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
-import { Button as FlowbiteButton} from "flowbite-react";
-import Link from "next/link";
-import TextArea from "@/components/TextArea";
-import {useService} from "@/hooks/useService";
-import SelectMenu from "@/components/SelectMenu";
-import {useEstablishment} from "@/hooks/useEstablishment";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useRouter } from 'next/router';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
+import TextArea from '@/components/TextArea';
+import { useService } from '@/hooks/useService';
+import SelectMenu from '@/components/SelectMenu';
+import { useEstablishment } from '@/hooks/useEstablishment';
 
 export default function CreateService() {
     const { createToastMessage } = useToast();
@@ -16,15 +16,14 @@ export default function CreateService() {
     const router = useRouter();
     const { establishments, getMyEstablishments } = useEstablishment();
 
-
     useEffect(() => {
         getMyEstablishments();
     }, []);
 
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        body: "",
+        title: '',
+        description: '',
+        body: '',
         establishment_id: 0,
         price: 0,
     });
@@ -44,11 +43,9 @@ export default function CreateService() {
     const handleSelectChangeEtablishment = (selectedValue) => {
         setFormData({
             ...formData,
-            establishment_id: parseInt(selectedValue) || null
+            establishment_id: parseInt(selectedValue) || null,
         });
     };
-
-
 
     const handleInputPriceChange = (value) => {
         setFormData({ ...formData, price: parseInt(value) });
@@ -56,33 +53,32 @@ export default function CreateService() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id, body} = formData;
-
+        const { title, description, price, establishment_id, body } = formData;
 
         if (!title || !description || !price || !establishment_id || !body) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
         try {
-            const establishment = `/establishments/${establishment_id}`
+            const establishment = `/establishments/${establishment_id}`;
 
             const services = await createService({
                 title,
                 description,
                 price,
                 establishment,
-                body
+                body,
             });
 
             if (!services) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             await router.push(`/provider/services/${services.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
 
@@ -126,10 +122,14 @@ export default function CreateService() {
                 <div>
                     <SelectMenu
                         label="Establishment"
-                        options={establishments ? establishments.map((establishment) => ({
-                            label: establishment.name,
-                            value: establishment.id,
-                        })) : []}
+                        options={
+                            establishments
+                                ? establishments.map((establishment) => ({
+                                      label: establishment.name,
+                                      value: establishment.id,
+                                  }))
+                                : []
+                        }
                         onChange={handleSelectChangeEtablishment}
                     />
                 </div>
@@ -147,10 +147,13 @@ export default function CreateService() {
                     <GenericButton label="Creer un Service" />
                 </div>
             </form>
-            <FlowbiteButton className="my-2" as={Link} href="/provider/services/">
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href="/provider/services/"
+            >
                 Retour
             </FlowbiteButton>
         </div>
     );
 }
-

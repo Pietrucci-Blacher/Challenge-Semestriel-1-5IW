@@ -3,5 +3,5 @@ export default function Teacher() {
         <>
             <h2>Teacher</h2>
         </>
-    )
+    );
 }

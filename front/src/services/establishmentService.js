@@ -1,7 +1,7 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
 export const createEstablishment = ({ name, street, city, zipCode }) => {
-    return httpClient.post("/establishments", {
+    return httpClient.post('/establishments', {
         name,
         street,
         city,
@@ -13,8 +13,8 @@ export const getEstablishmentById = (id) => {
     return httpClient.get(`/establishments/${id}`);
 };
 
-export const getMyEstablishments = () => {
-    return httpClient.get("/establishments/me");
+export const getMyEstablishments = (userId) => {
+    return httpClient.get(`users/${userId}/establishments`);
 };
 
 export const deleteEstablishment = (id) => {
@@ -40,6 +40,6 @@ export const updateEstablishment = (id, content) => {
  * Get all establishments for admin only
  */
 export const getAllEstablishments = async () => {
-    const result = await httpClient.get("/establishments");
-    return result["hydra:member"];
+    const result = await httpClient.get('/establishments');
+    return result['hydra:member'];
 };

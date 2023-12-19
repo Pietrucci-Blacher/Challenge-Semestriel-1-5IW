@@ -1,6 +1,6 @@
-import { useService } from "@/hooks/useService";
-import { useEffect } from "react";
-import { Table } from "flowbite-react";
+import { useService } from '@/hooks/useService';
+import { useEffect } from 'react';
+import { Table } from 'flowbite-react';
 export default function ListServices() {
     const { services, getAllMyServices } = useService();
 
@@ -10,26 +10,26 @@ export default function ListServices() {
 
     const renderServices = services
         ? services.map((service) => (
-            <Table.Row key={service.id}>
-                <Table.Cell>{service.title}</Table.Cell>
-                <Table.Cell>{service.description}</Table.Cell>
-                <Table.Cell>{service.body}</Table.Cell>
-                <Table.Cell>{service.price}</Table.Cell>
-                <Table.Cell>{service.establishment_id}</Table.Cell>
-                <Table.Cell>
-                    {service.author.firstname} {service.author.lastname}
-                </Table.Cell>
-                <Table.Cell>
-                    <a
-                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                        href={`/teacher/services/${service.id}`}
-                    >
-                        Voir
-                    </a>
-                </Table.Cell>
-            </Table.Row>
-        ))
-        : "Chargement en cours";
+              <Table.Row key={service.id}>
+                  <Table.Cell>{service.title}</Table.Cell>
+                  <Table.Cell>{service.description}</Table.Cell>
+                  <Table.Cell>{service.body}</Table.Cell>
+                  <Table.Cell>{service.price}</Table.Cell>
+                  <Table.Cell>{service.establishment_id}</Table.Cell>
+                  <Table.Cell>
+                      {service.author.firstname} {service.author.lastname}
+                  </Table.Cell>
+                  <Table.Cell>
+                      <a
+                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                          href={`/teacher/services/${service.id}`}
+                      >
+                          Voir
+                      </a>
+                  </Table.Cell>
+              </Table.Row>
+          ))
+        : 'Chargement en cours';
 
     return (
         <Table hoverable>

@@ -1,12 +1,12 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useRouter } from "next/router";
-import { updateEstablishment } from "@/services/establishmentService";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useRouter } from 'next/router';
+import { updateEstablishment } from '@/services/establishmentService';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
 
 export default function UpdateEstablishment() {
     const { createToastMessage } = useToast();
@@ -15,10 +15,10 @@ export default function UpdateEstablishment() {
     const { establishment, getEstablishmentById } = useEstablishment();
 
     const [formData, setFormData] = useState({
-        name: "",
-        street: "",
-        city: "",
-        zipCode: "",
+        name: '',
+        street: '',
+        city: '',
+        zipCode: '',
     });
 
     useEffect(() => {
@@ -27,10 +27,10 @@ export default function UpdateEstablishment() {
 
     useEffect(() => {
         setFormData({
-            name: establishment?.name || "",
-            street: establishment?.street || "",
-            city: establishment?.city || "",
-            zipCode: establishment?.zipCode || "",
+            name: establishment?.name || '',
+            street: establishment?.street || '',
+            city: establishment?.city || '',
+            zipCode: establishment?.zipCode || '',
         });
     }, [establishment]);
 
@@ -55,7 +55,7 @@ export default function UpdateEstablishment() {
         const { name, street, city, zipCode } = formData;
 
         if (!name || !street || !city || !zipCode) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
@@ -68,13 +68,13 @@ export default function UpdateEstablishment() {
             });
 
             if (!establishment) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             router.push(`/provider/establishment/${establishment.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
 
