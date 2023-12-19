@@ -41,7 +41,7 @@ jobs:
       - name: Start services
         run: docker compose up --wait --no-build
         env:
-          - BREVO_API_KEY: ${secrets.BREVO_API_KEY}
+          - BREVO_API_KEY: ${{secrets.BREVO_API_KEY}}
 
       - name: Check HTTP reachability
         run: curl -v -o /dev/null http://localhost
