@@ -1,11 +1,13 @@
 import {
     acceptInviteService,
     addMemberToTeamService,
-    declineInviteService, getEstablishmentTeamInvitationService, getUserInvitationService,
+    declineInviteService,
+    getEstablishmentTeamInvitationService,
+    getUserInvitationService,
     reInviteMemberToTeamService,
     removeMemberFromTeamService,
-} from "@/services/teamService";
-import {useCallback, useState} from "react";
+} from '@/services/teamService';
+import { useCallback, useState } from 'react';
 
 export const useTeam = () => {
     const [userId, setUserId] = useState(null);
@@ -14,40 +16,46 @@ export const useTeam = () => {
     const [userApprovedInvitation, setUserApprovedInvitation] = useState([]);
 
     const addMemberToTeam = async (payload) => {
-        return await addMemberToTeamService(payload)
-    }
+        return await addMemberToTeamService(payload);
+    };
 
     const reInviteMemberToTeam = async (memberId) => {
-        return await reInviteMemberToTeamService(memberId)
-    }
+        return await reInviteMemberToTeamService(memberId);
+    };
 
     const acceptInvite = async (payload) => {
-        payload = {...payload, status: "Approved"}
-        await acceptInviteService(payload)
-    }
+        payload = { ...payload, status: 'Approved' };
+        await acceptInviteService(payload);
+    };
 
     const declineInvite = async (payload) => {
-        payload = {...payload, status: "Declined"}
-        await declineInviteService(payload)
-    }
+        payload = { ...payload, status: 'Declined' };
+        await declineInviteService(payload);
+    };
 
     const removeMemberFromTeam = async (payload) => {
-        return await removeMemberFromTeamService(payload)
-    }
+        return await removeMemberFromTeamService(payload);
+    };
 
     const getEstablishmentTeam = useCallback(async (establishmentId) => {
-        const data = await getEstablishmentTeamInvitationService(establishmentId)
-        setEstablishmentTeam(data)
-        setEstablishmentId(establishmentId)
-    }, [])
+        const data =
+            await getEstablishmentTeamInvitationService(establishmentId);
+        setEstablishmentTeam(data);
+        setEstablishmentId(establishmentId);
+    }, []);
 
-    const getUserApprovedInvitation = useCallback(async (userId) => {
-        const data = await getUserInvitationService(userId)
-        const establishmentUser = data["hydra:member"]
-        const approvedInvitations = establishmentUser.filter((invitation)=>invitation.joinRequestStatus === "Approved")
-        setUserApprovedInvitation(approvedInvitations)
-        setUserId(userId)
-    }, [userId])
+    const getUserApprovedInvitation = useCallback(
+        async (userId) => {
+            const data = await getUserInvitationService(userId);
+            const establishmentUser = data['hydra:member'];
+            const approvedInvitations = establishmentUser.filter(
+                (invitation) => invitation.joinRequestStatus === 'Approved',
+            );
+            setUserApprovedInvitation(approvedInvitations);
+            setUserId(userId);
+        },
+        [userId],
+    );
 
     return {
         establishmentTeam,
@@ -58,6 +66,6 @@ export const useTeam = () => {
         declineInvite,
         removeMemberFromTeam,
         getEstablishmentTeam,
-        getUserApprovedInvitation
-    }
-}
+        getUserApprovedInvitation,
+    };
+};

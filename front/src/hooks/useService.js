@@ -4,9 +4,10 @@ import {
     getAllServicesRequest,
     createServiceRequest,
     updateServiceRequest,
-    deleteServiceRequest, getEstablishmentServicesRequest,
-} from '@/services/serviceService'
-import {useCallback, useState} from "react";
+    deleteServiceRequest,
+    getEstablishmentServicesRequest,
+} from '@/services/serviceService';
+import { useCallback, useState } from 'react';
 
 export const useService = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
@@ -17,7 +18,7 @@ export const useService = () => {
         try {
             return await createServiceRequest(data);
         } catch (e) {
-            console.error("Error creating service: ", e);
+            console.error('Error creating service: ', e);
         }
     };
 
@@ -25,54 +26,55 @@ export const useService = () => {
         try {
             return await updateServiceRequest(service);
         } catch (e) {
-            console.error("Error updating service: ", e);
+            console.error('Error updating service: ', e);
         }
     };
 
-    const deleteService =  async (service) => {
+    const deleteService = async (service) => {
         try {
             await deleteServiceRequest(service);
         } catch (e) {
-            console.error("Error deleting service: ", e);
+            console.error('Error deleting service: ', e);
         }
     };
 
     const getService = async (service) => {
         try {
             const response = await fetchServiceRequest(service);
-            setService(response)
+            setService(response);
         } catch (e) {
-            console.error("Error fetching service: ", e);
+            console.error('Error fetching service: ', e);
         }
     };
 
     const getAllMyServices = async () => {
         try {
             const response = await fetchMyServicesRequest();
-            setServices(response)
+            setServices(response);
         } catch (e) {
-            console.error("Error fetching all yours services: ", e);
+            console.error('Error fetching all yours services: ', e);
         }
     };
 
     const getAllServices = async () => {
         try {
             const response = await getAllServicesRequest();
-            setServices(response)
+            setServices(response);
         } catch (e) {
-            console.error("Error fetching all services: ", e);
+            console.error('Error fetching all services: ', e);
         }
     };
     const getEstablishmentServices = useCallback(async (establishmentId) => {
         try {
-            const response = await getEstablishmentServicesRequest(establishmentId);
-            console.log("resp, ", response)
-            setEstablishmentServices(response)
-            setEstablishmentId(establishmentId)
+            const response =
+                await getEstablishmentServicesRequest(establishmentId);
+            console.log('resp, ', response);
+            setEstablishmentServices(response);
+            setEstablishmentId(establishmentId);
         } catch (e) {
-            console.error("Error fetching all services: ", e);
+            console.error('Error fetching all services: ', e);
         }
-    }, [])
+    }, []);
 
     return {
         service,
@@ -84,7 +86,6 @@ export const useService = () => {
         getService,
         getAllServices,
         getAllMyServices,
-        getEstablishmentServices
+        getEstablishmentServices,
     };
-}
-
+};

@@ -1,9 +1,9 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
-import GenericButton from "@/components/GenericButton";
-import {useService} from "@/hooks/useService";
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
+import GenericButton from '@/components/GenericButton';
+import { useService } from '@/hooks/useService';
 
 export default function ShowService() {
     const router = useRouter();
@@ -17,9 +17,9 @@ export default function ShowService() {
     const handleDelete = async (event) => {
         try {
             await deleteService(id);
-            router.push("/admin/services");
+            router.push('/admin/services');
         } catch (error) {
-            createToastMessage("error", "Une erreur est survenue");
+            createToastMessage('error', 'Une erreur est survenue');
         }
     };
 
@@ -29,12 +29,12 @@ export default function ShowService() {
             <p>Description: {service.description}</p>
             <p>Prix: {service.city}</p>
             <p>
-                Propriétaire: {service.author.firstname}{" "}
+                Propriétaire: {service.author.firstname}{' '}
                 {service.author.lastname}
             </p>
         </div>
     ) : (
-        "Chargement..."
+        'Chargement...'
     );
 
     return (
@@ -48,11 +48,7 @@ export default function ShowService() {
             >
                 Modifier
             </FlowbiteButton>
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href="/admin/services"
-            >
+            <FlowbiteButton className="my-2" as={Link} href="/admin/services">
                 Retour
             </FlowbiteButton>
         </>

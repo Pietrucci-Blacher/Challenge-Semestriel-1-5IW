@@ -1,16 +1,16 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
-import {useService} from "@/hooks/useService";
-import TextArea from "@/components/TextArea";
-import SelectMenu from "@/components/SelectMenu";
-import {updateServiceRequest} from "@/services/serviceService";
-import {useEstablishment} from "@/hooks/useEstablishment";
-import {getAllEstablishments} from "@/services/establishmentService";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useRouter } from 'next/router';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
+import { useService } from '@/hooks/useService';
+import TextArea from '@/components/TextArea';
+import SelectMenu from '@/components/SelectMenu';
+import { updateServiceRequest } from '@/services/serviceService';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { getAllEstablishments } from '@/services/establishmentService';
 
 export default function UpdateService() {
     const { createToastMessage } = useToast();
@@ -26,18 +26,18 @@ export default function UpdateService() {
 
     useEffect(() => {
         setFormData({
-            title: service?.title || "",
-            description: service?.description || "",
-            body: service?.body || "",
+            title: service?.title || '',
+            description: service?.description || '',
+            body: service?.body || '',
             price: service?.price || 0,
-            establishment_id: service?.establishment_id || "",
+            establishment_id: service?.establishment_id || '',
         });
     }, [service]);
 
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        body: "",
+        title: '',
+        description: '',
+        body: '',
         establishment_id: 0,
         price: 0,
     });
@@ -57,7 +57,7 @@ export default function UpdateService() {
     const handleSelectChangeEtablishment = (selectedValue) => {
         setFormData({
             ...formData,
-            establishment_id: parseInt(selectedValue) || null
+            establishment_id: parseInt(selectedValue) || null,
         });
     };
 
@@ -67,31 +67,30 @@ export default function UpdateService() {
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id, body} = formData;
-
+        const { title, description, price, establishment_id, body } = formData;
 
         if (!title || !description || !price || !establishment_id || !body) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
         try {
-            const services = await updateServiceRequest(id,{
+            const services = await updateServiceRequest(id, {
                 title,
                 description,
                 price,
                 establishment_id,
-                body
+                body,
             });
 
             if (!services) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             await router.push(`/admin/services/${services.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
     return (
@@ -134,10 +133,14 @@ export default function UpdateService() {
                 <div>
                     <SelectMenu
                         label="Establishment"
-                        options={establishments ? establishments.map((establishment) => ({
-                            label: establishment.name,
-                            value: establishment.id
-                        })) : []}
+                        options={
+                            establishments
+                                ? establishments.map((establishment) => ({
+                                      label: establishment.name,
+                                      value: establishment.id,
+                                  }))
+                                : []
+                        }
                         onChange={handleSelectChangeEtablishment}
                     />
                 </div>
@@ -163,4 +166,3 @@ export default function UpdateService() {
         </div>
     );
 }
-

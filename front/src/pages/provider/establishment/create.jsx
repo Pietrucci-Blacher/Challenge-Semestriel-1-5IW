@@ -1,22 +1,22 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useRouter } from "next/router";
-import { createEstablishment } from "@/services/establishmentService";
-import { Button as FlowbiteButton, Table } from "flowbite-react";
-import Link from "next/link";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useRouter } from 'next/router';
+import { createEstablishment } from '@/services/establishmentService';
+import { Button as FlowbiteButton, Table } from 'flowbite-react';
+import Link from 'next/link';
 
 export default function CreateEstablishment() {
     const { createToastMessage } = useToast();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
-        name: "",
-        street: "",
-        city: "",
-        zipCode: "",
+        name: '',
+        street: '',
+        city: '',
+        zipCode: '',
     });
 
     const handleInputNameChange = (value) => {
@@ -40,7 +40,7 @@ export default function CreateEstablishment() {
         const { name, street, city, zipCode } = formData;
 
         if (!name || !street || !city || !zipCode) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
@@ -53,13 +53,13 @@ export default function CreateEstablishment() {
             });
 
             if (!establishment) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             router.push(`/provider/establishment/${establishment.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
 
@@ -108,7 +108,11 @@ export default function CreateEstablishment() {
                 </div>
                 <GenericButton label="Creer un etablisement" />
             </form>
-            <FlowbiteButton className="my-2" as={Link} href="/provider/establishment/">
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href="/provider/establishment/"
+            >
                 Retour
             </FlowbiteButton>
         </div>

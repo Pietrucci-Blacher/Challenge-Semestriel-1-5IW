@@ -1,40 +1,41 @@
-import {useEstablishment} from "@/hooks/useEstablishment";
-import {useContext, useEffect} from "react";
-import {Button as FlowbiteButton, Table} from "flowbite-react";
-import Link from "next/link";
-import {useAuthContext} from "@/providers/AuthProvider";
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useContext, useEffect } from 'react';
+import { Button as FlowbiteButton, Table } from 'flowbite-react';
+import Link from 'next/link';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function ListEstablishment() {
-    const {user} = useAuthContext();
-    const {establishments, getMyEstablishments} = useEstablishment();
+    const { user } = useAuthContext();
+    const { establishments, getMyEstablishments } = useEstablishment();
 
     useEffect(() => {
-        const {id} = user
-        if (!id) return
+        const { id } = user;
+        if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);
 
     useEffect(() => {
-        console.log(establishments)
+        console.log(establishments);
     }, [establishments]);
 
-    const renderEstablishments = establishments ? establishments.map((establishment) => (
-            <Table.Row key={establishment.id}>
-                <Table.Cell>{establishment.name}</Table.Cell>
-                <Table.Cell>{establishment.street}</Table.Cell>
-                <Table.Cell>{establishment.city}</Table.Cell>
-                <Table.Cell>{establishment.zipCode}</Table.Cell>
-                <Table.Cell>
-                    <a
-                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                        href={`/provider/establishment/${establishment.id}`}
-                    >
-                        Voir
-                    </a>
-                </Table.Cell>
-            </Table.Row>
-        ))
-        : "Chargement en cours";
+    const renderEstablishments = establishments
+        ? establishments.map((establishment) => (
+              <Table.Row key={establishment.id}>
+                  <Table.Cell>{establishment.name}</Table.Cell>
+                  <Table.Cell>{establishment.street}</Table.Cell>
+                  <Table.Cell>{establishment.city}</Table.Cell>
+                  <Table.Cell>{establishment.zipCode}</Table.Cell>
+                  <Table.Cell>
+                      <a
+                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                          href={`/provider/establishment/${establishment.id}`}
+                      >
+                          Voir
+                      </a>
+                  </Table.Cell>
+              </Table.Row>
+          ))
+        : 'Chargement en cours';
 
     return (
         <>
@@ -55,7 +56,6 @@ export default function ListEstablishment() {
             >
                 Créer un établissement
             </FlowbiteButton>
-
         </>
     );
 }
