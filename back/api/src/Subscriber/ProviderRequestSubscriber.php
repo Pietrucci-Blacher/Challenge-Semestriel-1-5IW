@@ -66,10 +66,10 @@ final class ProviderRequestSubscriber implements EventSubscriberInterface
         if ($statusCode === 201 && $method === "POST") {
             $content = json_decode($response->getContent(), false);
             $user = $content->createdBy;
-            /* $requestId = $content->id; */
-            /* $admins = $this->userRepository->findByRole("ROLE_ADMIN"); */
+            $requestId = $content->id;
+            $admins = $this->userRepository->findByRole("ROLE_ADMIN");
 
-            /* $this->email->sendRequestProviderEmail($admins, $user->name, $requestId); */
+            $this->email->sendRequestProviderEmail($admins, $user->name, $requestId);
             $this->email->sendProviderConfimationEmail($user->email, $user->firstname);
         }
     }
