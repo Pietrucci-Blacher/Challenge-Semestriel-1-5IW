@@ -124,7 +124,6 @@ export default function CreateService() {
                 </div>
                 <div>
                     <Editor
-                        data={editorData}
                         onChange={handleInputBodyChange}
                         editorblock="editorjs"
                         label="Corps du Texte"

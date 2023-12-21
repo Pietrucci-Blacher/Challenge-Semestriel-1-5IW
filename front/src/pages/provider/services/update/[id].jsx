@@ -23,6 +23,7 @@ export default function UpdateService() {
     const { establishments, getMyEstablishments } = useEstablishment();
     const [image, setImage] = useState(null);
     const [editorData, setEditorData] = useState(null);
+    const [initEditorData, setInitEditorData] = useState(null);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -30,8 +31,6 @@ export default function UpdateService() {
         // establishment_id: 0,
         price: 0,
     });
-
-    console.log('data', formData);
 
     useEffect(() => {
         const { id: userId } = user
@@ -48,6 +47,7 @@ export default function UpdateService() {
             // establishment_id: service?.establishment || 0,
         });
         setEditorData(service?.body || {});
+        setInitEditorData(service?.body || {});
     }, [service]);
 
     const handleFileChange = (event) => {
@@ -140,7 +140,7 @@ export default function UpdateService() {
                 </div>
                 <div>
                     <Editor
-                        data={editorData}
+                        data={initEditorData}
                         onChange={handleInputBodyChange}
                         editorblock="editorjs"
                         label="Corps du Texte"
@@ -178,7 +178,7 @@ export default function UpdateService() {
             <FlowbiteButton
                 className="my-2"
                 as={Link}
-                href={`/provider/establishment/${id}`}
+                href={`/provider/services/${id}`}
             >
                 Retour
             </FlowbiteButton>

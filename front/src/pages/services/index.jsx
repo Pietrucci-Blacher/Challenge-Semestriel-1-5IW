@@ -43,6 +43,7 @@ export default function ListServices() {
                   price={service.price}
                   imgSrc={`https://localhost/media/${service.imagePath}`}
                   imgAlt="image"
+                  href={`/services/${service.id}`}
               />
           ))
         : null;

@@ -12,11 +12,9 @@ export const urlParameters = (filter) => {
         .map((key) => `${key}=${filter[key]}`);
 
     if (filter.minPrice) param.push(`price[gt]=${filter.minPrice}`);
-
     if (filter.maxPrice) param.push(`price[lt]=${filter.maxPrice}`);
 
     const allParams = param.join('&');
-
     return allParams ? `?${allParams}` : "";
 };
 
@@ -54,5 +52,5 @@ export const convertDataToHtml = (blocks) => {
         }
     });
 
-    return <div className='editor-html'>{convertedHtml}</div>;
+    return <>{convertedHtml}</>;
 };

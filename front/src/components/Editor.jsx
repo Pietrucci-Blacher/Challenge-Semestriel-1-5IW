@@ -10,30 +10,29 @@ const EDITOR_JS_TOOLS = {
 
 const Editor = ({ data, onChange, editorblock, label }) => {
     const ref = useRef();
+
     useEffect(() => {
         if (!ref.current) {
             const editor = new EditorJS({
                 holder: editorblock,
-
+                onReady: () => {
+                    ref.current = editor;
+                },
                 tools: EDITOR_JS_TOOLS,
                 data: data,
                 async onChange(api, event) {
-                    const data = await api.saver.save();
-                    onChange(data);
+                    const content = await api.saver.save();
+                    onChange(content);
                 },
             });
-            ref.current = editor;
         }
 
         return () => {
-            if (ref.current && ref.current.destroy) {
-                ref.current.destroy();
-            }
+            ref?.current?.destroy();
+            ref.current = null;
         };
-    }, []);
-    // useEffect(() => {
-    //     ref?.current?.api?.blocks?.render(data);
-    // }, [data])
+    }, [data]);
+
     return (
         <>
             <label className="text-sm" htmlFor={editorblock}>{label}</label>

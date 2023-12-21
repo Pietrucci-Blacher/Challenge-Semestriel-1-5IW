@@ -23,9 +23,9 @@ export default function Admin() {
                     <div className="text-4xl">{services?.length || 0}</div>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
+                {/*<div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
-                <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
-                <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>*/}
             </div>
         </>
     )
