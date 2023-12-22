@@ -227,7 +227,7 @@ export default function ShowEstablishment() {
                                         </p>
                                         <p>Title: {service.title}</p>
                                         <p>Prix: {service.price}</p>
-                                        <p>
+                                        <p className="editor-html">
                                             Body:{' '}
                                             {convertDataToHtml(
                                                 service.body.blocks,
