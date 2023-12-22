@@ -41,6 +41,12 @@ class ServiceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function save(Service $entity): void
+    {
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return Service[] Returns an array of Service objects
 //     */

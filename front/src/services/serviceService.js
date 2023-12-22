@@ -27,7 +27,7 @@ const createServiceRequest = (payload) => {
 }
 
 const updateServiceRequest = (id, data) => {
-    return httpClient.patch(`services/${id}`, data, {
+    return httpClient.post(`services/${id}/update`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 }

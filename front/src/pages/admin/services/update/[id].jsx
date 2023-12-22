@@ -36,7 +36,7 @@ export default function UpdateService() {
     useEffect(() => {
         getService(id);
         getAllEstablishments();
-    }, [id]);
+    }, [id, getAllEstablishments, getService]);
 
     useEffect(() => {
         setFormData({

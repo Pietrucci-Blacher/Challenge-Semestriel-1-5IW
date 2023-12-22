@@ -25,6 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\HttpFoundation\File\File;
+use App\Controller\Provider\UpdateServiceController;
 
 #[Vich\Uploadable]
 #[ApiResource(
@@ -50,20 +51,28 @@ use Symfony\Component\HttpFoundation\File\File;
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
-        new Put(
+        new Post(
+            uriTemplate: '/services/{id}/update',
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos services.',
+            controller: UpdateServiceController::class,
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']]
         ),
-        new Patch(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos services.',
-            inputFormats: ['multipart' => ['multipart/form-data']],
-            normalizationContext: ['groups' => ['service:read']],
-            denormalizationContext: ['groups' => ['service:write']]
-        ),
+        /* new Put( */
+        /*     security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)', */
+        /*     securityMessage: 'Vous ne pouvez modifier que vos services.', */
+        /*     inputFormats: ['multipart' => ['multipart/form-data']], */
+        /*     normalizationContext: ['groups' => ['service:read']], */
+        /*     denormalizationContext: ['groups' => ['service:write']] */
+        /* ), */
+        /* new Patch( */
+        /*     security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)', */
+        /*     securityMessage: 'Vous ne pouvez modifier que vos services.', */
+        /*     inputFormats: ['multipart' => ['multipart/form-data']], */
+        /*     normalizationContext: ['groups' => ['service:read']], */
+        /*     denormalizationContext: ['groups' => ['service:write']] */
+        /* ), */
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez supprimer que vos services.',
