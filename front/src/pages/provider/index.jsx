@@ -41,7 +41,7 @@ export default function Provider() {
                     </div>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 p-1 rounded">
-                    <div className="">Nombre de menbres d&apos;équipe</div>
+                    <div className="">Nombre de membres d&apos;équipe</div>
                     <div className="text-4xl">0</div>
                 </div>
                 {/*<div className="bg-gray-50 dark:bg-gray-800 p-1 rounded"></div>
