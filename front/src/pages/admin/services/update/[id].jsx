@@ -1,19 +1,19 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
-import { Button as FlowbiteButton, FileInput } from "flowbite-react";
-import Link from "next/link";
-import {useService} from "@/hooks/useService";
-import TextArea from "@/components/TextArea";
-import SelectMenu from "@/components/SelectMenu";
-import {updateServiceRequest} from "@/services/serviceService";
-import {useEstablishment} from "@/hooks/useEstablishment";
-import {getAllEstablishments} from "@/services/establishmentService";
-import { useAuthContext } from "@/providers/AuthProvider";
-import dynamic from "next/dynamic";
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useRouter } from 'next/router';
+import { Button as FlowbiteButton, FileInput } from 'flowbite-react';
+import Link from 'next/link';
+import { useService } from '@/hooks/useService';
+import TextArea from '@/components/TextArea';
+import SelectMenu from '@/components/SelectMenu';
+import { updateServiceRequest } from '@/services/serviceService';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { getAllEstablishments } from '@/services/establishmentService';
+import { useAuthContext } from '@/providers/AuthProvider';
+import dynamic from 'next/dynamic';
+const Editor = dynamic(() => import('@/components/Editor'), { ssr: false });
 
 export default function UpdateService() {
     const { user } = useAuthContext();
@@ -27,8 +27,8 @@ export default function UpdateService() {
     const [initEditorData, setInitEditorData] = useState(null);
 
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
+        title: '',
+        description: '',
         // establishment_id: 0,
         price: 0,
     });
@@ -40,8 +40,8 @@ export default function UpdateService() {
 
     useEffect(() => {
         setFormData({
-            title: service?.title || "",
-            description: service?.description || "",
+            title: service?.title || '',
+            description: service?.description || '',
             price: service?.price || 0,
             // establishment_id: service?.establishment_id || "",
         });
@@ -83,7 +83,7 @@ export default function UpdateService() {
         const { title, description, price } = formData;
 
         if (!title || !description || !price || !editorData?.blocks?.length) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
@@ -92,23 +92,23 @@ export default function UpdateService() {
             const body = JSON.stringify(editorData);
 
             const data = new FormData();
-            if (image) data.append("image", image);
-            data.append("title", title);
-            data.append("description", description);
-            data.append("price", price);
+            if (image) data.append('image', image);
+            data.append('title', title);
+            data.append('description', description);
+            data.append('price', price);
             // data.append("establishment", establishment);
-            data.append("body", body);
+            data.append('body', body);
 
             const services = await updateServiceRequest(id, data);
 
             if (!services) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             await router.push(`/admin/services/${services.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
     return (
@@ -147,10 +147,14 @@ export default function UpdateService() {
                 {/*<div>
                     <SelectMenu
                         label="Establishment"
-                        options={establishments ? establishments.map((establishment) => ({
-                            label: establishment.name,
-                            value: establishment.id
-                        })) : []}
+                        options={
+                            establishments
+                                ? establishments.map((establishment) => ({
+                                      label: establishment.name,
+                                      value: establishment.id,
+                                  }))
+                                : []
+                        }
                         onChange={handleSelectChangeEtablishment}
                     />
                 </div>*/}
@@ -183,4 +187,3 @@ export default function UpdateService() {
         </div>
     );
 }
-

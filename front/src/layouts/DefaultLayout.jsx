@@ -1,11 +1,9 @@
-const DefaultLayout = ({children}) => {
+const DefaultLayout = ({ children }) => {
     return (
         <>
-            <main className="p-6 w-full">
-                {children}
-            </main>
+            <main className="p-6 w-full">{children}</main>
         </>
-    )
-}
+    );
+};
 
-export default DefaultLayout
+export default DefaultLayout;

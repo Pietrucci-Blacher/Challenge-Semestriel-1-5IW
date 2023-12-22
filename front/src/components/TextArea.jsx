@@ -1,12 +1,18 @@
-import {Label, Textarea } from 'flowbite-react';
+import { Label, Textarea } from 'flowbite-react';
 import PropTypes from 'prop-types';
 
-export default function TextArea({ label, type, value, placeholder, onChange, required, id}) {
-
+export default function TextArea({
+    label,
+    type,
+    value,
+    placeholder,
+    onChange,
+    required,
+    id,
+}) {
     const handleChange = (e) => {
-        onChange(e.target.value)
-    }
-
+        onChange(e.target.value);
+    };
 
     return (
         <div>
@@ -22,9 +28,8 @@ export default function TextArea({ label, type, value, placeholder, onChange, re
                 id={id}
             />
         </div>
-    )
+    );
 }
-
 
 TextArea.propTypes = {
     label: PropTypes.string,
@@ -33,5 +38,5 @@ TextArea.propTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     required: PropTypes.bool,
-    id: PropTypes.string
-}
+    id: PropTypes.string,
+};

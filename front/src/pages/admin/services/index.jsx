@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { Table } from "flowbite-react";
-import {useService} from "@/hooks/useService";
+import { useEffect } from 'react';
+import { Table } from 'flowbite-react';
+import { useService } from '@/hooks/useService';
 export default function ListAllServices() {
     const { services, getAllServices } = useService();
 
@@ -24,7 +24,7 @@ export default function ListAllServices() {
                   </Table.Cell>
               </Table.Row>
           ))
-        : "Chargement en cours";
+        : 'Chargement en cours';
 
     return (
         <Table>

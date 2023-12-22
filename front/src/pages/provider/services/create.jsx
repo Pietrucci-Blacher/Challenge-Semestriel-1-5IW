@@ -1,17 +1,17 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/router";
-import { Button as FlowbiteButton, FileInput } from "flowbite-react";
-import Link from "next/link";
-import TextArea from "@/components/TextArea";
-import { useService } from "@/hooks/useService";
-import SelectMenu from "@/components/SelectMenu";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import dynamic from "next/dynamic";
-import { useAuthContext } from "@/providers/AuthProvider";
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useRouter } from 'next/router';
+import { Button as FlowbiteButton, FileInput } from 'flowbite-react';
+import Link from 'next/link';
+import TextArea from '@/components/TextArea';
+import { useService } from '@/hooks/useService';
+import SelectMenu from '@/components/SelectMenu';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import dynamic from 'next/dynamic';
+import { useAuthContext } from '@/providers/AuthProvider';
+const Editor = dynamic(() => import('@/components/Editor'), { ssr: false });
 
 export default function CreateService() {
     const { user } = useAuthContext();
@@ -23,14 +23,14 @@ export default function CreateService() {
     const [editorData, setEditorData] = useState();
 
     useEffect(() => {
-        const {id} = user
-        if (!id) return
+        const { id } = user;
+        if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);
 
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
+        title: '',
+        description: '',
         establishment_id: 0,
         price: 0,
     });
@@ -67,8 +67,14 @@ export default function CreateService() {
         event.preventDefault();
         const { title, description, price, establishment_id } = formData;
 
-        if (!title || !description || !price || !establishment_id || !editorData?.blocks?.length) {
-            createToastMessage("error", "Veuillez remplir tous les champs");
+        if (
+            !title ||
+            !description ||
+            !price ||
+            !establishment_id ||
+            !editorData?.blocks?.length
+        ) {
+            createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
@@ -77,23 +83,23 @@ export default function CreateService() {
             const body = JSON.stringify(editorData);
 
             const data = new FormData();
-            data.append("image", image);
-            data.append("title", title);
-            data.append("description", description);
-            data.append("price", price);
-            data.append("establishment", establishment);
-            data.append("body", body);
+            data.append('image', image);
+            data.append('title', title);
+            data.append('description', description);
+            data.append('price', price);
+            data.append('establishment', establishment);
+            data.append('body', body);
 
             const services = await createService(data);
 
             if (!services) {
-                createToastMessage("error", "Une erreur est survenue");
+                createToastMessage('error', 'Une erreur est survenue');
                 return;
             }
 
             await router.push(`/provider/services/${services.id}`);
         } catch (error) {
-            createToastMessage("error", error);
+            createToastMessage('error', error);
         }
     };
 

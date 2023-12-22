@@ -4,9 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    @apply text-gray-900 dark:text-white
+    @apply text-gray-900 dark:text-white;
+}
+
+.fc-view-harness.fc-view-harness-active {
+    max-height: 60vh !important;
 }
 
 #editorjs {

@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import httpClient from "@/services/httpClient";
+import { useEffect, useState, useCallback } from 'react';
+import httpClient from '@/services/httpClient';
 
 const useUserAccount = (userId) => {
     const [userProfile, setUserProfile] = useState(null);
@@ -21,7 +21,10 @@ const useUserAccount = (userId) => {
     const updateProfile = async (updatedData) => {
         setLoading(true);
         try {
-            const response = await httpClient.patch(`/users/${userId}`, updatedData);
+            const response = await httpClient.patch(
+                `/users/${userId}`,
+                updatedData,
+            );
             setUserProfile(response);
             setLoading(false);
         } catch (err) {
@@ -41,6 +44,6 @@ const useUserAccount = (userId) => {
     }, [userId, loadUserProfile]);
 
     return { userProfile, updateProfile, loading, error };
-}
+};
 
 export default useUserAccount;

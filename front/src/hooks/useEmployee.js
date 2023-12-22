@@ -1,4 +1,4 @@
-import {useCallback, useState} from "react";
+import { useCallback, useState } from 'react';
 
 export const useEmployee = () => {
     // const [availability, setAvailability] = useState([])
@@ -18,5 +18,4 @@ export const useEmployee = () => {
     // }, []);
     //
     // return { availability, unavailability, getAvailability, getUnavailability };
-
 };

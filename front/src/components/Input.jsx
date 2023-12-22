@@ -1,14 +1,14 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
 
 export default function Input({
-    type = "text",
-    placeholder = "",
-    label = "",
-    name = "",
-    value = "",
+    type = 'text',
+    placeholder = '',
+    label = '',
+    name = '',
+    value = '',
     onChange = () => {},
     required = false,
-    className = "",
+    className = '',
 }) {
     const handleChange = (e) => {
         onChange(e.target.value);

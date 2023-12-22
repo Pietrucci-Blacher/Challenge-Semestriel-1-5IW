@@ -1,11 +1,11 @@
-import { useRouter } from "next/router";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useEffect } from "react";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
-import GenericButton from "@/components/GenericButton";
-import { deleteEstablishment } from "@/services/establishmentService";
-import { useToast } from "@/hooks/useToast";
+import { useRouter } from 'next/router';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useEffect } from 'react';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
+import GenericButton from '@/components/GenericButton';
+import { deleteEstablishment } from '@/services/establishmentService';
+import { useToast } from '@/hooks/useToast';
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -19,9 +19,9 @@ export default function ShowEstablishment() {
     const handleDelete = async (event) => {
         try {
             await deleteEstablishment(id);
-            router.push("/admin/establishment");
+            router.push('/admin/establishment');
         } catch (error) {
-            createToastMessage("error", "Une erreur est survenue");
+            createToastMessage('error', 'Une erreur est survenue');
         }
     };
 
@@ -32,12 +32,12 @@ export default function ShowEstablishment() {
             <p>Ville: {establishment.city}</p>
             <p>Code postal: {establishment.zipCode}</p>
             <p>
-                Propriétaire: {establishment.owner.firstname}{" "}
+                Propriétaire: {establishment.owner.firstname}{' '}
                 {establishment.owner.lastname}
             </p>
         </div>
     ) : (
-        "Chargement..."
+        'Chargement...'
     );
 
     return (
