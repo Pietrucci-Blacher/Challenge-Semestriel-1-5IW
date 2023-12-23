@@ -13,8 +13,8 @@ import {
   HiArrowDown,
 } from "react-icons/hi";
 import Image from "next/image";
-import { BedIcon } from "@/components/icons/extras";
 import { useToast } from "@/hooks/useToast";
+import { useModal } from "@/hooks/useModal";
 
 export const DateView = () => {
   /*    return (
@@ -31,6 +31,39 @@ const ShowEstablishment = () => {
   const { id } = router.query;
   const { establishment, getEstablishmentById } = useEstablishment();
   const { createToastMessage } = useToast();
+  const { openModal } = useModal();
+
+  const handleOpenModal = (
+    content,
+    size = "m",
+    showButtons = false,
+    onClose = () => {},
+    onConfirm = () => {},
+    onCancel = () => {},
+  ) => {
+    openModal({
+      content,
+      size,
+      showButtons,
+      onClose,
+      onConfirm,
+      onCancel,
+    });
+  };
+
+  const handleCloseModal = () => {
+    // Perform any necessary actions when the modal is closed.
+  };
+
+  const handleConfirm = () => {
+    // Handle confirmation logic.
+    handleCloseModal(); // Close the modal after confirmation.
+  };
+
+  const handleCancel = () => {
+    // Handle cancellation logic.
+    handleCloseModal(); // Close the modal after cancellation.
+  };
 
   const shareContent = () => {
     navigator.clipboard
@@ -254,7 +287,28 @@ const ShowEstablishment = () => {
 
   const setMore = (content) => {
     // Open popup
-    console.log(content);
+    switch (content) {
+      case "more":
+        handleOpenModal(
+          "more",
+          "l",
+          handleCloseModal,
+          handleConfirm,
+          handleCancel,
+        );
+        break;
+      case "reviews":
+        handleOpenModal(
+          "reviews",
+          "m",
+          handleCloseModal,
+          handleConfirm,
+          handleCancel,
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
