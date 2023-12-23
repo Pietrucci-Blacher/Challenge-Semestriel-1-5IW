@@ -54,7 +54,7 @@ use ApiPlatform\OpenApi\Model;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object.getOwner() == user)',
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
