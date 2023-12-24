@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
 import { useModal } from "@/hooks/useModal";
+import PropTypes from "prop-types";
 
 export const DateView = () => {
   /*    return (
@@ -193,6 +194,13 @@ const ShowEstablishment = () => {
     </li>
   );
 
+  Review.prototype = {
+    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    imageSrc: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+  };
+
   const ReviewsList = () => (
     <ul className="grid grid-cols-2 gap-8">
       <Review
@@ -316,15 +324,10 @@ const ShowEstablishment = () => {
   }, [id]);
 
   return (
-    // <MoreBg more={more} setMore={setMore} />
-    // <MoreContent more={more} setMore={setMore} />
-
-    <div className="place flex flex-col items-center w-full">
-      <div className="content px-4 lg:px-10 max-w-screen-xl mx-auto w-full">
-        <section className="upx relative mt-[2%]">
-          <div className="text-[26px] font-semibold">
-            {establishment?.name}Toto
-          </div>
+    <div className="flex flex-col items-center w-full">
+      <div className="px-4 lg:px-10 max-w-screen-xl mx-auto w-full">
+        <section className="relative mt-[2%]">
+          <div className="text-[26px] font-semibold">{establishment?.name}</div>
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center">
               <div className="flex font-semibold items-center">
@@ -338,10 +341,11 @@ const ShowEstablishment = () => {
               <div className="flex items-center text-gray-700 ">
                 <span className="mx-1">·</span>
                 <HiSpeakerphone className="mr-1 text-gray-700 w-5 h-5" />{" "}
-                Superhost <span className="mx-1">·</span>
+                {establishment?.owner.firstname} {establishment?.owner.lastname}{" "}
+                <span className="mx-1">·</span>
               </div>
               <p className="underline cursor-pointer font-semibold ml-1">
-                Toto
+                {establishment?.city} , {establishment?.zipCode}
               </p>
             </div>
             <div className="flex items-center space-x-2">
@@ -410,7 +414,7 @@ const ShowEstablishment = () => {
                   alt="host"
                   className="w-full h-full rounded-full"
                 />
-                <HiBadgeCheck class="absolute bottom-0 right-[-5px] w-[22px] h-[22px]" />
+                <HiBadgeCheck className="absolute bottom-0 right-[-5px] w-[22px] h-[22px]" />
               </div>
             </div>
             <div className="container2">

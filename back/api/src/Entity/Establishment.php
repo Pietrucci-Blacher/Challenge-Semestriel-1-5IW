@@ -49,12 +49,12 @@ use ApiPlatform\OpenApi\Model;
         ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user) or (is_granted("ROLE_USER"))',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN")',
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
