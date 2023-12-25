@@ -15,7 +15,7 @@ export const urlParameters = (filter) => {
     if (filter.maxPrice) param.push(`price[lt]=${filter.maxPrice}`);
 
     const allParams = param.join('&');
-    return allParams ? `?${allParams}` : "";
+    return allParams ? `?${allParams}` : '';
 };
 
 /**
@@ -30,7 +30,7 @@ export const convertDataToHtml = (blocks) => {
             return React.createElement(
                 `h${block.data.level}`,
                 null,
-                block.data.text
+                block.data.text,
             );
         } else if (block.type === 'paragraph') {
             return <p key={key}>{block.data.text}</p>;

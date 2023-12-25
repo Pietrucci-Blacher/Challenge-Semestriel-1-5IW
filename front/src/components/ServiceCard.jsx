@@ -1,12 +1,12 @@
-import { Card } from "flowbite-react";
+import { Card } from 'flowbite-react';
 
 export default function ServiceCard({
-    title = "",
-    imgSrc = "",
-    imgAlt = "",
-    className = "",
-    price = "",
-    href = "",
+    title = '',
+    imgSrc = '',
+    imgAlt = '',
+    className = '',
+    price = '',
+    href = '',
 }) {
     return (
         <a href={href}>

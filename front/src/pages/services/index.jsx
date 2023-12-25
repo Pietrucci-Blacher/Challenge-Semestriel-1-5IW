@@ -1,16 +1,16 @@
-import Input from "@/components/Input";
-import { useService } from "@/hooks/useService";
-import { useEffect, useState } from "react";
-import { Button, Modal } from "flowbite-react";
-import Link from "next/link";
-import ServiceCard from "@/components/ServiceCard";
-import Slider from "@/components/Slider";
+import Input from '@/components/Input';
+import { useService } from '@/hooks/useService';
+import { useEffect, useState } from 'react';
+import { Button, Modal } from 'flowbite-react';
+import Link from 'next/link';
+import ServiceCard from '@/components/ServiceCard';
+import Slider from '@/components/Slider';
 
 export default function ListServices() {
     const { services, getAllServices } = useService();
 
     const [formData, setFormData] = useState({
-        title: "",
+        title: '',
         minPrice: 0,
         maxPrice: 1000,
     });
@@ -28,11 +28,11 @@ export default function ListServices() {
     };
 
     const handleSliderMinPriceChange = (value) => {
-        setFormData({ ...formData, minPrice: parseInt(value) || 0});
+        setFormData({ ...formData, minPrice: parseInt(value) || 0 });
     };
 
     const handleSliderMaxPriceChange = (value) => {
-        setFormData({ ...formData, maxPrice: parseInt(value) || 0});
+        setFormData({ ...formData, maxPrice: parseInt(value) || 0 });
     };
 
     const renderCard = services

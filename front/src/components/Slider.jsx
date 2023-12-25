@@ -1,14 +1,14 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export default function Slider({
-    label = "",
-    id = "",
-    value = "",
+    label = '',
+    id = '',
+    value = '',
     min = 0,
     max = 100,
     onChange = () => {},
     required = false,
-    className = "",
+    className = '',
 }) {
     const handleChange = (e) => {
         onChange(e.target.value);

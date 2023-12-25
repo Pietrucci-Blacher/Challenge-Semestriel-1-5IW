@@ -1,11 +1,11 @@
-import React, { memo, useEffect, useRef } from "react";
-import EditorJS from "@editorjs/editorjs";
-import Header from "@editorjs/header";
-import List from "@editorjs/list";
+import React, { memo, useEffect, useRef } from 'react';
+import EditorJS from '@editorjs/editorjs';
+import Header from '@editorjs/header';
+import List from '@editorjs/list';
 
 const EDITOR_JS_TOOLS = {
-  list: List,
-  header: Header,
+    list: List,
+    header: Header,
 };
 
 const Editor = ({ data, onChange, editorblock, label }) => {
@@ -35,7 +35,9 @@ const Editor = ({ data, onChange, editorblock, label }) => {
 
     return (
         <>
-            <label className="text-sm" htmlFor={editorblock}>{label}</label>
+            <label className="text-sm" htmlFor={editorblock}>
+                {label}
+            </label>
             <div id={editorblock} />
         </>
     );
