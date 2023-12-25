@@ -28,7 +28,6 @@ export default function UpdateService() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        // establishment_id: 0,
         price: 0,
     });
 
@@ -44,7 +43,6 @@ export default function UpdateService() {
             title: service?.title || '',
             description: service?.description || '',
             price: service?.price || 0,
-            // establishment_id: service?.establishment || 0,
         });
         setEditorData(service?.body || {});
         setInitEditorData(service?.body || {});
@@ -67,35 +65,24 @@ export default function UpdateService() {
         setEditorData(value);
     };
 
-    // const handleSelectChangeEtablishment = (selectedValue) => {
-    //     setFormData({
-    //         ...formData,
-    //         establishment_id: parseInt(selectedValue) || null
-    //     });
-    // };
-
     const handleInputPriceChange = (value) => {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        // const { title, description, price, establishment_id } = formData;
         const { title, description, price } = formData;
 
-        // if (!title || !description || !price || !establishment_id || !editorData?.blocks?.length) {
         if (!title || !description || !price || !editorData?.blocks?.length) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
 
         try {
-            // const establishment = `/establishments/${establishment_id}`;
             const body = JSON.stringify(editorData);
 
             const data = new FormData();
             if (image) data.append('image', image);
-            // if (establishment_id) data.append("establishment", establishment);
             data.append('title', title);
             data.append('description', description);
             data.append('price', price);
@@ -146,20 +133,6 @@ export default function UpdateService() {
                         label="Corps du Texte"
                     />
                 </div>
-                {/*<div>
-                    <SelectMenu
-                        label="Establishment"
-                        options={
-                            establishments
-                                ? establishments.map((establishment) => ({
-                                      label: establishment.name,
-                                      value: establishment.id,
-                                  }))
-                                : []
-                        }
-                        onChange={handleSelectChangeEtablishment}
-                    />
-                </div>*/}
                 <div>
                     <Input
                         label="Prix"

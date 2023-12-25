@@ -59,20 +59,6 @@ use App\Controller\Provider\UpdateServiceController;
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']]
         ),
-        /* new Put( */
-        /*     security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)', */
-        /*     securityMessage: 'Vous ne pouvez modifier que vos services.', */
-        /*     inputFormats: ['multipart' => ['multipart/form-data']], */
-        /*     normalizationContext: ['groups' => ['service:read']], */
-        /*     denormalizationContext: ['groups' => ['service:write']] */
-        /* ), */
-        /* new Patch( */
-        /*     security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)', */
-        /*     securityMessage: 'Vous ne pouvez modifier que vos services.', */
-        /*     inputFormats: ['multipart' => ['multipart/form-data']], */
-        /*     normalizationContext: ['groups' => ['service:read']], */
-        /*     denormalizationContext: ['groups' => ['service:write']] */
-        /* ), */
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez supprimer que vos services.',
@@ -111,8 +97,7 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?array $body = [];
 
-    /* #[ORM\ManyToOne(inversedBy: 'services')] */
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne(inversedBy: 'services')]
     #[Groups(['service:read', 'service:write'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
