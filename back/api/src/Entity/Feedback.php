@@ -65,6 +65,10 @@ class Feedback
     #[Groups(['feedback:read', 'feedback:write'])]
     private ?string $comment = null;
 
+    #[ORM\Column]
+    #[Groups(['feedback:read', 'feedback:write'])]
+    private array $detailedNote = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +130,18 @@ class Feedback
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getDetailedNote(): array
+    {
+        return $this->detailedNote;
+    }
+
+    public function setDetailedNote(array $detailedNote): static
+    {
+        $this->detailedNote = $detailedNote;
 
         return $this;
     }
