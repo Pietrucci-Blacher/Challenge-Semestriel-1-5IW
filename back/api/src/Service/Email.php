@@ -64,13 +64,16 @@ class Email {
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
-    public function sendRequestProviderEmail(array $adminEmails, string $name, string $requestId)
+    public function sendRequestProviderEmail(array $admins, string $name, string $requestId)
     {
         $subject = 'Nouvelle demande prestataire';
         $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name.'.<br><br> Pour la consulter, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="https://localhost:8080/admin/requests/'.$requestId.'">Consulter la demande</a>';
 
-        foreach($adminEmails as $emailTo) {
+
+        foreach($admins as $admin) {
+            $emailTo = $admin->getEmail();
             $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
+
         }
     }
 
@@ -88,7 +91,7 @@ class Email {
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
-    public function sendProviderRefusedEmail(string $emailTo, string $name)
+    public function sendProviderRejectedEmail(string $emailTo, string $name)
     {
         $subject = 'Demande prestataire';
         $body = 'Bonjour '.$name.',<br><br> Votre demande prestataire a été refusée.';
