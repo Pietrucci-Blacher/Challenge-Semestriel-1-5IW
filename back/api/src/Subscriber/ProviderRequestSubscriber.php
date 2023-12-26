@@ -69,7 +69,7 @@ final class ProviderRequestSubscriber implements EventSubscriberInterface
             $requestId = $content->id;
             $admins = $this->userRepository->findByRole("ROLE_ADMIN");
 
-            $this->email->sendRequestProviderEmail($admins, $user->name, $requestId);
+            $this->email->sendRequestProviderEmail($admins, $user->firstname, $requestId);
             $this->email->sendProviderConfimationEmail($user->email, $user->firstname);
         }
     }
