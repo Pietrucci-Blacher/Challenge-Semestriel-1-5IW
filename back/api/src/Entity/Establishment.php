@@ -104,12 +104,16 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
+    private Collection $feedback;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -297,6 +301,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($service->getEstablishment() === $this) {
                 $service->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getEstablishment() === $this) {
+                $feedback->setEstablishment(null);
             }
         }
 

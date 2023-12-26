@@ -61,15 +61,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'auth:me','team_invitation:read'])]
+    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -121,6 +121,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
 
+    #[ORM\OneToMany(mappedBy: 'reviewer', targetEntity: Feedback::class)]
+    private Collection $feedback;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -129,6 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->establishments = new ArrayCollection();
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -409,6 +413,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($schedule->getAssigned() === $this) {
                 $schedule->setAssigned(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setReviewer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getReviewer() === $this) {
+                $feedback->setReviewer(null);
             }
         }
 
