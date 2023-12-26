@@ -65,17 +65,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'team_invitation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'team_invitation:read', 'service:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -118,8 +118,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
-    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
+
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
+    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $teacherReservations;
 
     public function __construct()
     {
@@ -129,6 +135,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->establishments = new ArrayCollection();
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->teacherReservations = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -409,6 +417,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($schedule->getAssigned() === $this) {
                 $schedule->setAssigned(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getCustomer() === $this) {
+                $reservation->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getTeacherReservations(): Collection
+    {
+        return $this->teacherReservations;
+    }
+
+    public function addTeacherReservation(Reservation $teacherReservation): static
+    {
+        if (!$this->teacherReservations->contains($teacherReservation)) {
+            $this->teacherReservations->add($teacherReservation);
+            $teacherReservation->setTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacherReservation(Reservation $teacherReservation): static
+    {
+        if ($this->teacherReservations->removeElement($teacherReservation)) {
+            // set the owning side to null (unless already changed)
+            if ($teacherReservation->getTeacher() === $this) {
+                $teacherReservation->setTeacher(null);
             }
         }
 

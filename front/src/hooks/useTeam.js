@@ -11,7 +11,7 @@ export const useTeam = () => {
     const [userId, setUserId] = useState(null);
     const [establishmentId, setEstablishmentId] = useState(null);
     const [establishmentTeam, setEstablishmentTeam] = useState([]);
-    const [userApprovedInvitation, setUserApprovedInvitation] = useState([]);
+    const [workplaces, setWorkplaces] = useState([]);
 
     const addMemberToTeam = async (payload) => {
         return await addMemberToTeamService(payload)
@@ -41,23 +41,23 @@ export const useTeam = () => {
         setEstablishmentId(establishmentId)
     }, [])
 
-    const getUserApprovedInvitation = useCallback(async (userId) => {
+    const getWorkplaces = useCallback(async (userId) => {
         const data = await getUserInvitationService(userId)
         const establishmentUser = data["hydra:member"]
         const approvedInvitations = establishmentUser.filter((invitation)=>invitation.joinRequestStatus === "Approved")
-        setUserApprovedInvitation(approvedInvitations)
+        setWorkplaces(approvedInvitations)
         setUserId(userId)
-    }, [userId])
+    }, [])
 
     return {
         establishmentTeam,
-        userApprovedInvitation,
+        workplaces,
         addMemberToTeam,
         reInviteMemberToTeam,
         acceptInvite,
         declineInvite,
         removeMemberFromTeam,
         getEstablishmentTeam,
-        getUserApprovedInvitation
+        getWorkplaces
     }
 }

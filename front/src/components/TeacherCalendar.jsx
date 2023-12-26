@@ -60,8 +60,7 @@ export default function TeacherCalendar({establishmentId}) {
 
     useEffect(() => {
         const points = []
-        console.log("called")
-        schedules.forEach((element) => {
+        schedules?.forEach((element) => {
             points.push(getPoint(element))
         })
         setPoints(points)

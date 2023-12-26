@@ -37,14 +37,14 @@ export const useService = () => {
         }
     };
 
-    const getService = async (service) => {
+    const getService = useCallback(async (serviceId) => {
         try {
-            const response = await fetchServiceRequest(service);
+            const response = await fetchServiceRequest(serviceId);
             setService(response)
         } catch (e) {
             console.error("Error fetching service: ", e);
         }
-    };
+    }, []);
 
     const getAllMyServices = async () => {
         try {
@@ -55,14 +55,14 @@ export const useService = () => {
         }
     };
 
-    const getAllServices = async () => {
+    const getAllServices = useCallback(async () => {
         try {
             const response = await getAllServicesRequest();
             setServices(response)
         } catch (e) {
             console.error("Error fetching all services: ", e);
         }
-    };
+    }, [])
     const getEstablishmentServices = useCallback(async (establishmentId) => {
         try {
             const response = await getEstablishmentServicesRequest(establishmentId);

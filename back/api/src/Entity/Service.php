@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\Provider\GetCollectionServices;
 use App\Repository\ServiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\OpenApi\Model;
@@ -25,17 +27,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
             ]
         ),
-        new GetCollection(
-            normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_PROVIDER") ',
-        ),
+        new GetCollection(),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new Put(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
@@ -51,7 +48,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
 
     ],
-    normalizationContext: ['groups' => ['service:read']],
     mercure: true,
 )]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
@@ -60,6 +56,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -72,16 +69,29 @@ class Service
 
     #[ORM\Column(length: 255)]
     #[Groups(['service:read', 'service:write'])]
-    private ?string $price = null;
+    private ?int $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['service:read', 'service:write'])]
     private ?string $body = null;
 
+    #[ORM\Column]
+    #[Groups(['service:read', 'service:write'])]
+    private ?int $duration = null;
+
     #[Groups(['service:read', 'service:write'])]
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -113,12 +123,12 @@ class Service
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(int $price): static
     {
         $this->price = $price;
 
@@ -145,6 +155,48 @@ class Service
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getService() === $this) {
+                $reservation->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): static
+    {
+        $this->duration = $duration;
 
         return $this;
     }

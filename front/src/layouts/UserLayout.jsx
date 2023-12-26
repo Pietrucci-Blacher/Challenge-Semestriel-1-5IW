@@ -6,7 +6,8 @@ const UserLayout = ({children}) => {
         {icon: HiChartPie, text: "Dashboard", href: "#", label: "Pro", labelColor: "gray"},
         {icon: HiViewBoards, text: "Requests", href: "#", label: "Pro", labelColor: "gray"},
         {icon: HiInbox, text: "Establishment", href: "#", label: "Pro", labelColor: "gray"},
-        {icon: HiShoppingBag, text: "Services", href: "#", label: "Pro", labelColor: "gray"},
+        {icon: HiShoppingBag, text: "Services", href: "/services", label: "Pro", labelColor: "gray"},
+        {icon: HiShoppingBag, text: "Reservations", href: "/reservations", label: "Pro", labelColor: "gray"},
         {icon: HiUser, text: "Users", href: "#", label: "Pro", labelColor: "gray"},
         {icon: HiTable, text: "Reviews", href: "#", label: "Pro", labelColor: "gray"}
     ]

@@ -11,7 +11,7 @@ export const useSchedule = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
     const [schedule, setSchedule] = useState(null)
     // const [userSchedules, setUuserSchedules] = useState([])
-    const [schedules, setSchedules] = useState([])
+    const [schedules, setSchedules] = useState(null)
 
     const addSchedule = useCallback(async (newSchedule) => {
         const payload = {
@@ -25,7 +25,7 @@ export const useSchedule = () => {
 
     const updateSchedule = useCallback(async (id, payload) => {
         const schedule = await updateScheduleService(id, payload)
-        const scheduleIndex = schedules.findIndex(schedule => schedule.id === +id);
+        const scheduleIndex = schedules?.findIndex(schedule => schedule.id === +id);
         if (scheduleIndex !== -1) {
             const updatedUserSchedules = [...schedules];
             updatedUserSchedules[scheduleIndex] = {...updatedUserSchedules[scheduleIndex], ...schedule};
@@ -37,7 +37,7 @@ export const useSchedule = () => {
     const deleteSchedule = useCallback(async (id) => {
         try {
             await deleteScheduleService(id);
-            const newSchedules = schedules.filter((schedule) =>  schedule.id !== +id)
+            const newSchedules = schedules?.filter((schedule) =>  schedule.id !== +id)
             setSchedules(newSchedules);
         } catch (error) {
             console.error("Erreur lors de la suppression du schedule :", error);
@@ -54,7 +54,7 @@ export const useSchedule = () => {
         } catch (error) {
             console.error('Erreur lors de la récupération des indisponibilités:', error);
         }
-    }, [userId]);
+    }, []);
 
     const getEstablishmentSchedules = useCallback(async (establishmentId) => {
         try {

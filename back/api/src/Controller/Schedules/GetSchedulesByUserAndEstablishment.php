@@ -14,7 +14,7 @@ class GetSchedulesByUserAndEstablishment extends AbstractController
     public function __invoke(int $establishmentId, int $userId): array
     {
         return $this->scheduleRepository->findBy([
-            "assignedTo"=>$userId,
+            "teacher"=>$userId,
             "establishment"=>$establishmentId
         ]);
     }

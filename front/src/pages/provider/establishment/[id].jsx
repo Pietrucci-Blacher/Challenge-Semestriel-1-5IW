@@ -75,7 +75,7 @@ export default function ShowEstablishment() {
 
 
     useEffect(() => {
-        const calendarPoints = schedules.map(schedule => getPoint(schedule));
+        const calendarPoints = schedules?.map(schedule => getPoint(schedule)) ?? [];
         setPoints(calendarPoints)
     }, [schedules]);
 
