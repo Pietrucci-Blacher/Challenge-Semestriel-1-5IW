@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import StarsLine from "@/components/feedback/StarsLine";
 import feedbackData from "./feedback/feedbackEntity.json";
 import PropTypes from "prop-types";
+import Input from "@/components/Input";
 
 export default function Feedback({ showFeedback }) {
   const [scores, setScores] = useState(

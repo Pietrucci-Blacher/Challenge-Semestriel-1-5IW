@@ -2,9 +2,6 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import nextI18NextConfig from "../../next-i18next.config";
 import { useTranslation } from "next-i18next";
-import Feedback from "@/components/Feedback";
-import { Button } from "flowbite-react";
-import { ModalProvider } from "@/providers/ModalProvider";
 
 export default function Index() {
   const { t, i18n } = useTranslation("common");

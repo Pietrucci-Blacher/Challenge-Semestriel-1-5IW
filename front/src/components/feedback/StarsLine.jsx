@@ -1,7 +1,47 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export default function StarsLine({
+const Star = ({
+  index,
+  filledStars,
+  isEditable,
+  onStarClick,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
+  const isHalf = filledStars - index === 0.5;
+  const isFilled = filledStars > index;
+  const isHovered = isEditable && (isHalf || index + 1 === filledStars);
+
+  const starClasses = `text-xl ${isEditable ? "cursor-pointer" : ""} ${
+    isHovered || isFilled ? "text-yellow-500" : "text-gray-300"
+  }`;
+
+  const handleStarClick = () => {
+    if (isEditable) {
+      const newFilledStars = isHalf ? index + 0.5 : index + 1;
+      onStarClick?.(index + 1, newFilledStars);
+    }
+  };
+
+  return (
+    <button
+      className={starClasses}
+      onClick={handleStarClick}
+      onMouseEnter={() => onMouseEnter(index, isHalf)}
+      onMouseLeave={onMouseLeave}
+    >
+      {renderStar(index + 1, filledStars)}
+    </button>
+  );
+};
+
+const renderStar = (star, filledStars) => {
+  const fullStars = Math.floor(filledStars);
+  return star <= fullStars ? "★" : star === fullStars + 0.5 ? "★½" : "☆";
+};
+
+const StarsLine = ({
   className,
   totalStar,
   filledStar,
@@ -9,25 +49,17 @@ export default function StarsLine({
   size = "md",
   onStarClick,
   onMouseLeave,
-}) {
+}) => {
+  const [localFilledStars, setLocalFilledStars] = useState(filledStar);
   const [hoveredStar, setHoveredStar] = useState(null);
-  const [filledStars, setFilledStars] = useState(filledStar);
 
   useEffect(() => {
-    setFilledStars(filledStar);
+    setLocalFilledStars(filledStar);
   }, [filledStar]);
 
-  const handleStarClick = (starIndex, isHalf) => {
+  const handleMouseEnter = (index, isHalf) => {
     if (isEditable) {
-      const newFilledStars = isHalf ? starIndex + 0.5 : starIndex + 1;
-      setFilledStars(newFilledStars);
-      onStarClick?.(starIndex + 1, newFilledStars); // pass the star index to onStarClick
-    }
-  };
-
-  const handleMouseEnter = (starIndex, isHalf) => {
-    if (isEditable) {
-      setHoveredStar(isHalf ? starIndex + 0.5 : starIndex + 1);
+      setHoveredStar(isHalf ? index + 0.5 : index + 1);
     }
   };
 
@@ -36,52 +68,37 @@ export default function StarsLine({
     onMouseLeave?.();
   };
 
-  const isHoveredStar = (star) => hoveredStar !== null && hoveredStar === star;
+  const handleStarClick = (starIndex, newFilledStars) => {
+    setLocalFilledStars(newFilledStars);
+    onStarClick?.(starIndex, newFilledStars);
+  };
 
-  const stars = Array.from({ length: totalStar }, (_, i) => {
-    const isHalf = filledStars - i === 0.5;
-    const isFilled = filledStars > i;
-
-    return (
-      <button
-        key={i}
-        className={`text-xl ${isEditable ? "cursor-pointer" : ""} ${
-          isHoveredStar(i + 1) || isFilled ? "text-yellow-500" : "text-gray-300"
-        }`}
-        onClick={() => handleStarClick(i, isHalf)}
-        onMouseEnter={() => handleMouseEnter(i, isHalf)}
-        onMouseLeave={handleMouseLeave}
-      >
-        {renderStar(i + 1)}
-      </button>
-    );
-  });
-
-  function renderStar(star) {
-    const fullStars = Math.floor(filledStars);
-    if (star <= fullStars) {
-      return "★";
-    } else if (star === fullStars + 0.5) {
-      return "★½";
-    } else {
-      return "☆";
-    }
-  }
+  const stars = Array.from({ length: totalStar }, (_, i) => (
+    <Star
+      key={i}
+      index={i}
+      filledStars={localFilledStars}
+      isEditable={isEditable}
+      onStarClick={handleStarClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    />
+  ));
 
   return <div className={`flex ${getSizeClass(size)}`}>{stars}</div>;
-}
+};
 
 StarsLine.propTypes = {
   className: PropTypes.string,
   totalStar: PropTypes.number,
   filledStar: PropTypes.number,
   isEditable: PropTypes.bool,
-  size: PropTypes.oneOf(["", "md", "lg"]),
+  size: PropTypes.oneOf(["", "sm", "md", "lg"]),
   onStarClick: PropTypes.func,
   onMouseLeave: PropTypes.func,
 };
 
-function getSizeClass(size) {
+const getSizeClass = (size) => {
   switch (size) {
     case "sm":
       return "text-sm";
@@ -92,4 +109,15 @@ function getSizeClass(size) {
     default:
       return "";
   }
-}
+};
+
+export default StarsLine;
+
+Star.PropsTypes = {
+  index: PropTypes.number,
+  filledStars: PropTypes.number,
+  isEditable: PropTypes.bool,
+  onStarClick: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+};
