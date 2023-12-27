@@ -260,6 +260,7 @@ const ShowEstablishment = () => {
     size: "m",
     text: null,
     showButtons: true,
+    showCloseButton: true,
     onClose: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
     onConfirm: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
     onCancel: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
