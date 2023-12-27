@@ -12,6 +12,9 @@ import { useCallback, useState } from 'react';
 export const useService = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
     const [establishmentServices, setEstablishmentServices] = useState([]);
+    const [servicesPerEstablishment, setServicesPerEstablishment] = useState(
+        [],
+    );
     const [service, setService] = useState(null);
     const [services, setServices] = useState(null);
     const createService = async (data) => {
@@ -38,14 +41,14 @@ export const useService = () => {
         }
     };
 
-    const getService = async (service) => {
+    const getService = useCallback(async (service) => {
         try {
             const response = await fetchServiceRequest(service);
             setService(response);
         } catch (e) {
             console.error('Error fetching service: ', e);
         }
-    };
+    }, []);
 
     const getAllMyServices = async () => {
         try {
@@ -56,9 +59,9 @@ export const useService = () => {
         }
     };
 
-    const getAllServices = async () => {
+    const getAllServices = async (filter) => {
         try {
-            const response = await getAllServicesRequest();
+            const response = await getAllServicesRequest(filter);
             setServices(response);
         } catch (e) {
             console.error('Error fetching all services: ', e);
@@ -76,10 +79,33 @@ export const useService = () => {
         }
     }, []);
 
+    const getGetServicesPerEstablishment = useCallback(
+        async (establishmentIds) => {
+            try {
+                const promises = establishmentIds.map(
+                    async (establishmentId) => {
+                        const response =
+                            await getEstablishmentServicesRequest(
+                                establishmentId,
+                            );
+                        return response;
+                    },
+                );
+                const services = await Promise.all(promises);
+                console.log('resp, ', services);
+                setServicesPerEstablishment(services);
+            } catch (e) {
+                console.error('Error fetching all services: ', e);
+            }
+        },
+        [],
+    );
+
     return {
         service,
         services,
         establishmentServices,
+        servicesPerEstablishment,
         createService,
         updateService,
         deleteService,
@@ -87,5 +113,6 @@ export const useService = () => {
         getAllServices,
         getAllMyServices,
         getEstablishmentServices,
+        getGetServicesPerEstablishment,
     };
 };

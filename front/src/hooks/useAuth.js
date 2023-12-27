@@ -22,6 +22,7 @@ export const useAuth = () => {
             const user = await fetchCurrentUser();
             setIsLogged(true);
             setUser(user);
+            console.log('user', user);
         } catch (error) {
             console.error(`Erreur de connexion : ${error.message}`);
             throw `Erreur de connexion : ${error.message}`;

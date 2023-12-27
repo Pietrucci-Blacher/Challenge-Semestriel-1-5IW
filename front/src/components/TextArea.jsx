@@ -8,6 +8,7 @@ export default function TextArea({
     placeholder,
     onChange,
     required,
+    id,
 }) {
     const handleChange = (e) => {
         onChange(e.target.value);
@@ -24,6 +25,7 @@ export default function TextArea({
                 placeholder={placeholder}
                 onChange={handleChange}
                 required={required}
+                id={id}
             />
         </div>
     );
@@ -36,4 +38,5 @@ TextArea.propTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     required: PropTypes.bool,
+    id: PropTypes.string,
 };
