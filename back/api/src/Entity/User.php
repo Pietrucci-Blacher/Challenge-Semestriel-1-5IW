@@ -21,6 +21,7 @@ use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Auth\MeController;
+use App\Controller\Auth\EmailConfirmationController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -31,6 +32,10 @@ use App\Controller\Auth\MeController;
             normalizationContext: ['groups' => ['user:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object == user)',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
+        new Get(
+            uriTemplate: '/confirm-email/{token}',
+            controller: EmailConfirmationController::class,
         ),
         new GetCollection(
             uriTemplate: '/auth/me',
@@ -120,6 +125,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $emailConfirmaionToken = null;
 
     public function __construct()
     {
@@ -413,5 +421,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getEmailConfirmaionToken(): ?string
+    {
+        return $this->emailConfirmaionToken;
+    }
+
+    public function setEmailConfirmaionToken(?string $emailConfirmaionToken): static
+    {
+        $this->emailConfirmaionToken = $emailConfirmaionToken;
+
+        return $this;
+    }
+
+    public function generateEmailConfirmationToken(): string
+    {
+        // create a token of 40 chars (20 bytes * 2)
+        $token = bin2hex(random_bytes(20));
+        $this->emailConfirmaionToken = $token;
+
+        return $token;
     }
 }

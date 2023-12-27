@@ -6,3 +6,6 @@ controllers:
 
 auth_login:
     path: /auth/login
+
+# confirm_email:
+#     path: /confirm-email

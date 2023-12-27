@@ -50,10 +50,17 @@ class Email {
         }
     }
 
-    public function sendWelcomeEmail(string $emailTo, string $name)
+    public function sendWelcomeEmail(string $emailTo, string $name, string $token)
     {
         $subject = 'Bienvenue';
-        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM';
+        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM DU SITE.<br><br> Pour confirmer votre adresse email, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="https://localhost/auth/confirm-email/'.$token.'">Confirmer l\'adresse email</a>';
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
+    }
+
+    public function sendEmailIsConfirmed(string $emailTo, string $name)
+    {
+        $subject = 'Adresse email confirmée';
+        $body = 'Bonjour '.$name.',<br><br> Votre adresse email a bien été confirmée.';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
