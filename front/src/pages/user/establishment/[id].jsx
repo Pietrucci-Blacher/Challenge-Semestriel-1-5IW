@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useEstablishment } from "@/hooks/useEstablishment";
 import {
@@ -14,7 +14,8 @@ import {
 } from "react-icons/hi";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
-
+import { Modal } from "flowbite-react";
+import ModalComponent from "@/components/Modal";
 export const DateView = () => {
   /*    return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -253,42 +254,73 @@ const ShowEstablishment = () => {
 
   RatingList.displayName = "RatingList";
 
+  let modalContent;
+  const [modalProps, setModalProps] = useState({
+    isOpen: false,
+    size: "m",
+    text: null,
+    showButtons: true,
+    onClose: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+    onConfirm: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+    onCancel: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+  });
+
   const setMore = (content) => {
-    const handleCloseModal = () => {
-      //
-    };
-
-    const handleConfirm = () => {
-      //
-    };
-
-    const handleCancel = () => {
-      handleCloseModal();
-    };
-
-    // Open popup
     switch (content) {
       case "more":
-        openModal({
-          text: 'Your modal content for "more"',
-          size: "l",
-          onClose: handleCloseModal,
-          onConfirm: handleConfirm,
-          onCancel: handleCancel,
-        });
+        modalContent = (
+          <div className="text-[18px] border-b border-[#22222226] py-8 pb-12">
+            <p className="leading-6">
+              Veluvana is a unique bamboo house with a wonderful view of Sidemen
+              Valley, a genuine tropical landscape with Mount Agung peak on its
+              back. This getaway spot is a great place to bring into reality the
+              dream adventure of the true wanderer. We invite you to feel the
+              magnificent vibes of the entire house to escape the life that is
+              full of drama into a journey with ultimate joy.
+              <br />
+              sleep ...
+            </p>
+            <button
+              className="flex items-center font-semibold underline black text-[17px] mt-5"
+              onClick={() => setMore("more")}
+            >
+              Show more <HiOutlineArrowRight className="ml-1.5" />
+            </button>
+          </div>
+        );
         break;
       case "reviews":
-        openModal({
-          text: 'Your modal content for "reviews"',
-          size: "m",
-          onClose: handleCloseModal,
-          onConfirm: handleConfirm,
-          onCancel: handleCancel,
-        });
+        modalContent = (
+          <div
+            id="reviews"
+            className="py-12 w-full border-b border-[#22222226]"
+          >
+            <div className="upp mb-8 w-full">
+              <h1 className="flex items-center font-semibold text-2xl mb-4">
+                <HiStar className="mr-2" />
+                4.86 · 126 reviews
+              </h1>
+              <RatingList />
+            </div>
+            <ReviewsList />
+            <button
+              className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
+              onClick={() => setMore("reviews")}
+            >
+              Show all 126 reviews
+            </button>
+          </div>
+        );
         break;
       default:
-        break;
+        modalContent = null;
     }
+    setModalProps((prev) => ({
+      ...prev,
+      isOpen: true,
+      text: modalContent,
+      showButtons: false,
+    }));
   };
 
   useEffect(() => {
@@ -508,6 +540,7 @@ const ShowEstablishment = () => {
           </button>
         </div>
       </div>
+      <ModalComponent modalProps={modalProps}>{modalProps.text}</ModalComponent>
     </div>
   );
 };
