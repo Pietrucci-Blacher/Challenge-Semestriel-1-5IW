@@ -36,6 +36,15 @@ const Star = ({
   );
 };
 
+Star.propTypes = {
+  index: PropTypes.number,
+  filledStars: PropTypes.number,
+  isEditable: PropTypes.bool,
+  onStarClick: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+};
+
 const renderStar = (star, filledStars) => {
   const fullStars = Math.floor(filledStars);
   return star <= fullStars ? "★" : star === fullStars + 0.5 ? "★½" : "☆";
@@ -112,12 +121,3 @@ const getSizeClass = (size) => {
 };
 
 export default StarsLine;
-
-Star.PropsTypes = {
-  index: PropTypes.number,
-  filledStars: PropTypes.number,
-  isEditable: PropTypes.bool,
-  onStarClick: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-};
