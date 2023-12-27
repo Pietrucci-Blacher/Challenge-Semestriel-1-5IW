@@ -18,15 +18,6 @@ export default function ShowService() {
         getService(id);
     }, [id, getService]);
 
-    const handleDelete = async (event) => {
-        try {
-            await deleteServiceRequest(id);
-            await router.push('/provider/services');
-        } catch (error) {
-            createToastMessage('error', 'Une erreur est survenue');
-        }
-    };
-
     const renderService = service ? (
         <>
             <div className="w-full mr-4 mb-4">
@@ -52,21 +43,6 @@ export default function ShowService() {
     return (
         <>
             <div className="lg:flex justify-between">{renderService}</div>
-            <GenericButton onClick={handleDelete} label="Supprimer" />
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href={`/provider/services/update/${id}`}
-            >
-                Modifier
-            </FlowbiteButton>
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href="/provider/services"
-            >
-                Retour
-            </FlowbiteButton>
         </>
     );
 }
