@@ -1,6 +1,6 @@
+import React, { memo, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useEstablishment } from "@/hooks/useEstablishment";
-import { useEffect } from "react";
 import {
   HiStar,
   HiSpeakerphone,
@@ -14,8 +14,6 @@ import {
 } from "react-icons/hi";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
-import { useModal } from "@/hooks/useModal";
-import PropTypes from "prop-types";
 
 export const DateView = () => {
   /*    return (
@@ -32,40 +30,6 @@ const ShowEstablishment = () => {
   const { id } = router.query;
   const { establishment, getEstablishmentById } = useEstablishment();
   const { createToastMessage } = useToast();
-  const { openModal } = useModal();
-
-  const handleOpenModal = (
-    content,
-    size = "m",
-    showButtons = false,
-    onClose = () => {},
-    onConfirm = () => {},
-    onCancel = () => {},
-  ) => {
-    openModal({
-      content,
-      size,
-      showButtons,
-      onClose,
-      onConfirm,
-      onCancel,
-    });
-  };
-
-  const handleCloseModal = () => {
-    // Perform any necessary actions when the modal is closed.
-  };
-
-  const handleConfirm = () => {
-    // Handle confirmation logic.
-    handleCloseModal(); // Close the modal after confirmation.
-  };
-
-  const handleCancel = () => {
-    // Handle cancellation logic.
-    handleCloseModal(); // Close the modal after cancellation.
-  };
-
   const shareContent = () => {
     navigator.clipboard
       .writeText(window.location.href)
@@ -180,7 +144,7 @@ const ShowEstablishment = () => {
   const Review = ({ name, date, imageSrc, content }) => (
     <li className="mb-[40px] pr-16">
       <div className="mb-4">
-        <img
+        <Image
           className="float-left mr-3 rounded-[100%]"
           src={imageSrc}
           width={40}
@@ -193,15 +157,7 @@ const ShowEstablishment = () => {
       <p className="p-0">{content}</p>
     </li>
   );
-
-  Review.prototype = {
-    name: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    imageSrc: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-  };
-
-  const ReviewsList = () => (
+  const ReviewsList = memo(() => (
     <ul className="grid grid-cols-2 gap-8">
       <Review
         name="Aldo"
@@ -240,9 +196,11 @@ const ShowEstablishment = () => {
         content="It was an amazing experience. I will never forget the words before entering ARE YOU READY, and we saw this wonderful place."
       />
     </ul>
-  );
+  ));
 
-  const RatingList = () => (
+  ReviewsList.displayName = "ReviewsList";
+
+  const RatingList = memo(() => (
     <ul className="w-full flex justify-between">
       <ul className="w-2/5 block mr-[10%]">
         <li className="pr-16 flex items-center mb-4">
@@ -291,28 +249,42 @@ const ShowEstablishment = () => {
         </li>
       </ul>
     </ul>
-  );
+  ));
+
+  RatingList.displayName = "RatingList";
 
   const setMore = (content) => {
+    const handleCloseModal = () => {
+      //
+    };
+
+    const handleConfirm = () => {
+      //
+    };
+
+    const handleCancel = () => {
+      handleCloseModal();
+    };
+
     // Open popup
     switch (content) {
       case "more":
-        handleOpenModal(
-          "more",
-          "l",
-          handleCloseModal,
-          handleConfirm,
-          handleCancel,
-        );
+        openModal({
+          text: 'Your modal content for "more"',
+          size: "l",
+          onClose: handleCloseModal,
+          onConfirm: handleConfirm,
+          onCancel: handleCancel,
+        });
         break;
       case "reviews":
-        handleOpenModal(
-          "reviews",
-          "m",
-          handleCloseModal,
-          handleConfirm,
-          handleCancel,
-        );
+        openModal({
+          text: 'Your modal content for "reviews"',
+          size: "m",
+          onClose: handleCloseModal,
+          onConfirm: handleConfirm,
+          onCancel: handleCancel,
+        });
         break;
       default:
         break;
@@ -370,6 +342,7 @@ const ShowEstablishment = () => {
                 height={750}
                 src={images[0].baseUrl}
                 quality={100}
+                alt="Main picture of establishment"
               />
             </div>
             <ul className="right w-1/2 flex flex-wrap">
@@ -387,6 +360,7 @@ const ShowEstablishment = () => {
                       width={1200}
                       height={750}
                       src={images[i].baseUrl}
+                      alt="Pictures of establishment"
                     />
                   </div>
                 </li>
