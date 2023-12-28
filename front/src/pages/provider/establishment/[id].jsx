@@ -32,21 +32,37 @@ export default function ShowEstablishment() {
 
 
     const userColors = {}
-
-    const generateRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+    const predefinedColors = {
+        "info": "#0ea5e9",
+        "gray": "#6b7280",
+        "failure": "#ef4444",
+        "success": "#4ade80",
+        "warning": "#f59e0b",
+        "indigo": "#6366f1",
+        "purple": "#a78bfa",
+        "pink": "#ec4899",
+        "blue": "#3b82f6",
+        "cyan": "#0ea5e9",
+        "dark": "#1f2937",
+        "light": "#4b5563",
+        "green": "#4ade80",
+        "lime": "#84cc16",
+        "red": "#ef4444",
+        "teal": "#14b8a6",
+        "yellow": "#f59e0b"
     }
 
+
     const getPoint = (schedule) => {
-        if (!schedule) return
-        const userId = schedule["assignedTo"]["@id"]
+        if (!schedule) return;
+
+        const userId = schedule["assignedTo"]["@id"];
         if (!userColors[userId]) {
-            userColors[userId] = generateRandomColor();
+            // Attribuer une couleur prédéfinie au lieu d'une couleur aléatoire
+            // Exemple : rotation à travers les clés de l'objet predefinedColors
+            const colorKeys = Object.keys(predefinedColors);
+            const colorIndex = Object.keys(userColors).length % colorKeys.length;
+            userColors[userId] = predefinedColors[colorKeys[colorIndex]];
         }
 
         let start = new Date(schedule["startTime"]);
@@ -54,15 +70,15 @@ export default function ShowEstablishment() {
         let end = new Date(schedule["endTime"]);
         end.setHours(end.getHours() - 1);
 
-        const username = schedule.assignedTo.firstname
+        const username = schedule.assignedTo.firstname;
         return {
             id: schedule["@id"],
             title: `${username} - ${schedule["reason"]}`,
             start: start.toISOString(),
             end: end.toISOString(),
-            color: userColors[userId]
+            color: userColors[userId] // Utilisation de la couleur prédéfinie
         };
-    }
+    };
 
     useEffect(() => {
         const {id} = router.query;
