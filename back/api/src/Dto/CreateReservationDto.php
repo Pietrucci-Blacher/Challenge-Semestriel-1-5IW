@@ -4,7 +4,11 @@ namespace App\Dto;
 
 class CreateReservationDto
 {
-    public $establishment;
-    public $teacher;
-    public $service;
+    public $establishment_id;
+    public $teacher_id;
+    public $service_id;
+    public $startTime;
+    public $endTime;
+    public $specialRequests = null;
+
 }
