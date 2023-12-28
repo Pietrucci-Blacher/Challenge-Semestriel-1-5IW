@@ -1,4 +1,3 @@
-// ModalComponent.jsx
 import { Button, Modal } from "flowbite-react";
 import PropTypes from "prop-types";
 
@@ -15,7 +14,12 @@ const ModalComponent = ({ modalProps, children }) => {
   } = modalProps;
 
   return (
-    <Modal show={isOpen} size={size} onClose={onClose}>
+    <Modal
+      dismissible={showCloseButton}
+      show={isOpen}
+      size={size}
+      onClose={onClose}
+    >
       {showCloseButton && <Modal.Header></Modal.Header>}
       <Modal.Body>{children || text}</Modal.Body>
       {showButtons && (
