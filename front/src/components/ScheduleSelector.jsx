@@ -26,14 +26,16 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
         return result;
     };
 
-
-    const getWeekDays = (offset) => {
+    const getWeekDays = (offset = 0) => {
         const today = new Date();
-        const startOfWeek = addDays(today, offset * 7 - today.getDay());
-        return [...Array(7)].map((_, i) => {
+        let startOfWeek = addDays(today, 1);
+        startOfWeek = addDays(startOfWeek, offset * 7);
+        const weekDays = [];
+        for (let i = 0; i < 7; i++) {
             const day = addDays(startOfWeek, i);
-            return day.toISOString().split('T')[0];
-        });
+            weekDays.push(day.toISOString().split('T')[0]);
+        }
+        return weekDays;
     };
 
     const weekDays = getWeekDays(weekOffset);
