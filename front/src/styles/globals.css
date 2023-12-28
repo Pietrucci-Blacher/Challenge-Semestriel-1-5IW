@@ -4,38 +4,82 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    @apply text-gray-900 dark:text-white
+    @apply text-gray-900 dark:text-white;
 }
 
-.fc-view-harness.fc-view-harness-active{
-    max-height: 60vh!important;
+.fc-view-harness.fc-view-harness-active {
+    max-height: 60vh !important;
 }
 
-.time-slots-container::-webkit-scrollbar {
-    display: none; /* Pour les navigateurs WebKit/Blink comme Chrome et Safari */
+#editorjs {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+
+    height: 400px;
+    overflow: auto;
+
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 26px;
+    }
+
+    h4 {
+        font-size: 24px;
+    }
+
+    h5 {
+        font-size: 22px;
+    }
+
+    h6 {
+        font-size: 20px;
+    }
 }
 
-.time-slots-container::after {
-    /*content: '';*/
-    /*position: absolute;*/
-    /*bottom: 0;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*height: 100px; !* Hauteur de l'effet de fondu *!*/
-    /*pointer-events: none; !* Assure que les clics passent à travers *!*/
-    /*background: linear-gradient(to bottom, transparent, white); !* Crée un effet de fondu *!*/
-}
+.editor-html {
+    @apply bg-gray-50 dark:bg-gray-800 p-5 rounded;
+    font-weight: 500;
 
+    h1 {
+        font-size: 30px;
+    }
 
-.card-hover:hover {
-    transform: scale(1.05); /* Légèrement agrandir la carte */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajouter une ombre pour un effet de profondeur */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animation fluide */
-}
-.truncate-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 26px;
+    }
+
+    h4 {
+        font-size: 24px;
+    }
+
+    h5 {
+        font-size: 22px;
+    }
+
+    h6 {
+        font-size: 20px;
+    }
+
+    ul {
+        list-style: disc;
+    }
+
+    li {
+        margin-left: 40px;
+    }
+
+    p {
+        margin: 10px 0;
+    }
 }

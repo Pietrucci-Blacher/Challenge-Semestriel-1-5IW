@@ -1,12 +1,10 @@
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
-import {Label} from "flowbite-react";
-import PropTypes from "prop-types";
+import { Label } from 'flowbite-react';
+import PropTypes from 'prop-types';
 
-
-export default function TextEditor({label}) {
-
+export default function TextEditor({ label }) {
     const configuration = {
         holder: 'editorjs',
         tools: {
@@ -24,9 +22,9 @@ export default function TextEditor({label}) {
                 inlineToolbar: true,
             },
         },
-    }
+    };
 
-    const editor = new EditorJS(configuration)
+    const editor = new EditorJS(configuration);
     return (
         <div>
             <div className="mb-2 block">
@@ -34,9 +32,9 @@ export default function TextEditor({label}) {
             </div>
             <div id="editorjs"></div>
         </div>
-    )
+    );
 }
 
 TextEditor.propTypes = {
     label: PropTypes.string.isRequired,
-}
+};

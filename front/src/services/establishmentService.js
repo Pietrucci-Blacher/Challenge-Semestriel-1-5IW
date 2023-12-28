@@ -1,7 +1,7 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
 export const createEstablishment = ({ name, street, city, zipCode }) => {
-    return httpClient.post("/establishments", {
+    return httpClient.post('/establishments', {
         name,
         street,
         city,
@@ -40,6 +40,6 @@ export const updateEstablishment = (id, content) => {
  * Get all establishments for admin only
  */
 export const getAllEstablishments = async () => {
-    const result = await httpClient.get("/establishments");
-    return result["hydra:member"];
+    const result = await httpClient.get('/establishments');
+    return result['hydra:member'];
 };

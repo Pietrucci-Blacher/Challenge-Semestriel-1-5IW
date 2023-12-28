@@ -1,19 +1,27 @@
 import {
     fetchCurrentUser,
     getUserFromSession,
-    storeUserInSession
-} from "@/services/authService";
+    storeUserInSession,
+} from '@/services/authService';
 
-import {useState, useEffect, createContext, useContext, useCallback} from 'react';
+import {
+    useState,
+    useEffect,
+    createContext,
+    useContext,
+    useCallback,
+} from 'react';
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(undefined);
     const [isLogged, setIsLogged] = useState(undefined);
     const verifyUser = useCallback(async () => {
+        console.log('called');
         let storedUser = getUserFromSession();
         if (!storedUser) {
+            console.log('cc');
             try {
                 await fetchUser();
             } catch (error) {
@@ -34,14 +42,23 @@ export const AuthProvider = ({children}) => {
             setIsLogged(true);
             storeUserInSession(fetchedUser);
         } catch {
-            throw "error recuperation user"
+            throw 'error recuperation user';
         }
-    }
+    };
     useEffect(() => {
         verifyUser();
     }, [verifyUser]);
     return (
-        <AuthContext.Provider value={{user, setUser, isLogged, setIsLogged, verifyUser, fetchUser}}>
+        <AuthContext.Provider
+            value={{
+                user,
+                setUser,
+                isLogged,
+                setIsLogged,
+                verifyUser,
+                fetchUser,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
