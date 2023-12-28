@@ -8,15 +8,7 @@ import {
 
 export const useReservation = () => {
     const [reservations, setReservations] = useState(null)
-    const createReservation = useCallback(async (newReservation) => {
-        const payload = {
-            startTime: newReservation["startTime"],
-            endTime: newReservation["endTime"],
-            establishment: `/establishments/${newReservation["establishment"]}`,
-            service: `/services/${newReservation["service"]}`,
-            teacher: `/users/${newReservation["teacher"]}`,
-            specialRequests: newReservation["specialRequests"]
-        }
+    const createReservation = useCallback(async (payload) => {
         const response = await addReservation(payload)
     }, []);
 
