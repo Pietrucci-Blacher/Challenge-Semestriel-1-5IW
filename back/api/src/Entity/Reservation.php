@@ -9,10 +9,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
 use App\Attributes\UserField;
+use App\Controller\Reservation\CreateReservation;
+use App\Dto\CreateReservationDto;
 use App\Repository\ReservationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ApiResource(
@@ -20,9 +24,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         new GetCollection(),
         new Get(),
         new Post(
-//            controller: CreateReservation::class,
-//            name: 'create_reservation',
-
+            controller: CreateReservation::class,
+            input: CreateReservationDto::class,
+            name: 'add_reservation',
         ),
         new Patch(),
         new Delete()
@@ -41,7 +45,7 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[UserField('customer')]
+//    #[UserField('customer')]
     private ?User $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
@@ -65,6 +69,9 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private ?User $teacher = null;
 
+    #[ORM\OneToOne(inversedBy: 'reservation', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Schedule $schedule = null;
 
     public function getId(): ?int
     {
@@ -153,5 +160,36 @@ class Reservation
         $this->teacher = $teacher;
 
         return $this;
+    }
+
+    public function getSchedule(): ?Schedule
+    {
+        return $this->schedule;
+    }
+
+    public function setSchedule(Schedule $schedule): static
+    {
+        $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context): void
+    {
+        $startTime = $this->startTime;
+        $endTime = $this->endTime;
+        $currentDate = new \DateTime();
+        if ($startTime <= $currentDate) {
+            $context->buildViolation('Le startTime doit être dans le futur ' )
+                ->atPath('startTime')
+                ->addViolation();
+        }
+
+        if ($startTime >= $endTime) {
+            $context->buildViolation('Le startTime doit être antérieur au endTime')
+                ->atPath('startTime')
+                ->addViolation();
+        }
     }
 }

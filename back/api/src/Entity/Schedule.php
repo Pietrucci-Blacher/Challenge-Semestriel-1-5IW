@@ -4,13 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Link;
 use App\Attributes\UserField;
-//use App\Controller\Teacher\AddSchedule;
-//use App\Controller\Teacher\GetMySchedules;
-//use App\Controller\Teacher\GetScheduleByEmployee;
 use App\Controller\Schedules\GetSchedulesByUserAndEstablishment;
-use App\Dto\Teacher\AddScheduleDto;
 use App\Repository\ScheduleRepository;
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -86,7 +81,8 @@ class Schedule
     #[Groups(['schedule:read'])]
     private ?\DateTimeInterface $endTime = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'schedule', cascade: ['persist', 'remove'])]
+    #[Groups(['schedule:read'])]
     private ?Reservation $reservation = null;
 
     public function getId(): ?int
@@ -107,7 +103,6 @@ class Schedule
         $this->reason = $reason;
         return $this;
     }
-
 
     public function getAssignedTo(): ?User
     {
@@ -145,25 +140,6 @@ class Schedule
         return $this;
     }
 
-    #[Assert\Callback]
-    public function validate(ExecutionContextInterface $context): void
-    {
-        $startTime = $this->startTime;
-        $endTime = $this->endTime;
-        $currentDate = new \DateTime();
-        if ($startTime <= $currentDate) {
-            $context->buildViolation('Le startTime doit être dans le futur ' )
-                ->atPath('startTime')
-                ->addViolation();
-        }
-
-        if ($startTime >= $endTime) {
-            $context->buildViolation('Le startTime doit être antérieur au endTime')
-                ->atPath('startTime')
-                ->addViolation();
-        }
-    }
-
     public function getEstablishment(): ?Establishment
     {
         return $this->establishment;
@@ -181,10 +157,34 @@ class Schedule
         return $this->reservation;
     }
 
-    public function setReservation(?Reservation $reservation): static
+    public function setReservation(Reservation $reservation): static
     {
+        // set the owning side of the relation if necessary
+        if ($reservation->getSchedule() !== $this) {
+            $reservation->setSchedule($this);
+        }
+
         $this->reservation = $reservation;
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context): void
+    {
+        $startTime = $this->startTime;
+        $endTime = $this->endTime;
+        $currentDate = new \DateTime();
+        if ($startTime <= $currentDate) {
+            $context->buildViolation('Le startTime doit être dans le futur ' )
+                ->atPath('startTime')
+                ->addViolation();
+        }
+
+        if ($startTime >= $endTime) {
+            $context->buildViolation('Le startTime doit être antérieur au endTime')
+                ->atPath('startTime')
+                ->addViolation();
+        }
     }
 }
