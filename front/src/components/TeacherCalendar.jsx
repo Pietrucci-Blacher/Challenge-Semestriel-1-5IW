@@ -36,6 +36,7 @@ export default function TeacherCalendar({establishmentId}) {
             title: '',
             start: '',
             end: '',
+            color: '',
         };
         point["id"] = schedule["id"];
         point["title"] = schedule["reason"];
@@ -45,6 +46,9 @@ export default function TeacherCalendar({establishmentId}) {
         let end = new Date(schedule["endTime"]);
         end.setHours(end.getHours() - 1);
         point["end"] = end.toISOString();
+        if (schedule["reservation"]) {
+            point["color"] = '#c0bdda';
+        }
         return point;
     }
 
@@ -79,6 +83,8 @@ export default function TeacherCalendar({establishmentId}) {
         const currentSchedule = {
             id: schedule.event.id,
             title: schedule.event.title,
+            start:schedule.event.startStr,
+            end:schedule.event.endStr,
             ...schedule.event
         }
         setCurrentSchedule(currentSchedule)
@@ -193,12 +199,12 @@ export default function TeacherCalendar({establishmentId}) {
                                         <div className="w-1/2 mr-1">
                                             <div className="mb-2 block">
                                                 <Label
-                                                    value={`Date debut : ${convertDateToString(newSchedule?.start)}`}/>
+                                                    value={`Date debut : ${convertDateToString(currentSchedule?.start)}`}/>
                                             </div>
                                         </div>
                                         <div className="w-1/2 ml-1">
                                             <div className="mb-2 block">
-                                                <Label value={`Date fin : ${convertDateToString(newSchedule?.end)}`}/>
+                                                <Label value={`Date fin : ${convertDateToString(currentSchedule?.end)}`}/>
                                             </div>
                                         </div>
                                     </div>
