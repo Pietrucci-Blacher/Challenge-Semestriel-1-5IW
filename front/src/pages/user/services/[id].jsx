@@ -1,66 +1,73 @@
 'use client';
-import {useRouter} from "next/router";
-import {useService} from "@/hooks/useService";
-import {useEffect, useState} from "react";
-import {Button, Card, Carousel, Label, Modal, Select, Textarea} from "flowbite-react";
+import { useRouter } from 'next/router';
+import { useService } from '@/hooks/useService';
+import { useEffect, useState } from 'react';
+import {
+    Button,
+    Card,
+    Carousel,
+    Label,
+    Modal,
+    Select,
+    Textarea,
+} from 'flowbite-react';
 import Image from 'next/image';
-import {useTeam} from "@/hooks/useTeam";
-import {useSchedule} from "@/hooks/useSchedule";
-import ScheduleSelector from "@/components/ScheduleSelector";
-import {useReservation} from "@/hooks/useReservation";
+import { useTeam } from '@/hooks/useTeam';
+import { useSchedule } from '@/hooks/useSchedule';
+import ScheduleSelector from '@/components/ScheduleSelector';
+import { useReservation } from '@/hooks/useReservation';
 
 export default function Id() {
-    const [selectedTeacher, setSelectedTeacher] = useState(null)
-    const [selectedSchedule, setSelectedSchedule] = useState({})
+    const [selectedTeacher, setSelectedTeacher] = useState(null);
+    const [selectedSchedule, setSelectedSchedule] = useState({});
     const [openModal, setOpenModal] = useState(false);
-    const [specialRequest, setSpecialRequest] = useState("");
+    const [specialRequest, setSpecialRequest] = useState('');
 
-    const {service, getService} = useService()
-    const {establishmentTeam, getEstablishmentTeam} = useTeam();
-    const {schedules, getUserSchedules} = useSchedule()
-    const {createReservation} = useReservation()
+    const { service, getService } = useService();
+    const { establishmentTeam, getEstablishmentTeam } = useTeam();
+    const { schedules, getUserSchedules } = useSchedule();
+    const { createReservation } = useReservation();
 
-    const router = useRouter()
-    const {id} = router.query
+    const router = useRouter();
+    const { id } = router.query;
     useEffect(() => {
-        if (!id) return
-        getService(id)
+        if (!id) return;
+        getService(id);
     }, [router, getService]);
 
     useEffect(() => {
-        if (!service) return
-        const {establishment} = service
-        const establishmentId = establishment?.id
-        getEstablishmentTeam(establishmentId)
+        if (!service) return;
+        const { establishment } = service;
+        const establishmentId = establishment?.id;
+        getEstablishmentTeam(establishmentId);
     }, [service, getEstablishmentTeam]);
 
     const handleSelectTeacher = (e) => {
-        const idEmployee = e.target.value
-        setSelectedTeacher(idEmployee)
-        if (!idEmployee) return
-        getUserSchedules(idEmployee)
-    }
+        const idEmployee = e.target.value;
+        setSelectedTeacher(idEmployee);
+        if (!idEmployee) return;
+        getUserSchedules(idEmployee);
+    };
     const handleSelectSchedule = (schedule) => {
-        setSelectedSchedule(schedule)
-    }
+        setSelectedSchedule(schedule);
+    };
 
     const handleReserve = () => {
-        const {date, time} = selectedSchedule
-        if (!date && !time){
+        const { date, time } = selectedSchedule;
+        if (!date && !time) {
             // TODOS:
             // utilise le toast pour retourner un probl
         }
-        setOpenModal(true)
-    }
-
+        setOpenModal(true);
+    };
 
     const handleConfirmReservation = async () => {
         const { date, time } = selectedSchedule;
         const duration = service?.duration;
         const timezoneOffset = 60;
 
-        const startTime = new Date(`${date}T${time}`)
-        startTime.setHours(startTime.getHours() + 1)
+        const startTime = new Date(`${date}T${time}`);
+        startTime.setHours(startTime.getHours() + 1);
         const endTime = new Date(startTime);
 
         endTime.setMinutes(startTime.getMinutes() + duration);
@@ -69,40 +76,59 @@ export default function Id() {
         const formattedEndTime = endTime.toISOString();
 
         const payload = {
-            "startTime": formattedStartTime,
-            "endTime": formattedEndTime,
-            "establishment_id": service?.establishment?.id,
-            "service_id" : service?.id,
-            "teacher_id": selectedTeacher,
-        }
-        specialRequest.length > 0 ? payload["specialRequest"] = specialRequest : payload
-        setOpenModal(false)
-        await createReservation(payload)
-        await getUserSchedules(selectedTeacher)
-        setSpecialRequest("")
-        setSelectedSchedule({})
-    }
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+            establishment_id: service?.establishment?.id,
+            service_id: service?.id,
+            teacher_id: selectedTeacher,
+        };
+        specialRequest.length > 0
+            ? (payload['specialRequest'] = specialRequest)
+            : payload;
+        setOpenModal(false);
+        await createReservation(payload);
+        await getUserSchedules(selectedTeacher);
+        setSpecialRequest('');
+        setSelectedSchedule({});
+    };
 
     const getTeacherInfo = (userId) => {
-        const teacher = establishmentTeam.find((team)=>+team.member.id === +userId)
-        return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`
-    }
+        const teacher = establishmentTeam.find(
+            (team) => +team.member.id === +userId,
+        );
+        return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`;
+    };
 
     return (
         <>
             <div className="container">
                 <div className="grid h-56 grid-cols-3 gap-4 sm:h-64 xl:h-80 2xl:h-96">
                     <Carousel indicators={false} className="col-span-1">
-                        <img className="w-full h-full object-cover"
-                             src="https://www.flowbite-react.com/images/blog/image-1.jpg" alt="..."/>
-                        <img className="w-full h-full object-cover"
-                             src="https://www.flowbite-react.com/images/blog/image-1.jpg" alt="..."/>
-                        <img className="w-full h-full object-cover"
-                             src="https://www.flowbite-react.com/images/blog/image-1.jpg" alt="..."/>
-                        <img className="w-full h-full object-cover"
-                             src="https://www.flowbite-react.com/images/blog/image-1.jpg" alt="..."/>
-                        <img className="w-full h-full object-cover"
-                             src="https://www.flowbite-react.com/images/blog/image-1.jpg" alt="..."/>
+                        <img
+                            className="w-full h-full object-cover"
+                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            alt="..."
+                        />
+                        <img
+                            className="w-full h-full object-cover"
+                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            alt="..."
+                        />
+                        <img
+                            className="w-full h-full object-cover"
+                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            alt="..."
+                        />
+                        <img
+                            className="w-full h-full object-cover"
+                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            alt="..."
+                        />
+                        <img
+                            className="w-full h-full object-cover"
+                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            alt="..."
+                        />
                     </Carousel>
                     <Card className="col-span-2">
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
@@ -135,13 +161,15 @@ export default function Id() {
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Date de creation : {service?.establishment?.createdAt}
+                                Date de creation :{' '}
+                                {service?.establishment?.createdAt}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Adresse
-                                : {service?.establishment?.street} {service?.establishment?.city} {service?.establishment?.zipCode}
+                                Adresse : {service?.establishment?.street}{' '}
+                                {service?.establishment?.city}{' '}
+                                {service?.establishment?.zipCode}
                             </p>
                         </div>
                     </div>
@@ -166,12 +194,16 @@ export default function Id() {
                                             />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{team?.member.firstname} {team?.member.lastname}</p>
-                                            <p className="truncate text-sm text-gray-500 dark:text-gray-400">{team?.member.email}</p>
+                                            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                                                {team?.member.firstname}{' '}
+                                                {team?.member.lastname}
+                                            </p>
+                                            <p className="truncate text-sm text-gray-500 dark:text-gray-400">
+                                                {team?.member.email}
+                                            </p>
                                         </div>
                                     </div>
                                 </li>
-
                             ))}
                         </ul>
                     </div>
@@ -185,25 +217,47 @@ export default function Id() {
                     <div>
                         <div className="max-w-md">
                             <div className="mb-2 block">
-                                <Label htmlFor="teachers" value="Selectionner un professeur"/>
+                                <Label
+                                    htmlFor="teachers"
+                                    value="Selectionner un professeur"
+                                />
                             </div>
-                            <Select id="teachers" required onChange={handleSelectTeacher}>
+                            <Select
+                                id="teachers"
+                                required
+                                onChange={handleSelectTeacher}
+                            >
                                 <option></option>
                                 {establishmentTeam?.map((team) => (
-                                    <option key={team.id}
-                                            value={team?.member?.id}>{team?.member?.firstname} {team?.member?.lastname}</option>
+                                    <option
+                                        key={team.id}
+                                        value={team?.member?.id}
+                                    >
+                                        {team?.member?.firstname}{' '}
+                                        {team?.member?.lastname}
+                                    </option>
                                 ))}
                             </Select>
                         </div>
                         <div className="my-8 w-fit ">
-                            {(selectedTeacher && schedules !== null) && (
+                            {selectedTeacher && schedules !== null && (
                                 <>
-                                    <h2 className="text-2xl font-semibold mb-6">Choissisez un crenau qui vous
-                                        convient</h2>
-                                    <ScheduleSelector range={service.duration} unavailableSlots={schedules}
-                                                      onSelectSchedule={handleSelectSchedule}/>
+                                    <h2 className="text-2xl font-semibold mb-6">
+                                        Choissisez un crenau qui vous convient
+                                    </h2>
+                                    <ScheduleSelector
+                                        range={service.duration}
+                                        unavailableSlots={schedules}
+                                        onSelectSchedule={handleSelectSchedule}
+                                    />
                                     <div className="flex justify-center">
-                                        <Button className="mt-8" size="lg" onClick={handleReserve}>Reserver</Button>
+                                        <Button
+                                            className="mt-8"
+                                            size="lg"
+                                            onClick={handleReserve}
+                                        >
+                                            Reserver
+                                        </Button>
                                     </div>
                                 </>
                             )}
@@ -211,49 +265,68 @@ export default function Id() {
                     </div>
                 </div>
 
-
                 <div className="mt-8">
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
                         Reviews :
                     </h2>
                     <p>TBD</p>
                 </div>
-
             </div>
             <Modal show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>Reservation</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">
                         <div className="">
-                        <div className="mb-2 block">
-                                <Label htmlFor="" value={`Vous sur le point de reserver un crenau de ${service?.duration} minutes`} className="text-xl"/>
+                            <div className="mb-2 block">
+                                <Label
+                                    htmlFor=""
+                                    value={`Vous sur le point de reserver un crenau de ${service?.duration} minutes`}
+                                    className="text-xl"
+                                />
                             </div>
                             <div className="mb-2 block">
-                                <Label htmlFor="" value="Information de la reservation:"/>
+                                <Label
+                                    htmlFor=""
+                                    value="Information de la reservation:"
+                                />
                             </div>
                             <ul className="list-disc pl-5 space-y-2">
                                 <li>Date : {selectedSchedule?.date}</li>
                                 <li>Heure : {selectedSchedule?.time}</li>
-                                <li>Professeur : {getTeacherInfo(selectedTeacher)}</li>
+                                <li>
+                                    Professeur :{' '}
+                                    {getTeacherInfo(selectedTeacher)}
+                                </li>
                             </ul>
                         </div>
                         <div className="max-w-md">
                             <div className="mb-2 block">
-                                <Label htmlFor="request" value="Votre message"/>
+                                <Label
+                                    htmlFor="request"
+                                    value="Votre message"
+                                />
                             </div>
-                            <Textarea id="request" placeholder="Laissez une remarque au professeur" rows={4} value={specialRequest} onChange={(e)=>setSpecialRequest(e.target.value)}/>
+                            <Textarea
+                                id="request"
+                                placeholder="Laissez une remarque au professeur"
+                                rows={4}
+                                value={specialRequest}
+                                onChange={(e) =>
+                                    setSpecialRequest(e.target.value)
+                                }
+                            />
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleConfirmReservation}>Confirmer</Button>
+                    <Button onClick={handleConfirmReservation}>
+                        Confirmer
+                    </Button>
                     <Button color="gray" onClick={() => setOpenModal(false)}>
                         Annuler
                     </Button>
                 </Modal.Footer>
             </Modal>
-
         </>
-    )
-
+    );
 }

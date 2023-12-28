@@ -1,4 +1,4 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
 export const addReservation = (payload) => {
     return httpClient.post(`/reservations`, payload);
@@ -12,11 +12,12 @@ export const getTeacherReservations = ({ establishmentId }) => {
     return httpClient.get(`establishments/${establishmentId}/schedules`);
 };
 
-export const getEstablishmentReservations = ({ establishmentId,userId }) => {
-    return httpClient.get(`establishments/${establishmentId}/users/${userId}/schedules`);
+export const getEstablishmentReservations = ({ establishmentId, userId }) => {
+    return httpClient.get(
+        `establishments/${establishmentId}/users/${userId}/schedules`,
+    );
 };
 
-export const getServiceReservations = (id,payload) => {
-    return httpClient.patch(`/schedules/${id}`, {...payload});
+export const getServiceReservations = (id, payload) => {
+    return httpClient.patch(`/schedules/${id}`, { ...payload });
 };
-

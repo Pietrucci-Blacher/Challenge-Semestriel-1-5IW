@@ -1,7 +1,7 @@
-export default function Reservations(){
-    return(
+export default function Reservations() {
+    return (
         <>
-        <h2>ok</h2>
+            <h2>ok</h2>
         </>
-    )
+    );
 }

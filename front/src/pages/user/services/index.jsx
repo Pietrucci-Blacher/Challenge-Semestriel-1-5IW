@@ -1,14 +1,14 @@
-import {useService} from "@/hooks/useService";
-import {useEffect} from "react";
-import {Card} from "flowbite-react";
+import { useService } from '@/hooks/useService';
+import { useEffect } from 'react';
+import { Card } from 'flowbite-react';
 // import {useRouter} from "next/router";
 
 export default function Services() {
     // const router = useRouter()
-    const {services, getAllServices} = useService()
+    const { services, getAllServices } = useService();
 
     useEffect(() => {
-        getAllServices()
+        getAllServices();
     }, []);
 
     // const goToServiceById = (id)=>{
@@ -18,9 +18,11 @@ export default function Services() {
         <>
             <h2>services</h2>
             <div className="flex flex-wrap mx-2 ">
-
                 {services?.map((service) => (
-                    <div className="w-full sm:w-1/2 md:w-1/3 px-2 py-4"  key={service.id}>
+                    <div
+                        className="w-full sm:w-1/2 md:w-1/3 px-2 py-4"
+                        key={service.id}
+                    >
                         <Card
                             className="max-w-sm card-hover"
                             imgAlt="Meaningful alt text for an image that is not purely decorative"
@@ -44,5 +46,5 @@ export default function Services() {
                 ))}
             </div>
         </>
-    )
+    );
 }
