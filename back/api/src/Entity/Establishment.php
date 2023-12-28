@@ -104,6 +104,9 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoEstablishment = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -299,6 +302,18 @@ class Establishment
                 $service->setEstablishment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhotoEstablishment(): ?string
+    {
+        return $this->photoEstablishment;
+    }
+
+    public function setPhotoEstablishment(?string $photoEstablishment): static
+    {
+        $this->photoEstablishment = $photoEstablishment;
 
         return $this;
     }
