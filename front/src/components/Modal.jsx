@@ -17,7 +17,7 @@ const ModalComponent = ({ modalProps, children }) => {
         <Modal
             dismissible={showCloseButton}
             show={isOpen}
-            size={size}
+            size={size ?? 'md'}
             onClose={onClose}
         >
             {showCloseButton && <Modal.Header></Modal.Header>}
@@ -35,13 +35,24 @@ const ModalComponent = ({ modalProps, children }) => {
 ModalComponent.propTypes = {
     modalProps: PropTypes.shape({
         isOpen: PropTypes.bool.isRequired,
-        size: PropTypes.string,
+        size: PropTypes.oneOf([
+            'sm',
+            'md',
+            'lg',
+            'xl',
+            '2xl',
+            '3xl',
+            '4xl',
+            '5xl',
+            '6xl',
+            '7xl',
+        ]),
         text: PropTypes.node,
         showButtons: PropTypes.bool,
         onClose: PropTypes.func.isRequired,
         onConfirm: PropTypes.func,
         onCancel: PropTypes.func,
-        showCloseButton: PropTypes.bool, // Add the prop for showing/hiding close button
+        showCloseButton: PropTypes.bool,
     }).isRequired,
     children: PropTypes.node,
 };

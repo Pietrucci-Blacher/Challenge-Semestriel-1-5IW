@@ -255,9 +255,10 @@ const ShowEstablishment = () => {
     RatingList.displayName = 'RatingList';
 
     let modalContent;
+    let modalSize;
     const [modalProps, setModalProps] = useState({
         isOpen: false,
-        size: 'm',
+        size: '5xl',
         text: null,
         showButtons: true,
         showCloseButton: true,
@@ -269,6 +270,7 @@ const ShowEstablishment = () => {
     const setMore = (content) => {
         switch (content) {
             case 'more':
+                modalSize = 'md';
                 modalContent = (
                     <div className="text-[18px] border-b border-[#22222226] py-8 pb-12">
                         <p className="leading-6">
@@ -293,12 +295,13 @@ const ShowEstablishment = () => {
                 );
                 break;
             case 'reviews':
+                modalSize = '5xl';
                 modalContent = (
                     <div
                         id="reviews"
                         className="py-12 w-full border-b border-[#22222226]"
                     >
-                        <div className="upp mb-8 w-full">
+                        <div className="mb-8 w-full">
                             <h1 className="flex items-center font-semibold text-2xl mb-4">
                                 <HiStar className="mr-2" />
                                 4.86 · 126 reviews
@@ -322,6 +325,7 @@ const ShowEstablishment = () => {
             ...prev,
             isOpen: true,
             text: modalContent,
+            size: modalSize,
             showButtons: false,
         }));
     };
@@ -548,7 +552,7 @@ const ShowEstablishment = () => {
                     id="reviews"
                     className="py-12 w-full border-b border-[#22222226]"
                 >
-                    <div className="upp mb-8 w-full">
+                    <div className="mb-8 w-full">
                         <h1 className="flex items-center font-semibold text-2xl mb-4">
                             <HiStar className="mr-2" />
                             4.86 · 126 reviews
