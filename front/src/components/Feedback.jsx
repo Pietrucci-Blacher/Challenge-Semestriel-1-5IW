@@ -3,8 +3,9 @@ import StarsLine from '@/components/feedback/StarsLine';
 import feedbackData from './feedback/feedbackEntity.json';
 import PropTypes from 'prop-types';
 import Input from '@/components/Input';
+import TextArea from '@/components/TextArea';
 
-export default function Feedback({ showFeedback }) {
+export default function Feedback({ showFeedback, onCloseModal }) {
     const [scores, setScores] = useState(
         showFeedback && feedbackData[showFeedback]
             ? feedbackData[showFeedback].reduce((acc, label) => {
@@ -13,6 +14,11 @@ export default function Feedback({ showFeedback }) {
               }, {})
             : {},
     );
+
+    const [formData, setFormData] = useState({
+        comment: '',
+        resultJson: {},
+    });
 
     const [locked, setLocked] = useState({});
 
@@ -34,12 +40,18 @@ export default function Feedback({ showFeedback }) {
         }
     };
 
+    const handleChange = (value) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            comment: value,
+        }));
+    };
+
     const calculateFinalScore = () => {
         const totalFeedbacks = Object.values(scores).length;
         const finalScore =
             Object.values(scores).reduce((total, score) => total + score, 0) /
             totalFeedbacks;
-        console.log('Final Score:', finalScore);
 
         const resultJson = {
             average: finalScore,
@@ -52,7 +64,11 @@ export default function Feedback({ showFeedback }) {
             ),
         };
 
-        console.log('Result JSON:', resultJson);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            resultJson: JSON.stringify(resultJson),
+        }));
+        onCloseModal();
     };
 
     return (
@@ -80,9 +96,20 @@ export default function Feedback({ showFeedback }) {
                         />
                     </div>
                 ))}
+            <br />
+            <TextArea
+                label="Commentaire"
+                placeholder="Commentaire"
+                type="textarea"
+                onChange={handleChange}
+            />
+            <br />
             {showFeedback && (
-                <button onClick={calculateFinalScore}>
-                    Afficher le résultat
+                <button
+                    className="flex items-center px-2 py-2 rounded bg-gray-200 font-semibold underline hover:bg-gray-100"
+                    onClick={calculateFinalScore}
+                >
+                    Envoyer le feedback
                 </button>
             )}
         </div>
@@ -91,4 +118,5 @@ export default function Feedback({ showFeedback }) {
 
 Feedback.propTypes = {
     showFeedback: PropTypes.string,
+    onCloseModal: PropTypes.func,
 };

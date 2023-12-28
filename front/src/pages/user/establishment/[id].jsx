@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/useToast';
 import { Modal } from 'flowbite-react';
 import ModalComponent from '@/components/Modal';
+import Feedback from '@/components/Feedback';
 export const DateView = () => {
     /*    return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -254,6 +255,10 @@ const ShowEstablishment = () => {
 
     RatingList.displayName = 'RatingList';
 
+    const onClose = () => {
+        setModalProps((prev) => ({ ...prev, isOpen: false }));
+    };
+
     let modalContent;
     let modalSize;
     const [modalProps, setModalProps] = useState({
@@ -297,10 +302,7 @@ const ShowEstablishment = () => {
             case 'reviews':
                 modalSize = '5xl';
                 modalContent = (
-                    <div
-                        id="reviews"
-                        className="py-12 w-full border-b border-[#22222226]"
-                    >
+                    <div id="reviews" className="py-12 w-full ">
                         <div className="mb-8 w-full">
                             <h1 className="flex items-center font-semibold text-2xl mb-4">
                                 <HiStar className="mr-2" />
@@ -311,10 +313,36 @@ const ShowEstablishment = () => {
                         <ReviewsList />
                         <button
                             className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                            onClick={() => setMore('reviews')}
+                            onClick={() => setMore('feedback')}
                         >
-                            Show all 126 reviews
+                            Ajouter un avis
                         </button>
+                    </div>
+                );
+                break;
+            case 'feedback':
+                modalSize = '4xl';
+                modalContent = (
+                    <div>
+                        <h1 className="text-2xl">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
+                            Avis sur l'établissement
+                            {establishment?.name}
+                        </h1>
+                        <br />
+                        <p>
+                            Nous aimerions entendre votre avis ! Chez
+                            {establishment?.name} nous sommes constamment à la
+                            recherche de façons d &eapos; améliorer votre
+                            expérience. Votre feedback est crucial pour nous
+                            aider à mieux comprendre vos besoins et à répondre à
+                            vos attentes.
+                        </p>
+                        <br />
+                        <Feedback
+                            showFeedback="establishment"
+                            onCloseModal={onClose}
+                        />
                     </div>
                 );
                 break;
