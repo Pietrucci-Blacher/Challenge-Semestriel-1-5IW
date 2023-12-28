@@ -6,8 +6,8 @@ import {
 } from '@/services/forgotPasswordService';
 
 export function useResetPassword() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isTokenValid, setIsTokenValid] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isTokenValid, setIsTokenValid] = useState(null);
 
     async function askResetPassword(email) {
         setIsLoading(true);

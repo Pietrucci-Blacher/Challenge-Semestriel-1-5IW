@@ -6,15 +6,15 @@ import { appWithTranslation } from 'next-i18next';
 import nextI18n from '../../next-i18next.config';
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ToastProvider>
-      <AuthProvider>
-        <ChooseLayout>
-          <Component {...pageProps} />
-        </ChooseLayout>
-      </AuthProvider>
-    </ToastProvider>
-  );
+    return (
+        <ToastProvider>
+            <AuthProvider>
+                <ChooseLayout>
+                    <Component {...pageProps} />
+                </ChooseLayout>
+            </AuthProvider>
+        </ToastProvider>
+    );
 }
 
 export default appWithTranslation(MyApp, nextI18n);

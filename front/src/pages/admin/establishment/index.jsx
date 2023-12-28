@@ -4,11 +4,11 @@ import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
 
 export default function ListAllEstablishment() {
-  const { establishments, getAllEstablishments } = useEstablishment();
+    const { establishments, getAllEstablishments } = useEstablishment();
 
-  useEffect(() => {
-    getAllEstablishments();
-  }, []);
+    useEffect(() => {
+        getAllEstablishments();
+    }, []);
 
     const renderEstablishments = establishments
         ? establishments.map((establishment) => (
@@ -33,17 +33,17 @@ export default function ListAllEstablishment() {
           ))
         : 'Chargement en cours';
 
-  return (
-    <Table>
-      <Table.Head>
-        <Table.HeadCell>Nom</Table.HeadCell>
-        <Table.HeadCell>Rue</Table.HeadCell>
-        <Table.HeadCell>Ville</Table.HeadCell>
-        <Table.HeadCell>Code postal</Table.HeadCell>
-        <Table.HeadCell>Propriétaire</Table.HeadCell>
-        <Table.HeadCell>Actions</Table.HeadCell>
-      </Table.Head>
-      <Table.Body>{renderEstablishments}</Table.Body>
-    </Table>
-  );
+    return (
+        <Table>
+            <Table.Head>
+                <Table.HeadCell>Nom</Table.HeadCell>
+                <Table.HeadCell>Rue</Table.HeadCell>
+                <Table.HeadCell>Ville</Table.HeadCell>
+                <Table.HeadCell>Code postal</Table.HeadCell>
+                <Table.HeadCell>Propriétaire</Table.HeadCell>
+                <Table.HeadCell>Actions</Table.HeadCell>
+            </Table.Head>
+            <Table.Body>{renderEstablishments}</Table.Body>
+        </Table>
+    );
 }

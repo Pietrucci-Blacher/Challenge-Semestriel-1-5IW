@@ -29,16 +29,16 @@ export default function ListAllServices() {
           ))
         : 'Chargement en cours';
 
-  return (
-    <Table>
-      <Table.Head>
-        <Table.HeadCell>Titre</Table.HeadCell>
-        <Table.HeadCell>Description</Table.HeadCell>
-        <Table.HeadCell>Prix</Table.HeadCell>
-          <Table.HeadCell>Auteur</Table.HeadCell>
-        <Table.HeadCell>Actions</Table.HeadCell>
-      </Table.Head>
-      <Table.Body>{renderServices}</Table.Body>
-    </Table>
-  );
+    return (
+        <Table>
+            <Table.Head>
+                <Table.HeadCell>Titre</Table.HeadCell>
+                <Table.HeadCell>Description</Table.HeadCell>
+                <Table.HeadCell>Prix</Table.HeadCell>
+                <Table.HeadCell>Auteur</Table.HeadCell>
+                <Table.HeadCell>Actions</Table.HeadCell>
+            </Table.Head>
+            <Table.Body>{renderServices}</Table.Body>
+        </Table>
+    );
 }

@@ -1,3 +1,8 @@
 {
-  "establishment": ["Qualité des cours", "Professionalisme", "Rapport Qualité Prix", "Communication"]
+    "establishment": [
+        "Qualité des cours",
+        "Professionalisme",
+        "Rapport Qualité Prix",
+        "Communication"
+    ]
 }

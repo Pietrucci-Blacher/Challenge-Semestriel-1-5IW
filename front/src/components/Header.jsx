@@ -52,18 +52,20 @@ export default function Header() {
                     <Navbar.Toggle />
                 </div>
 
-        <Navbar.Collapse>
-          <Navbar.Link href="#" active>
-            Home
-          </Navbar.Link>
-          <Navbar.Link href="#">About</Navbar.Link>
-          <Navbar.Link href="#">Contact</Navbar.Link>
-          {user && (
-            <Navbar.Link href="/establishment/">Etablissements</Navbar.Link>
-          )}
-          <Navbar.Link href="#">Services</Navbar.Link>
-        </Navbar.Collapse>
-      </Navbar>
-    </header>
-  );
+                <Navbar.Collapse>
+                    <Navbar.Link href="#" active>
+                        Home
+                    </Navbar.Link>
+                    <Navbar.Link href="#">About</Navbar.Link>
+                    <Navbar.Link href="#">Contact</Navbar.Link>
+                    {user && (
+                        <Navbar.Link href="/establishment/">
+                            Etablissements
+                        </Navbar.Link>
+                    )}
+                    <Navbar.Link href="#">Services</Navbar.Link>
+                </Navbar.Collapse>
+            </Navbar>
+        </header>
+    );
 }

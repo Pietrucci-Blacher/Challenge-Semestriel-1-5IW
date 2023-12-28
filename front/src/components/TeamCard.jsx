@@ -17,10 +17,10 @@ export function TeamCard({ members, onReinviteMember, onRemoveMember }) {
         setShowConfirmModal(true);
     };
 
-  const closeConfirmModal = () => {
-    setMemberIdToDelete(null);
-    setShowConfirmModal(false);
-  };
+    const closeConfirmModal = () => {
+        setMemberIdToDelete(null);
+        setShowConfirmModal(false);
+    };
 
     const deleteMember = () => {
         onRemoveMember(memberIdToDelete);

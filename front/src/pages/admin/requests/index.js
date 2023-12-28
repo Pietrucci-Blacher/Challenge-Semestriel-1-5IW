@@ -4,11 +4,11 @@ import { Button as FlowbiteButton } from 'flowbite-react';
 import Link from 'next/link';
 
 export default function Index() {
-  const { requests, getListOfRequests } = useRequestsProvider();
+    const { requests, getListOfRequests } = useRequestsProvider();
 
-  useEffect(() => {
-    getListOfRequests();
-  }, [getListOfRequests]);
+    useEffect(() => {
+        getListOfRequests();
+    }, [getListOfRequests]);
 
     return (
         <>

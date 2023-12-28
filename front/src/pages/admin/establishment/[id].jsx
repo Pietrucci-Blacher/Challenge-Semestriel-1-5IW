@@ -8,14 +8,14 @@ import { deleteEstablishment } from '@/services/establishmentService';
 import { useToast } from '@/hooks/useToast';
 
 export default function ShowEstablishment() {
-  const router = useRouter();
-  const { id } = router.query;
-  const { establishment, getEstablishmentById } = useEstablishment();
-  const { createToastMessage } = useToast();
+    const router = useRouter();
+    const { id } = router.query;
+    const { establishment, getEstablishmentById } = useEstablishment();
+    const { createToastMessage } = useToast();
 
-  useEffect(() => {
-    getEstablishmentById(id);
-  }, [id]);
+    useEffect(() => {
+        getEstablishmentById(id);
+    }, [id]);
 
     const handleDelete = async (event) => {
         try {
@@ -41,20 +41,24 @@ export default function ShowEstablishment() {
         'Chargement...'
     );
 
-  return (
-    <>
-      <div>{renderEstablishment}</div>
-      <GenericButton onClick={handleDelete} label="Supprimer" />
-      <FlowbiteButton
-        className="my-2"
-        as={Link}
-        href={`/admin/establishment/update/${id}`}
-      >
-        Modifier
-      </FlowbiteButton>
-      <FlowbiteButton className="my-2" as={Link} href="/admin/establishment">
-        Retour
-      </FlowbiteButton>
-    </>
-  );
+    return (
+        <>
+            <div>{renderEstablishment}</div>
+            <GenericButton onClick={handleDelete} label="Supprimer" />
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href={`/admin/establishment/update/${id}`}
+            >
+                Modifier
+            </FlowbiteButton>
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href="/admin/establishment"
+            >
+                Retour
+            </FlowbiteButton>
+        </>
+    );
 }
