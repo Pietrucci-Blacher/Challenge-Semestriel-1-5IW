@@ -43,25 +43,27 @@ export default function Id() {
     const handleSelectSchedule = (schedule) => {
         setSelectedSchedule(schedule)
     }
+
     const handleReserve = () => {
         const {date, time} = selectedSchedule
         if (!date && !time){
-            console.log("ok")
+            // TODOS:
             // utilise le toast pour retourner un probl
         }
         setOpenModal(true)
     }
 
 
-    const handleConfirmReservation = () => {
+    const handleConfirmReservation = async () => {
         const { date, time } = selectedSchedule;
         const duration = service?.duration;
         const timezoneOffset = 60;
 
-        const startTime = new Date(`${date}T${time}`);
-        const endTime = new Date(startTime.getTime());
-        startTime.setMinutes(startTime.getMinutes() + timezoneOffset);
-        endTime.setMinutes(endTime.getMinutes() + duration);
+        const startTime = new Date(`${date}T${time}`)
+        startTime.setHours(startTime.getHours() + 1)
+        const endTime = new Date(startTime);
+
+        endTime.setMinutes(startTime.getMinutes() + duration);
 
         const formattedStartTime = startTime.toISOString();
         const formattedEndTime = endTime.toISOString();
@@ -69,13 +71,16 @@ export default function Id() {
         const payload = {
             "startTime": formattedStartTime,
             "endTime": formattedEndTime,
-            "establishment": service?.establishment?.id,
-            "service" : service?.id,
-            "teacher": selectedTeacher,
+            "establishment_id": service?.establishment?.id,
+            "service_id" : service?.id,
+            "teacher_id": selectedTeacher,
         }
         specialRequest.length > 0 ? payload["specialRequest"] = specialRequest : payload
-        createReservation(payload)
         setOpenModal(false)
+        await createReservation(payload)
+        await getUserSchedules(selectedTeacher)
+        setSpecialRequest("")
+        setSelectedSchedule({})
     }
 
     const getTeacherInfo = (userId) => {
