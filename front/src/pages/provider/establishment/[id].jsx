@@ -30,7 +30,6 @@ export default function ShowEstablishment() {
     const {schedules, getEstablishmentSchedules, getSchedulesByUserAndEstablishment} = useSchedule();
     const [points, setPoints] = useState([]);
 
-
     const userColors = {}
     const predefinedColors = {
         "info": "#0ea5e9",
