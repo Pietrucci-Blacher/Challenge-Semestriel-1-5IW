@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Link;
 use App\Repository\EstablishmentRepository;
 use App\Attributes\UserField;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,37 +17,12 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\Controller\Provider\GetCollectionEstablishment;
-use ApiPlatform\OpenApi\Model;
+
 
 #[ORM\Entity(repositoryClass: EstablishmentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
-        new GetCollection(
-            uriTemplate: '/establishments/me',
-            controller: GetCollectionEstablishment::class,
-            openapi: new Model\Operation(
-                responses: [
-                    '200' => [
-                        'description' => 'Retrieves the establishments of the current provider.',
-                        'content' => [
-                            'application/json' => [
-                                'schema' => [
-                                    'type' => 'array',
-                                    'items' => [
-                                        '$ref' => '#/components/schemas/Establishment',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                summary: 'Retrieves the establishments of the current provider.',
-            ),
-            security: 'is_granted("ROLE_PROVIDER")',
-            securityMessage: 'Il faut être un prestataire pour accéder à ses établissements.',
-        ),
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user) or (is_granted("ROLE_USER"))',
@@ -54,7 +30,14 @@ use ApiPlatform\OpenApi\Model;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN")',
+//            security: 'is_granted("ROLE_ADMIN")',
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/establishments',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'owner', fromClass: Establishment::class),
+            ],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
@@ -78,7 +61,7 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('establishment:read')]
+    #[Groups(['establishment:read', 'team_invitation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
@@ -96,38 +79,48 @@ class Establishment
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write',  'user:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 5, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
     private ?string $zipCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamMember::class, orphanRemoval: true)]
-    #[Groups(['establishment:read'])]
-    private Collection $teamMembers;
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class, orphanRemoval: true)]
+    private Collection $teamInvitations;
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Schedule::class, orphanRemoval: true)]
+    private Collection $schedules;
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
+    private Collection $services;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->teamMembers = new ArrayCollection();
+        $this->teamInvitations = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist(): void {
+    public function onPrePersist(): void
+    {
         $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $event): void {
+    public function onPreUpdate(PreUpdateEventArgs $event): void
+    {
         $this->updatedAt = new \DateTimeImmutable();
     }
 
@@ -221,29 +214,89 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, TeamMember>
+     * @return Collection<int, TeamInvitation>
      */
-    public function getTeamMembers(): Collection
+    public function getTeamInvitations(): Collection
     {
-        return $this->teamMembers;
+        return $this->teamInvitations;
     }
 
-    public function addTeamMember(TeamMember $teamMember): static
+    public function addTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if (!$this->teamMembers->contains($teamMember)) {
-            $this->teamMembers->add($teamMember);
-            $teamMember->setEstablishment($this);
+        if (!$this->teamInvitations->contains($teamInvitation)) {
+            $this->teamInvitations->add($teamInvitation);
+            $teamInvitation->setEstablishment($this);
         }
 
         return $this;
     }
 
-    public function removeTeamMember(TeamMember $teamMember): static
+    public function removeTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if ($this->teamMembers->removeElement($teamMember)) {
+        if ($this->teamInvitations->removeElement($teamInvitation)) {
             // set the owning side to null (unless already changed)
-            if ($teamMember->getEstablishment() === $this) {
-                $teamMember->setEstablishment(null);
+            if ($teamInvitation->getEstablishment() === $this) {
+                $teamInvitation->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): static
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): static
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getEstablishment() === $this) {
+                $schedule->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getEstablishment() === $this) {
+                $service->setEstablishment(null);
             }
         }
 

@@ -1,9 +1,9 @@
 const DefaultLayout = ({ children }) => {
-  return (
-    <>
-      <main className="p-6">{children}</main>
-    </>
-  );
+    return (
+        <>
+            <main className="p-6 w-full">{children}</main>
+        </>
+    );
 };
 
 export default DefaultLayout;

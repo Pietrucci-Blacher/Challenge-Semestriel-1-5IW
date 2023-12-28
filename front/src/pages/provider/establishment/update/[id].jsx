@@ -1,135 +1,135 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useRouter } from "next/router";
-import { updateEstablishment } from "@/services/establishmentService";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useRouter } from 'next/router';
+import { updateEstablishment } from '@/services/establishmentService';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
 
 export default function UpdateEstablishment() {
-  const { createToastMessage } = useToast();
-  const router = useRouter();
-  const { id } = router.query;
-  const { establishment, getEstablishmentById } = useEstablishment();
+    const { createToastMessage } = useToast();
+    const router = useRouter();
+    const { id } = router.query;
+    const { establishment, getEstablishmentById } = useEstablishment();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    street: "",
-    city: "",
-    zipCode: "",
-  });
-
-  useEffect(() => {
-    getEstablishmentById(id);
-  }, [id]);
-
-  useEffect(() => {
-    setFormData({
-      name: establishment?.name || "",
-      street: establishment?.street || "",
-      city: establishment?.city || "",
-      zipCode: establishment?.zipCode || "",
+    const [formData, setFormData] = useState({
+        name: '',
+        street: '',
+        city: '',
+        zipCode: '',
     });
-  }, [establishment]);
 
-  const handleInputNameChange = (value) => {
-    setFormData({ ...formData, name: value });
-  };
+    useEffect(() => {
+        getEstablishmentById(id);
+    }, [id]);
 
-  const handleInputStreetChange = (value) => {
-    setFormData({ ...formData, street: value });
-  };
+    useEffect(() => {
+        setFormData({
+            name: establishment?.name || '',
+            street: establishment?.street || '',
+            city: establishment?.city || '',
+            zipCode: establishment?.zipCode || '',
+        });
+    }, [establishment]);
 
-  const handleInputCityChange = (value) => {
-    setFormData({ ...formData, city: value });
-  };
+    const handleInputNameChange = (value) => {
+        setFormData({ ...formData, name: value });
+    };
 
-  const handleInputZipCodeChange = (value) => {
-    setFormData({ ...formData, zipCode: value });
-  };
+    const handleInputStreetChange = (value) => {
+        setFormData({ ...formData, street: value });
+    };
 
-  const handleSubmitUpdate = async (event) => {
-    event.preventDefault();
-    const { name, street, city, zipCode } = formData;
+    const handleInputCityChange = (value) => {
+        setFormData({ ...formData, city: value });
+    };
 
-    if (!name || !street || !city || !zipCode) {
-      createToastMessage("error", "Veuillez remplir tous les champs");
-      return;
-    }
+    const handleInputZipCodeChange = (value) => {
+        setFormData({ ...formData, zipCode: value });
+    };
 
-    try {
-      const establishment = await updateEstablishment(id, {
-        name,
-        street,
-        city,
-        zipCode,
-      });
+    const handleSubmitUpdate = async (event) => {
+        event.preventDefault();
+        const { name, street, city, zipCode } = formData;
 
-      if (!establishment) {
-        createToastMessage("error", "Une erreur est survenue");
-        return;
-      }
+        if (!name || !street || !city || !zipCode) {
+            createToastMessage('error', 'Veuillez remplir tous les champs');
+            return;
+        }
 
-      router.push(`/provider/establishment/${establishment.id}`);
-    } catch (error) {
-      createToastMessage("error", error);
-    }
-  };
+        try {
+            const establishment = await updateEstablishment(id, {
+                name,
+                street,
+                city,
+                zipCode,
+            });
 
-  return (
-    <div>
-      <h1>Update</h1>
-      <form
-        className="flex max-w-md flex-col gap-4"
-        onSubmit={handleSubmitUpdate}
-      >
+            if (!establishment) {
+                createToastMessage('error', 'Une erreur est survenue');
+                return;
+            }
+
+            router.push(`/provider/establishment/${establishment.id}`);
+        } catch (error) {
+            createToastMessage('error', error);
+        }
+    };
+
+    return (
         <div>
-          <Input
-            label="Nom"
-            type="text"
-            placeholder="Entrer un nom"
-            value={formData.name}
-            onChange={handleInputNameChange}
-          />
+            <h1>Update</h1>
+            <form
+                className="flex max-w-md flex-col gap-4"
+                onSubmit={handleSubmitUpdate}
+            >
+                <div>
+                    <Input
+                        label="Nom"
+                        type="text"
+                        placeholder="Entrer un nom"
+                        value={formData.name}
+                        onChange={handleInputNameChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Rue"
+                        type="text"
+                        placeholder="Entrer une rue"
+                        value={formData.street}
+                        onChange={handleInputStreetChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Ville"
+                        type="text"
+                        placeholder="Entrer une ville"
+                        value={formData.city}
+                        onChange={handleInputCityChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Code postal"
+                        type="text"
+                        placeholder="Entrer un code postal"
+                        value={formData.zipCode}
+                        onChange={handleInputZipCodeChange}
+                    />
+                </div>
+                <GenericButton label="Modifier un etablisement" />
+            </form>
+            <FlowbiteButton
+                className="my-2"
+                as={Link}
+                href={`/provider/establishment/${id}`}
+            >
+                Retour
+            </FlowbiteButton>
         </div>
-        <div>
-          <Input
-            label="Rue"
-            type="text"
-            placeholder="Entrer une rue"
-            value={formData.street}
-            onChange={handleInputStreetChange}
-          />
-        </div>
-        <div>
-          <Input
-            label="Ville"
-            type="text"
-            placeholder="Entrer une ville"
-            value={formData.city}
-            onChange={handleInputCityChange}
-          />
-        </div>
-        <div>
-          <Input
-            label="Code postal"
-            type="text"
-            placeholder="Entrer un code postal"
-            value={formData.zipCode}
-            onChange={handleInputZipCodeChange}
-          />
-        </div>
-        <GenericButton label="Modifier un etablisement" />
-      </form>
-      <FlowbiteButton
-        className="my-2"
-        as={Link}
-        href={`/provider/establishment/${id}`}
-      >
-        Retour
-      </FlowbiteButton>
-    </div>
-  );
+    );
 }

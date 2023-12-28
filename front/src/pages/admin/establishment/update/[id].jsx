@@ -1,12 +1,12 @@
-import GenericButton from "@/components/GenericButton";
-import Input from "@/components/Input";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/useToast";
-import { useEstablishment } from "@/hooks/useEstablishment";
-import { useRouter } from "next/router";
-import { updateEstablishment } from "@/services/establishmentService";
-import { Button as FlowbiteButton } from "flowbite-react";
-import Link from "next/link";
+import GenericButton from '@/components/GenericButton';
+import Input from '@/components/Input';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import { useRouter } from 'next/router';
+import { updateEstablishment } from '@/services/establishmentService';
+import { Button as FlowbiteButton } from 'flowbite-react';
+import Link from 'next/link';
 
 export default function UpdateEstablishment() {
   const { createToastMessage } = useToast();
@@ -14,25 +14,25 @@ export default function UpdateEstablishment() {
   const { id } = router.query;
   const { establishment, getEstablishmentById } = useEstablishment();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    street: "",
-    city: "",
-    zipCode: "",
-  });
+    const [formData, setFormData] = useState({
+        name: '',
+        street: '',
+        city: '',
+        zipCode: '',
+    });
 
   useEffect(() => {
     getEstablishmentById(id);
   }, [id]);
 
-  useEffect(() => {
-    setFormData({
-      name: establishment?.name || "",
-      street: establishment?.street || "",
-      city: establishment?.city || "",
-      zipCode: establishment?.zipCode || "",
-    });
-  }, [establishment]);
+    useEffect(() => {
+        setFormData({
+            name: establishment?.name || '',
+            street: establishment?.street || '',
+            city: establishment?.city || '',
+            zipCode: establishment?.zipCode || '',
+        });
+    }, [establishment]);
 
   const handleInputNameChange = (value) => {
     setFormData({ ...formData, name: value });
@@ -54,10 +54,10 @@ export default function UpdateEstablishment() {
     event.preventDefault();
     const { name, street, city, zipCode } = formData;
 
-    if (!name || !street || !city || !zipCode) {
-      createToastMessage("error", "Veuillez remplir tous les champs");
-      return;
-    }
+        if (!name || !street || !city || !zipCode) {
+            createToastMessage('error', 'Veuillez remplir tous les champs');
+            return;
+        }
 
     try {
       const establishment = await updateEstablishment(id, {
@@ -67,16 +67,16 @@ export default function UpdateEstablishment() {
         zipCode,
       });
 
-      if (!establishment) {
-        createToastMessage("error", "Une erreur est survenue");
-        return;
-      }
+            if (!establishment) {
+                createToastMessage('error', 'Une erreur est survenue');
+                return;
+            }
 
-      router.push(`/admin/establishment/${establishment.id}`);
-    } catch (error) {
-      createToastMessage("error", error);
-    }
-  };
+            router.push(`/admin/establishment/${establishment.id}`);
+        } catch (error) {
+            createToastMessage('error', error);
+        }
+    };
 
   return (
     <div>

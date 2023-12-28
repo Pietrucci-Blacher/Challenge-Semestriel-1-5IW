@@ -2,7 +2,7 @@
 
 namespace App\Dto;
 
-class InviteTeamMemberDto
+class InviteTeamInvitationDto
 {
     public $email;
     public $establishment;

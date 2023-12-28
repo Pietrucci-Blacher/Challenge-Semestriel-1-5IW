@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Link;
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,7 +30,7 @@ use App\Controller\Auth\MeController;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['user:read']],
-            security: 'is_granted("ROLE_USER") and object == user',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object == user)',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
         ),
         new GetCollection(
@@ -57,24 +59,24 @@ use App\Controller\Auth\MeController;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[Groups(['user:read', 'auth:me'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:read', 'auth:me','team_invitation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(length: 100, unique: true)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'team_invitation:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -100,27 +102,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups('user:read')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups('user:read')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
 //    #[Groups('user:read')]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'scheduler', targetEntity: Schedule::class)]
-//    #[Groups('user:read')]
-    private Collection $schedules;
-
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class)]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class, orphanRemoval: true)]
     private Collection $establishments;
 
-    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamMember::class, orphanRemoval: true)]
-    #[Groups('user:read')]
-    private Collection $teamMembers;
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
+    private Collection $teamInvitations;
+
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
+    private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Feedback::class, orphanRemoval: true)]
     private Collection $feedback;
@@ -128,22 +128,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->schedules = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->birthdate = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->birthdate = new DateTimeImmutable();
         $this->establishments = new ArrayCollection();
-        $this->teamMembers = new ArrayCollection();
+        $this->teamInvitations = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
         $this->feedback = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
     public function onPrePersist(): void {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(PreUpdateEventArgs $event): void {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -244,24 +244,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -298,35 +298,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Schedule>
-     */
-    public function getSchedules(): Collection
-    {
-        return $this->schedules;
-    }
-
-    public function addSchedule(Schedule $schedule): static
-    {
-        if (!$this->schedules->contains($schedule)) {
-            $this->schedules->add($schedule);
-            $schedule->setScheduler($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSchedule(Schedule $schedule): static
-    {
-        if ($this->schedules->removeElement($schedule)) {
-            // set the owning side to null (unless already changed)
-            if ($schedule->getScheduler() === $this) {
-                $schedule->setScheduler(null);
-            }
-        }
-
-        return $this;
-    }
     /**
      * A visual identifier that represents this user.
      *
@@ -390,32 +361,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, TeamMember>
+     * @return Collection<int, TeamInvitation>
      */
-    public function getTeamMembers(): Collection
+    public function getTeamInvitations(): Collection
     {
-        return $this->teamMembers;
+        return $this->teamInvitations;
     }
 
-    public function addTeamMember(TeamMember $teamMember): static
+    public function addTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if (!$this->teamMembers->contains($teamMember)) {
-            $this->teamMembers->add($teamMember);
-            $teamMember->setMember($this);
+        if (!$this->teamInvitations->contains($teamInvitation)) {
+            $this->teamInvitations->add($teamInvitation);
+            $teamInvitation->setMember($this);
         }
 
         return $this;
     }
 
-    public function removeTeamMember(TeamMember $teamMember): static
+    public function removeTeamInvitation(TeamInvitation $teamInvitation): static
     {
-        if ($this->teamMembers->removeElement($teamMember)) {
+        if ($this->teamInvitations->removeElement($teamInvitation)) {
             // set the owning side to null (unless already changed)
-            if ($teamMember->getMember() === $this) {
-                $teamMember->setMember(null);
+            if ($teamInvitation->getMember() === $this) {
+                $teamInvitation->setMember(null);
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): static
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setAssigned($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): static
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getAssigned() === $this) {
+                $schedule->setAssigned(null);
+            }
+        }
         return $this;
     }
 
