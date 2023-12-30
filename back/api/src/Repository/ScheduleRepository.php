@@ -21,6 +21,19 @@ class ScheduleRepository extends ServiceEntityRepository
         parent::__construct($registry, Schedule::class);
     }
 
+    public function findSchedulesByTeacherAndTimeRange($teacherId, $startTime, $endTime)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.assignedTo = :teacherId')
+            ->andWhere('s.startTime < :endTime')
+            ->andWhere('s.endTime > :startTime')
+            ->setParameter('teacherId', $teacherId)
+            ->setParameter('startTime', $startTime)
+            ->setParameter('endTime', $endTime)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Schedule[] Returns an array of Schedule objects
 //     */
