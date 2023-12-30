@@ -64,28 +64,15 @@ export default function UpdateService() {
         setEditorData(value);
     };
 
-    const handleSelectChangeEtablishment = (selectedValue) => {
-        setFormData({
-            ...formData,
-            establishment_id: parseInt(selectedValue) || null,
-        });
-    };
-
     const handleInputPriceChange = (value) => {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id } = formData;
+        const { title, description, price } = formData;
 
-        if (
-            !title ||
-            !description ||
-            !price ||
-            !editorData?.blocks?.length ||
-            !establishment_id
-        ) {
+        if (!title || !description || !price || !editorData?.blocks?.length) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -143,20 +130,6 @@ export default function UpdateService() {
                         onChange={handleInputBodyChange}
                         editorblock="editorjs"
                         label="Corps du Texte"
-                    />
-                </div>
-                <div>
-                    <SelectMenu
-                        label="Establishment"
-                        options={
-                            establishments
-                                ? establishments.map((establishment) => ({
-                                      label: establishment.name,
-                                      value: establishment.id,
-                                  }))
-                                : []
-                        }
-                        onChange={handleSelectChangeEtablishment}
                     />
                 </div>
                 <div>

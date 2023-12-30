@@ -29,7 +29,6 @@ export default function UpdateService() {
         title: '',
         description: '',
         price: 0,
-        establishment_id: service?.establishment_id || '',
     });
 
     useEffect(() => {
@@ -44,7 +43,6 @@ export default function UpdateService() {
             title: service?.title || '',
             description: service?.description || '',
             price: service?.price || 0,
-            establishment_id: service?.establishment_id || '',
         });
         setEditorData(service?.body || {});
         setInitEditorData(service?.body || {});
@@ -67,28 +65,15 @@ export default function UpdateService() {
         setEditorData(value);
     };
 
-    const handleSelectChangeEtablishment = (selectedValue) => {
-        setFormData({
-            ...formData,
-            establishment_id: parseInt(selectedValue) || null,
-        });
-    };
-
     const handleInputPriceChange = (value) => {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id } = formData;
+        const { title, description, price } = formData;
 
-        if (
-            !title ||
-            !description ||
-            !price ||
-            !establishment_id ||
-            !editorData?.blocks?.length
-        ) {
+        if (!title || !description || !price || !editorData?.blocks?.length) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -101,7 +86,6 @@ export default function UpdateService() {
             data.append('title', title);
             data.append('description', description);
             data.append('price', price);
-            data.append('establishment_id', establishment_id);
             data.append('body', body);
 
             const services = await updateServiceRequest(id, data);
@@ -157,20 +141,6 @@ export default function UpdateService() {
                         value={formData.price}
                         min="0"
                         onChange={handleInputPriceChange}
-                    />
-                </div>
-                <div>
-                    <SelectMenu
-                        label="Establishment"
-                        options={
-                            establishments
-                                ? establishments.map((establishment) => ({
-                                      label: establishment.name,
-                                      value: establishment.id,
-                                  }))
-                                : []
-                        }
-                        onChange={handleSelectChangeEtablishment}
                     />
                 </div>
                 <div>

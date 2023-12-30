@@ -124,9 +124,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Feedback::class, orphanRemoval: true)]
     private Collection $feedback;
-  
+
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
+    private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $teacherReservations;
@@ -142,6 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->feedback = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->teacherReservations = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -451,6 +455,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($feedback->getUserId() === $this) {
                 $feedback->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getAuthor() === $this) {
+                $service->setAuthor(null);
             }
         }
 
