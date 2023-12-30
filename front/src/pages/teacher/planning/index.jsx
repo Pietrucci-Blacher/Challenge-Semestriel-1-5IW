@@ -7,17 +7,17 @@ import { useTeam } from '@/hooks/useTeam';
 
 export default function Planning() {
     const { user } = useAuthContext();
-    const { userApprovedInvitation, getUserApprovedInvitation } = useTeam();
+    const { workplaces, getWorkplaces } = useTeam();
     const [selectedEstablishment, setSelectedEstablishment] = useState(null);
     useEffect(() => {
         const { id } = user;
         if (!id) return;
-        getUserApprovedInvitation(id);
-    }, [user, getUserApprovedInvitation]);
+        getWorkplaces(id);
+    }, [user, getWorkplaces]);
 
     useEffect(() => {
-        console.log('userApprovedInvitation', userApprovedInvitation);
-    }, [userApprovedInvitation]);
+        console.log('workplaces', workplaces);
+    }, [workplaces]);
 
     const handleSelectEstablishment = (event) => {
         const selectedEstablishment = event.target.value;
@@ -43,7 +43,7 @@ export default function Planning() {
                         </h2>
                     </div>
                     <div className="mt-4 max-w-md">
-                        {userApprovedInvitation.length > 0 ? (
+                        {workplaces.length > 0 ? (
                             <>
                                 <div className="mb-2 block">
                                     <Label
@@ -57,22 +57,16 @@ export default function Planning() {
                                     onChange={handleSelectEstablishment}
                                 >
                                     <option value=""></option>
-                                    {userApprovedInvitation.map(
-                                        (invitation) => (
-                                            <option
-                                                value={
-                                                    invitation.establishment.id
-                                                }
-                                                key={
-                                                    invitation.establishment[
-                                                        '@id'
-                                                    ]
-                                                }
-                                            >
-                                                {invitation.establishment.name}
-                                            </option>
-                                        ),
-                                    )}
+                                    {workplaces.map((invitation) => (
+                                        <option
+                                            value={invitation.establishment.id}
+                                            key={
+                                                invitation.establishment['@id']
+                                            }
+                                        >
+                                            {invitation.establishment.name}
+                                        </option>
+                                    ))}
                                 </Select>
                             </>
                         ) : (

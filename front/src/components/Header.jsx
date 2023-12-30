@@ -4,6 +4,7 @@ import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function Header() {
     const { user } = useAuthContext();
+
     return (
         <header className="sticky top-0">
             <Navbar fluid rounded>
@@ -57,6 +58,7 @@ export default function Header() {
                         Home
                     </Navbar.Link>
                     <Navbar.Link href="#">About</Navbar.Link>
+                    <Navbar.Link href="/services">Services</Navbar.Link>
                     <Navbar.Link href="#">Contact</Navbar.Link>
                     {user && (
                         <Navbar.Link href="/establishment/">
