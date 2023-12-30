@@ -24,7 +24,6 @@ class EmailConfirmationController extends AbstractController
 
     public function __invoke(string $token): Response
     {
-        dd($token);
         if (!$token)
             return new Response(null, Response::HTTP_BAD_REQUEST);
 
@@ -32,6 +31,9 @@ class EmailConfirmationController extends AbstractController
 
         if (!$user)
             return new Response(null, Response::HTTP_NOT_FOUND);
+
+        if ($user->getIsActive())
+            return new Response(null, Response::HTTP_BAD_REQUEST);
 
         $user->setEmailConfirmationToken(null);
         $user->setIsActive(true);

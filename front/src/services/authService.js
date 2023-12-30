@@ -48,6 +48,10 @@ const storeUserInSession = (user) => {
     }
 };
 
+const confirmEmailRequest = (token) => {
+    return httpClient.get(`/auth/confirm-email/${token}`);
+};
+
 export {
     loginService,
     registerService,
@@ -55,4 +59,5 @@ export {
     refreshToken,
     storeUserInSession,
     getUserFromSession,
+    confirmEmailRequest,
 };

@@ -34,8 +34,9 @@ use App\Controller\Auth\EmailConfirmationController;
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
         ),
         new Get(
-            uriTemplate: '/confirm-email/{token}',
+            uriTemplate: '/auth/confirm-email/{token}',
             controller: EmailConfirmationController::class,
+            read: false,
         ),
         new GetCollection(
             uriTemplate: '/auth/me',
@@ -127,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $schedules;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $emailConfirmaionToken = null;
+    private ?string $emailConfirmationToken = null;
 
     public function __construct()
     {
@@ -423,14 +424,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmailConfirmaionToken(): ?string
+    public function getEmailConfirmationToken(): ?string
     {
-        return $this->emailConfirmaionToken;
+        return $this->emailConfirmationToken;
     }
 
-    public function setEmailConfirmaionToken(?string $emailConfirmaionToken): static
+    public function setEmailConfirmationToken(?string $emailConfirmationToken): static
     {
-        $this->emailConfirmaionToken = $emailConfirmaionToken;
+        $this->emailConfirmationToken = $emailConfirmationToken;
 
         return $this;
     }
@@ -439,7 +440,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // create a token of 40 chars (20 bytes * 2)
         $token = bin2hex(random_bytes(20));
-        $this->emailConfirmaionToken = $token;
+        $this->emailConfirmationToken = $token;
 
         return $token;
     }
