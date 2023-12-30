@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 export default function ConfirmEmail() {
     const router = useRouter();
     const { token } = router.query;
-    const { confirmEmail, isConfirmed  } = useAuth();
+    const { confirmEmail, isConfirmed } = useAuth();
 
     useEffect(() => {
         if (!token) return;
@@ -16,8 +16,9 @@ export default function ConfirmEmail() {
 
     if (isConfirmed) {
         message = 'Email confirmed! Redirecting ...';
-        setTimeout(() =>  router.push('/'), 3000);
-    } if (isConfirmed === false) {
+        setTimeout(() => router.push('/'), 3000);
+    }
+    if (isConfirmed === false) {
         message = 'Email confirmation failed! Redirecting ...';
         setTimeout(() => router.push('/'), 3000);
     }
