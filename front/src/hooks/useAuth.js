@@ -7,10 +7,9 @@ import {
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useState, useCallback } from 'react';
 
-
 export const useAuth = () => {
     const { setUser, setIsLogged } = useAuthContext();
-    const [ isConfirmed, setIsConfirmed ] = useState(null);
+    const [isConfirmed, setIsConfirmed] = useState(null);
 
     const login = async (credentials) => {
         try {
