@@ -5,7 +5,6 @@ import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/router';
 import { Button as FlowbiteButton, FileInput } from 'flowbite-react';
 import Link from 'next/link';
-import TextArea from '@/components/TextArea';
 import { useService } from '@/hooks/useService';
 import SelectMenu from '@/components/SelectMenu';
 import { useEstablishment } from '@/hooks/useEstablishment';

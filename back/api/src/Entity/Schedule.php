@@ -4,13 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Link;
 use App\Attributes\UserField;
-//use App\Controller\Teacher\AddSchedule;
-//use App\Controller\Teacher\GetMySchedules;
-//use App\Controller\Teacher\GetScheduleByEmployee;
 use App\Controller\Schedules\GetSchedulesByUserAndEstablishment;
-use App\Dto\Teacher\AddScheduleDto;
 use App\Repository\ScheduleRepository;
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -86,6 +81,10 @@ class Schedule
     #[Groups(['schedule:read'])]
     private ?\DateTimeInterface $endTime = null;
 
+    #[ORM\OneToOne(mappedBy: 'schedule', cascade: ['persist', 'remove'])]
+    #[Groups(['schedule:read'])]
+    private ?Reservation $reservation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,7 +103,6 @@ class Schedule
         $this->reason = $reason;
         return $this;
     }
-
 
     public function getAssignedTo(): ?User
     {
@@ -142,6 +140,35 @@ class Schedule
         return $this;
     }
 
+    public function getEstablishment(): ?Establishment
+    {
+        return $this->establishment;
+    }
+
+    public function setEstablishment(?Establishment $establishment): static
+    {
+        $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(Reservation $reservation): static
+    {
+        // set the owning side of the relation if necessary
+        if ($reservation->getSchedule() !== $this) {
+            $reservation->setSchedule($this);
+        }
+
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {
@@ -159,17 +186,5 @@ class Schedule
                 ->atPath('startTime')
                 ->addViolation();
         }
-    }
-
-    public function getEstablishment(): ?Establishment
-    {
-        return $this->establishment;
-    }
-
-    public function setEstablishment(?Establishment $establishment): static
-    {
-        $this->establishment = $establishment;
-
-        return $this;
     }
 }
