@@ -11,6 +11,7 @@ export default function ShowEstablishment() {
     const router = useRouter();
     const { id } = router.query;
     const { establishment, getEstablishmentById } = useEstablishment();
+    const { createToastMessage } = useToast();
 
     useEffect(() => {
         getEstablishmentById(id);

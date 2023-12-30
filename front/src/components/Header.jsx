@@ -59,8 +59,13 @@ export default function Header() {
                     </Navbar.Link>
                     <Navbar.Link href="#">About</Navbar.Link>
                     <Navbar.Link href="/services">Services</Navbar.Link>
-                    <Navbar.Link href="#">Pricing</Navbar.Link>
                     <Navbar.Link href="#">Contact</Navbar.Link>
+                    {user && (
+                        <Navbar.Link href="/establishment/">
+                            Etablissements
+                        </Navbar.Link>
+                    )}
+                    <Navbar.Link href="#">Services</Navbar.Link>
                 </Navbar.Collapse>
             </Navbar>
         </header>
