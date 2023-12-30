@@ -8,3 +8,10 @@
 | Workflow Demande pour devenir prestataire                                     | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/133 |
 | Gerer son equipe                                                              | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/191 |
 | Pipeline CD (BackEnd)                                                         | Maxime Pietrucci-Blacher | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/248 |
+| Gerer son planning                                                            | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/216 |
+| Reservation                                                                   | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/252 |
+| Pipeline CI                                                                   | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/215 |
+| Traduction dans le front                                                      | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/150 |
+| Gérer les prestations                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/195 |
+| Mise en place librairies tests front et back                                  | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/75  |
+| Faire l'envoi du mail                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/101 |
