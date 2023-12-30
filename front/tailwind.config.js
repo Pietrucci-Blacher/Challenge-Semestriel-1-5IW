@@ -15,5 +15,11 @@ export default {
             },
         },
     },
+    variants: {
+        extend: {
+            opacity: ['group-hover'],
+            scale: ['active'],
+        },
+    },
     plugins: [require('flowbite/plugin')],
 };

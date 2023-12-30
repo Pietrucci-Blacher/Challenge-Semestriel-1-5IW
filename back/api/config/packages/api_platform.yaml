@@ -24,6 +24,8 @@ api_platform:
             standard_put: true
             rfc_7807_compliant_errors: true
     event_listeners_backward_compatibility_layer: false
+    eager_loading:
+        force_eager: false
     keep_legacy_inflector: false
     patch_formats:
         json: [ 'application/json' ]

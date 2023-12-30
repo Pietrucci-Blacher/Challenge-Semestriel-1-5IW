@@ -29,7 +29,6 @@ export default function UpdateService() {
             description: service?.description || '',
             body: service?.body || '',
             price: service?.price || 0,
-            establishment_id: service?.establishment_id || '',
         });
     }, [service]);
 
@@ -37,7 +36,6 @@ export default function UpdateService() {
         title: '',
         description: '',
         body: '',
-        establishment_id: 0,
         price: 0,
     });
 
@@ -53,22 +51,15 @@ export default function UpdateService() {
         setFormData({ ...formData, body: value });
     };
 
-    const handleSelectChangeEtablishment = (selectedValue) => {
-        setFormData({
-            ...formData,
-            establishment_id: parseInt(selectedValue) || null,
-        });
-    };
-
     const handleInputPriceChange = (value) => {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id, body } = formData;
+        const { title, description, price, body } = formData;
 
-        if (!title || !description || !price || !establishment_id || !body) {
+        if (!title || !description || !price || !body) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -78,7 +69,6 @@ export default function UpdateService() {
                 title,
                 description,
                 price,
-                establishment_id,
                 body,
             });
 
@@ -127,20 +117,6 @@ export default function UpdateService() {
                         placeholder="Entrer un corps de texte"
                         value={formData.body}
                         onChange={handleInputBodyChange}
-                    />
-                </div>
-                <div>
-                    <SelectMenu
-                        label="Establishment"
-                        options={
-                            establishments
-                                ? establishments.map((establishment) => ({
-                                      label: establishment.name,
-                                      value: establishment.id,
-                                  }))
-                                : []
-                        }
-                        onChange={handleSelectChangeEtablishment}
                     />
                 </div>
                 <div>

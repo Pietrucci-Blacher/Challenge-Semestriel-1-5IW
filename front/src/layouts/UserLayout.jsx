@@ -34,7 +34,14 @@ const UserLayout = ({ children }) => {
         {
             icon: HiShoppingBag,
             text: 'Services',
-            href: '#',
+            href: '/services',
+            label: 'Pro',
+            labelColor: 'gray',
+        },
+        {
+            icon: HiShoppingBag,
+            text: 'Reservations',
+            href: '/reservations',
             label: 'Pro',
             labelColor: 'gray',
         },

@@ -36,6 +36,7 @@ export default function TeacherCalendar({ establishmentId }) {
             title: '',
             start: '',
             end: '',
+            color: '',
         };
         point['id'] = schedule['id'];
         point['title'] = schedule['reason'];
@@ -45,6 +46,9 @@ export default function TeacherCalendar({ establishmentId }) {
         let end = new Date(schedule['endTime']);
         end.setHours(end.getHours() - 1);
         point['end'] = end.toISOString();
+        if (schedule['reservation']) {
+            point['color'] = '#c0bdda';
+        }
         return point;
     };
 
@@ -59,8 +63,7 @@ export default function TeacherCalendar({ establishmentId }) {
 
     useEffect(() => {
         const points = [];
-        console.log('called');
-        schedules.forEach((element) => {
+        schedules?.forEach((element) => {
             points.push(getPoint(element));
         });
         setPoints(points);
@@ -76,6 +79,8 @@ export default function TeacherCalendar({ establishmentId }) {
         const currentSchedule = {
             id: schedule.event.id,
             title: schedule.event.title,
+            start: schedule.event.startStr,
+            end: schedule.event.endStr,
             ...schedule.event,
         };
         setCurrentSchedule(currentSchedule);
@@ -201,7 +206,7 @@ export default function TeacherCalendar({ establishmentId }) {
                                                 <div className="mb-2 block">
                                                     <Label
                                                         value={`Date debut : ${convertDateToString(
-                                                            newSchedule?.start,
+                                                            currentSchedule?.start,
                                                         )}`}
                                                     />
                                                 </div>
@@ -210,7 +215,7 @@ export default function TeacherCalendar({ establishmentId }) {
                                                 <div className="mb-2 block">
                                                     <Label
                                                         value={`Date fin : ${convertDateToString(
-                                                            newSchedule?.end,
+                                                            currentSchedule?.end,
                                                         )}`}
                                                     />
                                                 </div>
