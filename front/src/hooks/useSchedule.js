@@ -12,7 +12,6 @@ export const useSchedule = () => {
     const [userId, setUserId] = useState(null);
     const [establishmentId, setEstablishmentId] = useState(null);
     const [schedule, setSchedule] = useState(null);
-    // const [userSchedules, setUuserSchedules] = useState([])
     const [schedules, setSchedules] = useState([]);
 
     const addSchedule = useCallback(
@@ -68,7 +67,6 @@ export const useSchedule = () => {
     const getUserSchedules = useCallback(
         async (userId) => {
             try {
-                setSchedules([]);
                 const data = await getUserSchedulesService({ userId });
                 const schedulesData = data['hydra:member'] ?? [];
                 setUserId(userId);
