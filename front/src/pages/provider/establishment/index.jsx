@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/providers/AuthProvider';
+import MapComponent from '@/components/Map';
 
 export default function ListEstablishment() {
     const { user } = useAuthContext();
@@ -56,6 +57,8 @@ export default function ListEstablishment() {
             >
                 Créer un établissement
             </FlowbiteButton>
+            <MapComponent></MapComponent>
+
         </>
     );
 }

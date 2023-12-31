@@ -23,6 +23,7 @@
         "@fullcalendar/timegrid": "^6.1.8",
         "@headlessui/react": "^1.7.17",
         "@heroicons/react": "^2.0.18",
+        "@react-google-maps/api": "^2.19.2",
         "axios": "^1.6.2",
         "flowbite": "^2.2.0",
         "flowbite-react": "^0.7.0",
