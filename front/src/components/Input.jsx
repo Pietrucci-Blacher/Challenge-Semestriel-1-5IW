@@ -8,22 +8,28 @@ export default function Input({
     value = '',
     onChange = () => {},
     required = false,
+    className = '',
 }) {
     const handleChange = (e) => {
         onChange(e.target.value);
     };
 
+    const labelElem = label && (
+        <div className="mb-2 block">
+            <Label>{label}:</Label>
+        </div>
+    );
+
     return (
         <div>
-            <div className="mb-2 block">
-                <Label>{label}:</Label>
-            </div>
+            {labelElem}
             <TextInput
                 type={type}
                 value={value}
                 placeholder={placeholder}
                 onChange={handleChange}
                 required={required}
+                className={className}
             />
         </div>
     );

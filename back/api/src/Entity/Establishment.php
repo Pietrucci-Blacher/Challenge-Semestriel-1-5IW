@@ -25,7 +25,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user) or (is_granted("ROLE_USER"))',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
@@ -61,17 +61,17 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['establishment:read', 'team_invitation:read'])]
+    #[Groups(['establishment:read', 'team_invitation:read', 'service:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
     #[UserField('owner')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'service:read'])]
     private ?User $owner = null;
 
     #[ORM\Column]
-    #[Groups(['establishment:read', 'establishment:write'])]
+    #[Groups(['establishment:read', 'establishment:write', 'service:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -79,21 +79,20 @@ class Establishment
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 5, nullable: true)]
-    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
-
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
@@ -107,6 +106,9 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
     private Collection $feedback;
 
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -114,6 +116,7 @@ class Establishment
         $this->schedules = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->feedback = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -331,6 +334,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($feedback->getEstablishment() === $this) {
                 $feedback->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getEstablishment() === $this) {
+                $reservation->setEstablishment(null);
             }
         }
 

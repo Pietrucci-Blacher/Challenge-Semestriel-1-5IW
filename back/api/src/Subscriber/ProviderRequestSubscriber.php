@@ -8,11 +8,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use App\Service\Email;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class ProviderRequestSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
+    private Email $email;
+    private EntityManagerInterface $entityManager;
+    private UserRepository $userRepository;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
+    ) {
+        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
+        $this->email = new Email();
     }
 
     public static function getSubscribedEvents()
@@ -29,31 +42,35 @@ final class ProviderRequestSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
         $statusCode = $response->getStatusCode();
         $resourceClass = $request->attributes->get("_api_resource_class");
+        $currentData = $request->attributes->get("data");
+
         if ($resourceClass !== ProviderRequest::class) return;
-        if ($statusCode === 200 && $method === "PATCH"){
-            /**
-             * @var $currentData ProviderRequest
-             */
-            $currentData = $request->attributes->get("data");
-            /**
-             * @var $previousData ProviderRequest
-             */
+
+        if ($statusCode === 200 && $method === "PATCH") {
             $previousData = $request->attributes->get("previous_data");
             $previousStatus = $previousData->getStatus();
             $currentStatus = $currentData->getStatus();
-            if ($previousStatus === "pending" && $currentStatus != $previousStatus){
-                // TODO: Faire l'envoie de mail pour informer le client que ça demande a été refusé ou accepté
+
+            if ($previousStatus === "pending" && $currentStatus != $previousStatus) {
+                $user = $currentData->getCreatedBy();
                 if ($currentStatus === "approved") {
-                    $user = $currentData->getCreatedBy();
                     $user->setRoles(["ROLE_PROVIDER"]);
-                    $this->entityManager->persist($user);
-                    $this->entityManager->flush();
+                    $this->userRepository->save($user);
+                    $this->email->sendProviderAcceptedEmail($user->getEmail(), $user->getFirstname());
+                } else if ($currentStatus === "rejected") {
+                    $this->email->sendProviderRejectedEmail($user->getEmail(), $user->getFirstname());
                 }
             }
         }
-        if ($statusCode === 201 && $method === "POST"){
-            // TODO: Faire l'envoie de mail vers l'admin pour lui informer que une demande est dispo
+
+        if ($statusCode === 201 && $method === "POST") {
+            $content = json_decode($response->getContent(), false);
+            $user = $content->createdBy;
+            $requestId = $content->id;
+            $admins = $this->userRepository->findByRole("ROLE_ADMIN");
+
+            $this->email->sendRequestProviderEmail($admins, $user->firstname, $requestId);
+            $this->email->sendProviderConfimationEmail($user->email, $user->firstname);
         }
     }
-
 }
