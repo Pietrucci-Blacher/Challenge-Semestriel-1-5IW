@@ -54,7 +54,7 @@ class Email {
     public function sendWelcomeEmail(string $emailTo, string $name, string $token)
     {
         $subject = 'Bienvenue';
-        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM DU SITE.<br><br> Pour confirmer votre adresse email, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="http://localhost:8080/auth/confirm-email/'.$token.'">Confirmer l\'adresse email</a>';
+        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM DU SITE.<br><br> Pour confirmer votre adresse email, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['FRONT_URL'].'/auth/confirm-email/'.$token.'">Confirmer l\'adresse email</a>';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
@@ -68,20 +68,18 @@ class Email {
     public function sendResetPasswordEmail(string $emailTo, string $name, string $token)
     {
         $subject = 'Réinitialisation de mot de passe';
-        $body = 'Bonjour '.$name.',<br><br> Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="https://localhost/auth/reset-password/validate/'.$token.'">Réinitialiser le mot de passe</a>';
+        $body = 'Bonjour '.$name.',<br><br> Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['API_URL'].'/auth/reset-password/validate/'.$token.'">Réinitialiser le mot de passe</a>';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
     public function sendRequestProviderEmail(array $admins, string $name, string $requestId)
     {
         $subject = 'Nouvelle demande prestataire';
-        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name.'.<br><br> Pour la consulter, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="http://localhost:8080/admin/requests/'.$requestId.'">Consulter la demande</a>';
-
+        $body = 'Bonjour,<br><br> Une nouvelle demande prestataire a été effectuée par '.$name.'.<br><br> Pour la consulter, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['FRONT_URL'].'/admin/requests/'.$requestId.'">Consulter la demande</a>';
 
         foreach($admins as $admin) {
             $emailTo = $admin->getEmail();
             $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
-
         }
     }
 

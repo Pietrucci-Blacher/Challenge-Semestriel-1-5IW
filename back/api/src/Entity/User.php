@@ -127,11 +127,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
-    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Feedback::class, orphanRemoval: true)]
-    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
