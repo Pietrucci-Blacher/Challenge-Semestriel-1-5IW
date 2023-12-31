@@ -1,4 +1,5 @@
 import httpClient from '@/services/httpClient';
+import { urlParameters } from '@/utils/utils';
 
 const fetchServiceRequest = (id) => {
     return httpClient.get(`services/${id}`);
@@ -8,8 +9,9 @@ const fetchMyServicesRequest = () => {
     return httpClient.get('services/me');
 };
 
-const getAllServicesRequest = async () => {
-    const result = await httpClient.get('services');
+const getAllServicesRequest = async (filter = {}) => {
+    const query = urlParameters(filter);
+    const result = await httpClient.get(`services${query}`);
     return result['hydra:member'];
 };
 
@@ -20,24 +22,16 @@ const getEstablishmentServicesRequest = async (establishmentId) => {
     return result['hydra:member'];
 };
 
-const createServiceRequest = ({
-    title,
-    description,
-    price,
-    establishment,
-    body,
-}) => {
-    return httpClient.post('services', {
-        title,
-        description,
-        price,
-        establishment,
-        body,
+const createServiceRequest = (payload) => {
+    return httpClient.post('services', payload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
     });
 };
 
 const updateServiceRequest = (id, data) => {
-    return httpClient.put(`services/${id}`, data);
+    return httpClient.post(`services/${id}/update`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
 };
 
 const deleteServiceRequest = (id) => {

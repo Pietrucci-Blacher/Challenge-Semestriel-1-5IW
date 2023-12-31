@@ -6,10 +6,6 @@ import { BiBuoy } from 'react-icons/bi';
 const Sidebar = function ({ content = [] }) {
     const [isOpen, setOpen] = useState(false);
 
-    const toggle = () => {
-        setOpen(!isOpen);
-    };
-
     return (
         <FlowbiteSidebar>
             <FlowbiteSidebar.Items className="flex flex-col h-full justify-between">

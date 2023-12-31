@@ -2,21 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use App\Controller\Provider\GetCollectionServices;
 use App\Repository\ServiceRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\OpenApi\Model;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\Provider\UpdateServiceController;
 
+#[Vich\Uploadable]
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -25,35 +32,37 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
             ]
         ),
-        new GetCollection(
-            normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_PROVIDER") ',
-        ),
+        new GetCollection(),
         new Post(
-            security: 'is_granted("ROLE_PROVIDER")',
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            normalizationContext: ['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:write']],
+            security: 'is_granted("ROLE_PROVIDER")'
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
-        new Put(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos services.',
-        ),
-        new Patch(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos services.',
+        new Post(
+            uriTemplate: '/services/{id}/update',
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            controller: UpdateServiceController::class,
+            normalizationContext: ['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:write']],
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)'
         ),
         new Delete(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
             securityMessage: 'Vous ne pouvez supprimer que vos services.',
         ),
-
     ],
     normalizationContext: ['groups' => ['service:read']],
+    denormalizationContext: ['groups' => ['service:write']],
     mercure: true,
 )]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'description' => 'partial'])]
+#[ApiFilter(RangeFilter::class, properties: ['price'])]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -70,19 +79,49 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     #[Groups(['service:read', 'service:write'])]
-    private ?string $price = null;
+    #[Context(['disable_type_enforcement' => true])]
+    private ?float $price = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: 'json')]
     #[Groups(['service:read', 'service:write'])]
-    private ?string $body = null;
+    private ?array $body = [];
 
+    #[ORM\Column]
     #[Groups(['service:read', 'service:write'])]
+    private ?int $duration = null;
+
     #[ORM\ManyToOne(inversedBy: 'services')]
+    #[Groups(['service:read', 'service:write'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
+    #[ApiProperty(openapiContext: [
+        'type' => 'string',
+        'format' => 'binary'
+    ])]
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")]
+    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Groups(['service:write'])]
+    public ?File $image = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['service:read'])]
+    public ?string $imagePath = null;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read'])]
+    private ?User $author = null;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -113,24 +152,24 @@ class Service
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getBody(): ?string
+    public function getBody(): ?array
     {
         return $this->body;
     }
 
-    public function setBody(string $body): static
+    public function setBody(array $body): static
     {
         $this->body = $body;
 
@@ -145,6 +184,60 @@ class Service
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getService() === $this) {
+                $reservation->setService(null);
+            }
+        }
 
         return $this;
     }

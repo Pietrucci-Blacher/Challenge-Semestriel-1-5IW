@@ -24,11 +24,12 @@ export const useEstablishment = () => {
         [userId],
     );
 
-    const getAllEstablishments = async () => {
+    const getAllEstablishments = useCallback(async () => {
         const response = await service.getAllEstablishments();
         setEstablishments(null);
         setEstablishments(response);
-    };
+    }, []);
+
     return {
         establishment,
         getEstablishmentById,

@@ -5,7 +5,6 @@ import PasswordResetForm from '@/components/PasswordResetForm';
 import { useToast } from '@/hooks/useToast';
 
 export default function UpdatePassword() {
-    console.log('ok');
     const router = useRouter();
     const { token } = router.query;
     const { createToastMessage } = useToast();
