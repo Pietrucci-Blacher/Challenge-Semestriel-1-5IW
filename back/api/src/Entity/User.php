@@ -22,6 +22,7 @@ use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Auth\MeController;
+use App\Controller\Auth\EmailConfirmationController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -32,6 +33,11 @@ use App\Controller\Auth\MeController;
             normalizationContext: ['groups' => ['user:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object == user)',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
+        new Get(
+            uriTemplate: '/auth/confirm-email/{token}',
+            controller: EmailConfirmationController::class,
+            read: false,
         ),
         new GetCollection(
             uriTemplate: '/auth/me',
@@ -108,6 +114,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private ?DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $emailConfirmationToken = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
 //    #[Groups('user:read')]
@@ -119,11 +127,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
-    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Feedback::class, orphanRemoval: true)]
-    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
@@ -549,5 +554,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getEmailConfirmationToken(): ?string
+    {
+        return $this->emailConfirmationToken;
+    }
+
+    public function setEmailConfirmationToken(?string $emailConfirmationToken): static
+    {
+        $this->emailConfirmationToken = $emailConfirmationToken;
+
+        return $this;
+    }
+
+    public function generateEmailConfirmationToken(): string
+    {
+        // create a token of 40 chars (20 bytes * 2)
+        $token = bin2hex(random_bytes(20));
+        $this->emailConfirmationToken = $token;
+
+        return $token;
     }
 }
