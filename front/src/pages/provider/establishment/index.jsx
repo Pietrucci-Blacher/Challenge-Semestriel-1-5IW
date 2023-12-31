@@ -58,7 +58,6 @@ export default function ListEstablishment() {
                 Créer un établissement
             </FlowbiteButton>
             <MapComponent></MapComponent>
-
         </>
     );
 }
