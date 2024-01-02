@@ -1,15 +1,7 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { CardTitle, CardHeader, CardContent, Card } from '@/components/ui/card';
-import { ResponsiveLine } from '@nivo/line';
-import {
-    TableHead,
-    TableRow,
-    TableHeader,
-    TableCell,
-    TableBody,
-    Table,
-} from '@/components/ui/table';
+import { Table, Button, Card } from 'flowbite-react';
+import PropTypes from 'prop-types';
+import { Chart } from 'react-charts';
 
 export default function AdminIndex() {
     return (
@@ -50,128 +42,95 @@ export default function AdminIndex() {
                     </h1>
                 </div>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                            <CardTitle className="text-sm font-medium">
-                                Total Bookings
-                            </CardTitle>
+                    {renderCard({
+                        title: 'Total Bookings',
+                        value: '1,245',
+                        change: '+10% from last month',
+                        icon: (
                             <PlaneIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">1,245</div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                +10% from last month
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                            <CardTitle className="text-sm font-medium">
-                                Average Rating
-                            </CardTitle>
+                        ),
+                    })}
+                    {renderCard({
+                        title: 'Average Rating',
+                        value: '4.2',
+                        change: '+0.1 from last month',
+                        icon: (
                             <StarIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">4.2</div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                +0.1 from last month
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                            <CardTitle className="text-sm font-medium">
-                                Revenue
-                            </CardTitle>
+                        ),
+                    })}
+                    {renderCard({
+                        title: 'Revenue',
+                        value: '$1,234,567',
+                        change: '+2% from last month',
+                        icon: (
                             <DollarSignIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">$1,234,567</div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                +2% from last month
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                            <CardTitle className="text-sm font-medium">
-                                Active Users
-                            </CardTitle>
+                        ),
+                    })}
+                    {renderCard({
+                        title: 'Active Users',
+                        value: '987',
+                        change: '+50% from last month',
+                        icon: (
                             <GroupIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">987</div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                +50% from last month
-                            </p>
-                        </CardContent>
-                    </Card>
+                        ),
+                    })}
                 </div>
                 <div className="flex flex-col gap-6 md:flex-row md:gap-8">
                     <Card className="w-full md:w-1/2">
-                        <CardHeader>
-                            <CardTitle className="text-lg font-semibold">
+                        <div className="p-4">
+                            <h5 className="text-lg font-semibold">
                                 Booking Trends
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                            </h5>
+                        </div>
+                        <div className="p-4">
                             <CurvedlineChart className="w-full aspect-[4/3]" />
-                        </CardContent>
+                        </div>
                     </Card>
+
                     <Card className="w-full md:w-1/2">
-                        <CardHeader>
-                            <CardTitle className="text-lg font-semibold">
+                        <div className="p-4">
+                            <h5 className="text-lg font-semibold">
                                 Recent Bookings
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                            </h5>
+                        </div>
+                        <div className="p-4">
                             <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[100px]">
+                                <thead>
+                                    <tr>
+                                        <th className="w-[100px]">
                                             Booking ID
-                                        </TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Price</TableHead>
-                                        <TableHead className="text-right">
-                                            User
-                                        </TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            BK001
-                                        </TableCell>
-                                        <TableCell>Confirmed</TableCell>
-                                        <TableCell>$250.00</TableCell>
-                                        <TableCell className="text-right">
-                                            John Doe
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            BK002
-                                        </TableCell>
-                                        <TableCell>Pending</TableCell>
-                                        <TableCell>$150.00</TableCell>
-                                        <TableCell className="text-right">
+                                        </th>
+                                        <th>Status</th>
+                                        <th>Price</th>
+                                        <th className="text-right">User</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="font-medium">BK001</td>
+                                        <td>Confirmed</td>
+                                        <td>$250.00</td>
+                                        <td className="text-right">John Doe</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="font-medium">BK002</td>
+                                        <td>Pending</td>
+                                        <td>$150.00</td>
+                                        <td className="text-right">
                                             Jane Smith
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            BK003
-                                        </TableCell>
-                                        <TableCell>Cancelled</TableCell>
-                                        <TableCell>$350.00</TableCell>
-                                        <TableCell className="text-right">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="font-medium">BK003</td>
+                                        <td>Cancelled</td>
+                                        <td>$350.00</td>
+                                        <td className="text-right">
                                             Bob Johnson
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </Table>
-                        </CardContent>
+                        </div>
                     </Card>
                 </div>
             </main>
@@ -182,7 +141,7 @@ export default function AdminIndex() {
 function CurvedlineChart(props) {
     return (
         <div {...props}>
-            <ResponsiveLine
+            <Chart
                 data={[
                     {
                         id: 'B',
@@ -368,3 +327,27 @@ function StarIcon(props) {
         </svg>
     );
 }
+
+function renderCard({ title, value, change, icon }) {
+    return (
+        <Card>
+            <div className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <h5 className="text-sm font-medium">{title}</h5>
+                {icon}
+            </div>
+            <div className="card-content">
+                <div className="text-2xl font-bold">{value}</div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {change}
+                </p>
+            </div>
+        </Card>
+    );
+}
+
+renderCard.prototype = {
+    title: PropTypes.string,
+    value: PropTypes.string,
+    change: PropTypes.string,
+    icon: PropTypes.element,
+};
