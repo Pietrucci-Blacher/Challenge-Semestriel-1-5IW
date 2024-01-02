@@ -7,6 +7,7 @@ import {
     HiUser,
     HiViewBoards,
 } from 'react-icons/hi';
+import PropTypes from 'prop-types';
 
 const AdminLayout = ({ children }) => {
     const sidebarContent = [
@@ -49,8 +50,13 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <Sidebar content={sidebarContent} />
-            <main className="p-6 flex-grow  w-full">{children}</main>
+            <main className="flex-grow w-full px-6">{children}</main>
         </>
     );
 };
+
+AdminLayout.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
 export default AdminLayout;
