@@ -14,4 +14,4 @@
 | Gérer les prestations                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/195 |
 | Mise en place librairies tests front et back                                  | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/75  |
 | Faire l'envoi du mail                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/101 |
-| Traduction dans le back                                                       | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/101 |
+| Traduction dans le back                                                       | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/265 |
