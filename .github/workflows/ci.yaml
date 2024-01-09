@@ -57,7 +57,7 @@ jobs:
 
   ci-front:
     runs-on: ubuntu-latest
-    needs: ci-back
+#    needs: ci-back
     defaults:
       run:
         working-directory: front
@@ -97,7 +97,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .next/cache
+            front/.next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
