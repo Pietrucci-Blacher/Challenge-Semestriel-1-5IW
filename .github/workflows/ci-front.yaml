@@ -70,3 +70,8 @@ jobs:
 
       - name: Run Vitest tests
         run: pnpm run test --no-watch
+
+#  ci-playwright:
+#    runs-on: ubuntu-latest
+#    container:
+#      image: mcr.microsoft.com/playwright:v1.40.0-jammy
