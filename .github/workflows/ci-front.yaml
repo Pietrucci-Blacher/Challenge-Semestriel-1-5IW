@@ -19,6 +19,7 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 8
+          run_install: false
 
       - name: Setup npm
         uses: actions/setup-node@v4
@@ -71,7 +72,26 @@ jobs:
       - name: Run Vitest tests
         run: pnpm run test --no-watch
 
-#  ci-playwright:
-#    runs-on: ubuntu-latest
-#    container:
-#      image: mcr.microsoft.com/playwright:v1.40.0-jammy
+  ci-playwright:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.40.0-jammy
+
+    steps:
+        - name: Checkout
+            uses: actions/checkout@v4
+
+        - name: Setup pnpm
+            uses: pnpm/action-setup@v2
+            with:
+                version: 8
+
+
+        - name: Install dependencies
+            run: pnpm install
+
+        - name: Run Playwright tests
+            run: pnpm run test:e2e
+
+        - name: Run Vitest tests
+            run: pnpm run test --no-watch
