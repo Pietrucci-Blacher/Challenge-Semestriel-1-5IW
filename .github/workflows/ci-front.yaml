@@ -1,5 +1,6 @@
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     paths:
     - "front/**"
     - ".github/workflows/ci-front.yaml"
@@ -55,44 +56,29 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Cache Playwright dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright dependencies
-        run: pnpm dlx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: pnpm run test:e2e
-
       - name: Run Vitest tests
         run: pnpm run test --no-watch
 
-#  ci-playwright:
-#    runs-on: ubuntu-latest
-#    container:
-#      image: mcr.microsoft.com/playwright:v1.40.0-jammy
-#
-#    uses: actions/checkout@v4
-#    steps:
-#        - name: Checkout
-#            uses: actions/checkout@v4
-#
-#        - name: Setup pnpm
-#            uses: pnpm/action-setup@v2
-#            with:
-#                version: 8
-#
-#
-#        - name: Install dependencies
-#            run: pnpm install
-#
-#        - name: Run Playwright tests
-#            run: pnpm run test:e2e
-#
-#        - name: Run Vitest tests
-#            run: pnpm run test --no-watch
+  ci-playwright:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: front
+    container:
+      image: mcr.microsoft.com/playwright:v1.40.0-jammy
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Playwright tests
+        run: pnpm run playwright test
