@@ -321,7 +321,6 @@ class Establishment
 
         return $this;
     }
-}
 
   /**
      * @return Collection<int, Reservation>
