@@ -255,7 +255,8 @@ const ShowEstablishment = () => {
 
     RatingList.displayName = 'RatingList';
 
-    const onClose = () => {
+    const onClose = (value) => {
+        console.log('value', value);
         setModalProps((prev) => ({ ...prev, isOpen: false }));
     };
 

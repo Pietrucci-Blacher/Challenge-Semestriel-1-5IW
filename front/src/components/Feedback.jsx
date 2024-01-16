@@ -47,6 +47,8 @@ export default function Feedback({ showFeedback, onCloseModal }) {
         }));
     };
 
+    console.log('formData', formData);
+
     const calculateFinalScore = () => {
         const totalFeedbacks = Object.values(scores).length;
         const finalScore =
@@ -66,9 +68,9 @@ export default function Feedback({ showFeedback, onCloseModal }) {
 
         setFormData((prevFormData) => ({
             ...prevFormData,
-            resultJson: JSON.stringify(resultJson),
+            resultJson: JSON.stringify({test: 'test'}),
         }));
-        onCloseModal();
+        onCloseModal(formData);
     };
 
     return (
