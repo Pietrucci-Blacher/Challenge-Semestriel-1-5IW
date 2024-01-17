@@ -13,12 +13,25 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Link;
+use App\Controller\GetEstablishmentNote;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
         new Get(
             normalizationContext: ['groups' => ['feedback:read']],
+        ),
+        new GetCollection(
+            uriTemplate: '/establishments/{id}/feedback',
+            uriVariables: ['id' => new Link(toProperty: 'establishment', fromClass: Feedback::class)],
+            normalizationContext: ['groups' => ['feedback:read']],
+        ),
+        new Get(
+            uriTemplate: '/establishments/{id}/note',
+            controller: GetEstablishmentNote::class,
+            read: false,
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['feedback:read']],
@@ -68,6 +81,19 @@ class Feedback
     #[ORM\Column]
     #[Groups(['feedback:read', 'feedback:write'])]
     private array $detailedNote = [];
+
+    #[ORM\Column]
+    #[Groups(['feedback:read', 'feedback:write'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['feedback:read', 'feedback:write'])]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -142,6 +168,30 @@ class Feedback
     public function setDetailedNote(array $detailedNote): static
     {
         $this->detailedNote = $detailedNote;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
