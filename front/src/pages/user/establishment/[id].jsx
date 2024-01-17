@@ -303,7 +303,7 @@ const ShowEstablishment = () => {
                         <div className="mb-8 w-full">
                             <h1 className="flex items-center font-semibold text-2xl mb-4">
                                 <HiStar className="mr-2" />
-                            {note} · {feedbacks.length} reviews
+                                {note} · {feedbacks.length} reviews
                             </h1>
                             <RatingList />
                         </div>
