@@ -65,7 +65,7 @@ jobs:
       run:
         working-directory: front
     container:
-      image: mcr.microsoft.com/playwright:v1.40.0-jammy
+      image: mcr.microsoft.com/playwright:v1.41.0-jammy
 
     steps:
       - name: Checkout
