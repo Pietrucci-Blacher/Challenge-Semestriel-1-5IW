@@ -71,7 +71,8 @@ export default function CreateService() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { title, description, price, duration, establishment_id } = formData;
+        const { title, description, price, duration, establishment_id } =
+            formData;
 
         if (
             !title ||
