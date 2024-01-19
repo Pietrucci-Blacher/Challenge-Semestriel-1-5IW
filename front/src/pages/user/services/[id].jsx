@@ -16,6 +16,7 @@ import { useTeam } from '@/hooks/useTeam';
 import { useSchedule } from '@/hooks/useSchedule';
 import ScheduleSelector from '@/components/ScheduleSelector';
 import { useReservation } from '@/hooks/useReservation';
+import { convertDataToHtml } from '@/utils/utils';
 
 export default function Id() {
     const [selectedTeacher, setSelectedTeacher] = useState(null);
@@ -99,6 +100,16 @@ export default function Id() {
         return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`;
     };
 
+    console.log('service', service);
+
+    const renderBody = service?.body?.blocks ? (
+        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3 editor-html-no-bg">
+            {convertDataToHtml(service?.body?.blocks)}
+        </p>
+    ) : (
+        <></>
+    );
+
     return (
         <>
             <div className="container">
@@ -130,23 +141,21 @@ export default function Id() {
                             alt="..."
                         />
                     </Carousel>
-                    <Card className="col-span-2">
+                    <div className="col-span-2 overflow-auto">
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
                             {service?.title}
                         </h2>
                         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
                             {service?.description}
                         </p>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
-                            {service?.body}
-                        </p>
+                        {renderBody}
                         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
                             Duration: {service?.duration} min
                         </p>
                         <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words mt-4">
                             {service?.price} €
                         </p>
-                    </Card>
+                    </div>
                 </div>
 
                 <div className="mt-8">
