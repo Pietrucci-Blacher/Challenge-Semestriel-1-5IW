@@ -60,6 +60,7 @@ jobs:
         run: pnpm run test --no-watch
 
   ci-playwright:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -82,7 +83,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -93,7 +94,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-
       - name: Cache Playwright dependencies
         uses: actions/cache@v3
         with:
@@ -102,8 +102,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-
 
-      - name: Install Playwright dependencies
-        run: pnpm dlx playwright install --with-deps
+      - name: Build app
+        run: pnpm build
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: pnpm run test:e2e
