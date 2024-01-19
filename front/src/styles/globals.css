@@ -47,7 +47,8 @@ body {
     @apply bg-gray-50 p-5 rounded;
 }
 
-.editor-html, .editor-html-no-bg {
+.editor-html,
+.editor-html-no-bg {
     @apply dark:bg-gray-800;
     font-weight: 500;
 
