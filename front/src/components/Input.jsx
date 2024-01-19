@@ -21,7 +21,7 @@ export default function Input({
     );
 
     return (
-        <div>
+        <div className="flex-1">
             {labelElem}
             <TextInput
                 type={type}

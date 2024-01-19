@@ -73,14 +73,12 @@ export default function Services() {
     ));
     return (
         <>
-            <h2>services</h2>
             <div className="mb-4 flex">
                 <Input
                     type="text"
                     placeholder="Entrer un service"
                     value={formData.title}
                     onChange={handleInputSearchChange}
-                    className="w-full"
                 />
                 <Button onClick={() => setOpenModal(true)}>Filtrer</Button>
             </div>

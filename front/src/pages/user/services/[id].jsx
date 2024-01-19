@@ -100,8 +100,6 @@ export default function Id() {
         return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`;
     };
 
-    console.log('service', service);
-
     const renderBody = service?.body?.blocks ? (
         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3 editor-html-no-bg">
             {convertDataToHtml(service?.body?.blocks)}
@@ -117,27 +115,7 @@ export default function Id() {
                     <Carousel indicators={false} className="col-span-1">
                         <img
                             className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            src={`https://localhost/media/${service?.imagePath}`}
                             alt="..."
                         />
                     </Carousel>
