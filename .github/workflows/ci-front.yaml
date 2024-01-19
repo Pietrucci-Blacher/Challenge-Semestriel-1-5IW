@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -97,3 +97,11 @@ jobs:
 
       - name: Run Playwright tests
         run: pnpm run test:e2e
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+            name: playwright-report
+            path: playwright-report/
+            retention-days: 30
