@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+    echo "Usage: migrate [--hard]"
+    echo "  --help, -h     Display this help message"
+    echo "  --hard         Drop database and recreate it"
+    exit 0
+fi
+
+if [ "$1" == "--hard" ]; then
+    docker compose exec php bin/console d:d:d -f
+    docker compose exec php bin/console d:d:c
+    rm back/api/migrations/*.php
+fi
+
+docker compose exec php bin/console make:migra
+docker compose exec php bin/console d:m:m

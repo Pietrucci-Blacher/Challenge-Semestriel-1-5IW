@@ -66,9 +66,9 @@ export default function Feedback({ showFeedback, onCloseModal }) {
 
         setFormData((prevFormData) => ({
             ...prevFormData,
-            resultJson: JSON.stringify(resultJson),
+            resultJson,
         }));
-        onCloseModal();
+        onCloseModal({ ...formData, resultJson });
     };
 
     return (

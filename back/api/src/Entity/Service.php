@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Context;
@@ -100,6 +101,9 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Feedback::class)]
+    private Collection $feedback;
+
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
@@ -125,6 +129,7 @@ class Service
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +193,36 @@ class Service
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getService() === $this) {
+                $feedback->setService(null);
+            }
+        }
 
         return $this;
     }

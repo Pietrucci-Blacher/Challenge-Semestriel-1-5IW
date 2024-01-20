@@ -21,6 +21,16 @@ class FeedbackRepository extends ServiceEntityRepository
         parent::__construct($registry, Feedback::class);
     }
 
+    public function findByEstablishmentId($value): ?array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.establishment = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Feedback[] Returns an array of Feedback objects
 //     */
