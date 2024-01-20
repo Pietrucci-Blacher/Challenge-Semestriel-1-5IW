@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Provider\UpdateServiceController;
+use App\Attributes\UserField;
 
 #[Vich\Uploadable]
 #[ApiResource(
@@ -90,8 +91,9 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?array $body = [];
 
-    #[ORM\Column]
+    #[ORM\Column()]
     #[Groups(['service:read', 'service:write'])]
+    #[Context(['disable_type_enforcement' => true])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -120,7 +122,8 @@ class Service
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['service:read'])]
+    #[Groups(['service:read', 'service:write'])]
+    #[UserField('author')]
     private ?User $author = null;
 
     public function __construct()
