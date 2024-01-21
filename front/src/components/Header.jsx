@@ -12,12 +12,9 @@ export default function Header() {
                     <Image
                         alt="Flowbite logo"
                         height="32"
-                        src="https://flowbite.com/docs/images/logo.svg"
+                        src="/images/logo.svg"
                         width="32"
                     />
-                    <span className="self-center whitespace-nowrap pl-3 text-xl font-semibold dark:text-white">
-                        Flowbite
-                    </span>
                 </Navbar.Brand>
 
                 <div className="flex md:order-2">
