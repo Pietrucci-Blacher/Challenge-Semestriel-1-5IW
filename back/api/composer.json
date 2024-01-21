@@ -42,7 +42,9 @@
         "symfony/phpunit-bridge": "6.4.*",
         "symfony/stopwatch": "6.4.*",
         "symfony/var-dumper": "6.4.*",
-        "symfony/web-profiler-bundle": "6.4.*"
+        "symfony/web-profiler-bundle": "6.4.*",
+        "doctrine/doctrine-fixtures-bundle": "^3.5",
+        "zenstruck/foundry": "^1.36"
     },
     "config": {
         "optimize-autoloader": true,

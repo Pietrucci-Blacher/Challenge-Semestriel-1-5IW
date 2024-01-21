@@ -34,6 +34,11 @@ export default function ShowService() {
                     <h1 className="font-medium text-3xl">{service.title}</h1>
                     <p>{service.description}</p>
                     <p>{service.price} €</p>
+                    <p>{service.duration} Minutes</p>
+                    <p>
+                        Propriétaire: {service.author.firstname}{' '}
+                        {service.author.lastname}
+                    </p>
                 </div>
                 <div className="editor-html">
                     {convertDataToHtml(service.body.blocks)}
