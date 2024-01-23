@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEstablishment } from '@/hooks/useEstablishment';
+import { useFeedback } from '@/hooks/useFeedback';
 import { useEffect, useState } from 'react';
 import {
     Breadcrumb,
@@ -38,6 +39,7 @@ export default function ShowEstablishment() {
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
     } = useSchedule();
+    const { feedbacks, getFeedbacksFromEstablishmentId } = useFeedback();
     const [points, setPoints] = useState([]);
 
     const userColors = {};
@@ -80,11 +82,13 @@ export default function ShowEstablishment() {
         getEstablishmentServices(id);
         getEstablishmentTeam(id);
         getEstablishmentSchedules(id);
+        getFeedbacksFromEstablishmentId(id);
     }, [
         getEstablishmentById,
         getEstablishmentServices,
         getEstablishmentTeam,
         getEstablishmentSchedules,
+        getFeedbacksFromEstablishmentId,
         router,
     ]);
 
@@ -241,6 +245,37 @@ export default function ShowEstablishment() {
                             ) : (
                                 <div className="mt-2">
                                     <p>Aucun service</p>
+                                </div>
+                            )}
+                        </>
+                    </div>
+                </Tabs.Item>
+                <Tabs.Item title="Feedback" icon={HiUserCircle}>
+                    <div className="mt-4">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                            Feedback pour {establishment?.name}:
+                        </h1>
+                        <>
+                            {feedbacks.length > 0 ? (
+                                feedbacks.map((feedback, index) => (
+                                    <div className="mt-2" key={index}>
+                                        <p>Note moyenne: {feedback.note}</p>
+                                        <p>
+                                            {Object.keys(
+                                                feedback.detailedNote,
+                                            ).map((key) => (
+                                                <p key={key}>
+                                                    {key}:{' '}
+                                                    {feedback.detailedNote[key]}
+                                                </p>
+                                            ))}
+                                        </p>
+                                        <p>Comment: {feedback.comment}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="mt-2">
+                                    <p>Aucun feedback</p>
                                 </div>
                             )}
                         </>
