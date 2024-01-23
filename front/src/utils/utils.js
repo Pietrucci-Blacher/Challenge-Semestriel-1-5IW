@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 /**
  * Create url parameters from filter object
@@ -38,7 +39,7 @@ export const convertDataToHtml = (blocks) => {
             return <hr key={key} />;
         } else if (block.type === 'image') {
             return (
-                <img
+                <Image
                     key={key}
                     src={block.data.file.url}
                     alt={block.data.caption}
