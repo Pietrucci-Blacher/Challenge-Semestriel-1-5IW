@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^8.0.3",
-    "postcss-nesting": "^12.0.2"
+    "husky": "^8.0.3"
   }
 }
