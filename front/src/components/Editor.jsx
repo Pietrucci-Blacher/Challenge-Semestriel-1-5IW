@@ -1,7 +1,8 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useCallback } from 'react';
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
+import PropTypes from "prop-types";
 
 const EDITOR_JS_TOOLS = {
     list: List,
@@ -10,6 +11,11 @@ const EDITOR_JS_TOOLS = {
 
 const Editor = ({ data, onChange, editorblock, label }) => {
     const ref = useRef();
+
+    const handleChange = useCallback(async (api) => {
+        const content = await api.saver.save();
+        onChange(content);
+    }, [onChange]);
 
     useEffect(() => {
         if (!ref.current) {
@@ -20,10 +26,7 @@ const Editor = ({ data, onChange, editorblock, label }) => {
                 },
                 tools: EDITOR_JS_TOOLS,
                 data: data,
-                async onChange(api, event) {
-                    const content = await api.saver.save();
-                    onChange(content);
-                },
+                onChange: handleChange,
             });
         }
 
@@ -31,7 +34,7 @@ const Editor = ({ data, onChange, editorblock, label }) => {
             ref?.current?.destroy();
             ref.current = null;
         };
-    }, [data]);
+    }, [data, handleChange, editorblock]);
 
     return (
         <>
@@ -43,4 +46,12 @@ const Editor = ({ data, onChange, editorblock, label }) => {
     );
 };
 
+Editor.propTypes = {
+    data: {},
+    onChange: () => {},
+    editorblock: 'editor',
+    label: 'Editor',
+}
+
 export default memo(Editor);
+
