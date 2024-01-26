@@ -49,7 +49,7 @@ export default function Services() {
             <Card
                 className="max-w-sm card-hover"
                 renderImage={() => (
-                    <img
+                    <Image
                         src={`https://localhost/media/${service.imagePath}`}
                         alt="Picture of the author"
                         className="w-full rounded-t-lg h-48 object-cover"
