@@ -9,6 +9,15 @@ export const getFeedbacksFromEstablishmentId = async (id) => {
     return result['hydra:member'];
 };
 
+export const getFeedbacksFromServiceId = async (id) => {
+    const result = await httpClient.get(`/services/${id}/feedback`);
+    return result['hydra:member'];
+};
+
 export const getEstablishmentNote = (id) => {
     return httpClient.get(`/establishments/${id}/note`);
+};
+
+export const getServiceNote = (id) => {
+    return httpClient.get(`/services/${id}/note`);
 };

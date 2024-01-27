@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
 use App\Controller\GetEstablishmentNote;
+use App\Controller\GetServiceNote;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -28,9 +29,19 @@ use App\Controller\GetEstablishmentNote;
             uriVariables: ['id' => new Link(toProperty: 'establishment', fromClass: Feedback::class)],
             normalizationContext: ['groups' => ['feedback:read']],
         ),
+        new GetCollection(
+            uriTemplate: '/services/{id}/feedback',
+            uriVariables: ['id' => new Link(toProperty: 'service', fromClass: Feedback::class)],
+            normalizationContext: ['groups' => ['feedback:read']],
+        ),
         new Get(
             uriTemplate: '/establishments/{id}/note',
             controller: GetEstablishmentNote::class,
+            read: false,
+        ),
+        new Get(
+            uriTemplate: '/services/{id}/note',
+            controller: GetServiceNote::class,
             read: false,
         ),
         new GetCollection(

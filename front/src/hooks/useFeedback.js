@@ -15,10 +15,22 @@ export const useFeedback = () => {
         setNote(parseFloat(response));
     }, []);
 
+    const getFeedbacksFromServiceId = useCallback(async (id) => {
+        const response = await service.getFeedbacksFromServiceId(id);
+        setFeedbacks(response);
+    }, []);
+
+    const getServiceNote = useCallback(async (id) => {
+        const response = await service.getServiceNote(id);
+        setNote(parseFloat(response));
+    }, []);
+
     return {
         feedbacks,
         note,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
+        getFeedbacksFromServiceId,
+        getServiceNote,
     };
 };
