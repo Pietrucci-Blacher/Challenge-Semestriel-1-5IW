@@ -1,12 +1,17 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
-const loginService = async ({email, password}) => {
-    return await httpClient.post('auth/login', {email, password});
+const loginService = async ({ email, password }) => {
+    return await httpClient.post('auth/login', { email, password });
 };
 
-const registerService = async ({lastname, firstname, email, password}) => {
-    const plainPassword = password
-    return await httpClient.post('auth/register', {lastname, firstname, email, plainPassword})
+const registerService = async ({ lastname, firstname, email, password }) => {
+    const plainPassword = password;
+    return await httpClient.post('auth/register', {
+        lastname,
+        firstname,
+        email,
+        plainPassword,
+    });
 };
 
 const fetchCurrentUser = async () => {
@@ -14,7 +19,9 @@ const fetchCurrentUser = async () => {
 };
 
 const refreshToken = async (refreshToken) => {
-    return await httpClient.post('/token/refresh', {refresh_token: refreshToken})
+    return await httpClient.post('/token/refresh', {
+        refresh_token: refreshToken,
+    });
 };
 
 const getUserFromSession = () => {
@@ -34,10 +41,23 @@ const storeUserInSession = (user) => {
     if (user) {
         const now = new Date();
         const userWithExpiry = {
-            ...user, expiresAt: now.getTime() + 120000,
+            ...user,
+            expiresAt: now.getTime() + 120000,
         };
         sessionStorage.setItem('user', JSON.stringify(userWithExpiry));
     }
 };
 
-export {loginService, registerService, fetchCurrentUser, refreshToken, storeUserInSession, getUserFromSession};
+const confirmEmailRequest = (token) => {
+    return httpClient.get(`/auth/confirm-email/${token}`);
+};
+
+export {
+    loginService,
+    registerService,
+    fetchCurrentUser,
+    refreshToken,
+    storeUserInSession,
+    getUserFromSession,
+    confirmEmailRequest,
+};

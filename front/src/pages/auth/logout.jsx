@@ -1,15 +1,13 @@
-"use client"
-import {useEffect} from "react";
-import {useRouter} from "next/router";
-import {useAuth} from "@/hooks/useAuth";
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Logout() {
     const router = useRouter();
-    const {logout} = useAuth()
+    const { logout } = useAuth();
     useEffect(() => {
-        logout()
-        router.push('/')
+        logout();
+        router.push('/');
     }, [logout, router]);
-
-
 }

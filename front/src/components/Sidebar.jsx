@@ -1,20 +1,16 @@
-import {useState} from "react";
-import {HiChartPie, HiViewBoards} from "react-icons/hi";
-import {Sidebar as FlowbiteSidebar} from "flowbite-react";
-import {BiBuoy} from "react-icons/bi";
+import { useState } from 'react';
+import { HiChartPie, HiViewBoards } from 'react-icons/hi';
+import { Sidebar as FlowbiteSidebar } from 'flowbite-react';
+import { BiBuoy } from 'react-icons/bi';
 
-const Sidebar = function ({content = []}) {
+const Sidebar = function ({ content = [] }) {
     const [isOpen, setOpen] = useState(false);
-
-    const toggle = () => {
-        setOpen(!isOpen);
-    }
 
     return (
         <FlowbiteSidebar>
             <FlowbiteSidebar.Items className="flex flex-col h-full justify-between">
                 <FlowbiteSidebar.ItemGroup>
-                    {content.map((element, index)=>(
+                    {content.map((element, index) => (
                         <FlowbiteSidebar.Item key={index} {...element}>
                             {element.text}
                         </FlowbiteSidebar.Item>

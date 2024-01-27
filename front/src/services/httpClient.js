@@ -1,14 +1,12 @@
-import axios from 'axios'
-
+import axios from 'axios';
 
 const httpClient = axios.create({
     baseURL: 'https://localhost',
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 15000
+    timeout: 15000,
 });
-
 
 httpClient.interceptors.request.use(
     (config) => {
@@ -18,27 +16,32 @@ httpClient.interceptors.request.use(
         }
         return config;
     },
-    error => {
+    (error) => {
         return Promise.reject(error);
-    }
+    },
 );
 
 const handleResponseSuccess = (response) => {
-    return response?.data
-}
+    return response?.data;
+};
 
 const handleResponseError = async (error) => {
     const originalRequest = error.config;
     const status = error?.response.status;
     const message = error?.response?.data?.message;
-    if (status === 401 && message === 'Expired JWT Token' && !originalRequest._retry) {
-        console.log('Expired JWT Token');
+    if (
+        status === 401 &&
+        message === 'Expired JWT Token' &&
+        !originalRequest._retry
+    ) {
         originalRequest._retry = true;
-        const refreshToken = ses('refreshToken');
+        const refreshToken = sessionStorage.getItem('refreshToken');
         if (!refreshToken) {
             return Promise.reject(error);
         }
-        const response = await axios.post('https://localhost/token/refresh', { refresh_token: refreshToken });
+        const response = await axios.post('https://localhost/token/refresh', {
+            refresh_token: refreshToken,
+        });
         const newJwtToken = response?.data?.token;
         const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {
@@ -49,10 +52,12 @@ const handleResponseError = async (error) => {
         }
     }
     return Promise.reject(error);
-}
+};
 
-httpClient.interceptors.response.use(handleResponseSuccess, handleResponseError);
-
+httpClient.interceptors.response.use(
+    handleResponseSuccess,
+    handleResponseError,
+);
 
 const makeRequest = async (method, url, data, config) => {
     try {
@@ -70,16 +75,15 @@ const makeRequest = async (method, url, data, config) => {
 
 httpClient.get = async function (url, config) {
     return await makeRequest('get', url, null, config);
-
 };
 
 httpClient.post = async function (url, data, config) {
     const headers = { ...config?.headers };
     config = {
         ...config,
-        headers
+        headers,
     };
-    console.log(data)
+    console.log(data);
     return await makeRequest('post', url, data, config);
 };
 
@@ -87,17 +91,16 @@ httpClient.put = async function (url, data, config) {
     const headers = { ...config?.headers };
     config = {
         ...config,
-        headers
+        headers,
     };
     return await makeRequest('put', url, data, config);
-
 };
 
 httpClient.patch = async function (url, data, config) {
     const headers = { ...config?.headers };
     config = {
         ...config,
-        headers
+        headers,
     };
     return makeRequest('patch', url, data, config);
 };
@@ -105,6 +108,5 @@ httpClient.patch = async function (url, data, config) {
 httpClient.delete = async function (url, config) {
     return makeRequest('delete', url, null, config);
 };
-
 
 export default httpClient;

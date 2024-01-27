@@ -1,15 +1,15 @@
 {
-  "name": "Challenge-Semestriel-1-5IW",
+  "name": "challengesemestriel15iw",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^8.0.0"
+    "husky": "^9.0.0"
   }
 }
