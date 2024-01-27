@@ -73,6 +73,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['service:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
