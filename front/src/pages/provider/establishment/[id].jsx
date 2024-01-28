@@ -228,10 +228,10 @@ export default function ShowEstablishment() {
                                         <p>Title: {service.title}</p>
                                         <p>Prix: {service.price}</p>
                                         <p className="editor-html">
-                                            Body:{' '}
-                                            {convertDataToHtml(
-                                                service.body.blocks,
-                                            )}
+                                            {/*Body:{' '}*/}
+                                            {/*{convertDataToHtml(*/}
+                                            {/*    service.body.blocks,*/}
+                                            {/*)}*/}
                                         </p>
                                         <p>
                                             Description: {service.description}

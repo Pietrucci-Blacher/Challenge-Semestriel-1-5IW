@@ -45,8 +45,6 @@ use App\Controller\Provider\UpdateServiceController;
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new Post(
             uriTemplate: '/services/{id}/update',
