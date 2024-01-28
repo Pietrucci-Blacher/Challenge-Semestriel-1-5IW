@@ -17,6 +17,9 @@ import { useToast } from '@/hooks/useToast';
 import { Modal } from 'flowbite-react';
 import ModalComponent from '@/components/Modal';
 import Feedback from '@/components/Feedback';
+import { createFeedback } from '@/services/feedbackService';
+import { useAuthContext } from '@/providers/AuthProvider';
+import { useFeedback } from '@/hooks/useFeedback';
 export const DateView = () => {
     /*    return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -28,10 +31,17 @@ export const DateView = () => {
     );*/
 };
 const ShowEstablishment = () => {
+    const { user } = useAuthContext();
     const router = useRouter();
     const { id } = router.query;
     const { establishment, getEstablishmentById } = useEstablishment();
     const { createToastMessage } = useToast();
+    const {
+        feedbacks,
+        note,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+    } = useFeedback();
     const shareContent = () => {
         navigator.clipboard
             .writeText(window.location.href)
@@ -159,45 +169,21 @@ const ShowEstablishment = () => {
             <p className="p-0">{content}</p>
         </li>
     );
+
+    const renderFeedback = feedbacks
+        ? feedbacks?.map((feedback) => (
+              <Review
+                  key={feedback.id}
+                  name={`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                  date={feedback.createdAt}
+                  imageSrc="https://a0.muscache.com/im/pictures/user/48bfe386-b947-443d-a7d8-9ba16dd87c1f.jpg?im_w=240"
+                  content={feedback.comment}
+              />
+          ))
+        : 'No feedbacks';
+
     const ReviewsList = memo(() => (
-        <ul className="grid grid-cols-2 gap-8">
-            <Review
-                name="Aldo"
-                date="June 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/48bfe386-b947-443d-a7d8-9ba16dd87c1f.jpg?im_w=240"
-                content="The service is impeccable. The staff is super friendly and responsive. We highly recommend it."
-            />
-            <Review
-                name="Anisha"
-                date="June 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/6d4366ac-fea5-4865-a914-5bf6cc2c8286.jpg?im_w=240"
-                content="We loved the place to stay; beautiful night was so good & lovely morning sounds."
-            />
-            <Review
-                name="Sanal"
-                date="June 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/User-44531743/original/9f9b36c8-22fd-4f51-a2e2-1eb85c0e1865.jpeg?im_w=240"
-                content="We had a very relaxing time in the villa. The hosts were very responsive when we had questions. The food they cooked was also great!"
-            />
-            <Review
-                name="Yiting"
-                date="May 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/User-56556621/original/106504df-e131-45b2-8bab-aa809f8f5737.jpeg?im_w=240"
-                content="We had a wonderful time at Veluvana!"
-            />
-            <Review
-                name="Muhammad"
-                date="May 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/fa2b5a4d-fc11-438f-9ffc-21c6aab6129f.jpg?im_w=240"
-                content="It was just perfect. Thank you 🙏"
-            />
-            <Review
-                name="Alex"
-                date="May 2023"
-                imageSrc="https://a0.muscache.com/im/pictures/user/7832c8d6-16e3-4aed-a923-d5c57c2350db.jpg?im_w=240"
-                content="It was an amazing experience. I will never forget the words before entering ARE YOU READY, and we saw this wonderful place."
-            />
-        </ul>
+        <ul className="grid grid-cols-2 gap-8">{renderFeedback}</ul>
     ));
 
     ReviewsList.displayName = 'ReviewsList';
@@ -255,8 +241,19 @@ const ShowEstablishment = () => {
 
     RatingList.displayName = 'RatingList';
 
-    const onClose = () => {
+    const onClose = async (value) => {
         setModalProps((prev) => ({ ...prev, isOpen: false }));
+
+        await createFeedback({
+            reviewer: `users/${user?.id}`,
+            establishment: `establishments/${id}`,
+            note: value.resultJson.average,
+            comment: value.comment,
+            detailedNote: value.resultJson.establishment,
+        });
+
+        getFeedbacksFromEstablishmentId(id);
+        getEstablishmentNote(id);
     };
 
     let modalContent;
@@ -306,7 +303,7 @@ const ShowEstablishment = () => {
                         <div className="mb-8 w-full">
                             <h1 className="flex items-center font-semibold text-2xl mb-4">
                                 <HiStar className="mr-2" />
-                                4.86 · 126 reviews
+                                {note} · {feedbacks.length} reviews
                             </h1>
                             <RatingList />
                         </div>
@@ -360,7 +357,14 @@ const ShowEstablishment = () => {
 
     useEffect(() => {
         getEstablishmentById(id);
-    }, [id]);
+        getFeedbacksFromEstablishmentId(id);
+        getEstablishmentNote(id);
+    }, [
+        id,
+        getEstablishmentById,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+    ]);
 
     return (
         <div className="flex flex-col items-center w-full">
@@ -373,11 +377,11 @@ const ShowEstablishment = () => {
                         <div className="flex items-center">
                             <div className="flex font-semibold items-center">
                                 <HiStar className="mr-1.5" />
-                                <p>2</p>
+                                <p>{note}</p>
                                 <span className="mx-2">·</span>
                             </div>
                             <p className="underline cursor-pointer font-semibold">
-                                130 reviews
+                                {feedbacks.length} reviews
                             </p>
                             <div className="flex items-center text-gray-700 ">
                                 <span className="mx-1">·</span>
@@ -528,7 +532,7 @@ const ShowEstablishment = () => {
                                 <HiStar className="mr-1" />5
                                 <span className="mx-1">·</span>
                                 <span className="text-[#717171] font-normal">
-                                    130 reviews
+                                    {feedbacks.length} reviews
                                 </span>
                             </div>
                         </div>
@@ -583,7 +587,7 @@ const ShowEstablishment = () => {
                     <div className="mb-8 w-full">
                         <h1 className="flex items-center font-semibold text-2xl mb-4">
                             <HiStar className="mr-2" />
-                            4.86 · 126 reviews
+                            {note} · {feedbacks.length} reviews
                         </h1>
                         <RatingList />
                     </div>
@@ -592,7 +596,7 @@ const ShowEstablishment = () => {
                         className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
                         onClick={() => setMore('reviews')}
                     >
-                        Show all 126 reviews
+                        Show all {feedbacks.length} reviews
                     </button>
                 </div>
             </div>

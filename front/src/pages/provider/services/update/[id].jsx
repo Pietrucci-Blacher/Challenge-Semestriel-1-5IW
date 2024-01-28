@@ -29,6 +29,7 @@ export default function UpdateService() {
         title: '',
         description: '',
         price: 0,
+        duration: 0,
     });
 
     useEffect(() => {
@@ -43,6 +44,7 @@ export default function UpdateService() {
             title: service?.title || '',
             description: service?.description || '',
             price: service?.price || 0,
+            duration: service?.duration || 0,
         });
         setEditorData(service?.body || {});
         setInitEditorData(service?.body || {});
@@ -69,11 +71,21 @@ export default function UpdateService() {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
+    const handleInputDurationChange = (value) => {
+        setFormData({ ...formData, duration: parseInt(value) });
+    };
+
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { title, description, price } = formData;
+        const { title, description, price, duration } = formData;
 
-        if (!title || !description || !price || !editorData?.blocks?.length) {
+        if (
+            !title ||
+            !description ||
+            !price ||
+            !duration ||
+            !editorData?.blocks?.length
+        ) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -87,6 +99,7 @@ export default function UpdateService() {
             data.append('description', description);
             data.append('price', price);
             data.append('body', body);
+            data.append('duration', duration);
 
             const services = await updateServiceRequest(id, data);
 
@@ -141,6 +154,16 @@ export default function UpdateService() {
                         value={formData.price}
                         min="0"
                         onChange={handleInputPriceChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Durée en minutes"
+                        type="number"
+                        placeholder="Entrer une durée"
+                        value={formData.duration}
+                        min="0"
+                        onChange={handleInputDurationChange}
                     />
                 </div>
                 <div>
