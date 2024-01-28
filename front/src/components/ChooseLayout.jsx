@@ -41,6 +41,7 @@ const ChooseLayout = ({ children }) => {
         path.startsWith('/teacher') ||
         path.startsWith('/user');
     const [isAccessAllowed, setIsAccessAllowed] = useState(false);
+    const isLoginPage = path === '/auth/login';
 
     useEffect(() => {
         if (user === null && needsAuth && !isLogged) {
@@ -82,6 +83,17 @@ const ChooseLayout = ({ children }) => {
             </Flowbite>
         );
     }
+
+    if (isLoginPage && !isLogged && !needsAuth) {
+        return (
+            <Flowbite>
+                <div className="h-screen dark:bg-gray-900">
+                    <Layout>{children}</Layout>
+                </div>
+            </Flowbite>
+        );
+    }
+
     return (
         <>
             {needsAuth && isAccessAllowed && (

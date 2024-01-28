@@ -10,7 +10,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+<<<<<<< Updated upstream
     "husky": "^8.0.3",
     "postcss-nesting": "^12.0.2"
+=======
+    "husky": "^9.0.0"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.8"
+>>>>>>> Stashed changes
   }
 }
