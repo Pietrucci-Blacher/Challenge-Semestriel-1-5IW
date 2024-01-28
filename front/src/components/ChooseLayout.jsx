@@ -87,10 +87,12 @@ const ChooseLayout = ({ children }) => {
             {needsAuth && isAccessAllowed && (
                 <Flowbite>
                     <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
-                        <div>
-                            <Header />
-                        </div>
-                        <div className="flex flex-row">
+                        {Layout === UserLayout && (
+                            <div className="hidden md:block">
+                                <Header />
+                            </div>
+                        )}
+                        <div className="flex flex-row h-screen">
                             <Layout>{children}</Layout>
                         </div>
                     </div>

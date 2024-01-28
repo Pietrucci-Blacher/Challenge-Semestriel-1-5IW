@@ -63,7 +63,7 @@ const UserLayout = ({ children }) => {
     return (
         <>
             <Sidebar content={sidebarContent} />
-            <main className="p-6 flex-grow  w-full">{children}</main>
+            <main className="p-6 flex-grow w-full">{children}</main>
         </>
     );
 };
