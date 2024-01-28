@@ -41,8 +41,8 @@ const AdminLayout = ({ children }) => {
         {
             icon: HiUser,
             text: 'Users',
-            href: '#',
-            label: '/admin/users',
+            href: '/admin/users',
+            label: '',
             labelColor: 'gray',
         },
     ];

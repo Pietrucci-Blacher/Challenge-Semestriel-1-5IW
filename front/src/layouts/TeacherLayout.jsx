@@ -3,13 +3,6 @@ import { HiChartPie, HiInbox, HiShoppingBag, HiTable } from 'react-icons/hi';
 
 const sidebarContent = [
     {
-        icon: HiChartPie,
-        text: 'Dashboard',
-        href: '#',
-        label: '',
-        labelColor: 'gray',
-    },
-    {
         icon: HiInbox,
         text: 'My Establishment',
         href: '/teacher/',
