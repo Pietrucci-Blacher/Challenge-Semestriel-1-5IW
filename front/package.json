@@ -23,6 +23,7 @@
         "@fullcalendar/timegrid": "^6.1.10",
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^2.1.1",
+        "@vercel/speed-insights": "^1.0.8",
         "axios": "^1.6.5",
         "chart.js": "^4.4.1",
         "chartjs-adapter-dayjs-4": "^1.0.4",
