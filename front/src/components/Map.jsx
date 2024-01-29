@@ -27,7 +27,8 @@ const MapComponent = () => {
 
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: 'AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8',
+        // googleMapsApiKey: process.env.API_KEY,
+        googleMapsApiKey: "AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8"
     });
 
     useEffect(() => {
@@ -44,19 +45,9 @@ const MapComponent = () => {
                         )}&key=AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8`,
                     );
                     const data = await response.json();
-                    console.log(
-                        'Données de géocodage pour',
-                        establishment.street,
-                        data,
-                    );
 
                     if (data.results && data.results.length > 0) {
                         const location = data.results[0].geometry.location;
-                        console.log(
-                            `Position pour ${establishment.id}: `,
-                            location,
-                        );
-
                         return {
                             id: establishment.id,
                             name: establishment.name,
@@ -77,7 +68,6 @@ const MapComponent = () => {
                 return {};
             }),
         ).then((markers) => {
-            console.log('Markers :', markers);
             setMarkers(
                 markers.filter((marker) => Object.keys(marker).length !== 0),
             );
