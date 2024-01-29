@@ -28,7 +28,7 @@ const MapComponent = () => {
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         // googleMapsApiKey: process.env.API_KEY,
-        googleMapsApiKey: "AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8"
+        googleMapsApiKey: 'AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8',
     });
 
     useEffect(() => {
