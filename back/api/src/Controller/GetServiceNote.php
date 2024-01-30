@@ -34,13 +34,23 @@ class GetServiceNote extends AbstractController
         if (!$feedbacks)
             return new Response(null, Response::HTTP_NOT_FOUND);
 
-        $note = 0;
+        $detailedNote = [ 'note' => 0 ];
 
-        foreach ($feedbacks as $feedback)
-            $note += $feedback->getNote();
+        foreach ($feedbacks as $feedback) {
+            $detailedNote['note'] += $feedback->getNote();
+            $details = $feedback->getDetailedNote();
 
-        $note = round($note / count($feedbacks), 2);
-        $data = $this->serializer->serialize($note, 'json');
+            foreach ($details as $key => $value) {
+                if (!isset($detailedNote[$key]))
+                    $detailedNote[$key] = 0;
+                $detailedNote[$key] += $value;
+            }
+        }
+
+        foreach ($detailedNote as $key => $value)
+            $detailedNote[$key] = round($value / count($feedbacks), 2);
+
+        $data = $this->serializer->serialize($detailedNote, 'json');
 
         return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }

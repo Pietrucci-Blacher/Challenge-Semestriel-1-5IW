@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 
 export const useFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);
-    const [note, setNote] = useState(0);
+    const [detailed, setNote] = useState(0);
 
     const getFeedbacksFromEstablishmentId = useCallback(async (id) => {
         const response = await service.getFeedbacksFromEstablishmentId(id);
@@ -12,7 +12,7 @@ export const useFeedback = () => {
 
     const getEstablishmentNote = useCallback(async (id) => {
         const response = await service.getEstablishmentNote(id);
-        setNote(parseFloat(response));
+        setNote(response);
     }, []);
 
     const getFeedbacksFromServiceId = useCallback(async (id) => {
@@ -22,12 +22,12 @@ export const useFeedback = () => {
 
     const getServiceNote = useCallback(async (id) => {
         const response = await service.getServiceNote(id);
-        setNote(parseFloat(response));
+        setNote(response);
     }, []);
 
     return {
         feedbacks,
-        note,
+        detailed,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
         getFeedbacksFromServiceId,

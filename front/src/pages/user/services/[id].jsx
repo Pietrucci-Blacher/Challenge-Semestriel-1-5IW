@@ -42,12 +42,14 @@ export default function Id() {
     const [specialRequest, setSpecialRequest] = useState('');
     const {
         feedbacks,
-        note,
+        detailed,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
         getFeedbacksFromServiceId,
         getServiceNote,
     } = useFeedback();
+
+    console.log('detailed', detailed);
 
     const { service, getService } = useService();
     const { establishmentTeam, getEstablishmentTeam } = useTeam();
@@ -216,7 +218,7 @@ export default function Id() {
             service: `services/${id}`,
             note: value.resultJson.average,
             comment: value.comment,
-            detailedNote: value.resultJson.establishment,
+            detailedNote: value.resultJson.service,
         });
 
         getFeedbacksFromServiceId(id);
@@ -238,26 +240,6 @@ export default function Id() {
 
     const setMore = (content) => {
         switch (content) {
-            case 'reviews':
-                modalSize = '5xl';
-                modalContent = (
-                    <div id="reviews" className="py-12 w-full ">
-                        <div className="mb-8 w-full">
-                            <h1 className="flex items-center font-semibold text-2xl mb-4">
-                                <HiStar className="mr-2" />
-                                {note} · {feedbacks.length} reviews
-                            </h1>
-                            <RatingList />
-                        </div>
-                        <ReviewsList />
-                        <button
-                            className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                            onClick={() => setMore('feedback')}
-                        >
-                            Ajouter un avis
-                        </button>
-                    </div>
-                );
             case 'feedback':
                 modalSize = '4xl';
                 modalContent = (
@@ -276,7 +258,6 @@ export default function Id() {
                         />
                     </div>
                 );
-                break;
                 break;
             default:
                 modalContent = null;
@@ -457,13 +438,13 @@ export default function Id() {
                         <div className="mb-8 w-full">
                             <h1 className="flex items-center font-semibold text-2xl mb-4">
                                 <HiStar className="mr-2" />
-                                {note} · {feedbacks.length} reviews
+                                {detailed.note} · {feedbacks.length} reviews
                             </h1>
                         </div>
                         <ReviewsList />
                         <button
                             className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                            onClick={() => setMore('reviews')}
+                            onClick={() => setMore('feedback')}
                         >
                             Ajouter un avis
                         </button>
