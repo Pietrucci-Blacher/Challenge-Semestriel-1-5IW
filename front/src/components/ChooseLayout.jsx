@@ -67,14 +67,15 @@ const ChooseLayout = ({ children }) => {
     } else {
         Layout = DefaultLayout;
     }
-
     if (!needsAuth) {
         return (
             <Flowbite>
                 <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
-                    <div>
-                        <Header />
-                    </div>
+                    {!(path.startsWith('/auth/login') || path.startsWith('/auth/register')) && (
+                        <div>
+                            <Header />
+                        </div>
+                    )}
                     <div className="flex flex-row">
                         <Layout>{children}</Layout>
                     </div>
@@ -82,6 +83,7 @@ const ChooseLayout = ({ children }) => {
             </Flowbite>
         );
     }
+
     return (
         <>
             {needsAuth && isAccessAllowed && (

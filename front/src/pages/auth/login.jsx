@@ -58,15 +58,6 @@ export default function Login() {
         <h2>
             {t('login')}
             <br />
-            <br />
-            <br />
-
-            {isLogged ? 'Logged' : 'Not logged'}
-            <br />
-            <br />
-            <div>ossama.dahbi@gmail.com</div>
-
-            <br />
             <form
                 className="flex max-w-md flex-col gap-4"
                 onSubmit={handleSubmitLogin}
