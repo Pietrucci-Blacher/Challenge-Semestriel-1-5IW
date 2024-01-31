@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 
 export default function Input({
-                                  type = 'text',
-                                  placeholder = '',
-                                  label = '',
-                                  value = '',
-                                  onChange = value => {},
-                                  required = false,
-                                  autoComplete = '',
-                                  className = '',
-                              }) {
+    type = 'text',
+    placeholder = '',
+    label = '',
+    value = '',
+    onChange = (value) => {},
+    required = false,
+    autoComplete = '',
+    className = '',
+}) {
     const [inputType, setInputType] = useState(type);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [showLabel, setShowLabel] = useState(false);
@@ -51,7 +51,10 @@ export default function Input({
                     className={`flex-1 ${className}`}
                 />
                 {type === 'password' && (
-                    <button onClick={togglePasswordVisibility} className="absolute right-5 top-1/2 transform -translate-y-1/2">
+                    <button
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-5 top-1/2 transform -translate-y-1/2"
+                    >
                         {eyeIcon}
                     </button>
                 )}

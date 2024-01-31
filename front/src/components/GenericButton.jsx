@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button as FlowbiteButton } from 'flowbite-react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export default function GenericButton({
     label = '',
@@ -19,4 +19,4 @@ GenericButton.propTypes = {
     label: PropTypes.string,
     onClick: PropTypes.func,
     className: PropTypes.string,
-}
+};

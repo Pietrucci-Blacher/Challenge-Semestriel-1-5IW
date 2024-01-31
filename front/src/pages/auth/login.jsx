@@ -8,9 +8,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
-import {HomeIcon} from "@heroicons/react/16/solid";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import nextI18NextConfig from "../../../next-i18next.config";
+import { HomeIcon } from '@heroicons/react/16/solid';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import nextI18NextConfig from '../../../next-i18next.config';
 export default function Login() {
     const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();
@@ -59,10 +59,14 @@ export default function Login() {
                     <div className="flex items-center justify-center gap-2">
                         <Image
                             src="/favicons/icon.svg"
-                            width={64} height={64} alt="Logo"
+                            width={64}
+                            height={64}
+                            alt="Logo"
                             className="rounded-[20px]"
                         />
-                        <h2 className="text-3xl text-center font-extrabold">Coursia</h2>
+                        <h2 className="text-3xl text-center font-extrabold">
+                            Coursia
+                        </h2>
                     </div>
                     <div className="flex flex-col items-center">
                         <div className="w-full flex-1 mt-8">
@@ -74,7 +78,12 @@ export default function Login() {
                                     {t('connectAccount')}
                                 </h1>
                                 <div>
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">{t('yourEmail')}</label>
+                                    <label
+                                        htmlFor="email"
+                                        className="block mb-2 text-sm font-medium text-gray-900"
+                                    >
+                                        {t('yourEmail')}
+                                    </label>
                                     <Input
                                         type="email"
                                         name="email"
@@ -88,7 +97,12 @@ export default function Login() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">{t('password')}</label>
+                                    <label
+                                        htmlFor="password"
+                                        className="block mb-2 text-sm font-medium text-gray-900"
+                                    >
+                                        {t('password')}
+                                    </label>
                                     <Input
                                         type="password"
                                         name="password"
@@ -100,7 +114,12 @@ export default function Login() {
                                         className="block w-full px-2.5 py-3"
                                         required
                                     />
-                                    <Link href="/reset-password/ask" className="text-blue-600 hover:underline text-sm flex justify-end px-3 mt-1.5">{t('forgotPassword')}</Link>
+                                    <Link
+                                        href="/reset-password/ask"
+                                        className="text-blue-600 hover:underline text-sm flex justify-end px-3 mt-1.5"
+                                    >
+                                        {t('forgotPassword')}
+                                    </Link>
                                 </div>
                                 <GenericButton
                                     label={t('login')}
@@ -109,7 +128,13 @@ export default function Login() {
                                 />
                             </form>
                             <div className="mt-8 text-center text-sm font-light text-gray-500">
-                                {t('noAccount')} <Link href="/auth/register" className="font-medium text-blue-600 hover:underline">{t('signUp')}</Link>
+                                {t('noAccount')}{' '}
+                                <Link
+                                    href="/auth/register"
+                                    className="font-medium text-blue-600 hover:underline"
+                                >
+                                    {t('signUp')}
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -118,15 +143,22 @@ export default function Login() {
                             onClick={() => router.push('/')}
                             className="flex items-center text-gray-600 bg-transparent hover:bg-gray-100 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                         >
-                            <HomeIcon className="h-5 w-5 mr-2" aria-hidden="true"/>
+                            <HomeIcon
+                                className="h-5 w-5 mr-2"
+                                aria-hidden="true"
+                            />
                             {t('returnHome')}
                         </button>
                     </div>
                 </div>
                 <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
-                    <div className="w-full bg-contain bg-center bg-no-repeat"
-                         style={{backgroundImage: "url('/images/backgrounds/login_back.svg')"}}>
-                    </div>
+                    <div
+                        className="w-full bg-contain bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage:
+                                "url('/images/backgrounds/login_back.svg')",
+                        }}
+                    ></div>
                 </div>
             </div>
         </div>

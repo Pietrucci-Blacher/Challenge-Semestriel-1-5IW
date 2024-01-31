@@ -4,12 +4,12 @@ import Input from '@/components/Input';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import Image from "next/image";
-import {HomeIcon} from "@heroicons/react/16/solid";
-import {useTranslation} from "next-i18next";
-import {useRouter} from "next/router";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import nextI18NextConfig from "../../../next-i18next.config";
+import Image from 'next/image';
+import { HomeIcon } from '@heroicons/react/16/solid';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import nextI18NextConfig from '../../../next-i18next.config';
 
 export default function Register() {
     const { register } = useAuth();
@@ -65,10 +65,14 @@ export default function Register() {
                     <div className="flex items-center justify-center gap-2">
                         <Image
                             src="/favicons/icon.svg"
-                            width={64} height={64} alt="Logo"
+                            width={64}
+                            height={64}
+                            alt="Logo"
                             className="rounded-[20px]"
                         />
-                        <h2 className="text-3xl text-center font-extrabold">Coursia</h2>
+                        <h2 className="text-3xl text-center font-extrabold">
+                            Coursia
+                        </h2>
                     </div>
                     <div className="flex flex-col items-center">
                         <div className="w-full flex-1 mt-4">
@@ -80,7 +84,13 @@ export default function Register() {
                                     {t('createAccount')}
                                 </h1>
                                 <div>
-                                    <label htmlFor="firstname" className="text-sm font-bold text-gray-700 tracking-wide"> {t('yourFirstName')}</label>
+                                    <label
+                                        htmlFor="firstname"
+                                        className="text-sm font-bold text-gray-700 tracking-wide"
+                                    >
+                                        {' '}
+                                        {t('yourFirstName')}
+                                    </label>
                                     <Input
                                         type="text"
                                         placeholder={t('firstname')}
@@ -91,7 +101,13 @@ export default function Register() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="lastname" className="text-sm font-bold text-gray-700 tracking-wide"> {t('yourLastName')}</label>
+                                    <label
+                                        htmlFor="lastname"
+                                        className="text-sm font-bold text-gray-700 tracking-wide"
+                                    >
+                                        {' '}
+                                        {t('yourLastName')}
+                                    </label>
                                     <Input
                                         type="text"
                                         placeholder={t('lastname')}
@@ -102,7 +118,13 @@ export default function Register() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="email" className="text-sm font-bold text-gray-700 tracking-wide"> {t('yourEmail')}</label>
+                                    <label
+                                        htmlFor="email"
+                                        className="text-sm font-bold text-gray-700 tracking-wide"
+                                    >
+                                        {' '}
+                                        {t('yourEmail')}
+                                    </label>
                                     <Input
                                         type="email"
                                         placeholder={t('emailPlaceholder')}
@@ -113,7 +135,12 @@ export default function Register() {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">{t('yourPassword')}</label>
+                                    <label
+                                        htmlFor="password"
+                                        className="block mb-2 text-sm font-medium text-gray-900"
+                                    >
+                                        {t('yourPassword')}
+                                    </label>
                                     <Input
                                         type="password"
                                         placeholder="••••••••"
@@ -130,8 +157,13 @@ export default function Register() {
                                 />
                             </form>
                             <div className="mt-3 text-center text-sm font-light text-gray-500">
-                                {t('haveAccount')} <Link href="/auth/login"
-                                                         className="font-medium text-blue-600 hover:underline">{t('login')}</Link>
+                                {t('haveAccount')}{' '}
+                                <Link
+                                    href="/auth/login"
+                                    className="font-medium text-blue-600 hover:underline"
+                                >
+                                    {t('login')}
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -140,15 +172,22 @@ export default function Register() {
                             onClick={() => router.push('/')}
                             className="flex items-center text-gray-600 bg-transparent hover:bg-gray-100 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                         >
-                            <HomeIcon className="h-5 w-5 mr-2" aria-hidden="true"/>
+                            <HomeIcon
+                                className="h-5 w-5 mr-2"
+                                aria-hidden="true"
+                            />
                             {t('returnHome')}
                         </button>
                     </div>
                 </div>
                 <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
-                    <div className="w-full bg-contain bg-center bg-no-repeat m-16"
-                         style={{backgroundImage: "url('/images/backgrounds/register_back.svg')"}}>
-                    </div>
+                    <div
+                        className="w-full bg-contain bg-center bg-no-repeat m-16"
+                        style={{
+                            backgroundImage:
+                                "url('/images/backgrounds/register_back.svg')",
+                        }}
+                    ></div>
                 </div>
             </div>
         </div>
