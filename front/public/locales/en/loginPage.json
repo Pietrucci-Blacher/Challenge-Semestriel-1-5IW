@@ -1,8 +1,8 @@
 {
     "login": "Login",
     "forgotPassword": "Forgot password",
-    "emailPlaceholder": "Email",
     "connectAccount": "Connect to your account",
+    "emailPlaceholder": "Email",
     "yourEmail": "Your email",
     "password": "Password",
     "signUp": "Sign up",
