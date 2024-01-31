@@ -1,3 +1,11 @@
 {
-    "login": "Connexion"
+    "login": "Connexion au compte",
+    "forgotPassword": "Mot de passe oublié",
+    "emailPlaceholder": "Email",
+    "connectAccount": "Connectez-vous à votre compte",
+    "yourEmail": "Votre email",
+    "password": "Mot de passe",
+    "signUp": "S'inscrire",
+    "noAccount": "Pas encore de compte ?",
+    "returnHome": "Retour à l'accueil"
 }
