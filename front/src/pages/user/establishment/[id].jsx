@@ -153,17 +153,23 @@ const ShowEstablishment = () => {
         },
     ];
 
-    const Review = ({ name, date, imageSrc, content }) => (
+    const Review = ({ name, date, imageSrc, content, note }) => (
         <li className="mb-[40px] pr-16">
             <div className="mb-4">
-                <Image
+                {/*<Image
                     className="float-left mr-3 rounded-[100%]"
                     src={imageSrc}
                     width={40}
                     height={40}
                     alt={`Profile of ${name}`}
-                />
-                <p className="block font-semibold text-base">{name}</p>
+                />*/}
+                <p className="block font-semibold text-base">
+                    {name}
+                    <span className="ml-2">
+                        <HiStar className="inline-block mr-1" />
+                        {note}
+                    </span>
+                </p>
                 <p className="text-[#717171] text-sm">{date}</p>
             </div>
             <p className="p-0">{content}</p>
@@ -178,6 +184,7 @@ const ShowEstablishment = () => {
                   date={feedback.createdAt}
                   imageSrc="https://a0.muscache.com/im/pictures/user/48bfe386-b947-443d-a7d8-9ba16dd87c1f.jpg?im_w=240"
                   content={feedback.comment}
+                  note={feedback.note}
               />
           ))
         : 'No feedbacks';
@@ -188,53 +195,33 @@ const ShowEstablishment = () => {
 
     ReviewsList.displayName = 'ReviewsList';
 
+    const renderRating = (name) => {
+        const rating = detailed[name] || 0;
+        const percentage = (rating / 5) * 100;
+
+        return (
+            <li className="pr-16 flex items-center mb-4">
+                <p className="text-[17px] w-full">{name}</p>
+                <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
+                    <span
+                        className="text-[#222] bg-black block h-1"
+                        style={{ width: `${percentage}%` }}
+                    ></span>
+                </div>
+                <p className="w-1/6 text-[13px] font-semibold mr-2">{rating}</p>
+            </li>
+        );
+    };
+
     const RatingList = memo(() => (
         <ul className="w-full flex justify-between">
             <ul className="w-2/5 block mr-[10%]">
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Cleanliness</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[92%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.8</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Communication</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Check-in</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
+                {renderRating('Qualité des cours')}
+                {renderRating('Professionalisme')}
             </ul>
             <ul className="w-2/5 block mr-[10%]">
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Accuracy</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Location</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[92%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.8</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Value</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[90%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.7</p>
-                </li>
+                {renderRating('Rapport Qualité Prix')}
+                {renderRating('Communication')}
             </ul>
         </ul>
     ));
@@ -508,7 +495,8 @@ const ShowEstablishment = () => {
                                 night
                             </p>
                             <div className="flex items-center text-[15px]">
-                                <HiStar className="mr-1" />5
+                                <HiStar className="mr-1" />
+                                <span>{detailed.note}</span>
                                 <span className="mx-1">·</span>
                                 <span className="text-[#717171] font-normal">
                                     {feedbacks.length} reviews
