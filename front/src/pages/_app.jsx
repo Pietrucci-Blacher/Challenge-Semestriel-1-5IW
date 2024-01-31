@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import { ToastProvider } from '@/providers/ToastProvider';
 import ChooseLayout from '@/components/ChooseLayout';
 import { appWithTranslation } from 'next-i18next';
-import nextI18n from '../../next-i18next.config';
+import nextI18n from '../../next-i18next.config.js';
 
 function MyApp({ Component, pageProps }) {
     return (

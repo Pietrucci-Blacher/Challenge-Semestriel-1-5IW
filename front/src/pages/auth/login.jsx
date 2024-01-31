@@ -7,20 +7,21 @@ import { useAuthContext } from '@/providers/AuthProvider';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useTranslation } from 'next-i18next';
-
+import Image from 'next/image';
+import {HomeIcon} from "@heroicons/react/16/solid";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import nextI18NextConfig from "../../../next-i18next.config";
 export default function Login() {
     const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();
     const { login } = useAuth();
     const { t, i18n } = useTranslation('loginPage');
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
-        firstname: 'email@email.com',
-        lastname: 'email@email.com',
-        email: 'email@email.com',
-        password: 'email@email.com',
+        email: '',
+        password: '',
     });
-    const router = useRouter();
 
     const handleInputEmailChange = (value) => {
         setFormData({ ...formData, email: value });
@@ -39,55 +40,110 @@ export default function Login() {
         }
         try {
             await login(formData);
+            router.push('/profile');
         } catch (error) {
             createToastMessage('error', error);
         }
     };
 
     useEffect(() => {
-        const goToProfilePage = async () => {
-            if (isLogged === true && user) {
-                await router.push('/profile');
-            }
-        };
-
-        goToProfilePage();
+        if (isLogged === true && user) {
+            router.push('/profile');
+        }
     }, [user, isLogged, router]);
 
     return (
-        <h2>
-            {t('login')}
-            <br />
-            <form
-                className="flex max-w-md flex-col gap-4"
-                onSubmit={handleSubmitLogin}
-            >
-                <div>
-                    <Input
-                        label="Email"
-                        type="email"
-                        placeholder="Email"
-                        onChange={handleInputEmailChange}
-                        value={formData.email}
-                    />
+        <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+            <div className="relative m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+                <div className="lg:w-1/2 xl:w-4/12 p-6 sm:p-12 gap-2">
+                    <div className="flex items-center justify-center gap-2">
+                        <Image
+                            src="/favicons/icon.svg"
+                            width={64} height={64} alt="Logo"
+                            className="rounded-[20px]"
+                        />
+                        <h2 className="text-3xl text-center font-extrabold">Coursia</h2>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <div className="w-full flex-1 mt-8">
+                            <form
+                                className="w-full max-w-md bg-white rounded-lg shadow p-8 space-y-8"
+                                onSubmit={handleSubmitLogin}
+                            >
+                                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                                    {t('connectAccount')}
+                                </h1>
+                                <div>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">{t('yourEmail')}</label>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        placeholder={t('emailPlaceholder')}
+                                        onChange={handleInputEmailChange}
+                                        value={formData.email}
+                                        autoComplete="email"
+                                        className="block w-full px-2.5 py-3"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">{t('password')}</label>
+                                    <Input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        placeholder="••••••••"
+                                        onChange={handleInputPasswordChange}
+                                        value={formData.password}
+                                        autoComplete="current-password"
+                                        className="block w-full px-2.5 py-3"
+                                        required
+                                    />
+                                    <Link href="/reset-password/ask" className="text-blue-600 hover:underline text-sm flex justify-end px-3 mt-1.5">{t('forgotPassword')}</Link>
+                                </div>
+                                <GenericButton
+                                    label={t('login')}
+                                    onClick={handleSubmitLogin}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-8 py-1 text-center focus:outline-none focus:ring-4 focus:ring-blue-300"
+                                />
+                            </form>
+                            <div className="mt-8 text-center text-sm font-light text-gray-500">
+                                {t('noAccount')} <Link href="/auth/register" className="font-medium text-blue-600 hover:underline">{t('signUp')}</Link>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 mb-4 ml-4">
+                        <button
+                            onClick={() => router.push('/')}
+                            className="flex items-center text-gray-600 bg-transparent hover:bg-gray-100 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                        >
+                            <HomeIcon className="h-5 w-5 mr-2" aria-hidden="true"/>
+                            {t('returnHome')}
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <Input
-                        label="Password"
-                        type="Password"
-                        placeholder="Password"
-                        onChange={handleInputPasswordChange}
-                        value={formData.password}
-                    />
+                <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+                    <div className="w-full bg-contain bg-center bg-no-repeat"
+                         style={{backgroundImage: "url('/images/backgrounds/login_back.svg')"}}>
+                    </div>
                 </div>
-                <GenericButton label="Login" />
-            </form>
-
-            <br />
-            <Link href="/auth/register">Register</Link>
-            <br />
-            <br />
-            <Link href="/reset-password/ask">Forgot Password</Link>
-        </h2>
+            </div>
+        </div>
     );
+}
+
+export async function getStaticProps(context) {
+    const { locale } = context;
+
+    return {
+        props: {
+            // pass the translation props to the page component
+            ...(await serverSideTranslations(
+                locale ?? 'fr',
+                ['loginPage'],
+                nextI18NextConfig,
+            )),
+        },
+    };
 }

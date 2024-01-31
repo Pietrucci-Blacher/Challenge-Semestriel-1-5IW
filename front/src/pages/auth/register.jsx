@@ -2,7 +2,6 @@ import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
 import Input from '@/components/Input';
 import { useState } from 'react';
-import { useAuthContext } from '@/providers/AuthProvider';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
@@ -11,10 +10,10 @@ export default function Register() {
     const { createToastMessage } = useToast();
 
     const [formData, setFormData] = useState({
-        firstname: 'email@email.com',
-        lastname: 'email@email.com',
-        email: 'email@email.com',
-        password: 'email@email.com',
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
     });
     const { firstname, lastname, email, password } = formData;
 
@@ -52,55 +51,44 @@ export default function Register() {
         }
     };
     return (
-        <>
-            <h2>
-                Register
-                <br />
-                <br />
-                <br />
+        <div>
+            Register
+            <Link href="/auth/login">Login</Link>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <p>Firstname: {formData.firstname}</p>
-                    <p>Lastname: {formData.lastname}</p>
-                    <p>Email: {formData.email}</p>
-                    <p>Password: {formData.password}</p>
+                    <Input
+                        label="firstname"
+                        type="firstname"
+                        placeholder="firstname"
+                        onChange={handleInputFirstnameChange}
+                        value={firstname}
+                    />
+                    <Input
+                        label="lastname"
+                        type="lastname"
+                        placeholder="lastname"
+                        onChange={handleInputLastnameChange}
+                        value={lastname}
+                    />
+                    <Input
+                        label="Email"
+                        type="email"
+                        placeholder="Email"
+                        onChange={handleInputEmailChange}
+                        value={email}
+                    />
+                    <Input
+                        label="Password"
+                        type="Password"
+                        placeholder="Password"
+                        onChange={handleInputPasswordChange}
+                        value={password}
+                    />
                 </div>
-                <Link href="/auth/login">Login</Link>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <Input
-                            label="firstname"
-                            type="firstname"
-                            placeholder="firstname"
-                            onChange={handleInputFirstnameChange}
-                            value={firstname}
-                        />
-                        <Input
-                            label="lastname"
-                            type="lastname"
-                            placeholder="lastname"
-                            onChange={handleInputLastnameChange}
-                            value={lastname}
-                        />
-                        <Input
-                            label="Email"
-                            type="email"
-                            placeholder="Email"
-                            onChange={handleInputEmailChange}
-                            value={email}
-                        />
-                        <Input
-                            label="Password"
-                            type="Password"
-                            placeholder="Password"
-                            onChange={handleInputPasswordChange}
-                            value={password}
-                        />
-                    </div>
 
-                    <GenericButton label="S'inscrire" />
-                </form>
-                <br />
-            </h2>
-        </>
+                <GenericButton label="S'inscrire"/>
+            </form>
+            <br/>
+        </div>
     );
 }
