@@ -55,7 +55,7 @@ export default function AdminIndex() {
                         </div>
                     </Card>
 
-                    <Card className="w-full md:w-1/2">
+                    <Card className="w-full md:w-1/2 h-fit">
                         <div className="p-4">
                             <h5 className="text-lg font-semibold">
                                 Recent Bookings
