@@ -15,7 +15,6 @@ class TranslationController extends AbstractController
     public function getTranslations($language): JsonResponse
     {
         $path = "../config/translations/translations_$language.yaml";
-        print_r($path);
         if (!file_exists($path)) {
             return new JsonResponse(['error' => 'Language file not found'], 404);
         }
