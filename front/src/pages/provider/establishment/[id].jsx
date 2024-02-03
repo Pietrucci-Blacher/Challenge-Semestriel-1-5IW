@@ -7,6 +7,7 @@ import {
     Button as FlowbiteButton,
     Select,
     Tabs,
+    Table,
 } from 'flowbite-react';
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
@@ -22,6 +23,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
+import {
+    HiStar,
+    HiSpeakerphone,
+    HiOutlineUpload,
+    HiOutlineHeart,
+    HiViewGrid,
+    HiBadgeCheck,
+    HiKey,
+    HiOutlineArrowRight,
+    HiArrowDown,
+} from 'react-icons/hi';
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -39,7 +51,12 @@ export default function ShowEstablishment() {
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
     } = useSchedule();
-    const { feedbacks, getFeedbacksFromEstablishmentId } = useFeedback();
+    const {
+        feedbacks,
+        detailed,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+    } = useFeedback();
     const [points, setPoints] = useState([]);
 
     const userColors = {};
@@ -83,12 +100,14 @@ export default function ShowEstablishment() {
         getEstablishmentTeam(id);
         getEstablishmentSchedules(id);
         getFeedbacksFromEstablishmentId(id);
+        getEstablishmentNote(id);
     }, [
         getEstablishmentById,
         getEstablishmentServices,
         getEstablishmentTeam,
         getEstablishmentSchedules,
         getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
         router,
     ]);
 
@@ -121,7 +140,7 @@ export default function ShowEstablishment() {
         const percentage = (rating / 5) * 100;
 
         return (
-            <li key={name} className="pr-16 flex items-center mb-4">
+            <li key={name} className="pr-16 flex items-center">
                 <p className="text-[17px] w-full">{name}</p>
                 <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
                     <span
@@ -133,6 +152,24 @@ export default function ShowEstablishment() {
             </li>
         );
     };
+
+    const renderServices = establishmentServices
+        ? establishmentServices.flat().map((service) => (
+              <Table.Row key={service.id}>
+                  <Table.Cell>{service.title}</Table.Cell>
+                  <Table.Cell>{service.description}</Table.Cell>
+                  <Table.Cell>{service.price}</Table.Cell>
+                  <Table.Cell>
+                      <a
+                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                          href={`/provider/services/${service.id}`}
+                      >
+                          Voir
+                      </a>
+                  </Table.Cell>
+              </Table.Row>
+          ))
+        : 'Chargement en cours';
 
     return (
         <>
@@ -205,17 +242,20 @@ export default function ShowEstablishment() {
                 </Tabs.Item>
                 <Tabs.Item title="Etablissement Info" icon={MdDashboard}>
                     <div className="mt-4">
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Establishment info:
-                        </h1>
                         <>
                             {establishment && (
-                                <div className="mt-2">
-                                    <p>Name: {establishment.name}</p>
-                                    <p>Street: {establishment.street}</p>
-                                    <p>City: {establishment.city}</p>
-                                    <p>Zip Code: {establishment.zipCode}</p>
-                                </div>
+                                <>
+                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {establishment.name}
+                                        <HiStar className="inline-block mx-1" />
+                                        {detailed.note}
+                                    </h1>
+                                    <div className="mt-2">
+                                        <p>Street: {establishment.street}</p>
+                                        <p>City: {establishment.city}</p>
+                                        <p>Zip Code: {establishment.zipCode}</p>
+                                    </div>
+                                </>
                             )}
                         </>
                     </div>
@@ -238,37 +278,20 @@ export default function ShowEstablishment() {
                 <Tabs.Item title="Services" icon={HiUserCircle}>
                     <div className="mt-4">
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Service pour {establishment?.name}:
+                            Service pour {establishment?.name}
                         </h1>
-                        <>
-                            {establishmentServices.length > 0 ? (
-                                establishmentServices.map((service, index) => (
-                                    <div className="mt-2" key={index}>
-                                        <p className="text-xl font-bold">
-                                            Service {index + 1}
-                                        </p>
-                                        <p>Title: {service.title}</p>
-                                        <p>Prix: {service.price}</p>
-                                        <p className="editor-html">
-                                            Body:{' '}
-                                            {convertDataToHtml(
-                                                service.body.blocks,
-                                            )}
-                                        </p>
-                                        <p>
-                                            Description: {service.description}
-                                        </p>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="mt-2">
-                                    <p>Aucun service</p>
-                                </div>
-                            )}
-                        </>
+                        <Table hoverable className="mt-2">
+                            <Table.Head>
+                                <Table.HeadCell>Titre</Table.HeadCell>
+                                <Table.HeadCell>Description</Table.HeadCell>
+                                <Table.HeadCell>Prix</Table.HeadCell>
+                                <Table.HeadCell>Actions</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body>{renderServices}</Table.Body>
+                        </Table>
                     </div>
                 </Tabs.Item>
-                <Tabs.Item title="Feedback" icon={HiUserCircle}>
+                <Tabs.Item title="Feedback" icon={HiOutlineHeart}>
                     <div className="mt-4">
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Feedback pour {establishment?.name}:
@@ -277,7 +300,11 @@ export default function ShowEstablishment() {
                             {feedbacks.length > 0 ? (
                                 feedbacks.map((feedback, index) => (
                                     <div className="mt-2" key={index}>
-                                        <p>Note moyenne: {feedback.note}</p>
+                                        <p>
+                                            {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                                            <HiStar className="inline-block mx-1" />
+                                            {feedback.note}
+                                        </p>
                                         <p>
                                             {Object.keys(
                                                 feedback.detailedNote,
@@ -288,7 +315,9 @@ export default function ShowEstablishment() {
                                                 ),
                                             )}
                                         </p>
-                                        <p>Comment: {feedback.comment}</p>
+                                        <p className="py-2">
+                                            {feedback.comment}
+                                        </p>
                                     </div>
                                 ))
                             ) : (
