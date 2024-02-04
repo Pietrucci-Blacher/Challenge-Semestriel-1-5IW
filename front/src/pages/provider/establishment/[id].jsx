@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEstablishment } from '@/hooks/useEstablishment';
 import { useFeedback } from '@/hooks/useFeedback';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import {
     Breadcrumb,
     Button as FlowbiteButton,
@@ -34,6 +34,7 @@ import {
     HiOutlineArrowRight,
     HiArrowDown,
 } from 'react-icons/hi';
+import { Rating } from '@/components/Rating';
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -135,23 +136,20 @@ export default function ShowEstablishment() {
             });
     };
 
-    const renderRating = (name, container) => {
-        const rating = container[name] || 0;
-        const percentage = (rating / 5) * 100;
+    const RatingList = memo(() => (
+        <ul className="w-full flex justify-between">
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Qualité des cours', detailed)}
+                {Rating('Professionalisme', detailed)}
+            </ul>
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
+            </ul>
+        </ul>
+    ));
 
-        return (
-            <li key={name} className="pr-16 flex items-center">
-                <p className="text-[17px] w-full">{name}</p>
-                <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                    <span
-                        className="text-[#222] bg-black block h-1"
-                        style={{ width: `${percentage}%` }}
-                    ></span>
-                </div>
-                <p className="w-1/6 text-[13px] font-semibold mr-2">{rating}</p>
-            </li>
-        );
-    };
+    RatingList.displayName = 'RatingList';
 
     const renderServices = establishmentServices
         ? establishmentServices.flat().map((service) => (
@@ -250,6 +248,7 @@ export default function ShowEstablishment() {
                                         <HiStar className="inline-block mx-1" />
                                         {detailed.note}
                                     </h1>
+                                    <RatingList />
                                     <div className="mt-2">
                                         <p>Street: {establishment.street}</p>
                                         <p>City: {establishment.city}</p>
@@ -309,7 +308,7 @@ export default function ShowEstablishment() {
                                             {Object.keys(
                                                 feedback.detailedNote,
                                             ).map((key) =>
-                                                renderRating(
+                                                Rating(
                                                     key,
                                                     feedback.detailedNote,
                                                 ),

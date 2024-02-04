@@ -33,6 +33,7 @@ import Feedback from '@/components/Feedback';
 import { useFeedback } from '@/hooks/useFeedback';
 import ModalComponent from '@/components/Modal';
 import { useAuthContext } from '@/providers/AuthProvider';
+import { Rating } from '@/components/Rating';
 
 export default function Id() {
     const { user } = useAuthContext();
@@ -133,33 +134,15 @@ export default function Id() {
 
     ReviewsList.displayName = 'ReviewsList';
 
-    const renderRating = (name) => {
-        const rating = detailed[name] || 0;
-        const percentage = (rating / 5) * 100;
-
-        return (
-            <li className="pr-16 flex items-center mb-4">
-                <p className="text-[17px] w-full">{name}</p>
-                <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                    <span
-                        className="text-[#222] bg-black block h-1"
-                        style={{ width: `${percentage}%` }}
-                    ></span>
-                </div>
-                <p className="w-1/6 text-[13px] font-semibold mr-2">{rating}</p>
-            </li>
-        );
-    };
-
     const RatingList = memo(() => (
         <ul className="w-full flex justify-between">
             <ul className="w-2/5 block mr-[10%]">
-                {renderRating('Qualité du cours')}
-                {renderRating('Pédagogie')}
+                {Rating('Qualité du cours', detailed)}
+                {Rating('Pédagogie', detailed)}
             </ul>
             <ul className="w-2/5 block mr-[10%]">
-                {renderRating('Rapport Qualité Prix')}
-                {renderRating('Communication')}
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
             </ul>
         </ul>
     ));

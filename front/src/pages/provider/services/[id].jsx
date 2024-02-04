@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { useToast } from '@/hooks/useToast';
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
@@ -25,6 +25,7 @@ import {
     HiUserCircle,
 } from 'react-icons/hi';
 import { useFeedback } from '@/hooks/useFeedback';
+import { Rating } from '@/components/Rating';
 
 export default function ShowService() {
     const router = useRouter();
@@ -54,28 +55,26 @@ export default function ShowService() {
             createToastMessage('error', 'Une erreur est survenue');
         }
     };
-    const renderRating = (name, container) => {
-        const rating = container[name] || 0;
-        const percentage = (rating / 5) * 100;
 
-        return (
-            <li key={name} className="pr-16 flex items-center">
-                <p className="text-[17px] w-full">{name}</p>
-                <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                    <span
-                        className="text-[#222] bg-black block h-1"
-                        style={{ width: `${percentage}%` }}
-                    ></span>
-                </div>
-                <p className="w-1/6 text-[13px] font-semibold mr-2">{rating}</p>
-            </li>
-        );
-    };
+    const RatingList = memo(() => (
+        <ul className="w-full flex justify-between">
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Qualité du cours', detailed)}
+                {Rating('Pédagogie', detailed)}
+            </ul>
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
+            </ul>
+        </ul>
+    ));
+
+    RatingList.displayName = 'RatingList';
 
     const renderService = service ? (
         <>
             <div className="w-full mr-4 mb-4">
-                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded mb-4">
+                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded my-2">
                     <h1 className="font-medium text-3xl">
                         {service.title}
                         <HiStar className="inline-block mx-1" />
@@ -89,8 +88,12 @@ export default function ShowService() {
                         {service.author.lastname}
                     </p>
                 </div>
-                <div className="editor-html">
+                <div className="editor-html my-2">
                     {convertDataToHtml(service.body.blocks)}
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded my-2">
+                    <h1 className="font-medium text-3xl">Note détaillée</h1>
+                    <RatingList />
                 </div>
             </div>
             <img
@@ -124,7 +127,7 @@ export default function ShowService() {
                                     <p>
                                         {Object.keys(feedback.detailedNote).map(
                                             (key) =>
-                                                renderRating(
+                                                Rating(
                                                     key,
                                                     feedback.detailedNote,
                                                 ),
