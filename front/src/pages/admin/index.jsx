@@ -1,6 +1,13 @@
 import { Table, Card } from 'flowbite-react';
 import { Line } from 'react-chartjs-2';
+import { useStats } from '@/hooks/useStats';
+import { useEffect } from 'react';
 export default function AdminIndex() {
+    const { userNumber, getUserNumbers } = useStats();
+
+    useEffect(() => {
+        getUserNumbers();
+    }, [getUserNumbers]);
     return (
         <div className="flex h-full bg-gray-50 dark:bg-gray-900">
             <main className="flex-1 flex flex-col px-6 gap-6">
@@ -36,8 +43,8 @@ export default function AdminIndex() {
                     })}
                     {renderCard({
                         title: 'Active Users',
-                        value: '987',
-                        change: '+50% from last month',
+                        value: userNumber,
+                        change: '',
                         icon: (
                             <GroupIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         ),
