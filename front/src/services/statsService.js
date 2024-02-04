@@ -4,4 +4,12 @@ const getUsersNumber = async () => {
     return await httpClient.get('users');
 };
 
-export { getUsersNumber };
+const getActiveCompaniesNumber = async () => {
+    return await httpClient.get('establishments');
+};
+
+const getTotalCourseBookings = async () => {
+    return await httpClient.get('reservations');
+};
+
+export { getUsersNumber, getActiveCompaniesNumber, getTotalCourseBookings };

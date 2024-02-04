@@ -2,12 +2,22 @@ import { Table, Card } from 'flowbite-react';
 import { Line } from 'react-chartjs-2';
 import { useStats } from '@/hooks/useStats';
 import { useEffect } from 'react';
+import { HiHome } from 'react-icons/hi';
 export default function AdminIndex() {
-    const { userNumber, getUserNumbers } = useStats();
+    const {
+        userNumber,
+        getUserNumber,
+        companieNumber,
+        getCompaniesNumber,
+        bookingNumber,
+        getTotalBookings,
+    } = useStats();
 
     useEffect(() => {
-        getUserNumbers();
-    }, [getUserNumbers]);
+        getUserNumber();
+        getCompaniesNumber();
+        getTotalBookings();
+    }, [getUserNumber, getCompaniesNumber, getTotalBookings]);
     return (
         <div className="flex h-full bg-gray-50 dark:bg-gray-900">
             <main className="flex-1 flex flex-col px-6 gap-6">
@@ -19,10 +29,10 @@ export default function AdminIndex() {
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     {renderCard({
                         title: 'Total Bookings',
-                        value: '1,245',
-                        change: '+10% from last month',
+                        value: bookingNumber,
+                        change: '',
                         icon: (
-                            <PlaneIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            <HiAcademicCap className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         ),
                     })}
                     {renderCard({
@@ -34,11 +44,11 @@ export default function AdminIndex() {
                         ),
                     })}
                     {renderCard({
-                        title: 'Revenue',
-                        value: '$1,234,567',
-                        change: '+2% from last month',
+                        title: 'Active companies',
+                        value: companieNumber,
+                        change: '',
                         icon: (
-                            <DollarSignIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            <HiHome className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         ),
                     })}
                     {renderCard({
@@ -175,27 +185,6 @@ function CurvedlineChart(props) {
 
     return <Line data={data} options={options} {...props} />;
 }
-
-function DollarSignIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http:www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <line x1="12" x2="12" y1="2" y2="22" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-    );
-}
-
 function GroupIcon(props) {
     return (
         <svg
