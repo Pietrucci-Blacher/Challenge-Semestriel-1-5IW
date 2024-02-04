@@ -61,7 +61,7 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['establishment:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
@@ -79,7 +79,7 @@ class Establishment
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]

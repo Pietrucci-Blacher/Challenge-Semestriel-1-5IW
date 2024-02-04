@@ -1,42 +1,69 @@
 import {useCallback, useState} from "react";
 import {
     addReservation,
-    getEstablishmentReservations, getServiceReservations,
+    getEstablishmentReservations, getReservation, getServiceReservations,
     getTeacherReservations,
-    getUserReservations
+    getUserReservations, updateReservation
 } from "@/services/reservationService";
 
 export const useReservation = () => {
-    const [reservations, setReservations] = useState(null)
+    const [reservation, setReservation] = useState({})
+    const [reservations, setReservations] = useState([])
     const createReservation = useCallback(async (payload) => {
         const response = await addReservation(payload)
     }, []);
 
+    const fetchReservation = useCallback(async (reservationId) => {
+        try {
+            const response = await getReservation(reservationId)
+            setReservation(response)
+        } catch (e) {
+            setReservation(null)
+            throw e
+        }
+    }, []);
+
+    const moveReservation = useCallback(async (payload) => {
+        try {
+            const response = await updateReservation(payload)
+            setReservation(response)
+        } catch (e) {
+            setReservation(null)
+            throw e
+        }
+    }, []);
+
     const fetchUserReservations = useCallback(async (userId) => {
         const response = await getUserReservations(userId)
-        setReservations("a")
+        const reservations = response["hydra:member"]
+        setReservations(reservations)
     }, []);
 
 
     const fetchTeacherReservations = useCallback(async (teacherId) => {
         const response = await getTeacherReservations(teacherId)
-        setReservations("a")
+        setReservations(response)
     }, []);
 
     const fetchEstablishmentReservations = useCallback(async (establishmentId) => {
         const response = await getEstablishmentReservations(establishmentId)
-        setReservations("a")
+        setReservations(response)
     }, []);
 
 
     const fetchServiceReservations = useCallback(async (serviceId) => {
         const response = await getServiceReservations(serviceId)
-        setReservations("a")
+        setReservations(response)
     }, []);
 
 
     return {
+        reservation,
         reservations,
-        createReservation
+        createReservation,
+        fetchReservation,
+        fetchUserReservations,
+        fetchEstablishmentReservations,
+        moveReservation
     }
 }

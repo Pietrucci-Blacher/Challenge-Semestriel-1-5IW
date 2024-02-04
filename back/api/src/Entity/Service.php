@@ -71,11 +71,11 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['service:read'])]
+    #[Groups(['service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -83,7 +83,7 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
     private ?float $price = null;
 
@@ -92,7 +92,7 @@ class Service
     private ?array $body = [];
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]

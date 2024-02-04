@@ -14,15 +14,15 @@ export const addScheduleService = ({
     });
 };
 
-export const getUserSchedulesService = ({ userId }) => {
-    return httpClient.get(`users/${userId}/schedules`);
+export const getTeacherSchedulesService = ({ teacherId }) => {
+    return httpClient.get(`users/${teacherId}/schedules`);
 };
 
 export const getEstablishmentSchedulesService = ({ establishmentId }) => {
     return httpClient.get(`establishments/${establishmentId}/schedules`);
 };
 
-export const getSchedulesByUserAndEstablishmentService = ({
+export const getSchedulesByTeacherAndEstablishmentService = ({
     establishmentId,
     userId,
 }) => {

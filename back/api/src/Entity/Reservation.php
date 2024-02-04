@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
@@ -15,6 +16,7 @@ use App\Repository\ReservationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +24,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/reservations',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'customer', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/teachers/{userId}/reservations',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'teacher', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/services/{serviceId}/reservations',
+            uriVariables: [
+                'serviceId' => new Link(toProperty: 'service', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/establishments/{establishmentId}/reservations',
+            uriVariables: [
+                'establishmentId' => new Link(toProperty: 'establishment', fromClass: Reservation::class),
+            ],
+        ),
+        new Get(
+            security: "object.getCustomer() == user or object.getTeacher() == user or object.getEstablishment().getOwner() == user",
+            securityMessage: 'Acces denied'
+        ),
         new Post(
             controller: CreateReservation::class,
             input: CreateReservationDto::class,
@@ -30,7 +59,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(),
         new Delete()
-    ]
+    ],
+    normalizationContext: ['groups' => ['reservation:read']]
+
 )]
 #[UniqueEntity(
     fields: ['teacher', 'startTime', 'endTime'],
@@ -41,32 +72,39 @@ class Reservation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-//    #[UserField('customer')]
+    #[Groups(['reservation:read'])]
     private ?User $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['reservation:read'])]
     private ?Establishment $establishment = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['reservation:read'])]
     private ?Service $service = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $endTime = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['reservation:read'])]
     private ?string $specialRequests = null;
 
     #[ORM\ManyToOne(inversedBy: 'teacherReservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['reservation:read'])]
     private ?User $teacher = null;
 
     #[ORM\OneToOne(inversedBy: 'reservation', cascade: ['persist', 'remove'])]
@@ -181,7 +219,7 @@ class Reservation
         $endTime = $this->endTime;
         $currentDate = new \DateTime();
         if ($startTime <= $currentDate) {
-            $context->buildViolation('Le startTime doit être dans le futur ' )
+            $context->buildViolation('Le startTime doit être dans le futur ')
                 ->atPath('startTime')
                 ->addViolation();
         }

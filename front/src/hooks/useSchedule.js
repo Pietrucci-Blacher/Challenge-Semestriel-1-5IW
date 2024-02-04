@@ -1,13 +1,15 @@
 import {useCallback, useState} from "react";
 import {
     addScheduleService,
-    deleteScheduleService, getEstablishmentSchedulesService, getSchedulesByUserAndEstablishmentService,
-    getUserSchedulesService,
+    deleteScheduleService,
+    getEstablishmentSchedulesService,
+    getSchedulesByTeacherAndEstablishmentService,
+    getTeacherSchedulesService,
     updateScheduleService
 } from "@/services/scheduleService";
 
 export const useSchedule = () => {
-    const [userId, setUserId] = useState(null)
+    const [teacherId, setTeacherId] = useState(null)
     const [establishmentId, setEstablishmentId] = useState(null);
     const [schedule, setSchedule] = useState(null)
     const [schedules, setSchedules] = useState([])
@@ -20,16 +22,16 @@ export const useSchedule = () => {
             establishment: `/establishments/${newSchedule["establishment"]}`,
         }
         const response = await addScheduleService(payload)
-    }, [userId]);
+    }, [teacherId]);
 
     const updateSchedule = useCallback(async (id, payload) => {
         const schedule = await updateScheduleService(id, payload)
         const scheduleIndex = schedules.findIndex(schedule => schedule.id === +id);
         if (scheduleIndex !== -1) {
-            const updatedUserSchedules = [...schedules];
-            updatedUserSchedules[scheduleIndex] = {...updatedUserSchedules[scheduleIndex], ...schedule};
+            const updatedTeacherSchedules = [...schedules];
+            updatedTeacherSchedules[scheduleIndex] = {...updatedTeacherSchedules[scheduleIndex], ...schedule};
             setSchedules([]);
-            setSchedules(updatedUserSchedules);
+            setSchedules(updatedTeacherSchedules);
         }
     }, [schedules]);
 
@@ -43,16 +45,17 @@ export const useSchedule = () => {
         }
     }, [schedules]);
 
-    const getUserSchedules = useCallback(async (userId) => {
+    const getTeacherSchedules = useCallback(async (teacherId) => {
+        console.log(teacherId)
         try {
-            const data = await getUserSchedulesService({userId})
+            const data = await getTeacherSchedulesService({teacherId})
             const schedulesData = data["hydra:member"] ?? []
-            setUserId(userId)
+            setTeacherId(teacherId)
             setSchedules(schedulesData);
         } catch (error) {
             console.error('Erreur lors de la récupération des indisponibilités:', error);
         }
-    }, [userId]);
+    }, [teacherId]);
 
     const getEstablishmentSchedules = useCallback(async (establishmentId) => {
         try {
@@ -60,18 +63,18 @@ export const useSchedule = () => {
             const data = await getEstablishmentSchedulesService({establishmentId})
             const schedulesData = data["hydra:member"] ?? []
             setSchedules(schedulesData);
-            setEstablishmentId(userId);
+            setEstablishmentId(teacherId);
         } catch (error) {
             console.error('Erreur lors de la récupération des indisponibilités:', error);
         }
     }, []);
 
-    const getSchedulesByUserAndEstablishment = useCallback(async ({ establishmentId,userId }) => {
+    const getSchedulesByTeacherAndEstablishment = useCallback(async ({ establishmentId,teacherId }) => {
         try {
-            const data = await getSchedulesByUserAndEstablishmentService({ establishmentId,userId })
+            const data = await getSchedulesByTeacherAndEstablishmentService({ establishmentId,teacherId })
             const schedulesData = data["hydra:member"] ?? []
             setSchedules(schedulesData);
-            setUserId(userId);
+            setTeacherId(teacherId);
         } catch (error) {
             console.error('Erreur lors de la récupération des indisponibilités:', error);
         }
@@ -82,12 +85,12 @@ export const useSchedule = () => {
     return {
         schedules,
         schedule,
-        // schedulesByUserAndEstablishment,
+        // schedulesByTeacherAndEstablishment,
         addSchedule,
         updateSchedule,
         deleteSchedule,
-        getUserSchedules,
+        getTeacherSchedules,
         getEstablishmentSchedules,
-        getSchedulesByUserAndEstablishment,
+        getSchedulesByTeacherAndEstablishment,
     };
 };

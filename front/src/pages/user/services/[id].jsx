@@ -17,7 +17,7 @@ export default function Id() {
 
     const {service, getService} = useService()
     const {establishmentTeam, getEstablishmentTeam} = useTeam();
-    const {schedules, getUserSchedules} = useSchedule()
+    const {schedules, getTeacherSchedules} = useSchedule()
     const {createReservation} = useReservation()
 
     const router = useRouter()
@@ -38,15 +38,15 @@ export default function Id() {
         const idEmployee = e.target.value
         setSelectedTeacher(idEmployee)
         if (!idEmployee) return
-        getUserSchedules(idEmployee)
+        getTeacherSchedules(idEmployee)
     }
     const handleSelectSchedule = (schedule) => {
         setSelectedSchedule(schedule)
     }
 
     const handleReserve = () => {
-        const {date, time} = selectedSchedule
-        if (!date && !time){
+        const { startTime, endTime } = selectedSchedule;
+        if (!startTime && !endTime){
             // TODOS:
             // utilise le toast pour retourner un probl
         }
@@ -55,22 +55,10 @@ export default function Id() {
 
 
     const handleConfirmReservation = async () => {
-        const { date, time } = selectedSchedule;
-        const duration = service?.duration;
-        const timezoneOffset = 60;
-
-        const startTime = new Date(`${date}T${time}`)
-        startTime.setHours(startTime.getHours() + 1)
-        const endTime = new Date(startTime);
-
-        endTime.setMinutes(startTime.getMinutes() + duration);
-
-        const formattedStartTime = startTime.toISOString();
-        const formattedEndTime = endTime.toISOString();
-
+        const { startTime, endTime } = selectedSchedule;
         const payload = {
-            "startTime": formattedStartTime,
-            "endTime": formattedEndTime,
+            "startTime": startTime,
+            "endTime": endTime,
             "establishment_id": service?.establishment?.id,
             "service_id" : service?.id,
             "teacher_id": selectedTeacher,
@@ -78,7 +66,7 @@ export default function Id() {
         specialRequest.length > 0 ? payload["specialRequest"] = specialRequest : payload
         setOpenModal(false)
         await createReservation(payload)
-        await getUserSchedules(selectedTeacher)
+        await getTeacherSchedules(selectedTeacher)
         setSpecialRequest("")
         setSelectedSchedule({})
     }
