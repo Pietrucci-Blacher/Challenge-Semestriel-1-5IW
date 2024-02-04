@@ -49,12 +49,9 @@ export default function Login() {
     useEffect(() => {
         if (!isLogged || !user) return;
 
-        if (user.roles.includes('ROLE_ADMIN'))
-            router.push('/admin');
-        else if (user.roles.includes('ROLE_PROVIDER'))
-            router.push('/provider');
-        else
-            router.push('/profile');
+        if (user.roles.includes('ROLE_ADMIN')) router.push('/admin');
+        else if (user.roles.includes('ROLE_PROVIDER')) router.push('/provider');
+        else router.push('/profile');
     }, [user, isLogged, router]);
 
     return (
