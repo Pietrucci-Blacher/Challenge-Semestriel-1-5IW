@@ -38,3 +38,7 @@ export const updateScheduleService = (id, payload) => {
 export const deleteScheduleService = (id) => {
     return httpClient.delete(`/schedules/${id}`);
 };
+
+export const getScheduleByIdService = (id) => {
+    return httpClient.get(`/schedules/${id}`);
+};

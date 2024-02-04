@@ -6,6 +6,7 @@ import {
     getSchedulesByUserAndEstablishmentService,
     getUserSchedulesService,
     updateScheduleService,
+    getScheduleByIdService
 } from '@/services/scheduleService';
 
 export const useSchedule = () => {
@@ -48,21 +49,26 @@ export const useSchedule = () => {
 
     const deleteSchedule = useCallback(
         async (id) => {
-            try {
-                await deleteScheduleService(id);
-                const newSchedules = schedules.filter(
-                    (schedule) => schedule.id !== +id,
-                );
-                setSchedules(newSchedules);
-            } catch (error) {
-                console.error(
-                    'Erreur lors de la suppression du schedule :',
-                    error,
-                );
+            const shouldDelete = window.confirm("Voulez-vous vraiment supprimer ce schedule ?");
+            if (shouldDelete) {
+                try {
+                    await deleteScheduleService(id);
+                    const newSchedules = schedules.filter(
+                        (schedule) => schedule.id !== +id
+                    );
+                    setSchedules(newSchedules);
+                    router.push(`/admin/establishment/${establishmentId}`);
+                } catch (error) {
+                    console.error(
+                        'Erreur lors de la suppression du schedule :',
+                        error
+                    );
+                }
             }
         },
         [schedules],
     );
+
 
     const getUserSchedules = useCallback(
         async (userId) => {
@@ -118,6 +124,18 @@ export const useSchedule = () => {
         [],
     );
 
+    const getScheduleById = useCallback(
+        async (scheduleId) => {
+            try {
+                const schedule = await getScheduleByIdService(scheduleId);
+                setSchedule(schedule); // Mettez à jour le state avec le schedule trouvé
+            } catch (error) {
+                console.error('Erreur lors de la récupération du schedule par ID:', error);
+            }
+        },
+        [],
+    );
+
     return {
         schedules,
         schedule,
@@ -128,5 +146,6 @@ export const useSchedule = () => {
         getUserSchedules,
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
+        getScheduleById,
     };
 };
