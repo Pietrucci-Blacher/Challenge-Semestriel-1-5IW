@@ -71,7 +71,6 @@ export const useStats = () => {
         try {
             const data = await getBestCompany();
             const companiesData = data['hydra:member'] ?? [];
-            console.log(companiesData);
             setBestCompany(companiesData);
         } catch (error) {
             console.error(
