@@ -1,7 +1,7 @@
 import {
     getUsersNumber,
     getActiveCompaniesNumber,
-    getTotalCourseBookings,
+    getBookings,
 } from '@/services/statsService';
 import { useCallback, useState } from 'react';
 
@@ -9,6 +9,7 @@ export const useStats = () => {
     const [userNumber, setUserNumber] = useState(0);
     const [companieNumber, setCompanieNumber] = useState(0);
     const [bookingNumber, setBookingNumber] = useState(0);
+    const [recentBookings, setRecentBookings] = useState([]);
 
     const getUserNumber = useCallback(async () => {
         try {
@@ -38,12 +39,27 @@ export const useStats = () => {
 
     const getTotalBookings = useCallback(async () => {
         try {
-            const data = await getTotalCourseBookings();
+            const data = await getBookings();
             const bookingsData = data['hydra:member'] ?? [];
             setCompanieNumber(bookingsData.length);
         } catch (error) {
             console.error(
                 'Erreur lors de la récupération du nombre d entreprises:',
+                error,
+            );
+        }
+    }, []);
+
+    const getRecentBookings = useCallback(async () => {
+        try {
+            const data = await getBookings();
+            const bookingsData = data['hydra:member'] ?? [];
+            console.log(bookingsData);
+            const recentBookings = bookingsData.slice(-3);
+            setRecentBookings(recentBookings);
+        } catch (error) {
+            console.error(
+                'Erreur lors de la récupération des dernières réservations:',
                 error,
             );
         }
@@ -56,5 +72,7 @@ export const useStats = () => {
         getCompaniesNumber,
         bookingNumber,
         getTotalBookings,
+        recentBookings,
+        getRecentBookings,
     };
 };

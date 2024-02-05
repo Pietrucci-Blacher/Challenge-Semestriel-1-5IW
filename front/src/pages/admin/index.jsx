@@ -2,7 +2,8 @@ import { Table, Card } from 'flowbite-react';
 import { Line } from 'react-chartjs-2';
 import { useStats } from '@/hooks/useStats';
 import { useEffect } from 'react';
-import { HiHome } from 'react-icons/hi';
+import { HiHome, HiAcademicCap } from 'react-icons/hi';
+import dayjs from 'dayjs';
 export default function AdminIndex() {
     const {
         userNumber,
@@ -11,13 +12,22 @@ export default function AdminIndex() {
         getCompaniesNumber,
         bookingNumber,
         getTotalBookings,
+        recentBookings,
+        getRecentBookings,
     } = useStats();
 
     useEffect(() => {
         getUserNumber();
         getCompaniesNumber();
         getTotalBookings();
-    }, [getUserNumber, getCompaniesNumber, getTotalBookings]);
+        getRecentBookings();
+    }, [
+        getUserNumber,
+        getCompaniesNumber,
+        getTotalBookings,
+        getRecentBookings,
+    ]);
+
     return (
         <div className="flex h-full bg-gray-50 dark:bg-gray-900">
             <main className="flex-1 flex flex-col px-6 gap-6">
@@ -82,37 +92,35 @@ export default function AdminIndex() {
                             <Table>
                                 <thead>
                                     <tr>
-                                        <th className="w-[100px]">
-                                            Booking ID
-                                        </th>
-                                        <th>Status</th>
-                                        <th>Price</th>
-                                        <th className="text-right">User</th>
+                                        <th className="w-[100px]">Id</th>
+                                        <th>Customer</th>
+                                        <th>Company</th>
+                                        <th>Teacher</th>
+                                        <th>Course Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td className="font-medium">BK001</td>
-                                        <td>Confirmed</td>
-                                        <td>$250.00</td>
-                                        <td className="text-right">John Doe</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="font-medium">BK002</td>
-                                        <td>Pending</td>
-                                        <td>$150.00</td>
-                                        <td className="text-right">
-                                            Jane Smith
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="font-medium">BK003</td>
-                                        <td>Cancelled</td>
-                                        <td>$350.00</td>
-                                        <td className="text-right">
-                                            Bob Johnson
-                                        </td>
-                                    </tr>
+                                    {recentBookings.map((booking) => (
+                                        <tr key={booking.id}>
+                                            <td>{booking.id}</td>
+                                            <td>
+                                                {booking.customer.firstname}{' '}
+                                                {booking.customer.lastname}
+                                            </td>
+                                            <td>
+                                                {booking.establishment.name}
+                                            </td>
+                                            <td>
+                                                {booking.teacher.firstname}{' '}
+                                                {booking.teacher.lastname}
+                                            </td>
+                                            <td>
+                                                {dayjs(
+                                                    booking.schedule.startTime,
+                                                ).format('DD/MM/YYYY')}
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </div>
@@ -205,25 +213,6 @@ function GroupIcon(props) {
             <path d="M7 21H5c-1.1 0-2-.9-2-2v-2" />
             <rect width="7" height="5" x="7" y="7" rx="1" />
             <rect width="7" height="5" x="10" y="12" rx="1" />
-        </svg>
-    );
-}
-
-function PlaneIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http:www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
         </svg>
     );
 }

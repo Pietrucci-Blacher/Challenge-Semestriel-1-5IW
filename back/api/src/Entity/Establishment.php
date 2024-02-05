@@ -30,7 +30,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-//            security: 'is_granted("ROLE_ADMIN")',
+//          security: 'is_granted("ROLE_ADMIN")',
         ),
         new GetCollection(
             uriTemplate: '/users/{userId}/establishments',
@@ -72,14 +72,14 @@ class Establishment
 
     #[ORM\Column]
     #[Groups(['establishment:read', 'establishment:write', 'service:read'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['establishment:read', 'establishment:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]

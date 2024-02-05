@@ -8,8 +8,8 @@ const getActiveCompaniesNumber = async () => {
     return await httpClient.get('establishments');
 };
 
-const getTotalCourseBookings = async () => {
+const getBookings = async () => {
     return await httpClient.get('reservations');
 };
 
-export { getUsersNumber, getActiveCompaniesNumber, getTotalCourseBookings };
+export { getUsersNumber, getActiveCompaniesNumber, getBookings };
