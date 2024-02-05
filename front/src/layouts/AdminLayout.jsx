@@ -18,6 +18,13 @@ const AdminLayout = ({ children }) => {
             labelColor: 'gray',
         },
         {
+            icon: HiUser,
+            text: 'Profile',
+            href: '/profile',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
             icon: HiViewBoards,
             text: 'Requests',
             href: '/admin/requests',
