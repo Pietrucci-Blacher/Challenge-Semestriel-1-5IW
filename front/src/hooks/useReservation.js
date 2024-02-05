@@ -1,6 +1,6 @@
 import {useCallback, useState} from "react";
 import {
-    addReservation, deleteReservation, deleteReservationService,
+    addReservation, deleteReservationService,
     getEstablishmentReservations, getReservation, getServiceReservations,
     getTeacherReservations,
     getUserReservations, updateReservation
