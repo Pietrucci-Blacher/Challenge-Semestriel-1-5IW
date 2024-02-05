@@ -27,3 +27,7 @@ export const updateReservation = ({reservationId, startTime, endTime}) => {
     return httpClient.patch(`reservations/${reservationId}`, {startTime, endTime});
 };
 
+export const deleteReservationService = (reservationId) => {
+    return httpClient.delete(`reservations/${reservationId}`);
+};
+

@@ -1,12 +1,13 @@
 import {useCallback, useState} from "react";
 import {
-    addReservation,
+    addReservation, deleteReservation, deleteReservationService,
     getEstablishmentReservations, getReservation, getServiceReservations,
     getTeacherReservations,
     getUserReservations, updateReservation
 } from "@/services/reservationService";
 
 export const useReservation = () => {
+    const [userId, setUserId] = useState(null)
     const [reservation, setReservation] = useState({})
     const [reservations, setReservations] = useState([])
     const createReservation = useCallback(async (payload) => {
@@ -37,7 +38,8 @@ export const useReservation = () => {
         const response = await getUserReservations(userId)
         const reservations = response["hydra:member"]
         setReservations(reservations)
-    }, []);
+        setUserId(userId)
+    }, [userId]);
 
 
     const fetchTeacherReservations = useCallback(async (teacherId) => {
@@ -57,6 +59,11 @@ export const useReservation = () => {
     }, []);
 
 
+    const deleteReservation = useCallback(async (reservationId) => {
+        deleteReservationService(reservationId)
+    }, []);
+
+
     return {
         reservation,
         reservations,
@@ -64,6 +71,7 @@ export const useReservation = () => {
         fetchReservation,
         fetchUserReservations,
         fetchEstablishmentReservations,
-        moveReservation
+        moveReservation,
+        deleteReservation
     }
 }

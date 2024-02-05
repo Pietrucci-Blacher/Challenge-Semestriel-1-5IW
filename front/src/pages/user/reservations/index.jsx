@@ -6,6 +6,7 @@ import {Table} from "flowbite-react";
 export default function Reservations() {
     const {user} = useAuthContext()
     const {reservations, fetchUserReservations} = useReservation()
+
     useEffect(() => {
         const {id} = user
         if (!id) return
@@ -53,9 +54,9 @@ export default function Reservations() {
                             ))
 
                             : <>
-                                <div>
+                                <Table.Row>
                                     Pas de reservation
-                                </div>
+                                </Table.Row>
                             </>
                         }
 

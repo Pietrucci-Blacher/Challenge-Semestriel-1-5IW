@@ -7,7 +7,7 @@ import {Button, Label, Modal, Textarea} from "flowbite-react";
 
 export default function Id() {
     const router = useRouter();
-    const {reservation, fetchReservation, createReservation, moveReservation} = useReservation()
+    const {reservation, fetchReservation, createReservation, moveReservation, deleteReservation, fetchUserReservations} = useReservation()
     const {schedules, getTeacherSchedules} = useSchedule()
     const [selectedSchedule, setSelectedSchedule] = useState({})
     const [openModal, setOpenModal] = useState(false);
@@ -47,17 +47,6 @@ export default function Id() {
     const handleCancelMoveAppointment = () => {
         setIsCancelModalOpen(true);
     };
-    const handleClickCancel = () => {
-        setIsCancelModalOpen(true);
-    };
-
-    const handleClickMove = () => {
-        setIsMoveModalOpen(true);
-    };
-
-    const handleClickAppointment = () => {
-        setIsAppointmentModalOpen(true);
-    };
 
     const handleNewAppointment= async () => {
         const {startTime, endTime} = selectedSchedule;
@@ -83,8 +72,11 @@ export default function Id() {
         setSpecialRequest("")
     }
 
-    const handleCancelAppointment = () => {
-
+    const handleCancelAppointment = async () => {
+        setIsCancelModalOpen(false)
+        await deleteReservation(reservation?.id)
+        await fetchUserReservations(reservation?.customer?.id)
+        router.push('/reservations')
     }
     return (
         <>
@@ -109,9 +101,9 @@ export default function Id() {
             </div>
             <br/>
             <div>
-                <Button onClick={handleClickCancel}>Annuler le rdv</Button>
-                <Button onClick={handleClickMove}>Deplacer le rdv</Button>
-                <Button onClick={handleClickAppointment}>Reprendre la meme reservation</Button>
+                <Button onClick={()=>setIsCancelModalOpen(true)}>Annuler le rdv</Button>
+                <Button onClick={()=>setIsMoveModalOpen(true)}>Deplacer le rdv</Button>
+                <Button onClick={()=>setIsAppointmentModalOpen(true)}>Reprendre la meme reservation</Button>
 
             </div>
 
