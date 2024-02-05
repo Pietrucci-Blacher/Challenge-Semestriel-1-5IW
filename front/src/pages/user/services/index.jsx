@@ -1,17 +1,17 @@
-import {useService} from "@/hooks/useService";
-import {useEffect, useState} from "react";
-import {Button, Card, Modal} from "flowbite-react";
+import { useService } from '@/hooks/useService';
+import { useEffect, useState } from 'react';
+import { Button, Card, Modal } from 'flowbite-react';
 // import {useRouter} from "next/router";
 import Input from '@/components/Input';
-import Slider from "@/components/Slider";
+import Slider from '@/components/Slider';
 
 export default function Services() {
     // const router = useRouter()
-    const {services, getAllServices, getServicesByFilters} = useService()
+    const { services, getAllServices, getServicesByFilters } = useService();
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
-        getAllServices()
+        getAllServices();
     }, []);
 
     const [formData, setFormData] = useState({
@@ -28,15 +28,15 @@ export default function Services() {
     }, [formData]);
 
     const handleInputSearchChange = (value) => {
-        setFormData({...formData, title: value});
+        setFormData({ ...formData, title: value });
     };
 
     const handleSliderMinPriceChange = (value) => {
-        setFormData({...formData, minPrice: parseInt(value) || 0});
+        setFormData({ ...formData, minPrice: parseInt(value) || 0 });
     };
 
     const handleSliderMaxPriceChange = (value) => {
-        setFormData({...formData, maxPrice: parseInt(value) || 0});
+        setFormData({ ...formData, maxPrice: parseInt(value) || 0 });
     };
     // const goToServiceById = (id)=>{
     //     router.push(`/services/${id}`)
@@ -58,7 +58,10 @@ export default function Services() {
             </div>
             <div className="flex flex-wrap mx-2 ">
                 {services?.map((service) => (
-                    <div className="w-full sm:w-1/2 md:w-1/3 px-2 py-4" key={service.id}>
+                    <div
+                        className="w-full sm:w-1/2 md:w-1/3 px-2 py-4"
+                        key={service.id}
+                    >
                         <Card
                             className="max-w-sm card-hover transform transition-transform duration-1000 hover:scale-105"
                             imgAlt="Meaningful alt text for an image that is not purely decorative"
@@ -101,5 +104,5 @@ export default function Services() {
                 </Modal.Body>
             </Modal>
         </>
-    )
+    );
 }

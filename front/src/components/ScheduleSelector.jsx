@@ -54,8 +54,8 @@ const ScheduleSelector = ({ onSelectSchedule, range, unavailableSlots }) => {
         } else {
             value = { date: selectedDate, time: selectedTimeSlot };
         }
-        const startTime = new Date(`${selectedDate}T${selectedTimeSlot}`)
-        startTime.setHours(startTime.getHours() + 1)
+        const startTime = new Date(`${selectedDate}T${selectedTimeSlot}`);
+        startTime.setHours(startTime.getHours() + 1);
         const endTime = new Date(startTime);
         endTime.setMinutes(startTime.getMinutes() + range);
         const formattedStartTime = startTime.toISOString();
@@ -63,7 +63,7 @@ const ScheduleSelector = ({ onSelectSchedule, range, unavailableSlots }) => {
         setSelectedTime(value);
         onSelectSchedule({
             startTime: formattedStartTime,
-            endTime: formattedEndTime
+            endTime: formattedEndTime,
         });
     };
 

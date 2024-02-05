@@ -21,7 +21,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
-import EstablishmentReservations from "@/components/EstablishmentReservations";
+import EstablishmentReservations from '@/components/EstablishmentReservations';
 
 export default function ShowEstablishment() {
     const router = useRouter();

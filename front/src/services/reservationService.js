@@ -1,4 +1,4 @@
-import httpClient from "./httpClient";
+import httpClient from './httpClient';
 
 export const addReservation = (payload) => {
     return httpClient.post(`/reservations`, payload);
@@ -23,11 +23,13 @@ export const getServiceReservations = (serviceId) => {
     return httpClient.get(`services/${serviceId}//reservations`);
 };
 
-export const updateReservation = ({reservationId, startTime, endTime}) => {
-    return httpClient.patch(`reservations/${reservationId}`, {startTime, endTime});
+export const updateReservation = ({ reservationId, startTime, endTime }) => {
+    return httpClient.patch(`reservations/${reservationId}`, {
+        startTime,
+        endTime,
+    });
 };
 
 export const deleteReservationService = (reservationId) => {
     return httpClient.delete(`reservations/${reservationId}`);
 };
-
