@@ -25,6 +25,11 @@ export const useFeedback = () => {
         setNote(response);
     }, []);
 
+    const getFeedbacksFromUserId = useCallback(async (id) => {
+        const response = await service.getFeedbacksFromUserId(id);
+        setFeedbacks(response);
+    }, []);
+
     return {
         feedbacks,
         detailed,
@@ -32,5 +37,6 @@ export const useFeedback = () => {
         getEstablishmentNote,
         getFeedbacksFromServiceId,
         getServiceNote,
+        getFeedbacksFromUserId,
     };
 };

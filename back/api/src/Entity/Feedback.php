@@ -34,6 +34,11 @@ use App\Controller\GetServiceNote;
             uriVariables: ['id' => new Link(toProperty: 'service', fromClass: Feedback::class)],
             normalizationContext: ['groups' => ['feedback:read']],
         ),
+        new GetCollection(
+            uriTemplate: '/users/{id}/feedback',
+            uriVariables: ['id' => new Link(toProperty: 'reviewer', fromClass: Feedback::class)],
+            normalizationContext: ['groups' => ['feedback:read']],
+        ),
         new Get(
             uriTemplate: '/establishments/{id}/note',
             controller: GetEstablishmentNote::class,
