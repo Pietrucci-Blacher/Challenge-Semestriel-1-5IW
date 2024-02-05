@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Link;
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +22,7 @@ use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Auth\MeController;
+use App\Controller\Auth\EmailConfirmationController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -31,6 +33,11 @@ use App\Controller\Auth\MeController;
             normalizationContext: ['groups' => ['user:read']],
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_USER") and object == user)',
             securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
+        new Get(
+            uriTemplate: '/auth/confirm-email/{token}',
+            controller: EmailConfirmationController::class,
+            read: false,
         ),
         new GetCollection(
             uriTemplate: '/auth/me',
@@ -61,15 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'auth:me','team_invitation:read', 'reservation:read'])]
+    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -101,12 +108,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups('user:read')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups('user:read')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $emailConfirmationToken = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
 //    #[Groups('user:read')]
@@ -118,11 +127,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
-    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
+
+    #[ORM\OneToMany(mappedBy: 'reviewer', targetEntity: Feedback::class)]
+    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Service::class)]
+    private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $teacherReservations;
@@ -130,23 +145,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->birthdate = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->birthdate = new DateTimeImmutable();
         $this->establishments = new ArrayCollection();
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->teacherReservations = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
     public function onPrePersist(): void {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(PreUpdateEventArgs $event): void {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -247,24 +264,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -419,6 +436,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $schedule->setAssigned(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setReviewer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getReviewer() === $this) {
+                $feedback->setReviewer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getAuthor() === $this) {
+                $service->setAuthor(null);
+            }
+        }
 
         return $this;
     }
@@ -481,5 +557,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getEmailConfirmationToken(): ?string
+    {
+        return $this->emailConfirmationToken;
+    }
+
+    public function setEmailConfirmationToken(?string $emailConfirmationToken): static
+    {
+        $this->emailConfirmationToken = $emailConfirmationToken;
+
+        return $this;
+    }
+
+    public function generateEmailConfirmationToken(): string
+    {
+        // create a token of 40 chars (20 bytes * 2)
+        $token = bin2hex(random_bytes(20));
+        $this->emailConfirmationToken = $token;
+
+        return $token;
     }
 }

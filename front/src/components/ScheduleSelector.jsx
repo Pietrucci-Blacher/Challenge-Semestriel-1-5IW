@@ -1,9 +1,11 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
-
-const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
+const ScheduleSelector = ({ onSelectSchedule, range, unavailableSlots }) => {
     const [weekOffset, setWeekOffset] = useState(0);
-    const [selectedTime, setSelectedTime] = useState({date: null, time: null});
+    const [selectedTime, setSelectedTime] = useState({
+        date: null,
+        time: null,
+    });
 
     const timeSlots = [];
     let totalMinutes = 8 * 60;
@@ -44,10 +46,13 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
         const selectedDate = weekDays[day];
         const selectedTimeSlot = timeSlot;
         let value;
-        if (selectedDate === selectedTime?.date && selectedTimeSlot === selectedTime?.time) {
-            value = {date: null, time: null}
+        if (
+            selectedDate === selectedTime?.date &&
+            selectedTimeSlot === selectedTime?.time
+        ) {
+            value = { date: null, time: null };
         } else {
-            value = {date: selectedDate, time: selectedTimeSlot}
+            value = { date: selectedDate, time: selectedTimeSlot };
         }
         const startTime = new Date(`${selectedDate}T${selectedTimeSlot}`)
         startTime.setHours(startTime.getHours() + 1)
@@ -78,17 +83,20 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
         const slotStartTime = new Date(dateTimeStringStart);
         const slotEndTime = new Date(slotStartTime.getTime() + range * 60000);
 
-        return unavailableSlots.some(({startTime, endTime}) => {
+        return unavailableSlots.some(({ startTime, endTime }) => {
             const start = new Date(startTime);
             const end = new Date(endTime);
-            return (slotStartTime < end && slotEndTime > start);
+            return slotStartTime < end && slotEndTime > start;
         });
     };
 
-
     function formatDate(dateString) {
         const date = new Date(dateString);
-        const formattedDate = date.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+        });
         return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
     }
 
@@ -97,7 +105,11 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
             <div className="flex justify-center items-center mx-4">
                 <button
                     onClick={goToPreviousWeek}
-                    className={`px-4 py-2 rounded-md hover:bg-gray-300 ${weekOffset === 0 ? 'bg-gray-100 cursor-not-allowed' : 'bg-gray-200'}`}
+                    className={`px-4 py-2 rounded-md hover:bg-gray-300 ${
+                        weekOffset === 0
+                            ? 'bg-gray-100 cursor-not-allowed'
+                            : 'bg-gray-200'
+                    }`}
                     disabled={weekOffset === 0}
                 >
                     {/* Replace with an appropriate icon */}
@@ -108,13 +120,21 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
                 {weekDays.map((day, index) => (
                     <div key={day} className="flex flex-col items-center w-32">
                         <div className="text-center mb-4">
-                            <div className="text-md font-medium">{formatDate(day).split(' ')[0]}</div>
-                            <div className="text-sm">{formatDate(day).split(' ').slice(1).join(' ')}</div>
+                            <div className="text-md font-medium">
+                                {formatDate(day).split(' ')[0]}
+                            </div>
+                            <div className="text-sm">
+                                {formatDate(day).split(' ').slice(1).join(' ')}
+                            </div>
                         </div>
 
                         <div
                             className="time-slots-container relative overflow-y-auto"
-                            style={{height: '30vh', overflowY: 'auto', position: 'relative'}}
+                            style={{
+                                height: '30vh',
+                                overflowY: 'auto',
+                                position: 'relative',
+                            }}
                         >
                             {timeSlots.map((slot) => (
                                 <button
@@ -122,11 +142,15 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
                                     className={`mb-2 px-4 py-2 rounded-md text-sm font-medium w-full ${
                                         isUnavailable(index, slot)
                                             ? 'bg-red-200 text-white'
-                                            : selectedTime.date === weekDays[index] && selectedTime.time === slot
-                                                ? 'bg-blue-500 text-white'
-                                                : 'bg-gray-300'
+                                            : selectedTime.date ===
+                                                    weekDays[index] &&
+                                                selectedTime.time === slot
+                                              ? 'bg-blue-500 text-white'
+                                              : 'bg-gray-300'
                                     }`}
-                                    onClick={() => handleTimeSlotClick(index, slot)}
+                                    onClick={() =>
+                                        handleTimeSlotClick(index, slot)
+                                    }
                                     disabled={isUnavailable(index, slot)}
                                 >
                                     {slot}
@@ -135,11 +159,12 @@ const ScheduleSelector = ({onSelectSchedule, range, unavailableSlots}) => {
                         </div>
                     </div>
                 ))}
-
-
             </div>
             <div className="flex justify-center items-center mx-4">
-                <button onClick={goToNextWeek} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                <button
+                    onClick={goToNextWeek}
+                    className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                >
                     {/* Replace with an appropriate icon */}
                     &gt;
                 </button>

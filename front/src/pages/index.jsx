@@ -36,7 +36,7 @@ export async function getStaticProps(context) {
             // pass the translation props to the page component
             ...(await serverSideTranslations(
                 locale ?? 'fr',
-                ['common', 'loginPage'],
+                ['common'],
                 nextI18NextConfig,
             )),
         },

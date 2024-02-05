@@ -11,21 +11,19 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\OpenApi\Model;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Provider\UpdateServiceController;
+use App\Attributes\UserField;
 
 #[Vich\Uploadable]
 #[ApiResource(
@@ -93,12 +91,17 @@ class Service
 
     #[ORM\Column]
     #[Groups(['service:read', 'service:write', 'reservation:read'])]
+    #[Context(['disable_type_enforcement' => true])]
+
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[Groups(['service:read', 'service:write'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Feedback::class)]
+    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
@@ -116,9 +119,16 @@ class Service
     #[Groups(['service:read'])]
     public ?string $imagePath = null;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['service:read', 'service:write'])]
+    #[UserField('author')]
+    private ?User $author = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,6 +192,48 @@ class Service
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getService() === $this) {
+                $feedback->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

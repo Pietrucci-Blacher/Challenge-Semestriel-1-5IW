@@ -18,10 +18,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(undefined);
     const [isLogged, setIsLogged] = useState(undefined);
     const verifyUser = useCallback(async () => {
-        console.log('called');
         let storedUser = getUserFromSession();
         if (!storedUser) {
-            console.log('cc');
             try {
                 await fetchUser();
             } catch (error) {

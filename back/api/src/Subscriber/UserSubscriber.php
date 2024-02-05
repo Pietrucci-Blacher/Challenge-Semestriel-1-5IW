@@ -45,8 +45,13 @@ final class UserSubscriber implements EventSubscriberInterface
         if ($resourceClass !== User::class) return;
 
         if ($statusCode === 201 && $method === "POST") {
-            $user = json_decode($response->getContent(), false);
-            $this->email->sendWelcomeEmail($user->email, $user->firstname);
+            $userData = json_decode($response->getContent(), false);
+
+            $user = $this->userRepository->find($userData->id);
+            $token = $user->generateEmailConfirmationToken();
+            $this->userRepository->save($user);
+
+            $this->email->sendWelcomeEmail($user->getEmail(), $user->getFirstname(), $token);
         }
     }
 }

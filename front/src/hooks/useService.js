@@ -1,11 +1,11 @@
 import {
-    fetchServiceRequest,
-    fetchMyServicesRequest,
-    getAllServicesRequest,
     createServiceRequest,
-    updateServiceRequest,
     deleteServiceRequest,
+    fetchMyServicesRequest,
+    fetchServiceRequest,
+    getAllServicesRequest,
     getEstablishmentServicesRequest,
+    updateServiceRequest,
 } from '@/services/serviceService';
 import { useCallback, useState } from 'react';
 
@@ -94,15 +94,12 @@ export const useService = () => {
             try {
                 const promises = establishmentIds.map(
                     async (establishmentId) => {
-                        const response =
-                            await getEstablishmentServicesRequest(
-                                establishmentId,
-                            );
-                        return response;
+                        return await getEstablishmentServicesRequest(
+                            establishmentId,
+                        );
                     },
                 );
                 const services = await Promise.all(promises);
-                console.log('resp, ', services);
                 setServicesPerEstablishment(services);
             } catch (e) {
                 console.error('Error fetching all services: ', e);

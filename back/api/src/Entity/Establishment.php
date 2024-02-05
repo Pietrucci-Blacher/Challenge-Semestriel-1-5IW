@@ -25,7 +25,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
     operations: [
         new Get(
             normalizationContext: ['groups' => ['establishment:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
+            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user) or (is_granted("ROLE_USER"))',
             securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new GetCollection(
@@ -94,7 +94,6 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
 
-
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
@@ -103,6 +102,9 @@ class Establishment
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
+    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
@@ -113,6 +115,7 @@ class Establishment
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }
 
@@ -301,6 +304,36 @@ class Establishment
             // set the owning side to null (unless already changed)
             if ($service->getEstablishment() === $this) {
                 $service->setEstablishment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedback(Feedback $feedback): static
+    {
+        if ($this->feedback->removeElement($feedback)) {
+            // set the owning side to null (unless already changed)
+            if ($feedback->getEstablishment() === $this) {
+                $feedback->setEstablishment(null);
             }
         }
 

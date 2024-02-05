@@ -1,0 +1,14 @@
+{
+    "createAccount": "Créez votre compte",
+    "yourFirstName": "Votre prénom",
+    "firstname": "Prénom",
+    "yourLastName": "Votre nom",
+    "lastname": "Nom",
+    "yourEmail": "Votre adresse email",
+    "emailPlaceholder": "Votre adresse email",
+    "yourPassword": "Votre mot de passe",
+    "register": "S'inscrire",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "login": "Connectez-vous",
+    "returnHome": "Retour à l'accueil"
+}

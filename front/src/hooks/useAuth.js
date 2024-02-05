@@ -2,11 +2,14 @@ import {
     fetchCurrentUser,
     loginService,
     registerService,
+    confirmEmailRequest,
 } from '@/services/authService';
 import { useAuthContext } from '@/providers/AuthProvider';
+import { useState, useCallback } from 'react';
 
 export const useAuth = () => {
     const { setUser, setIsLogged } = useAuthContext();
+    const [isConfirmed, setIsConfirmed] = useState(null);
 
     const login = async (credentials) => {
         try {
@@ -41,5 +44,14 @@ export const useAuth = () => {
         sessionStorage.removeItem('refreshToken');
     };
 
-    return { login, register, logout };
+    const confirmEmail = useCallback(async (token) => {
+        try {
+            await confirmEmailRequest(token);
+            setIsConfirmed(true);
+        } catch (error) {
+            setIsConfirmed(false);
+        }
+    }, []);
+
+    return { login, register, logout, confirmEmail, isConfirmed };
 };
