@@ -83,7 +83,6 @@ httpClient.post = async function (url, data, config) {
         ...config,
         headers,
     };
-    console.log(data);
     return await makeRequest('post', url, data, config);
 };
 
