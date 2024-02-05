@@ -1,32 +1,139 @@
 import { Table, Card } from 'flowbite-react';
-import { Line } from 'react-chartjs-2';
 import { useStats } from '@/hooks/useStats';
 import { useEffect } from 'react';
-import { HiHome, HiAcademicCap } from 'react-icons/hi';
+import { HiHome, HiAcademicCap, HiUserGroup, HiStar } from 'react-icons/hi';
+import CurvedlineChart from '@/components/Stats/CurvedLineChart';
 import dayjs from 'dayjs';
 export default function AdminIndex() {
     const {
         userNumber,
         getUserNumber,
+        bestCompany,
+        getBestFeedBackCompany,
         companieNumber,
         getCompaniesNumber,
         bookingNumber,
         getTotalBookings,
         recentBookings,
         getRecentBookings,
+        bookingsGraph,
+        getGraphReservations,
     } = useStats();
 
     useEffect(() => {
         getUserNumber();
+        getBestFeedBackCompany();
         getCompaniesNumber();
         getTotalBookings();
         getRecentBookings();
+        getGraphReservations();
     }, [
         getUserNumber,
+        getBestFeedBackCompany,
         getCompaniesNumber,
         getTotalBookings,
         getRecentBookings,
+        getGraphReservations,
     ]);
+
+    function formatMonth(isoString) {
+        return dayjs(isoString).format('YYYY-MM');
+    }
+
+    const reservationCountsByMonth = bookingsGraph.reduce(
+        (acc, { startTime }) => {
+            const month = formatMonth(startTime);
+            acc[month] = (acc[month] || 0) + 1;
+            return acc;
+        },
+        {},
+    );
+
+    const sortedMonths = Object.keys(reservationCountsByMonth).sort((a, b) =>
+        dayjs(a).isAfter(dayjs(b)) ? 1 : -1,
+    );
+
+    // Filtrer pour ne conserver que les feedbacks concernant des établissements
+    const establishmentFeedbacks = bestCompany.filter(
+        (feedback) => feedback.establishment,
+    );
+
+    const feedbacksWithName = establishmentFeedbacks.map((feedback) => {
+        // Comme on a déjà filtré pour ne garder que les feedbacks d'établissements, pas besoin de vérifier `feedback.service`
+        const name = feedback.establishment.name;
+        return {
+            name,
+            note: feedback.note,
+        };
+    });
+
+    const averages = feedbacksWithName.reduce((acc, { name, note }) => {
+        if (!acc[name]) {
+            acc[name] = { total: 0, count: 0 };
+        }
+        acc[name].total += note;
+        acc[name].count += 1;
+        return acc;
+    }, {});
+
+    const averageList = Object.keys(averages).map((name) => ({
+        name,
+        average: averages[name].total / averages[name].count,
+    }));
+
+    const bestCompanyObject = averageList.reduce(
+        (best, current) => (best.average > current.average ? best : current),
+        { name: null, average: 0 },
+    );
+
+    const myChartData = {
+        labels: sortedMonths,
+        datasets: [
+            {
+                label: 'Bookings per Month',
+                data: sortedMonths.map(
+                    (month) => reservationCountsByMonth[month],
+                ),
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                tension: 0.4,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Month',
+                },
+                type: 'time',
+                time: {
+                    unit: 'month',
+                    parser: 'YYYY-MM',
+                    tooltipFormat: 'MMMM YYYY',
+                    displayFormats: {
+                        month: 'MMM YYYY',
+                    },
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Number of Bookings',
+                },
+                beginAtZero: true,
+            },
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    };
 
     return (
         <div className="flex h-full bg-gray-50 dark:bg-gray-900">
@@ -46,11 +153,13 @@ export default function AdminIndex() {
                         ),
                     })}
                     {renderCard({
-                        title: 'Average Rating',
-                        value: '4.2',
-                        change: '+0.1 from last month',
+                        title: 'Best Establishment',
+                        value: bestCompanyObject?.name || 'No data',
+                        change: `With an average of: ${bestCompanyObject?.average.toFixed(
+                            2,
+                        )}`,
                         icon: (
-                            <StarIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            <HiStar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         ),
                     })}
                     {renderCard({
@@ -66,7 +175,7 @@ export default function AdminIndex() {
                         value: userNumber,
                         change: '',
                         icon: (
-                            <GroupIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            <HiUserGroup className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         ),
                     })}
                 </div>
@@ -78,7 +187,11 @@ export default function AdminIndex() {
                             </h5>
                         </div>
                         <div className="p-4">
-                            <CurvedlineChart className="w-full aspect-[4/3]" />
+                            <CurvedlineChart
+                                chartData={myChartData}
+                                chartOptions={chartOptions}
+                                className="w-full aspect-[4/3]"
+                            />
                         </div>
                     </Card>
 
@@ -131,110 +244,6 @@ export default function AdminIndex() {
     );
 }
 
-function CurvedlineChart(props) {
-    const data = {
-        labels: [
-            '2018-01-01',
-            '2018-01-02',
-            '2018-01-03',
-            '2018-01-04',
-            '2018-01-05',
-            '2018-01-06',
-            '2018-01-07',
-            '2018-01-08',
-        ],
-        datasets: [
-            {
-                label: 'Series B',
-                data: [7, 5, 11, 9, 12, 16, 13, 13],
-                borderColor: 'rgb(54, 162, 235)',
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                tension: 0.4,
-            },
-            {
-                label: 'Series A',
-                data: [9, 8, 13, 6, 8, 14, 11, 12],
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                tension: 0.4,
-            },
-        ],
-    };
-
-    const options = {
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                    displayFormats: {
-                        day: 'MMM D',
-                    },
-                },
-                title: {
-                    display: true,
-                    text: 'Date',
-                },
-            },
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Value',
-                },
-            },
-        },
-        plugins: {
-            legend: {
-                position: 'bottom',
-            },
-        },
-    };
-
-    return <Line data={data} options={options} {...props} />;
-}
-function GroupIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http:www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M3 7V5c0-1.1.9-2 2-2h2" />
-            <path d="M17 3h2c1.1 0 2 .9 2 2v2" />
-            <path d="M21 17v2c0 1.1-.9 2-2 2h-2" />
-            <path d="M7 21H5c-1.1 0-2-.9-2-2v-2" />
-            <rect width="7" height="5" x="7" y="7" rx="1" />
-            <rect width="7" height="5" x="10" y="12" rx="1" />
-        </svg>
-    );
-}
-
-function StarIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http:www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-    );
-}
 function renderCard({ title, value, change, icon }) {
     return (
         <Card>

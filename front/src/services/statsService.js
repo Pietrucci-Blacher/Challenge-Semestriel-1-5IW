@@ -12,4 +12,13 @@ const getBookings = async () => {
     return await httpClient.get('reservations');
 };
 
-export { getUsersNumber, getActiveCompaniesNumber, getBookings };
+const getBestCompany = async () => {
+    return await httpClient.get('feedback');
+};
+
+export {
+    getUsersNumber,
+    getActiveCompaniesNumber,
+    getBookings,
+    getBestCompany,
+};

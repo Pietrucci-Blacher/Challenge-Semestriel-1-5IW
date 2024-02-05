@@ -2,6 +2,7 @@ import {
     getUsersNumber,
     getActiveCompaniesNumber,
     getBookings,
+    getBestCompany,
 } from '@/services/statsService';
 import { useCallback, useState } from 'react';
 
@@ -10,6 +11,8 @@ export const useStats = () => {
     const [companieNumber, setCompanieNumber] = useState(0);
     const [bookingNumber, setBookingNumber] = useState(0);
     const [recentBookings, setRecentBookings] = useState([]);
+    const [bestCompany, setBestCompany] = useState([]);
+    const [bookingsGraph, setBookingsGraph] = useState([]);
 
     const getUserNumber = useCallback(async () => {
         try {
@@ -41,10 +44,10 @@ export const useStats = () => {
         try {
             const data = await getBookings();
             const bookingsData = data['hydra:member'] ?? [];
-            setCompanieNumber(bookingsData.length);
+            setBookingNumber(bookingsData.length);
         } catch (error) {
             console.error(
-                'Erreur lors de la récupération du nombre d entreprises:',
+                'Erreur lors de la récupération du nombre de reservations',
                 error,
             );
         }
@@ -54,12 +57,38 @@ export const useStats = () => {
         try {
             const data = await getBookings();
             const bookingsData = data['hydra:member'] ?? [];
-            console.log(bookingsData);
             const recentBookings = bookingsData.slice(-3);
             setRecentBookings(recentBookings);
         } catch (error) {
             console.error(
-                'Erreur lors de la récupération des dernières réservations:',
+                'Erreur lors de la récupération des dernières réservations',
+                error,
+            );
+        }
+    }, []);
+
+    const getBestFeedBackCompany = useCallback(async () => {
+        try {
+            const data = await getBestCompany();
+            const companiesData = data['hydra:member'] ?? [];
+            console.log(companiesData);
+            setBestCompany(companiesData);
+        } catch (error) {
+            console.error(
+                'Erreur lors de la récupération de la meilleure entreprise',
+                error,
+            );
+        }
+    }, []);
+
+    const getGraphReservations = useCallback(async () => {
+        try {
+            const data = await getBookings();
+            const bookingsData = data['hydra:member'] ?? [];
+            setBookingsGraph(bookingsData);
+        } catch (error) {
+            console.error(
+                'Erreur lors de la récupération des dernières réservations',
                 error,
             );
         }
@@ -74,5 +103,9 @@ export const useStats = () => {
         getTotalBookings,
         recentBookings,
         getRecentBookings,
+        bestCompany,
+        getBestFeedBackCompany,
+        bookingsGraph,
+        getGraphReservations,
     };
 };
