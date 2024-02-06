@@ -14,11 +14,6 @@ export default function Planning() {
         if (!id) return;
         getWorkplaces(id);
     }, [user, getWorkplaces]);
-
-    useEffect(() => {
-        console.log('workplaces', workplaces);
-    }, [workplaces]);
-
     const handleSelectEstablishment = (event) => {
         const selectedEstablishment = event.target.value;
         if (!selectedEstablishment) setSelectedEstablishment(null);
