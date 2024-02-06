@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import { useFeedback } from '@/hooks/useFeedback';
-import { useAuthContext } from '@/providers/AuthProvider';
 import { Rating } from '@/components/Rating';
 import {
     HiStar,
@@ -14,16 +13,27 @@ import {
     HiOutlineArrowRight,
     HiArrowDown,
 } from 'react-icons/hi';
+import { deleteFeedback } from '@/services/feedbackService';
+import GenericButton from '@/components/GenericButton';
+import { useToast } from '@/hooks/useToast';
 
 export default function ListFeedback() {
-    const { user } = useAuthContext();
-    const { feedbacks, getFeedbacksFromUserId } = useFeedback();
+    const { feedbacks, getFeedbacks } = useFeedback();
+    const { createToastMessage } = useToast();
+    const [click, setClick] = useState(0);
 
     useEffect(() => {
-        const { id } = user;
-        if (!id) return;
-        getFeedbacksFromUserId(id);
-    }, [user, getFeedbacksFromUserId]);
+        getFeedbacks();
+    }, [click, getFeedbacks]);
+
+    const handleDelete = async (event, id) => {
+        try {
+            await deleteFeedback(id);
+            setClick(click + 1);
+        } catch (error) {
+            createToastMessage('error', 'Une erreur est survenue');
+        }
+    };
 
     const renderFeedbacks =
         feedbacks.length > 0 ? (
@@ -32,6 +42,12 @@ export default function ListFeedback() {
                     <p>
                         <HiStar className="inline-block mx-1" />
                         {feedback.note}
+                        <GenericButton
+                            onClick={(event) =>
+                                handleDelete(event, feedback.id)
+                            }
+                            label="Supprimer"
+                        />
                     </p>
                     <p>
                         {Object.keys(feedback.detailedNote).map((key) =>

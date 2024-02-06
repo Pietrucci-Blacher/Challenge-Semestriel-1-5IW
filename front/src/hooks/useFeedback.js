@@ -5,6 +5,11 @@ export const useFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [detailed, setNote] = useState(0);
 
+    const getFeedbacks = useCallback(async () => {
+        const response = await service.getFeedbacks();
+        setFeedbacks(response);
+    }, []);
+
     const getFeedbacksFromEstablishmentId = useCallback(async (id) => {
         const response = await service.getFeedbacksFromEstablishmentId(id);
         setFeedbacks(response);
@@ -33,6 +38,7 @@ export const useFeedback = () => {
     return {
         feedbacks,
         detailed,
+        getFeedbacks,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
         getFeedbacksFromServiceId,
