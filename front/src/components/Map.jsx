@@ -27,8 +27,7 @@ const MapComponent = () => {
 
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        // googleMapsApiKey: process.env.API_KEY,
-        googleMapsApiKey: 'AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8',
+        googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     });
 
     useEffect(() => {
@@ -42,7 +41,7 @@ const MapComponent = () => {
                     const response = await fetch(
                         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
                             establishment.street,
-                        )}&key=AIzaSyDZdFaDB4L72ma6LOOTxK93KvMPlhS2bj8`,
+                        )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
                     );
                     const data = await response.json();
 
