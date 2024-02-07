@@ -27,6 +27,8 @@ import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
 import { Table } from 'flowbite-react';
 
+import Modal from 'react-modal';
+
 
 
 
@@ -45,7 +47,8 @@ export default function ShowEstablishment() {
         schedules,
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
-        deleteSchedule
+        deleteSchedule,
+        deleteAdminSchedule,
     } = useSchedule();
     const [points, setPoints] = useState([]);
 
@@ -67,9 +70,9 @@ export default function ShowEstablishment() {
             userColors[userId] = generateRandomColor();
         }
 
-        let start = new Date(schedule['startTime']);
+        const start = new Date(schedule['startTime']);
         start.setHours(start.getHours() - 1);
-        let end = new Date(schedule['endTime']);
+        const end = new Date(schedule['endTime']);
         end.setHours(end.getHours() - 1);
 
         const username = schedule.assignedTo.firstname;
@@ -117,6 +120,8 @@ export default function ShowEstablishment() {
             createToastMessage('error', 'Une erreur est survenue');
         }
     };
+
+
     
 
     const renderEstablishment = establishment ? (
@@ -158,33 +163,28 @@ export default function ShowEstablishment() {
         return formattedDate;
     };
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedSchedule, setSelectedSchedule] = useState(null);
-    const [modifiedStartTime, setModifiedStartTime] = useState('');
-    const [modifiedEndTime, setModifiedEndTime] = useState('');
-    const [modifiedReason, setModifiedReason] = useState('');
 
-
-
-    const handleOpenModal = (schedule) => {
-        setSelectedSchedule(schedule);
-        setModifiedStartTime(schedule?.startTime || ''); // Assurez-vous que schedule est défini
-        setModifiedEndTime(schedule?.endTime || ''); // Assurez-vous que schedule est défini
-        setModifiedReason(schedule?.reason ?? ''); // Assurez-vous que schedule est défini
-        setIsModalOpen(true);
-    };    
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [scheduleToDeleteId, setScheduleToDeleteId] = useState(null);
     
-      const handleCloseModal = () => {
-        setSelectedSchedule(null);
-        setIsModalOpen(false);
-      };
-      const handleSaveChanges = () => {
-        console.log('Nouvelle valeur de Start Time :', modifiedStartTime);
-        console.log('Nouvelle valeur de End Time :', modifiedEndTime);
-        console.log('Nouvelle valeur de Reason :', modifiedReason);
-        setIsModalOpen(false);
+    const openModal = (id) => {
+        setScheduleToDeleteId(id);
+        setModalIsOpen(true);
+    };
+    
+    const closeModal = () => {
+        setModalIsOpen(false);
     };
 
+    const confirmDelete = async () => {
+        try {
+            await deleteAdminSchedule(scheduleToDeleteId);
+            closeModal(); // Fermer la modal après la suppression réussie
+        } catch (error) {
+            console.error('Erreur lors de la suppression du schedule :', error);
+            // Gérer les erreurs de suppression
+        }
+    };
 
     return (
         <>
@@ -367,11 +367,22 @@ export default function ShowEstablishment() {
                                                 </Link>
                                             </td>
                                             <td>
-                                                <button onClick={() => deleteSchedule(schedule.id)}>Supprimer</button>
+                                                {/* <button onClick={() => deleteAdminSchedule(schedule.id)}>Supprimer</button> */}
+                                                <button onClick={() => openModal(schedule.id)}>Supprimer</button>
+                                                <Modal
+                                                    isOpen={modalIsOpen}
+                                                    onRequestClose={closeModal}
+                                                    contentLabel="Confirmation de suppression"
+                                                >
+                                                    <h2>Confirmation de suppression</h2>
+                                                    <p>Voulez-vous vraiment supprimer le schedule avec l'ID {scheduleToDeleteId} ?</p>
+                                                    <button onClick={confirmDelete}>Oui</button>
+                                                    <button onClick={closeModal}>Non</button>
+                                                </Modal>
                                             </td>
-
                                         </tr>
                                     ))}
+                                    
                                 </tbody>
                             </Table>
                         ) : (
@@ -382,10 +393,6 @@ export default function ShowEstablishment() {
                     </div>
                 </Tabs.Item>
             </Tabs>
-
-
-
-
         </>
     );
 }

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import {
     addScheduleService,
     deleteScheduleService,
+    deleteAdminScheduleService,
     getEstablishmentSchedulesService,
     getSchedulesByUserAndEstablishmentService,
     getUserSchedulesService,
@@ -49,26 +50,41 @@ export const useSchedule = () => {
 
     const deleteSchedule = useCallback(
         async (id) => {
-            const shouldDelete = window.confirm("Voulez-vous vraiment supprimer ce schedule ?");
-            if (shouldDelete) {
-                try {
-                    await deleteScheduleService(id);
-                    const newSchedules = schedules.filter(
-                        (schedule) => schedule.id !== +id
-                    );
-                    setSchedules(newSchedules);
-                    router.push(`/admin/establishment/${establishmentId}`);
-                } catch (error) {
-                    console.error(
-                        'Erreur lors de la suppression du schedule :',
-                        error
-                    );
-                }
+            try {
+                await deleteScheduleService(id);
+                const newSchedules = schedules.filter(
+                    (schedule) => schedule.id !== +id,
+                );
+                setSchedules(newSchedules);
+            } catch (error) {
+                console.error(
+                    'Erreur lors de la suppression du schedule :',
+                    error,
+                );
             }
         },
         [schedules],
     );
 
+
+    const deleteAdminSchedule = useCallback(
+        async (id) => {
+            try {
+                await deleteAdminScheduleService(id);
+                const newSchedules = schedules.filter(
+                    (schedule) => schedule.id !== +id
+                );
+                setSchedules(newSchedules);
+                router.push(`/admin/establishment/${establishmentId}`);
+            } catch (error) {
+                console.error(
+                    'Erreur lors de la suppression du schedule :',
+                    error
+                );
+            }
+        },
+        [schedules],
+    );
 
     const getUserSchedules = useCallback(
         async (userId) => {
@@ -147,5 +163,6 @@ export const useSchedule = () => {
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
         getScheduleById,
+        deleteAdminSchedule,
     };
 };

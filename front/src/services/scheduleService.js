@@ -39,6 +39,10 @@ export const deleteScheduleService = (id) => {
     return httpClient.delete(`/schedules/${id}`);
 };
 
+export const deleteAdminScheduleService = (id) => {
+    return httpClient.delete(`/schedules/${id}`);
+}; 
+
 export const getScheduleByIdService = (id) => {
     return httpClient.get(`/schedules/${id}`);
 };
