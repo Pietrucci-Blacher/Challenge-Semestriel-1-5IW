@@ -7,7 +7,7 @@ import {
     getSchedulesByUserAndEstablishmentService,
     getUserSchedulesService,
     updateScheduleService,
-    getScheduleByIdService
+    getScheduleByIdService,
 } from '@/services/scheduleService';
 
 export const useSchedule = () => {
@@ -66,20 +66,19 @@ export const useSchedule = () => {
         [schedules],
     );
 
-
     const deleteAdminSchedule = useCallback(
         async (id) => {
             try {
                 await deleteAdminScheduleService(id);
                 const newSchedules = schedules.filter(
-                    (schedule) => schedule.id !== +id
+                    (schedule) => schedule.id !== +id,
                 );
                 setSchedules(newSchedules);
                 router.push(`/admin/establishment/${establishmentId}`);
             } catch (error) {
                 console.error(
                     'Erreur lors de la suppression du schedule :',
-                    error
+                    error,
                 );
             }
         },
@@ -140,17 +139,17 @@ export const useSchedule = () => {
         [],
     );
 
-    const getScheduleById = useCallback(
-        async (scheduleId) => {
-            try {
-                const schedule = await getScheduleByIdService(scheduleId);
-                setSchedule(schedule); // Mettez à jour le state avec le schedule trouvé
-            } catch (error) {
-                console.error('Erreur lors de la récupération du schedule par ID:', error);
-            }
-        },
-        [],
-    );
+    const getScheduleById = useCallback(async (scheduleId) => {
+        try {
+            const schedule = await getScheduleByIdService(scheduleId);
+            setSchedule(schedule); // Mettez à jour le state avec le schedule trouvé
+        } catch (error) {
+            console.error(
+                'Erreur lors de la récupération du schedule par ID:',
+                error,
+            );
+        }
+    }, []);
 
     return {
         schedules,

@@ -74,7 +74,7 @@ export default function DataSchedule() {
         try {
             // Appelez la fonction pour mettre à jour le schedule
             await updateSchedule(schedule.id, updatedSchedule);
-    
+
             // Redirection après la mise à jour réussie
             const establishmentId = establishment.split('/').pop();
 
@@ -83,18 +83,19 @@ export default function DataSchedule() {
         } catch (error) {
             console.error('Erreur lors de la mise à jour du schedule :', error);
             // Gérez l'erreur ici si nécessaire
-        }    };
+        }
+    };
 
-        const formatDate = (dateTimeString) => {
-            const date = new Date(dateTimeString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-        
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
-        };
+    const formatDate = (dateTimeString) => {
+        const date = new Date(dateTimeString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
 
     return (
         <>
@@ -105,38 +106,50 @@ export default function DataSchedule() {
                     <input
                         type="text"
                         value={reason}
-                        onChange={(e) => handleInputChange('reason', e.target.value)}
+                        onChange={(e) =>
+                            handleInputChange('reason', e.target.value)
+                        }
                     />
                     <br />
                     <label>Assigned To:</label>
                     <input
                         type="text"
                         value={assignedTo}
-                        onChange={(e) => handleInputChange('assignedTo', e.target.value)}
+                        onChange={(e) =>
+                            handleInputChange('assignedTo', e.target.value)
+                        }
                     />
                     <br />
                     <label>Establishment:</label>
                     <input
                         type="text"
                         value={establishment}
-                        onChange={(e) => handleInputChange('establishment', e.target.value)}
+                        onChange={(e) =>
+                            handleInputChange('establishment', e.target.value)
+                        }
                     />
                     <br />
                     <label>Start Time:</label>
                     <input
                         type="datetime-local"
                         value={formatDate(startTime)}
-                        onChange={(e) => handleInputChange('startTime', e.target.value)}
+                        onChange={(e) =>
+                            handleInputChange('startTime', e.target.value)
+                        }
                     />
                     <br />
                     <label>End Time:</label>
                     <input
                         type="datetime-local"
                         value={formatDate(endTime)}
-                        onChange={(e) => handleInputChange('endTime', e.target.value)}
+                        onChange={(e) =>
+                            handleInputChange('endTime', e.target.value)
+                        }
                     />
                     <br />
-                    <button onClick={handleUpdateSchedule}>Mettre à jour</button>
+                    <button onClick={handleUpdateSchedule}>
+                        Mettre à jour
+                    </button>
                 </div>
             ) : (
                 <p>Chargement en cours...</p>

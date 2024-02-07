@@ -22,8 +22,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
 
-
-
 export default function ShowEstablishment() {
     const router = useRouter();
     const { id } = router.query;
@@ -249,7 +247,6 @@ export default function ShowEstablishment() {
                     </div>
                 </Tabs.Item>
             </Tabs>
-            
         </>
     );
 }
