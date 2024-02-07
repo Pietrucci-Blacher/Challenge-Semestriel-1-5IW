@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
@@ -60,6 +61,10 @@ use App\Controller\Auth\EmailConfirmationController;
             security: 'is_granted("ROLE_USER") and object == user',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
             processor: UserPasswordHasher::class
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
+            securityMessage: 'Vous ne pouvez supprimer que votre propre compte ou un administrateur peut supprimer un utilisateur.'
         )
     ]
 )]
