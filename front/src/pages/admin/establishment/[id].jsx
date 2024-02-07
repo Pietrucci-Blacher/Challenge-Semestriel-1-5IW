@@ -386,7 +386,7 @@ export default function ShowEstablishment() {
                                                     <p>
                                                         Voulez-vous vraiment
                                                         supprimer le schedule
-                                                        avec l'ID{' '}
+                                                        avec l&eapos;ID{' '}
                                                         {scheduleToDeleteId} ?
                                                     </p>
                                                     <button
