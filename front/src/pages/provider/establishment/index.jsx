@@ -21,7 +21,7 @@ export default function ListEstablishment() {
                   <Table.Cell>{establishment.name}</Table.Cell>
                   <Table.Cell>{establishment.street}</Table.Cell>
                   <Table.Cell>{establishment.city}</Table.Cell>
-                  <Table.Cell>{establishment.zipCode}</Table.Cell>                  
+                  <Table.Cell>{establishment.zipCode}</Table.Cell>
                   <Table.Cell>
                       <a
                           className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"

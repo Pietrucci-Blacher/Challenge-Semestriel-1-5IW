@@ -38,7 +38,7 @@ export default function CreateEstablishment() {
 
     const handleInputPhotoEstablishmentChange = (value) => {
         setFormData({ ...formData, photoEstablishment: value });
-    }
+    };
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
