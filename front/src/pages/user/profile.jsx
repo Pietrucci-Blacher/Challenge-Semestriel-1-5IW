@@ -26,9 +26,7 @@ export default function Profile() {
         if (!user) {
             verifyUser();
         } else {
-            console.log('ok', userProfile);
             const pendingRequests = getPendingRequest(userProfile?.teamMembers);
-            console.log('pend', pendingRequests);
             setPendingRequests(pendingRequests);
             setFormData({ ...userProfile });
         }

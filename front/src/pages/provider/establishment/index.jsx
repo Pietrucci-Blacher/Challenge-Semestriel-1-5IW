@@ -15,10 +15,6 @@ export default function ListEstablishment() {
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);
 
-    useEffect(() => {
-        console.log(establishments);
-    }, [establishments]);
-
     const renderEstablishments = establishments
         ? establishments.map((establishment) => (
               <Table.Row key={establishment.id}>

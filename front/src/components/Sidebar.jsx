@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HiChartPie, HiViewBoards } from 'react-icons/hi';
+import { HiArrowLeft, HiChartPie, HiViewBoards } from 'react-icons/hi';
 import { Sidebar as FlowbiteSidebar } from 'flowbite-react';
 import { BiBuoy } from 'react-icons/bi';
 
@@ -23,8 +23,11 @@ const Sidebar = function ({ content = [] }) {
                     <FlowbiteSidebar.Item href="#" icon={HiViewBoards}>
                         Documentation
                     </FlowbiteSidebar.Item>
-                    <FlowbiteSidebar.Item href="#" icon={BiBuoy}>
-                        Help
+                    <FlowbiteSidebar.Item
+                        href="/auth/logout"
+                        icon={HiArrowLeft}
+                    >
+                        Déconnexion
                     </FlowbiteSidebar.Item>
                 </FlowbiteSidebar.ItemGroup>
             </FlowbiteSidebar.Items>

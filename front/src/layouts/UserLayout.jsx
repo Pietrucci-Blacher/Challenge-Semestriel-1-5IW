@@ -7,13 +7,25 @@ import {
     HiUser,
     HiViewBoards,
 } from 'react-icons/hi';
+import { useAuthContext } from '@/providers/AuthProvider';
+import { useEffect, useState } from 'react';
 
 const UserLayout = ({ children }) => {
+    const { user } = useAuthContext();
+    const [path, setPath] = useState('');
+
+    useEffect(() => {
+        if (!user) return;
+        if (user.roles.includes('ROLE_ADMIN')) setPath('/admin');
+        else if (user.roles.includes('ROLE_PROVIDER')) setPath('/provider');
+        else setPath('/profile');
+    }, [user]);
+
     const sidebarContent = [
         {
             icon: HiChartPie,
             text: 'Dashboard',
-            href: '#',
+            href: path,
             label: 'Pro',
             labelColor: 'gray',
         },
@@ -63,7 +75,7 @@ const UserLayout = ({ children }) => {
     return (
         <>
             <Sidebar content={sidebarContent} />
-            <main className="p-6 flex-grow  w-full">{children}</main>
+            <main className="p-6 flex-grow w-full">{children}</main>
         </>
     );
 };
