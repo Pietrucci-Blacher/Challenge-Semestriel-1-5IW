@@ -35,6 +35,9 @@ dependencies:
     '@heroicons/react':
         specifier: ^2.1.1
         version: 2.1.1(react@18.2.0)
+    '@react-google-maps/api':
+        specifier: ^2.19.2
+        version: 2.19.2(react-dom@18.2.0)(react@18.2.0)
     '@vercel/speed-insights':
         specifier: ^1.0.9
         version: 1.0.9(next@14.1.0)(react@18.2.0)
@@ -55,7 +58,7 @@ dependencies:
         version: 2.2.1
     flowbite-react:
         specifier: ^0.7.2
-        version: 0.7.2(@types/react@18.2.54)(esbuild@0.20.0)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.1)
+        version: 0.7.2(@types/react@18.2.55)(esbuild@0.20.0)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.1)
     i18next:
         specifier: ^23.8.2
         version: 23.8.2
@@ -67,7 +70,7 @@ dependencies:
         version: 14.1.0(@babel/core@7.23.9)(@opentelemetry/api@1.7.0)(react-dom@18.2.0)(react@18.2.0)
     next-i18next:
         specifier: ^15.2.0
-        version: 15.2.0(i18next@23.8.2)(next@14.1.0)(react-i18next@14.0.3)(react@18.2.0)
+        version: 15.2.0(i18next@23.8.2)(next@14.1.0)(react-i18next@14.0.5)(react@18.2.0)
     prop-types:
         specifier: ^15.8.1
         version: 15.8.1
@@ -81,8 +84,8 @@ dependencies:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     react-i18next:
-        specifier: ^14.0.3
-        version: 14.0.3(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^14.0.5
+        version: 14.0.5(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0)
     react-icons:
         specifier: ^5.0.1
         version: 5.0.1(react@18.2.0)
@@ -1437,6 +1440,25 @@ packages:
             '@fullcalendar/daygrid': 6.1.10(@fullcalendar/core@6.1.10)
         dev: false
 
+    /@googlemaps/js-api-loader@1.16.2:
+        resolution:
+            {
+                integrity: sha512-psGw5u0QM6humao48Hn4lrChOM2/rA43ZCm3tKK9qQsEj1/VzqkCqnvGfEOshDbBQflydfaRovbKwZMF4AyqbA==,
+            }
+        dependencies:
+            fast-deep-equal: 3.1.3
+        dev: false
+
+    /@googlemaps/markerclusterer@2.3.2:
+        resolution:
+            {
+                integrity: sha512-zb9OQP8XscZp2Npt1uQUYnGKu1miuq4DPP28JyDuFd6HV17HCEcjV9MtBi4muG/iVRXXvuHW9bRCnHbao9ITfw==,
+            }
+        dependencies:
+            fast-deep-equal: 3.1.3
+            supercluster: 8.0.1
+        dev: false
+
     /@grpc/grpc-js@1.9.14:
         resolution:
             {
@@ -2164,6 +2186,39 @@ packages:
             }
         dev: false
 
+    /@react-google-maps/api@2.19.2(react-dom@18.2.0)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-Vt57XWzCKfsUjKOmFUl2erVVfOePkPK5OigF/f+q7UuV/Nm9KDDy1PMFBx+wNahEqOd6a32BxfsykEhBnbU9wQ==,
+            }
+        peerDependencies:
+            react: ^16.8 || ^17 || ^18
+            react-dom: ^16.8 || ^17 || ^18
+        dependencies:
+            '@googlemaps/js-api-loader': 1.16.2
+            '@googlemaps/markerclusterer': 2.3.2
+            '@react-google-maps/infobox': 2.19.2
+            '@react-google-maps/marker-clusterer': 2.19.2
+            '@types/google.maps': 3.53.5
+            invariant: 2.2.4
+            react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
+        dev: false
+
+    /@react-google-maps/infobox@2.19.2:
+        resolution:
+            {
+                integrity: sha512-6wvBqeJsQ/eFSvoxg+9VoncQvNoVCdmxzxRpLvmjPD+nNC6mHM0vJH1xSqaKijkMrfLJT0nfkTGpovrF896jwg==,
+            }
+        dev: false
+
+    /@react-google-maps/marker-clusterer@2.19.2:
+        resolution:
+            {
+                integrity: sha512-x9ibmsP0ZVqzyCo1Pitbw+4b6iEXRw/r1TCy3vOUR3eKrzWLnHYZMR325BkZW2r8fnuWE/V3Fp4QZOP9qYORCw==,
+            }
+        dev: false
+
     /@rollup/pluginutils@5.1.0:
         resolution:
             {
@@ -2442,6 +2497,13 @@ packages:
                 integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==,
             }
 
+    /@types/google.maps@3.53.5:
+        resolution:
+            {
+                integrity: sha512-HoRq4Te8J6krH7hj+TfdYepqegoKZCj3kkaK5gf+ySFSHLvyqYkDvkrtbcVJXQ6QBphQ0h1TF7p4J6sOh4r/zg==,
+            }
+        dev: false
+
     /@types/hast@2.3.10:
         resolution:
             {
@@ -2542,10 +2604,10 @@ packages:
             csstype: 3.1.3
         dev: false
 
-    /@types/react@18.2.54:
+    /@types/react@18.2.55:
         resolution:
             {
-                integrity: sha512-039k+vrVJymDoe2y+HLk3O3oI3sa+C8KNjuDKofqrIJK26ramnqLNj9VJTaxAzFGMvpW/79HrrAJapHzpQ9fGQ==,
+                integrity: sha512-Y2Tz5P4yz23brwm2d7jNon39qoAtMMmalOQv6+fEFt1mT+FcM3D841wDpoUvFXhaYenuROCy3FZYqdTjM7qVyA==,
             }
         dependencies:
             '@types/prop-types': 15.7.11
@@ -4675,7 +4737,6 @@ packages:
             {
                 integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==,
             }
-        dev: true
 
     /fast-fifo@1.3.2:
         resolution:
@@ -4802,7 +4863,7 @@ packages:
             }
         dev: true
 
-    /flowbite-react@0.7.2(@types/react@18.2.54)(esbuild@0.20.0)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.1):
+    /flowbite-react@0.7.2(@types/react@18.2.55)(esbuild@0.20.0)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.4.1):
         resolution:
             {
                 integrity: sha512-Qq+yKW3955ZWjABzNq02NAS91rE86AHjCVRTXHXZ3dkcoGghqViIpsDCxOBo0NO7xnKkshYU3DocmczcP4pYTA==,
@@ -4821,7 +4882,7 @@ packages:
             react-dom: 18.2.0(react@18.2.0)
             react-icons: 4.12.0(react@18.2.0)
             react-indiana-drag-scroll: 2.2.0(react-dom@18.2.0)(react@18.2.0)
-            react-markdown: 9.0.1(@types/react@18.2.54)(react@18.2.0)
+            react-markdown: 9.0.1(@types/react@18.2.55)(react@18.2.0)
             sharp: 0.32.6
             tailwind-merge: 2.2.1
             tailwindcss: 3.4.1
@@ -5645,6 +5706,15 @@ packages:
             side-channel: 1.0.4
         dev: true
 
+    /invariant@2.2.4:
+        resolution:
+            {
+                integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==,
+            }
+        dependencies:
+            loose-envify: 1.4.0
+        dev: false
+
     /is-alphabetical@2.0.1:
         resolution:
             {
@@ -6232,6 +6302,13 @@ packages:
             object.assign: 4.1.5
             object.values: 1.1.7
         dev: true
+
+    /kdbush@4.0.2:
+        resolution:
+            {
+                integrity: sha512-WbCVYJ27Sz8zi9Q7Q0xHC+05iwkm3Znipc2XTlrnJbsHMYktW4hPhXUE8Ys1engBrvffoSCqbil1JQAa7clRpA==,
+            }
+        dev: false
 
     /keyv@4.5.4:
         resolution:
@@ -7659,7 +7736,7 @@ packages:
             - supports-color
         dev: false
 
-    /next-i18next@15.2.0(i18next@23.8.2)(next@14.1.0)(react-i18next@14.0.3)(react@18.2.0):
+    /next-i18next@15.2.0(i18next@23.8.2)(next@14.1.0)(react-i18next@14.0.5)(react@18.2.0):
         resolution:
             {
                 integrity: sha512-Rl5yZ4oGffsB0AjRykZ5PzNQ2M6am54MaMayldGmH/UKZisrIxk2SKEPJvaHhKlWe1qgdNi2FkodwK8sEjfEmg==,
@@ -7679,7 +7756,7 @@ packages:
             i18next-fs-backend: 2.3.1
             next: 14.1.0(@babel/core@7.23.9)(@opentelemetry/api@1.7.0)(react-dom@18.2.0)(react@18.2.0)
             react: 18.2.0
-            react-i18next: 14.0.3(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0)
+            react-i18next: 14.0.5(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0)
         dev: false
 
     /next@14.1.0(@babel/core@7.23.9)(@opentelemetry/api@1.7.0)(react-dom@18.2.0)(react@18.2.0):
@@ -8501,10 +8578,10 @@ packages:
             scheduler: 0.23.0
         dev: false
 
-    /react-i18next@14.0.3(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0):
+    /react-i18next@14.0.5(i18next@23.8.2)(react-dom@18.2.0)(react@18.2.0):
         resolution:
             {
-                integrity: sha512-Zav2EEnrQNmCawnzj0l7xitj7jipC7kBNG3o6Cl75NwGndvdp/wu3LSVwJpyAc3eSWMwRFYZ5uNi43CtFUDf/g==,
+                integrity: sha512-5+bQSeEtgJrMBABBL5lO7jPdSNAbeAZ+MlFWDw//7FnVacuVu3l9EeWFzBQvZsKy+cihkbThWOAThEdH8YjGEw==,
             }
         peerDependencies:
             i18next: '>= 23.2.3'
@@ -8576,7 +8653,7 @@ packages:
             }
         dev: true
 
-    /react-markdown@9.0.1(@types/react@18.2.54)(react@18.2.0):
+    /react-markdown@9.0.1(@types/react@18.2.55)(react@18.2.0):
         resolution:
             {
                 integrity: sha512-186Gw/vF1uRkydbsOIkcGXw7aHq0sZOCRFFjGrr7b9+nVZg4UfA4enXCaxm4fUzecU38sWfrNDitGhshuU7rdg==,
@@ -8586,7 +8663,7 @@ packages:
             react: '>=18'
         dependencies:
             '@types/hast': 3.0.4
-            '@types/react': 18.2.54
+            '@types/react': 18.2.55
             devlop: 1.1.0
             hast-util-to-jsx-runtime: 2.3.0
             html-url-attributes: 3.0.0
@@ -9478,6 +9555,15 @@ packages:
             mz: 2.7.0
             pirates: 4.0.6
             ts-interface-checker: 0.1.13
+
+    /supercluster@8.0.1:
+        resolution:
+            {
+                integrity: sha512-IiOea5kJ9iqzD2t7QJq/cREyLHTtSmUT6gQsweojg9WH2sYJqZK9SswTu6jrscO6D1G5v5vYZ9ru/eq85lXeZQ==,
+            }
+        dependencies:
+            kdbush: 4.0.2
+        dev: false
 
     /supports-color@5.5.0:
         resolution:
