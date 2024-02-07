@@ -14,7 +14,6 @@ import {
 } from 'react-icons/hi';
 import Image from 'next/image';
 import { useToast } from '@/hooks/useToast';
-import { Modal } from 'flowbite-react';
 import ModalComponent from '@/components/Modal';
 import Feedback from '@/components/Feedback';
 import { createFeedback } from '@/services/feedbackService';

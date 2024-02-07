@@ -12,8 +12,6 @@ import GenericButton from '@/components/GenericButton';
 import { deleteEstablishment } from '@/services/establishmentService';
 import { useToast } from '@/hooks/useToast';
 
-
-
 import { HiHome, HiUserCircle } from 'react-icons/hi';
 import { useService } from '@/hooks/useService';
 import { useTeam } from '@/hooks/useTeam';
@@ -28,9 +26,6 @@ import { convertDataToHtml } from '@/utils/utils';
 import { Table } from 'flowbite-react';
 
 import Modal from 'react-modal';
-
-
-
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -105,7 +100,6 @@ export default function ShowEstablishment() {
         setPoints(calendarPoints);
     }, [schedules]);
 
-
     const { createToastMessage } = useToast();
 
     useEffect(() => {
@@ -120,9 +114,6 @@ export default function ShowEstablishment() {
             createToastMessage('error', 'Une erreur est survenue');
         }
     };
-
-
-    
 
     const renderEstablishment = establishment ? (
         <div>
@@ -158,20 +149,22 @@ export default function ShowEstablishment() {
             minute: 'numeric',
             hour12: false,
         };
-    
-        const formattedDate = new Date(dateTimeString).toLocaleString('fr-FR', options);
+
+        const formattedDate = new Date(dateTimeString).toLocaleString(
+            'fr-FR',
+            options,
+        );
         return formattedDate;
     };
 
-
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [scheduleToDeleteId, setScheduleToDeleteId] = useState(null);
-    
+
     const openModal = (id) => {
         setScheduleToDeleteId(id);
         setModalIsOpen(true);
     };
-    
+
     const closeModal = () => {
         setModalIsOpen(false);
     };
@@ -179,10 +172,9 @@ export default function ShowEstablishment() {
     const confirmDelete = async () => {
         try {
             await deleteAdminSchedule(scheduleToDeleteId);
-            closeModal(); // Fermer la modal après la suppression réussie
+            closeModal();
         } catch (error) {
             console.error('Erreur lors de la suppression du schedule :', error);
-            // Gérer les erreurs de suppression
         }
     };
 
@@ -358,31 +350,59 @@ export default function ShowEstablishment() {
                                     {schedules.map((schedule) => (
                                         <tr key={schedule.id}>
                                             <td>{schedule.id}</td>
-                                            <td>{formatDate(schedule.startTime)}</td>
-                                            <td>{formatDate(schedule.endTime)}</td>
+                                            <td>
+                                                {formatDate(schedule.startTime)}
+                                            </td>
+                                            <td>
+                                                {formatDate(schedule.endTime)}
+                                            </td>
                                             <td>{schedule.reason}</td>
                                             <td>
-                                                <Link href={`/admin/establishment/update/schedule/${schedule.id}`} passHref>
+                                                <Link
+                                                    href={`/admin/establishment/update/schedule/${schedule.id}`}
+                                                    passHref
+                                                >
                                                     <p>Modifier</p>
                                                 </Link>
                                             </td>
                                             <td>
                                                 {/* <button onClick={() => deleteAdminSchedule(schedule.id)}>Supprimer</button> */}
-                                                <button onClick={() => openModal(schedule.id)}>Supprimer</button>
+                                                <button
+                                                    onClick={() =>
+                                                        openModal(schedule.id)
+                                                    }
+                                                >
+                                                    Supprimer
+                                                </button>
                                                 <Modal
                                                     isOpen={modalIsOpen}
                                                     onRequestClose={closeModal}
                                                     contentLabel="Confirmation de suppression"
                                                 >
-                                                    <h2>Confirmation de suppression</h2>
-                                                    <p>Voulez-vous vraiment supprimer le schedule avec l'ID {scheduleToDeleteId} ?</p>
-                                                    <button onClick={confirmDelete}>Oui</button>
-                                                    <button onClick={closeModal}>Non</button>
+                                                    <h2>
+                                                        Confirmation de
+                                                        suppression
+                                                    </h2>
+                                                    <p>
+                                                        Voulez-vous vraiment
+                                                        supprimer le schedule
+                                                        avec l'ID{' '}
+                                                        {scheduleToDeleteId} ?
+                                                    </p>
+                                                    <button
+                                                        onClick={confirmDelete}
+                                                    >
+                                                        Oui
+                                                    </button>
+                                                    <button
+                                                        onClick={closeModal}
+                                                    >
+                                                        Non
+                                                    </button>
                                                 </Modal>
                                             </td>
                                         </tr>
                                     ))}
-                                    
                                 </tbody>
                             </Table>
                         ) : (
