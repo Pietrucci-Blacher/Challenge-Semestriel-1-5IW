@@ -37,6 +37,8 @@ const MapComponent = () => {
     useEffect(() => {
         Promise.all(
             (establishments || []).map(async (establishment) => {
+                console.log('photo',establishment.photoEstablishment )
+
                 try {
                     const response = await fetch(
                         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -44,16 +46,19 @@ const MapComponent = () => {
                         )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
                     );
                     const data = await response.json();
+                    console.log('data', data)
 
                     if (data.results && data.results.length > 0) {
                         const location = data.results[0].geometry.location;
+                        console.log('establishment', establishment )
+
                         return {
                             id: establishment.id,
                             name: establishment.name,
                             street: establishment.street,
                             position: { lat: location.lat, lng: location.lng },
-                            photo: 'images/immeubles-parisiens-paris-zigzag.jpg',
-                            //photo: establishment.photoEstablishment,
+                            // photo: 'images/immeubles-parisiens-paris-zigzag.jpg',
+                            photo: establishment.photoEstablishment || 'images/immeubles-parisiens-paris-zigzag.jpg',                           
                             city: establishment.city,
                             zipCode: establishment.zipCode,
                         };
@@ -78,7 +83,6 @@ const MapComponent = () => {
     const onLoad = (map) => {
         setMap(map);
     };
-
     const onMapClick = () => {
         if (selectedMarker) {
             setSelectedMarker(null);

@@ -193,6 +193,7 @@ export default function ShowEstablishment() {
                                     <p>Street: {establishment.street}</p>
                                     <p>City: {establishment.city}</p>
                                     <p>Zip Code: {establishment.zipCode}</p>
+                                    <p>Photo: {establishment.photoEstablishment}</p>
                                 </div>
                             )}
                         </>

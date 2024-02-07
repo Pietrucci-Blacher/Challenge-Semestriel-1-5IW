@@ -32,6 +32,7 @@ export default function ShowEstablishment() {
             <p>Rue: {establishment.street}</p>
             <p>Ville: {establishment.city}</p>
             <p>Code postal: {establishment.zipCode}</p>
+            <p>Photo: {establishment.photoEstablishment}</p>
             <p>
                 Propriétaire: {establishment.owner.firstname}{' '}
                 {establishment.owner.lastname}

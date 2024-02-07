@@ -19,6 +19,7 @@ export default function UpdateEstablishment() {
         street: '',
         city: '',
         zipCode: '',
+        photoEstablishment: '',
     });
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function UpdateEstablishment() {
             street: establishment?.street || '',
             city: establishment?.city || '',
             zipCode: establishment?.zipCode || '',
+            photoEstablishment: establishment?.photoEstablishment || '',
         });
     }, [establishment]);
 
@@ -50,11 +52,15 @@ export default function UpdateEstablishment() {
         setFormData({ ...formData, zipCode: value });
     };
 
+    const handleInputPhotoEstablishmentChange = (value) => {
+        setFormData({ ...formData, photoEstablishment: value });
+    }
+
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
-        const { name, street, city, zipCode } = formData;
+        const { name, street, city, zipCode, photoEstablishment } = formData;
 
-        if (!name || !street || !city || !zipCode) {
+        if (!name || !street || !city || !zipCode || !photoEstablishment) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -65,6 +71,7 @@ export default function UpdateEstablishment() {
                 street,
                 city,
                 zipCode,
+                photoEstablishment
             });
 
             if (!establishment) {
@@ -119,6 +126,15 @@ export default function UpdateEstablishment() {
                         placeholder="Entrer un code postal"
                         value={formData.zipCode}
                         onChange={handleInputZipCodeChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Photo"
+                        type="text"
+                        placeholder="Entrer une photo"
+                        value={formData.photoEstablishment}
+                        onChange={handleInputPhotoEstablishmentChange}
                     />
                 </div>
                 <GenericButton label="Modifier un etablisement" />

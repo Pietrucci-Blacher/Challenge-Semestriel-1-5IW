@@ -1,11 +1,12 @@
 import httpClient from './httpClient';
 
-export const createEstablishment = ({ name, street, city, zipCode }) => {
+export const createEstablishment = ({ name, street, city, zipCode, photoEstablishment }) => {
     return httpClient.post('/establishments', {
         name,
         street,
         city,
         zipCode,
+        photoEstablishment,
     });
 };
 
@@ -30,6 +31,7 @@ export const deleteEstablishment = (id) => {
  *     street: string,
  *     city: string,
  *     zipCode: string,
+ *     photoEstablishment: string,
  * }} content - establishment content
  */
 export const updateEstablishment = (id, content) => {

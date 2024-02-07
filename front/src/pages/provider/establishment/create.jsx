@@ -17,6 +17,7 @@ export default function CreateEstablishment() {
         street: '',
         city: '',
         zipCode: '',
+        photoEstablishment: '',
     });
 
     const handleInputNameChange = (value) => {
@@ -35,11 +36,15 @@ export default function CreateEstablishment() {
         setFormData({ ...formData, zipCode: value });
     };
 
+    const handleInputPhotoEstablishmentChange = (value) => {
+        setFormData({ ...formData, photoEstablishment: value });
+    }
+
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { name, street, city, zipCode } = formData;
+        const { name, street, city, zipCode, photoEstablishment } = formData;
 
-        if (!name || !street || !city || !zipCode) {
+        if (!name || !street || !city || !zipCode || !photoEstablishment) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
             return;
         }
@@ -50,6 +55,7 @@ export default function CreateEstablishment() {
                 street,
                 city,
                 zipCode,
+                photoEstablishment: '',
             });
 
             if (!establishment) {
@@ -104,6 +110,15 @@ export default function CreateEstablishment() {
                         placeholder="Entrer un code postal"
                         value={formData.zipCode}
                         onChange={handleInputZipCodeChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Photo"
+                        type="text"
+                        placeholder="Entrer une photo"
+                        value={formData.photoEstablishment}
+                        onChange={handleInputPhotoEstablishmentChange}
                     />
                 </div>
                 <GenericButton label="Creer un etablisement" />
