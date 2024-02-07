@@ -5,8 +5,8 @@ export const useFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [detailed, setNote] = useState(0);
 
-    const getFeedbacks = useCallback(async () => {
-        const response = await service.getFeedbacks();
+    const getFeedbacks = useCallback(async (filter = {}) => {
+        const response = await service.getFeedbacks(filter);
         setFeedbacks(response);
     }, []);
 

@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
 use App\Controller\GetEstablishmentNote;
 use App\Controller\GetServiceNote;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -62,10 +64,11 @@ use App\Controller\GetServiceNote;
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(
-            security: 'is_granted("ROLE_ADMIN") or object.getReviewer() == user',
+            security: 'is_granted("ROLE_ADMIN")',
         ),
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['comment' => 'partial'])]
 class Feedback
 {
     #[ORM\Id]
