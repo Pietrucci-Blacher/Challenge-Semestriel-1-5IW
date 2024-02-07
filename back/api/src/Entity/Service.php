@@ -75,7 +75,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]

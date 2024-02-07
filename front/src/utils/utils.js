@@ -22,7 +22,7 @@ export const urlParameters = (filter) => {
  * convert EditorJS data to React HTML
  *
  * @param {object} blocks - EditorJS data
- * @returns {React} React HTML
+ * @returns {JSX.Element} React HTML
  */
 export const convertDataToHtml = (blocks) => {
     const convertedHtml = blocks.map((block, key) => {

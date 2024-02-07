@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\Link;
 use App\Attributes\UserField;
 use App\Controller\Schedules\GetSchedulesByUserAndEstablishment;
 use App\Repository\ScheduleRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -65,24 +66,24 @@ class Schedule
     #[ORM\ManyToOne(inversedBy: 'schedules')]
     #[UserField('assignedTo')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['schedule:read'])]
+    #[Groups(['schedule:read', 'reservation:read'])]
     private ?User $assignedTo = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['schedule:read'])]
+    #[Groups(['schedule:read', 'reservation:read'])]
     private ?Establishment $establishment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['schedule:read'])]
-    private ?\DateTimeInterface $startTime = null;
+    #[Groups(['schedule:read', 'reservation:read'])]
+    private ?DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['schedule:read'])]
-    private ?\DateTimeInterface $endTime = null;
+    #[Groups(['schedule:read', 'reservation:read'])]
+    private ?DateTimeInterface $endTime = null;
 
     #[ORM\OneToOne(mappedBy: 'schedule', cascade: ['persist', 'remove'])]
-    #[Groups(['schedule:read'])]
+    #[Groups(['schedule:read', 'reservation:read'])]
     private ?Reservation $reservation = null;
 
     public function getId(): ?int
@@ -116,24 +117,24 @@ class Schedule
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?DateTimeInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): static
+    public function setStartTime(DateTimeInterface $startTime): static
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getEndTime(): ?DateTimeInterface
     {
         return $this->endTime;
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): static
+    public function setEndTime(DateTimeInterface $endTime): static
     {
         $this->endTime = $endTime;
 
