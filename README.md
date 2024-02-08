@@ -1,6 +1,6 @@
 | Feature Name                                                                  | Author                   | Link PR                                                                  |
 |-------------------------------------------------------------------------------|--------------------------|--------------------------------------------------------------------------|
-| Setup infrastrcuture Docker                                                   | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/60  |
+| Setup infrastructure Docker                                                   | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/60  |
 | Authentification (Login, Register, Forgot password, Reset Password)           | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/152 |
 | Interceptros axios & add refresh token                                        | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/77  |
 | Setup Flowbite                                                                | Ossama DAHBI             | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/128 |
@@ -14,3 +14,5 @@
 | Gérer les prestations                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/195 |
 | Mise en place librairies tests front et back                                  | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/75  |
 | Faire l'envoi du mail                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/101 |
+| Feedback                                                                      | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/250 |
+| Dashboard Admin avec statistiques                                             | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/262 |
