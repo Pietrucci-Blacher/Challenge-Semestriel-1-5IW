@@ -37,13 +37,6 @@ const sidebarContent = [
         labelColor: 'gray',
     },
     {
-        icon: HiTable,
-        text: 'Reviews',
-        href: '#',
-        label: '',
-        labelColor: 'gray',
-    },
-    {
         icon: HiUser,
         text: 'Teams',
         href: '/provider/establishment/team',

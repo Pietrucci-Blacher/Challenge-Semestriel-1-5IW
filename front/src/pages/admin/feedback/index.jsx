@@ -79,7 +79,7 @@ export default function ListFeedback() {
 
     return (
         <>
-            <div className="mb-4 flex">
+            <div className="my-4 flex">
                 <Input
                     type="text"
                     placeholder="Entrer un service"
