@@ -50,8 +50,6 @@ export default function Id() {
         getServiceNote,
     } = useFeedback();
 
-    console.log('detailed', detailed);
-
     const { service, getService } = useService();
     const { establishmentTeam, getEstablishmentTeam } = useTeam();
     const { schedules, getUserSchedules } = useSchedule();
