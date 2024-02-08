@@ -61,7 +61,8 @@ export default function ListFeedback() {
                         </span>
                     </p>
                     <p>
-                        {feedback.reviewer.firstname}{' '}{feedback.reviewer.lastname}
+                        {feedback.reviewer.firstname}{' '}
+                        {feedback.reviewer.lastname}
                     </p>
                     <p>
                         {Object.keys(feedback.detailedNote).map((key) =>

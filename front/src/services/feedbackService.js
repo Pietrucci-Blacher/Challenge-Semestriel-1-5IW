@@ -36,4 +36,4 @@ export const getServiceNote = (id) => {
 
 export const deleteFeedback = (id) => {
     return httpClient.delete(`/feedback/${id}`);
-}
+};
