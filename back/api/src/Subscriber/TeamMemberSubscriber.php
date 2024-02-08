@@ -37,7 +37,7 @@ final class TeamMemberSubscriber implements EventSubscriberInterface
             $currentData = $request->attributes->get("data");
             $currentStatus = $currentData->getStatus();
             if ($currentStatus === "Approved"){
-                $user = $currentData->getMewwmber();
+                $user = $currentData->getMember();
                 $user->setRoles(["ROLE_TEACHER"]);
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
