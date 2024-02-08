@@ -47,6 +47,13 @@ const AdminLayout = ({ children }) => {
             labelColor: 'gray',
         },
         {
+            icon: HiTable,
+            text: 'Reviews',
+            href: '/admin/feedback',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
             icon: HiUser,
             text: 'Users',
             href: '/admin/users',

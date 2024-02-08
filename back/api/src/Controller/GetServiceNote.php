@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\FeedbackRepository;
 
 #[AsController]
-class GetEstablishmentNote extends AbstractController
+class GetServiceNote extends AbstractController
 {
     private FeedbackRepository $feedbackRepository;
     private SerializerInterface $serializer;
@@ -29,7 +29,7 @@ class GetEstablishmentNote extends AbstractController
         if (!$id)
             return new Response(null, Response::HTTP_BAD_REQUEST);
 
-        $feedbacks = $this->feedbackRepository->findByEstablishmentId($id);
+        $feedbacks = $this->feedbackRepository->findByServiceId($id);
 
         if (!$feedbacks)
             return new Response(null, Response::HTTP_NOT_FOUND);

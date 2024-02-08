@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import { useEstablishment } from '@/hooks/useEstablishment';
-import { useEffect, useState } from 'react';
+import { useFeedback } from '@/hooks/useFeedback';
+import { useEffect, useState, memo } from 'react';
 import {
     Breadcrumb,
     Button as FlowbiteButton,
     Select,
     Tabs,
+    Table,
 } from 'flowbite-react';
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
@@ -21,6 +23,18 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
+import {
+    HiStar,
+    HiSpeakerphone,
+    HiOutlineUpload,
+    HiOutlineHeart,
+    HiViewGrid,
+    HiBadgeCheck,
+    HiKey,
+    HiOutlineArrowRight,
+    HiArrowDown,
+} from 'react-icons/hi';
+import { Rating } from '@/components/Rating';
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -38,6 +52,12 @@ export default function ShowEstablishment() {
         getEstablishmentSchedules,
         getSchedulesByUserAndEstablishment,
     } = useSchedule();
+    const {
+        feedbacks,
+        detailed,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+    } = useFeedback();
     const [points, setPoints] = useState([]);
 
     const userColors = {};
@@ -80,11 +100,15 @@ export default function ShowEstablishment() {
         getEstablishmentServices(id);
         getEstablishmentTeam(id);
         getEstablishmentSchedules(id);
+        getFeedbacksFromEstablishmentId(id);
+        getEstablishmentNote(id);
     }, [
         getEstablishmentById,
         getEstablishmentServices,
         getEstablishmentTeam,
         getEstablishmentSchedules,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
         router,
     ]);
 
@@ -111,6 +135,39 @@ export default function ShowEstablishment() {
                 userId: userId,
             });
     };
+
+    const RatingList = memo(() => (
+        <ul className="w-full flex justify-between">
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Qualité des cours', detailed)}
+                {Rating('Professionalisme', detailed)}
+            </ul>
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
+            </ul>
+        </ul>
+    ));
+
+    RatingList.displayName = 'RatingList';
+
+    const renderServices = establishmentServices
+        ? establishmentServices.flat().map((service) => (
+              <Table.Row key={service.id}>
+                  <Table.Cell>{service.title}</Table.Cell>
+                  <Table.Cell>{service.description}</Table.Cell>
+                  <Table.Cell>{service.price}</Table.Cell>
+                  <Table.Cell>
+                      <a
+                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                          href={`/provider/services/${service.id}`}
+                      >
+                          Voir
+                      </a>
+                  </Table.Cell>
+              </Table.Row>
+          ))
+        : 'Chargement en cours';
 
     return (
         <>
@@ -183,17 +240,21 @@ export default function ShowEstablishment() {
                 </Tabs.Item>
                 <Tabs.Item title="Etablissement Info" icon={MdDashboard}>
                     <div className="mt-4">
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Establishment info:
-                        </h1>
                         <>
                             {establishment && (
-                                <div className="mt-2">
-                                    <p>Name: {establishment.name}</p>
-                                    <p>Street: {establishment.street}</p>
-                                    <p>City: {establishment.city}</p>
-                                    <p>Zip Code: {establishment.zipCode}</p>
-                                </div>
+                                <>
+                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {establishment.name}
+                                        <HiStar className="inline-block mx-1" />
+                                        {detailed.note}
+                                    </h1>
+                                    <RatingList />
+                                    <div className="mt-2">
+                                        <p>Street: {establishment.street}</p>
+                                        <p>City: {establishment.city}</p>
+                                        <p>Zip Code: {establishment.zipCode}</p>
+                                    </div>
+                                </>
                             )}
                         </>
                     </div>
@@ -216,31 +277,51 @@ export default function ShowEstablishment() {
                 <Tabs.Item title="Services" icon={HiUserCircle}>
                     <div className="mt-4">
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Service pour {establishment?.name}:
+                            Service pour {establishment?.name}
+                        </h1>
+                        <Table hoverable className="mt-2">
+                            <Table.Head>
+                                <Table.HeadCell>Titre</Table.HeadCell>
+                                <Table.HeadCell>Description</Table.HeadCell>
+                                <Table.HeadCell>Prix</Table.HeadCell>
+                                <Table.HeadCell>Actions</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body>{renderServices}</Table.Body>
+                        </Table>
+                    </div>
+                </Tabs.Item>
+                <Tabs.Item title="Feedback" icon={HiOutlineHeart}>
+                    <div className="mt-4">
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                            Feedback pour {establishment?.name}:
                         </h1>
                         <>
-                            {establishmentServices.length > 0 ? (
-                                establishmentServices.map((service, index) => (
+                            {feedbacks.length > 0 ? (
+                                feedbacks.map((feedback, index) => (
                                     <div className="mt-2" key={index}>
-                                        <p className="text-xl font-bold">
-                                            Service {index + 1}
-                                        </p>
-                                        <p>Title: {service.title}</p>
-                                        <p>Prix: {service.price}</p>
-                                        <p className="editor-html">
-                                            Body:{' '}
-                                            {convertDataToHtml(
-                                                service.body.blocks,
-                                            )}
+                                        <p>
+                                            {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                                            <HiStar className="inline-block mx-1" />
+                                            {feedback.note}
                                         </p>
                                         <p>
-                                            Description: {service.description}
+                                            {Object.keys(
+                                                feedback.detailedNote,
+                                            ).map((key) =>
+                                                Rating(
+                                                    key,
+                                                    feedback.detailedNote,
+                                                ),
+                                            )}
+                                        </p>
+                                        <p className="py-2">
+                                            {feedback.comment}
                                         </p>
                                     </div>
                                 ))
                             ) : (
                                 <div className="mt-2">
-                                    <p>Aucun service</p>
+                                    <p>Aucun feedback</p>
                                 </div>
                             )}
                         </>
