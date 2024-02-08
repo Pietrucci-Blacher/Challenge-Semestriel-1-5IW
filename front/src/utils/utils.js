@@ -25,7 +25,6 @@ export const urlParameters = (filter) => {
  * @returns {JSX.Element} React HTML
  */
 export const convertDataToHtml = (blocks) => {
-    console.log('blocks', blocks);
     const convertedHtml = blocks.map((block, key) => {
         if (block.type === 'header') {
             return React.createElement(
