@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/router';
 import { useService } from '@/hooks/useService';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import {
     Button,
     Card,
@@ -11,17 +11,44 @@ import {
     Select,
     Textarea,
 } from 'flowbite-react';
+import {
+    HiStar,
+    HiSpeakerphone,
+    HiOutlineUpload,
+    HiOutlineHeart,
+    HiViewGrid,
+    HiBadgeCheck,
+    HiKey,
+    HiOutlineArrowRight,
+    HiArrowDown,
+} from 'react-icons/hi';
 import Image from 'next/image';
 import { useTeam } from '@/hooks/useTeam';
 import { useSchedule } from '@/hooks/useSchedule';
 import ScheduleSelector from '@/components/ScheduleSelector';
 import { useReservation } from '@/hooks/useReservation';
+import { convertDataToHtml } from '@/utils/utils';
+import { createFeedback } from '@/services/feedbackService';
+import Feedback from '@/components/Feedback';
+import { useFeedback } from '@/hooks/useFeedback';
+import ModalComponent from '@/components/Modal';
+import { useAuthContext } from '@/providers/AuthProvider';
+import { Rating } from '@/components/Rating';
 
 export default function Id() {
+    const { user } = useAuthContext();
     const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [selectedSchedule, setSelectedSchedule] = useState({});
     const [openModal, setOpenModal] = useState(false);
     const [specialRequest, setSpecialRequest] = useState('');
+    const {
+        feedbacks,
+        detailed,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+        getFeedbacksFromServiceId,
+        getServiceNote,
+    } = useFeedback();
 
     const { service, getService } = useService();
     const { establishmentTeam, getEstablishmentTeam } = useTeam();
@@ -33,7 +60,9 @@ export default function Id() {
     useEffect(() => {
         if (!id) return;
         getService(id);
-    }, [router, getService]);
+        getFeedbacksFromServiceId(id);
+        getServiceNote(id);
+    }, [router, getService, getFeedbacksFromServiceId, getServiceNote]);
 
     useEffect(() => {
         if (!service) return;
@@ -60,6 +89,63 @@ export default function Id() {
         }
         setOpenModal(true);
     };
+
+    const Review = ({ name, date, imageSrc, content, note }) => (
+        <li className="mb-[40px] pr-16">
+            <div className="mb-4">
+                {/*<Image
+                    className="float-left mr-3 rounded-[100%]"
+                    src={imageSrc}
+                    width={40}
+                    height={40}
+                    alt={`Profile of ${name}`}
+                />*/}
+                <p className="block font-semibold text-base">
+                    {name}
+                    <span className="ml-2">
+                        <HiStar className="inline-block mr-1" />
+                        {note}
+                    </span>
+                </p>
+                <p className="text-[#717171] text-sm">{date}</p>
+            </div>
+            <p className="p-0">{content}</p>
+        </li>
+    );
+
+    const renderFeedback = feedbacks
+        ? feedbacks?.map((feedback) => (
+              <Review
+                  key={feedback.id}
+                  name={`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                  date={feedback.createdAt}
+                  imageSrc="https://a0.muscache.com/im/pictures/user/48bfe386-b947-443d-a7d8-9ba16dd87c1f.jpg?im_w=240"
+                  content={feedback.comment}
+                  note={feedback.note}
+              />
+          ))
+        : 'No feedbacks';
+
+    const ReviewsList = memo(() => (
+        <ul className="grid grid-cols-2 gap-8">{renderFeedback}</ul>
+    ));
+
+    ReviewsList.displayName = 'ReviewsList';
+
+    const RatingList = memo(() => (
+        <ul className="w-full flex justify-between">
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Qualité du cours', detailed)}
+                {Rating('Pédagogie', detailed)}
+            </ul>
+            <ul className="w-2/5 block mr-[10%]">
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
+            </ul>
+        </ul>
+    ));
+
+    RatingList.displayName = 'RatingList';
 
     const handleConfirmReservation = async () => {
         const { date, time } = selectedSchedule;
@@ -92,12 +178,81 @@ export default function Id() {
         setSelectedSchedule({});
     };
 
+    const onClose = async (value) => {
+        setModalProps((prev) => ({ ...prev, isOpen: false }));
+
+        await createFeedback({
+            reviewer: `users/${user?.id}`,
+            service: `services/${id}`,
+            note: value.resultJson.average,
+            comment: value.comment,
+            detailedNote: value.resultJson.service,
+        });
+
+        getFeedbacksFromServiceId(id);
+        getServiceNote(id);
+    };
+
+    let modalContent;
+    let modalSize;
+    const [modalProps, setModalProps] = useState({
+        isOpen: false,
+        size: '5xl',
+        text: null,
+        showButtons: true,
+        showCloseButton: true,
+        onClose: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+        onConfirm: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+        onCancel: () => setModalProps((prev) => ({ ...prev, isOpen: false })),
+    });
+
+    const setMore = (content) => {
+        switch (content) {
+            case 'feedback':
+                modalSize = '4xl';
+                modalContent = (
+                    <div>
+                        <h1 className="text-2xl">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
+                            Avis sur l'établissement
+                            {service?.title}
+                        </h1>
+                        <br />
+                        <p>Nous aimerions entendre votre avis !</p>
+                        <br />
+                        <Feedback
+                            showFeedback="service"
+                            onCloseModal={onClose}
+                        />
+                    </div>
+                );
+                break;
+            default:
+                modalContent = null;
+        }
+        setModalProps((prev) => ({
+            ...prev,
+            isOpen: true,
+            text: modalContent,
+            size: modalSize,
+            showButtons: false,
+        }));
+    };
+
     const getTeacherInfo = (userId) => {
         const teacher = establishmentTeam.find(
             (team) => +team.member.id === +userId,
         );
         return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`;
     };
+
+    const renderBody = service?.body?.blocks ? (
+        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3 editor-html-no-bg">
+            {convertDataToHtml(service?.body?.blocks)}
+        </p>
+    ) : (
+        <></>
+    );
 
     return (
         <>
@@ -106,47 +261,25 @@ export default function Id() {
                     <Carousel indicators={false} className="col-span-1">
                         <img
                             className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            src={`https://localhost/media/${service?.imagePath}`}
                             alt="..."
                         />
                     </Carousel>
-                    <Card className="col-span-2">
+                    <div className="col-span-2 overflow-auto">
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
                             {service?.title}
                         </h2>
                         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
                             {service?.description}
                         </p>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
-                            {service?.body}
-                        </p>
+                        {renderBody}
                         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
                             Duration: {service?.duration} min
                         </p>
                         <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words mt-4">
                             {service?.price} €
                         </p>
-                    </Card>
+                    </div>
                 </div>
 
                 <div className="mt-8">
@@ -269,7 +402,22 @@ export default function Id() {
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
                         Reviews :
                     </h2>
-                    <p>TBD</p>
+                    <p>
+                        <div className="mb-8 w-full">
+                            <h1 className="flex items-center font-semibold text-2xl mb-4">
+                                <HiStar className="mr-2" />
+                                {detailed.note} · {feedbacks.length} reviews
+                            </h1>
+                            <RatingList />
+                        </div>
+                        <ReviewsList />
+                        <button
+                            className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
+                            onClick={() => setMore('feedback')}
+                        >
+                            Ajouter un avis
+                        </button>
+                    </p>
                 </div>
             </div>
             <Modal show={openModal} onClose={() => setOpenModal(false)}>
@@ -327,6 +475,9 @@ export default function Id() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ModalComponent modalProps={modalProps}>
+                {modalProps.text}
+            </ModalComponent>
         </>
     );
 }

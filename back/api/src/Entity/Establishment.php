@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\Link;
 use App\Repository\EstablishmentRepository;
 use App\Attributes\UserField;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +31,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-//            security: 'is_granted("ROLE_ADMIN")',
+//          security: 'is_granted("ROLE_ADMIN")',
         ),
         new GetCollection(
             uriTemplate: '/users/{userId}/establishments',
@@ -72,14 +73,14 @@ class Establishment
 
     #[ORM\Column]
     #[Groups(['establishment:read', 'establishment:write', 'service:read'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['establishment:read', 'establishment:write'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'establishment:write', 'user:read', 'team_invitation:read', 'service:read', 'reservation:read', 'feedback:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -94,7 +95,6 @@ class Establishment
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
 
-
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
 
@@ -104,28 +104,35 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoEstablishment = null;
+
+    #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
+    private Collection $feedback;
+  
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->teamInvitations = new ArrayCollection();
         $this->schedules = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->feedback = new ArrayCollection();
         $this->reservations = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(PreUpdateEventArgs $event): void
     {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -145,24 +152,24 @@ class Establishment
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(?DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -304,6 +311,33 @@ class Establishment
             }
         }
 
+        return $this;
+    }
+
+    public function getPhotoEstablishment(): ?string
+    {
+        return $this->photoEstablishment;
+    }
+
+    public function setPhotoEstablishment(?string $photoEstablishment): static
+    {
+        $this->photoEstablishment = $photoEstablishment;
+    }
+  
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedback;
+    }
+
+    public function addFeedback(Feedback $feedback): static
+    {
+        if (!$this->feedback->contains($feedback)) {
+            $this->feedback->add($feedback);
+            $feedback->setEstablishment($this);
+        }
         return $this;
     }
 

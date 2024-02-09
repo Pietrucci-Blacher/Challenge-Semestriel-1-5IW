@@ -68,15 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'auth:me','team_invitation:read'])]
+    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]
@@ -129,6 +129,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
+
+    #[ORM\OneToMany(mappedBy: 'reviewer', targetEntity: Feedback::class)]
+    private Collection $feedback;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
@@ -448,7 +451,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->feedback->contains($feedback)) {
             $this->feedback->add($feedback);
-            $feedback->setUserId($this);
+            $feedback->setReviewer($this);
         }
 
         return $this;
@@ -458,8 +461,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->feedback->removeElement($feedback)) {
             // set the owning side to null (unless already changed)
-            if ($feedback->getUserId() === $this) {
-                $feedback->setUserId(null);
+            if ($feedback->getReviewer() === $this) {
+                $feedback->setReviewer(null);
             }
         }
 

@@ -24,7 +24,6 @@ export default function ApplyToBeProvider() {
             const response = await applyToBeProvider(formData);
             createToastMessage('success', 'votre demande a bien été envoyé');
         } catch (e) {
-            console.log('e', e);
             createToastMessage('error', e.detail);
         }
     };

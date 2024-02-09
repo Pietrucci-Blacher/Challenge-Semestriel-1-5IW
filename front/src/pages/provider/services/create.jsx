@@ -32,6 +32,7 @@ export default function CreateService() {
         description: '',
         establishment_id: 0,
         price: 0,
+        duration: 0,
     });
 
     const handleFileChange = (event) => {
@@ -62,15 +63,20 @@ export default function CreateService() {
         setFormData({ ...formData, price: parseInt(value) });
     };
 
+    const handleInputDurationChange = (value) => {
+        setFormData({ ...formData, duration: parseInt(value) });
+    };
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
-        const { title, description, price, establishment_id } = formData;
+        const { title, description, price, duration, establishment_id } =
+            formData;
 
         if (
             !title ||
             !description ||
             !price ||
             !establishment_id ||
+            !duration ||
             !editorData?.blocks?.length
         ) {
             createToastMessage('error', 'Veuillez remplir tous les champs');
@@ -88,6 +94,7 @@ export default function CreateService() {
             data.append('price', price);
             data.append('establishment', establishment);
             data.append('body', body);
+            data.append('duration', duration);
 
             const services = await createService(data);
 
@@ -156,6 +163,16 @@ export default function CreateService() {
                         value={formData.price}
                         min="0"
                         onChange={handleInputPriceChange}
+                    />
+                </div>
+                <div>
+                    <Input
+                        label="Durée en minutes"
+                        type="number"
+                        placeholder="Entrer une durée"
+                        value={formData.duration}
+                        min="0"
+                        onChange={handleInputDurationChange}
                     />
                 </div>
                 <div>

@@ -1,36 +1,75 @@
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
+import React, { useState } from 'react';
+import { Label, TextInput } from 'flowbite-react';
+import PropTypes from 'prop-types';
+import { HiEye, HiEyeOff } from 'react-icons/hi';
 
 export default function Input({
     type = 'text',
     placeholder = '',
     label = '',
-    name = '',
     value = '',
-    onChange = () => {},
+    onChange = (value) => {},
     required = false,
+    autoComplete = '',
     className = '',
 }) {
+    const [inputType, setInputType] = useState(type);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [showLabel, setShowLabel] = useState(false);
+
     const handleChange = (e) => {
         onChange(e.target.value);
     };
 
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+        setInputType(inputType === 'password' ? 'text' : 'password');
+        if (required) {
+            setShowLabel(!showLabel);
+        }
+    };
+
     const labelElem = label && (
-        <div className="mb-2 block">
+        <div className={`mb-2 block ${showLabel ? '' : 'hidden'}`}>
             <Label>{label}:</Label>
         </div>
     );
 
+    const eyeIcon = isPasswordVisible ? <HiEye /> : <HiEyeOff />;
+
     return (
-        <div>
+        <div className="flex-1">
             {labelElem}
-            <TextInput
-                type={type}
-                value={value}
-                placeholder={placeholder}
-                onChange={handleChange}
-                required={required}
-                className={className}
-            />
+            <div className="flex flex-row items-center relative">
+                <TextInput
+                    type={inputType}
+                    value={value}
+                    placeholder={placeholder}
+                    onChange={handleChange}
+                    autoComplete={autoComplete}
+                    required={required}
+                    className={`flex-1 ${className}`}
+                />
+                {type === 'password' && (
+                    <button
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-5 top-1/2 transform -translate-y-1/2"
+                    >
+                        {eyeIcon}
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
+
+Input.propTypes = {
+    type: PropTypes.string,
+    placeholder: PropTypes.string,
+    label: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    autoComplete: PropTypes.string,
+    required: PropTypes.bool,
+    className: PropTypes.string,
+};
