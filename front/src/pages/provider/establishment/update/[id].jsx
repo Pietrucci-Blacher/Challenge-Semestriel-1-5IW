@@ -54,7 +54,7 @@ export default function UpdateEstablishment() {
 
     const handleInputPhotoEstablishmentChange = (value) => {
         setFormData({ ...formData, photoEstablishment: value });
-    }
+    };
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
@@ -71,7 +71,7 @@ export default function UpdateEstablishment() {
                 street,
                 city,
                 zipCode,
-                photoEstablishment
+                photoEstablishment,
             });
 
             if (!establishment) {

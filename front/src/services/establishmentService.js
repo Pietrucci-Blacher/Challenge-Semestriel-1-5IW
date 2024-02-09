@@ -1,6 +1,12 @@
 import httpClient from './httpClient';
 
-export const createEstablishment = ({ name, street, city, zipCode, photoEstablishment }) => {
+export const createEstablishment = ({
+    name,
+    street,
+    city,
+    zipCode,
+    photoEstablishment,
+}) => {
     return httpClient.post('/establishments', {
         name,
         street,
