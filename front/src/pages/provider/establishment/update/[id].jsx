@@ -19,7 +19,7 @@ export default function UpdateEstablishment() {
         street: '',
         city: '',
         zipCode: '',
-        photoEstablishment: '',
+        photoEstablishment: null,
     });
 
     useEffect(() => {
@@ -51,10 +51,16 @@ export default function UpdateEstablishment() {
     const handleInputZipCodeChange = (value) => {
         setFormData({ ...formData, zipCode: value });
     };
-
-    const handleInputPhotoEstablishmentChange = (value) => {
-        setFormData({ ...formData, photoEstablishment: value });
+    
+    const handleInputPhotoEstablishmentChange = (file) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const url = event.target.result;
+            setFormData({ ...formData, photoEstablishment: url });
+        };
+        reader.readAsDataURL(file);
     };
+    
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
@@ -129,6 +135,9 @@ export default function UpdateEstablishment() {
                     />
                 </div>
                 <div>
+                    {formData.photoEstablishment && (
+                        <img src={formData.photoEstablishment} alt="Photo de l'établissement" style={{ maxWidth: '200px' }} />
+                    )}
                     <Input
                         label="Photo de l'établissement"
                         type="text"
@@ -137,6 +146,19 @@ export default function UpdateEstablishment() {
                         onChange={handleInputPhotoEstablishmentChange}
                     />
                 </div>
+                {/* <div>
+                    <label>Photo de l'établissement</label>
+                    <div>
+                        {formData.photoEstablishment && (
+                            <img src={formData.photoEstablishment} alt="Photo de l'établissement" style={{ maxWidth: '200px' }} />
+                        )}
+                        <input
+                            type="file"
+                            onChange={(e) => handleInputPhotoEstablishmentChange(e.target.files[0])}
+                        />
+                        <console className="log">{formData.photoEstablishment}</console>
+                    </div>
+                </div> */}
                 <GenericButton label="Modifier un etablisement" />
             </form>
             <FlowbiteButton
