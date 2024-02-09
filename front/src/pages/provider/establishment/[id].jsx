@@ -193,7 +193,8 @@ export default function ShowEstablishment() {
                                     <p>Street: {establishment.street}</p>
                                     <p>City: {establishment.city}</p>
                                     <p>Zip Code: {establishment.zipCode}</p>
-                                    <p>Photo: {establishment.photoEstablishment}</p>
+                                    <img class="h-auto max-w-xs"
+                                    src={establishment.photoEstablishment} />
                                 </div>
                             )}
                         </>
