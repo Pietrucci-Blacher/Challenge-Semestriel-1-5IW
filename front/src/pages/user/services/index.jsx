@@ -37,6 +37,7 @@ export default function Services() {
     const handleSliderMaxPriceChange = (value) => {
         setFormData({ ...formData, maxPrice: parseInt(value) || 0 });
     };
+
     return (
         <>
             <div>

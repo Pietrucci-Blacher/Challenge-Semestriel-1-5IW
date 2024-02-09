@@ -38,9 +38,9 @@ export default function Header() {
                                     {user.email}
                                 </span>
                             </Dropdown.Header>
-                            <Dropdown.Item>Dashboard</Dropdown.Item>
-                            <Dropdown.Item>Settings</Dropdown.Item>
-                            <Dropdown.Item>Earnings</Dropdown.Item>
+                            <Dropdown.Item href="/profile">
+                                Profile
+                            </Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item href="/auth/logout">
                                 Sign out

@@ -37,5 +37,5 @@ next-env.d.ts
 /playwright-report/
 /playwright/.cache/
 
-#Emailing 
-.react-email
+# Env
+.env

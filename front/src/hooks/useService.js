@@ -81,7 +81,6 @@ export const useService = () => {
         try {
             const response =
                 await getEstablishmentServicesRequest(establishmentId);
-            console.log('resp, ', response);
             setEstablishmentServices(response);
             setEstablishmentId(establishmentId);
         } catch (e) {

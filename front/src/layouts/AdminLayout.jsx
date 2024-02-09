@@ -7,6 +7,7 @@ import {
     HiUser,
     HiViewBoards,
 } from 'react-icons/hi';
+import PropTypes from 'prop-types';
 
 const AdminLayout = ({ children }) => {
     const sidebarContent = [
@@ -14,6 +15,13 @@ const AdminLayout = ({ children }) => {
             icon: HiChartPie,
             text: 'Dashboard',
             href: '/admin',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
+            icon: HiUser,
+            text: 'Profile',
+            href: '/profile',
             label: '',
             labelColor: 'gray',
         },
@@ -39,6 +47,13 @@ const AdminLayout = ({ children }) => {
             labelColor: 'gray',
         },
         {
+            icon: HiTable,
+            text: 'Reviews',
+            href: '/admin/feedback',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
             icon: HiUser,
             text: 'Users',
             href: '/admin/users',
@@ -49,8 +64,13 @@ const AdminLayout = ({ children }) => {
     return (
         <>
             <Sidebar content={sidebarContent} />
-            <main className="p-6 flex-grow  w-full">{children}</main>
+            <main className="flex-grow w-full px-6">{children}</main>
         </>
     );
 };
+
+AdminLayout.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
 export default AdminLayout;

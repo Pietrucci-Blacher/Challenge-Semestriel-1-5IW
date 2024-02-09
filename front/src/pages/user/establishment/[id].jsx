@@ -20,6 +20,7 @@ import Feedback from '@/components/Feedback';
 import { createFeedback } from '@/services/feedbackService';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
+import { Rating } from '@/components/Rating';
 export const DateView = () => {
     /*    return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -38,7 +39,7 @@ const ShowEstablishment = () => {
     const { createToastMessage } = useToast();
     const {
         feedbacks,
-        note,
+        detailed,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
     } = useFeedback();
@@ -153,17 +154,23 @@ const ShowEstablishment = () => {
         },
     ];
 
-    const Review = ({ name, date, imageSrc, content }) => (
+    const Review = ({ name, date, imageSrc, content, note }) => (
         <li className="mb-[40px] pr-16">
             <div className="mb-4">
-                <Image
+                {/*<Image
                     className="float-left mr-3 rounded-[100%]"
                     src={imageSrc}
                     width={40}
                     height={40}
                     alt={`Profile of ${name}`}
-                />
-                <p className="block font-semibold text-base">{name}</p>
+                />*/}
+                <p className="block font-semibold text-base">
+                    {name}
+                    <span className="ml-2">
+                        <HiStar className="inline-block mr-1" />
+                        {note}
+                    </span>
+                </p>
                 <p className="text-[#717171] text-sm">{date}</p>
             </div>
             <p className="p-0">{content}</p>
@@ -178,6 +185,7 @@ const ShowEstablishment = () => {
                   date={feedback.createdAt}
                   imageSrc="https://a0.muscache.com/im/pictures/user/48bfe386-b947-443d-a7d8-9ba16dd87c1f.jpg?im_w=240"
                   content={feedback.comment}
+                  note={feedback.note}
               />
           ))
         : 'No feedbacks';
@@ -191,50 +199,12 @@ const ShowEstablishment = () => {
     const RatingList = memo(() => (
         <ul className="w-full flex justify-between">
             <ul className="w-2/5 block mr-[10%]">
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Cleanliness</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[92%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.8</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Communication</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Check-in</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
+                {Rating('Qualité des cours', detailed)}
+                {Rating('Professionalisme', detailed)}
             </ul>
             <ul className="w-2/5 block mr-[10%]">
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Accuracy</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[96%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.9</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Location</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[92%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.8</p>
-                </li>
-                <li className="pr-16 flex items-center mb-4">
-                    <p className="text-[17px] w-full">Value</p>
-                    <div className="bg-[#dddddd] flex items-center overflow-hidden w-2/5 h-1 rounded-sm mr-2">
-                        <span className="w-[90%] text-[#222] bg-black block h-1"></span>
-                    </div>
-                    <p className="text-[13px] font-semibold">4.7</p>
-                </li>
+                {Rating('Rapport Qualité Prix', detailed)}
+                {Rating('Communication', detailed)}
             </ul>
         </ul>
     ));
@@ -292,27 +262,6 @@ const ShowEstablishment = () => {
                             onClick={() => setMore('more')}
                         >
                             Show more <HiOutlineArrowRight className="ml-1.5" />
-                        </button>
-                    </div>
-                );
-                break;
-            case 'reviews':
-                modalSize = '5xl';
-                modalContent = (
-                    <div id="reviews" className="py-12 w-full ">
-                        <div className="mb-8 w-full">
-                            <h1 className="flex items-center font-semibold text-2xl mb-4">
-                                <HiStar className="mr-2" />
-                                {note} · {feedbacks.length} reviews
-                            </h1>
-                            <RatingList />
-                        </div>
-                        <ReviewsList />
-                        <button
-                            className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                            onClick={() => setMore('feedback')}
-                        >
-                            Ajouter un avis
                         </button>
                     </div>
                 );
@@ -377,7 +326,7 @@ const ShowEstablishment = () => {
                         <div className="flex items-center">
                             <div className="flex font-semibold items-center">
                                 <HiStar className="mr-1.5" />
-                                <p>{note}</p>
+                                <p>{detailed.note}</p>
                                 <span className="mx-2">·</span>
                             </div>
                             <p className="underline cursor-pointer font-semibold">
@@ -529,7 +478,8 @@ const ShowEstablishment = () => {
                                 night
                             </p>
                             <div className="flex items-center text-[15px]">
-                                <HiStar className="mr-1" />5
+                                <HiStar className="mr-1" />
+                                <span>{detailed.note}</span>
                                 <span className="mx-1">·</span>
                                 <span className="text-[#717171] font-normal">
                                     {feedbacks.length} reviews
@@ -587,16 +537,16 @@ const ShowEstablishment = () => {
                     <div className="mb-8 w-full">
                         <h1 className="flex items-center font-semibold text-2xl mb-4">
                             <HiStar className="mr-2" />
-                            {note} · {feedbacks.length} reviews
+                            {detailed.note} · {feedbacks.length} reviews
                         </h1>
                         <RatingList />
                     </div>
                     <ReviewsList />
                     <button
                         className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                        onClick={() => setMore('reviews')}
+                        onClick={() => setMore('feedback')}
                     >
-                        Show all {feedbacks.length} reviews
+                        Ajouter un avis
                     </button>
                 </div>
             </div>
