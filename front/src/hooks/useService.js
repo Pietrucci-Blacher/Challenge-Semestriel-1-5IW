@@ -59,23 +59,23 @@ export const useService = () => {
         }
     };
 
-    const getAllServices = async () => {
+    const getAllServices = useCallback(async () => {
         try {
             const response = await getAllServicesRequest();
             setServices(response);
         } catch (e) {
             console.error('Error fetching all services: ', e);
         }
-    };
+    }, []);
 
-    const getServicesByFilters = async (filter = {}) => {
+    const getServicesByFilters = useCallback(async (filter = {}) => {
         try {
             const response = await getAllServicesRequest(filter);
             setServices(response);
         } catch (e) {
             console.error('Error fetching all services: ', e);
         }
-    };
+    }, []);
 
     const getEstablishmentServices = useCallback(async (establishmentId) => {
         try {

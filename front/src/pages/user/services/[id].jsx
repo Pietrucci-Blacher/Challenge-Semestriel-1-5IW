@@ -16,6 +16,7 @@ import { useTeam } from '@/hooks/useTeam';
 import { useSchedule } from '@/hooks/useSchedule';
 import ScheduleSelector from '@/components/ScheduleSelector';
 import { useReservation } from '@/hooks/useReservation';
+import { convertDataToHtml } from '@/utils/utils';
 
 export default function Id() {
     const [selectedTeacher, setSelectedTeacher] = useState(null);
@@ -33,7 +34,7 @@ export default function Id() {
     useEffect(() => {
         if (!id) return;
         getService(id);
-    }, [router, getService]);
+    }, [id, router, getService]);
 
     useEffect(() => {
         if (!service) return;
@@ -87,54 +88,40 @@ export default function Id() {
         return `${teacher?.member?.firstname} ${teacher?.member?.lastname}`;
     };
 
+    const renderBody = service?.body?.blocks ? (
+        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3 editor-html-no-bg">
+            {convertDataToHtml(service?.body?.blocks)}
+        </p>
+    ) : (
+        <></>
+    );
+
     return (
         <>
             <div className="container">
-                <div className="grid h-56 grid-cols-3 gap-4 sm:h-64 xl:h-80 2xl:h-96">
-                    <Carousel indicators={false} className="col-span-1">
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                        <img
-                            className="w-full h-full object-cover"
-                            src="https://www.flowbite-react.com/images/blog/image-1.jpg"
-                            alt="..."
-                        />
-                    </Carousel>
-                    <Card className="col-span-2">
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
+                <div className="lg:grid grid-cols-3 gap-4">
+                    <Card className="col-span-2 mb-4">
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
                             {service?.title}
                         </h2>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
                             {service?.description}
                         </p>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
-                            {service?.body}
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
+                            {renderBody}
                         </p>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
                             Duration: {service?.duration} min
                         </p>
-                        <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words mt-4">
+                        <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words">
                             {service?.price} €
                         </p>
                     </Card>
+                    <img
+                        className="w-full object-cover rounded-lg col-span-1"
+                        src={`https://localhost/media/${service?.imagePath}`}
+                        alt="..."
+                    />
                 </div>
 
                 <div className="mt-8">

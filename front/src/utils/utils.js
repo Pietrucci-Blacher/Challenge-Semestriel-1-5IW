@@ -45,8 +45,12 @@ export const convertDataToHtml = (blocks) => {
                 />
             );
         } else if (block.type === 'list') {
+            const style =
+                block.data.style === 'ordered' ? 'list-decimal' : 'list-disc';
             const listItems = block.data.items.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li key={i} className={style}>
+                    {item}
+                </li>
             ));
             return <ul key={key}>{listItems}</ul>;
         }

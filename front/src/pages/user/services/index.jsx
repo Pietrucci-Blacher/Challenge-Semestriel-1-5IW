@@ -1,18 +1,17 @@
 import { useService } from '@/hooks/useService';
 import { useEffect, useState } from 'react';
 import { Button, Card, Modal } from 'flowbite-react';
-// import {useRouter} from "next/router";
 import Input from '@/components/Input';
 import Slider from '@/components/Slider';
+import Image from 'next/image';
 
 export default function Services() {
-    // const router = useRouter()
     const { services, getAllServices, getServicesByFilters } = useService();
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
         getAllServices();
-    }, []);
+    }, [getAllServices]);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -25,7 +24,7 @@ export default function Services() {
             getServicesByFilters(formData);
         }, 200);
         return () => clearTimeout(timer);
-    }, [formData]);
+    }, [formData, getServicesByFilters]);
 
     const handleInputSearchChange = (value) => {
         setFormData({ ...formData, title: value });
@@ -38,12 +37,8 @@ export default function Services() {
     const handleSliderMaxPriceChange = (value) => {
         setFormData({ ...formData, maxPrice: parseInt(value) || 0 });
     };
-    // const goToServiceById = (id)=>{
-    //     router.push(`/services/${id}`)
-    // }
     return (
         <>
-            <h2>services</h2>
             <div>
                 <div className="mb-4 flex">
                     <Input
@@ -53,7 +48,7 @@ export default function Services() {
                         onChange={handleInputSearchChange}
                         className="w-full"
                     />
-                    <Button onClick={() => setOpenModal(true)}>Filtrer</Button>
+                    <Button className="ml-2" onClick={() => setOpenModal(true)}>Filtrer</Button>
                 </div>
             </div>
             <div className="flex flex-wrap mx-2 ">
@@ -64,8 +59,15 @@ export default function Services() {
                     >
                         <Card
                             className="max-w-sm card-hover transform transition-transform duration-1000 hover:scale-105"
-                            imgAlt="Meaningful alt text for an image that is not purely decorative"
-                            imgSrc="https://www.flowbite-react.com/images/blog/image-1.jpg"
+                            renderImage={() => (
+                                <img
+                                    src={`https://localhost/media/${service.imagePath}`}
+                                    alt="Picture of the author"
+                                    className="w-full rounded-t-lg h-48 object-cover"
+                                    width={500}
+                                    height={500}
+                                />
+                            )}
                             href={`/services/${service.id}`}
                         >
                             <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
