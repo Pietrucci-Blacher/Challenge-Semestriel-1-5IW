@@ -5,10 +5,8 @@ import { useService } from '@/hooks/useService';
 import { useEffect, useState } from 'react';
 import { Card } from 'flowbite-react';
 import { Image } from 'next/image';
-// import {useRouter} from "next/router";
 
 export default function Services() {
-    // const router = useRouter()
     const { services, getAllServices } = useService();
 
     const [formData, setFormData] = useState({
@@ -17,10 +15,6 @@ export default function Services() {
         maxPrice: 1000,
     });
     const [openModal, setOpenModal] = useState(false);
-
-    // useEffect(() => {
-    //     getAllServices();
-    // }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -41,9 +35,6 @@ export default function Services() {
         setFormData({ ...formData, maxPrice: parseInt(value) || 0 });
     };
 
-    // const goToServiceById = (id)=>{
-    //     router.push(`/services/${id}`)
-    // }
     const renderServices = services?.map((service) => (
         <div className="w-full sm:w-1/2 md:w-1/3 px-2 py-4" key={service.id}>
             <Card

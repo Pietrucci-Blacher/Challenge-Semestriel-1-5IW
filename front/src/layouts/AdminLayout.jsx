@@ -7,6 +7,7 @@ import {
     HiUser,
     HiViewBoards,
 } from 'react-icons/hi';
+import PropTypes from 'prop-types';
 
 const AdminLayout = ({ children }) => {
     const sidebarContent = [
@@ -14,50 +15,62 @@ const AdminLayout = ({ children }) => {
             icon: HiChartPie,
             text: 'Dashboard',
             href: '/admin',
-            label: 'Pro',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
+            icon: HiUser,
+            text: 'Profile',
+            href: '/profile',
+            label: '',
             labelColor: 'gray',
         },
         {
             icon: HiViewBoards,
             text: 'Requests',
             href: '/admin/requests',
-            label: 'Pro',
+            label: '',
             labelColor: 'gray',
         },
         {
             icon: HiInbox,
             text: 'Establishment',
-            href: '#',
-            label: 'Pro',
+            href: '/admin/establishment',
+            label: '',
             labelColor: 'gray',
         },
         {
             icon: HiShoppingBag,
             text: 'Services',
-            href: '#',
-            label: 'Pro',
-            labelColor: 'gray',
-        },
-        {
-            icon: HiUser,
-            text: 'Users',
-            href: '#',
-            label: 'Pro',
+            href: '/admin/services',
+            label: '',
             labelColor: 'gray',
         },
         {
             icon: HiTable,
             text: 'Reviews',
-            href: '#',
-            label: 'Pro',
+            href: '/admin/feedback',
+            label: '',
+            labelColor: 'gray',
+        },
+        {
+            icon: HiUser,
+            text: 'Users',
+            href: '/admin/users',
+            label: '',
             labelColor: 'gray',
         },
     ];
     return (
         <>
             <Sidebar content={sidebarContent} />
-            <main className="p-6 flex-grow  w-full">{children}</main>
+            <main className="flex-grow w-full px-6">{children}</main>
         </>
     );
 };
+
+AdminLayout.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
 export default AdminLayout;
