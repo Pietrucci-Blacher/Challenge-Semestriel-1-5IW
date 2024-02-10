@@ -8,7 +8,7 @@ export default function ListAllEstablishment() {
 
     useEffect(() => {
         getAllEstablishments();
-    }, []);
+    }, [getAllEstablishments]);
 
     const renderEstablishments = establishments
         ? establishments.map((establishment) => (

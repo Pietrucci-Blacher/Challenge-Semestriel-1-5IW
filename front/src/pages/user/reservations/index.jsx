@@ -76,9 +76,7 @@ export default function Reservations() {
                                 </Table.Row>
                             ))
                         ) : (
-                            <>
-                                <Table.Row>Pas de reservation</Table.Row>
-                            </>
+                            <Table.Row>Pas de reservation</Table.Row>
                         )}
                     </Table.Body>
                 </Table>

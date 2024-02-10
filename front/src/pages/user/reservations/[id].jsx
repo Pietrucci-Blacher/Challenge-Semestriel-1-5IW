@@ -129,9 +129,10 @@ export default function Id() {
                 <Modal.Header>Annuler la reservation</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">
-                        Vous etes sur d'annuler la reservation
+                        Vous &#39;etes sur d&#39;annuler la r&eacute;servation
                     </div>
                 </Modal.Body>
+
                 <Modal.Footer>
                     <Button onClick={handleCancelAppointment}>Confirmer</Button>
                     <Button
@@ -154,13 +155,11 @@ export default function Id() {
                     </h2>
                     <div className="space-y-6">
                         {schedules !== null && (
-                            <>
-                                <ScheduleSelector
-                                    range={reservation?.service?.duration}
-                                    unavailableSlots={schedules}
-                                    onSelectSchedule={handleSelectSchedule}
-                                />
-                            </>
+                            <ScheduleSelector
+                                range={reservation?.service?.duration}
+                                unavailableSlots={schedules}
+                                onSelectSchedule={handleSelectSchedule}
+                            />
                         )}
                     </div>
                 </Modal.Body>
@@ -183,13 +182,11 @@ export default function Id() {
                     </h2>
                     <div className="space-y-6">
                         {schedules !== null && (
-                            <>
-                                <ScheduleSelector
-                                    range={reservation?.service?.duration}
-                                    unavailableSlots={schedules}
-                                    onSelectSchedule={handleSelectSchedule}
-                                />
-                            </>
+                            <ScheduleSelector
+                                range={reservation?.service?.duration}
+                                unavailableSlots={schedules}
+                                onSelectSchedule={handleSelectSchedule}
+                            />
                         )}
                     </div>
                 </Modal.Body>
