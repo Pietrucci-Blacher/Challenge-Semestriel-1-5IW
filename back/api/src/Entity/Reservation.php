@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
@@ -22,7 +23,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/reservations',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'customer', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/teachers/{userId}/reservations',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'teacher', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/services/{serviceId}/reservations',
+            uriVariables: [
+                'serviceId' => new Link(toProperty: 'service', fromClass: Reservation::class),
+            ],
+        ),
+        new GetCollection(
+            uriTemplate: '/establishments/{establishmentId}/reservations',
+            uriVariables: [
+                'establishmentId' => new Link(toProperty: 'establishment', fromClass: Reservation::class),
+            ],
+        ),
+        new Get(
+            security: "object.getCustomer() == user or object.getTeacher() == user or object.getEstablishment().getOwner() == user",
+            securityMessage: 'Acces denied'
+        ),
         new Post(
             controller: CreateReservation::class,
             input: CreateReservationDto::class,
@@ -49,7 +77,6 @@ class Reservation
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['reservation:read', 'reservation:write'])]
-//    #[UserField('customer')]
     private ?User $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
@@ -192,7 +219,7 @@ class Reservation
         $endTime = $this->endTime;
         $currentDate = new \DateTime();
         if ($startTime <= $currentDate) {
-            $context->buildViolation('Le startTime doit être dans le futur ' )
+            $context->buildViolation('Le startTime doit être dans le futur ')
                 ->atPath('startTime')
                 ->addViolation();
         }

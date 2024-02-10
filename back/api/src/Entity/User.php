@@ -68,15 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read'])]
+    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]

@@ -4,20 +4,32 @@ export const addReservation = (payload) => {
     return httpClient.post(`/reservations`, payload);
 };
 
-export const getUserReservations = ({ userId }) => {
-    return httpClient.get(`users/${userId}/schedules`);
+export const getReservation = (reservationId) => {
+    return httpClient.get(`reservations/${reservationId}`);
+};
+export const getUserReservations = (userId) => {
+    return httpClient.get(`users/${userId}/reservations`);
 };
 
-export const getTeacherReservations = ({ establishmentId }) => {
-    return httpClient.get(`establishments/${establishmentId}/schedules`);
+export const getTeacherReservations = (teacherId) => {
+    return httpClient.get(`teachers/${teacherId}/reservations`);
 };
 
-export const getEstablishmentReservations = ({ establishmentId, userId }) => {
-    return httpClient.get(
-        `establishments/${establishmentId}/users/${userId}/schedules`,
-    );
+export const getEstablishmentReservations = (establishmentId) => {
+    return httpClient.get(`establishments/${establishmentId}/reservations`);
 };
 
-export const getServiceReservations = (id, payload) => {
-    return httpClient.patch(`/schedules/${id}`, { ...payload });
+export const getServiceReservations = (serviceId) => {
+    return httpClient.get(`services/${serviceId}//reservations`);
+};
+
+export const updateReservation = ({ reservationId, startTime, endTime }) => {
+    return httpClient.patch(`reservations/${reservationId}`, {
+        startTime,
+        endTime,
+    });
+};
+
+export const deleteReservationService = (reservationId) => {
+    return httpClient.delete(`reservations/${reservationId}`);
 };

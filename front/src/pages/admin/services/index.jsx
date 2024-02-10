@@ -6,7 +6,7 @@ export default function ListAllServices() {
 
     useEffect(() => {
         getAllServices();
-    }, []);
+    }, [getAllServices]);
 
     const renderServices = services
         ? services.map((service) => (

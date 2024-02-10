@@ -43,8 +43,6 @@ use App\Attributes\UserField;
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new Post(
             uriTemplate: '/services/{id}/update',
@@ -71,7 +69,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['service:read'])]
+    #[Groups(['service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -83,7 +81,7 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
     private ?float $price = null;
 
@@ -91,9 +89,10 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?array $body = [];
 
-    #[ORM\Column()]
-    #[Groups(['service:read', 'service:write'])]
+    #[ORM\Column]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
+
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
