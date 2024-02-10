@@ -115,21 +115,6 @@ export default function ShowEstablishment() {
         }
     };
 
-    const renderEstablishment = establishment ? (
-        <div>
-            <h1>{establishment.name}</h1>
-            <p>Rue: {establishment.street}</p>
-            <p>Ville: {establishment.city}</p>
-            <p>Code postal: {establishment.zipCode}</p>
-            <p>
-                Propriétaire: {establishment.owner.firstname}{' '}
-                {establishment.owner.lastname}
-            </p>
-        </div>
-    ) : (
-        'Chargement...'
-    );
-
     const handleSelectEmployee = async (event) => {
         const userId = event.target.value;
         if (!userId) getEstablishmentSchedules(id);
@@ -180,35 +165,6 @@ export default function ShowEstablishment() {
 
     return (
         <>
-            <div>{renderEstablishment}</div>
-            <GenericButton onClick={handleDelete} label="Supprimer" />
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href={`/admin/establishment/update/${id}`}
-            >
-                Modifier
-            </FlowbiteButton>
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href="/admin/establishment"
-            >
-                Retour
-            </FlowbiteButton>
-
-            <Breadcrumb aria-label="Default breadcrumb example">
-                <Breadcrumb.Item href="#" icon={HiHome}>
-                    Dashboard
-                </Breadcrumb.Item>
-                <Breadcrumb.Item href="/provider/establishment">
-                    Etablissements
-                </Breadcrumb.Item>
-                <Breadcrumb.Item href="#">
-                    {establishment?.name}
-                </Breadcrumb.Item>
-            </Breadcrumb>
-
             <Tabs aria-label="Default tabs" style="default">
                 <Tabs.Item
                     title="Equipe"
