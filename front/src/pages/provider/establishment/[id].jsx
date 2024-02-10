@@ -129,12 +129,14 @@ export default function ShowEstablishment() {
 
     const handleSelectEmployee = async (event) => {
         const userId = event.target.value;
-        if (!userId) getEstablishmentSchedules(id);
-        else
+        if (!userId) {
+            await getEstablishmentSchedules(id);
+        } else {
             getSchedulesByUserAndEstablishment({
                 establishmentId: id,
                 userId: userId,
             });
+        }
     };
 
     const RatingList = memo(() => (
@@ -194,13 +196,11 @@ export default function ShowEstablishment() {
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Equipe pour {establishment?.name}:
                         </h1>
-                        <>
-                            <TeamCard
-                                members={establishmentTeam}
-                                onReinviteMember={reInviteMemberToTeam}
-                                onRemoveMember={removeMemberFromTeam}
-                            />
-                        </>
+                        <TeamCard
+                            members={establishmentTeam}
+                            onReinviteMember={reInviteMemberToTeam}
+                            onRemoveMember={removeMemberFromTeam}
+                        />
 
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Planning de mon equipe:
@@ -241,23 +241,21 @@ export default function ShowEstablishment() {
                 </Tabs.Item>
                 <Tabs.Item title="Etablissement Info" icon={MdDashboard}>
                     <div className="mt-4">
-                        <>
-                            {establishment && (
-                                <>
-                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {establishment.name}
-                                        <HiStar className="inline-block mx-1" />
-                                        {detailed.note}
-                                    </h1>
-                                    <RatingList />
-                                    <div className="mt-2">
-                                        <p>Street: {establishment.street}</p>
-                                        <p>City: {establishment.city}</p>
-                                        <p>Zip Code: {establishment.zipCode}</p>
-                                    </div>
-                                </>
-                            )}
-                        </>
+                        {establishment && (
+                            <>
+                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {establishment.name}
+                                    <HiStar className="inline-block mx-1" />
+                                    {detailed.note}
+                                </h1>
+                                <RatingList />
+                                <div className="mt-2">
+                                    <p>Street: {establishment.street}</p>
+                                    <p>City: {establishment.city}</p>
+                                    <p>Zip Code: {establishment.zipCode}</p>
+                                </div>
+                            </>
+                        )}
                     </div>
                     <GenericButton onClick={handleDelete} label="Supprimer" />
                     <FlowbiteButton
@@ -296,36 +294,31 @@ export default function ShowEstablishment() {
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Feedback pour {establishment?.name}:
                         </h1>
-                        <>
-                            {feedbacks.length > 0 ? (
-                                feedbacks.map((feedback, index) => (
-                                    <div className="mt-2" key={index}>
-                                        <p>
-                                            {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
-                                            <HiStar className="inline-block mx-1" />
-                                            {feedback.note}
-                                        </p>
-                                        <p>
-                                            {Object.keys(
-                                                feedback.detailedNote,
-                                            ).map((key) =>
+                        {feedbacks.length > 0 ? (
+                            feedbacks.map((feedback, index) => (
+                                <div className="mt-2" key={index}>
+                                    <p>
+                                        {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                                        <HiStar className="inline-block mx-1" />
+                                        {feedback.note}
+                                    </p>
+                                    <p>
+                                        {Object.keys(feedback.detailedNote).map(
+                                            (key) =>
                                                 Rating(
                                                     key,
                                                     feedback.detailedNote,
                                                 ),
-                                            )}
-                                        </p>
-                                        <p className="py-2">
-                                            {feedback.comment}
-                                        </p>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="mt-2">
-                                    <p>Aucun feedback</p>
+                                        )}
+                                    </p>
+                                    <p className="py-2">{feedback.comment}</p>
                                 </div>
-                            )}
-                        </>
+                            ))
+                        ) : (
+                            <div className="mt-2">
+                                <p>Aucun feedback</p>
+                            </div>
+                        )}
                     </div>
                 </Tabs.Item>
                 <Tabs.Item title="Reservations" icon={HiUserCircle}>
