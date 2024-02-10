@@ -13,28 +13,21 @@ const AdminLayout = ({ children }) => {
     const sidebarContent = [
         {
             icon: HiChartPie,
-            text: 'Dashboard',
+            text: 'Tableau de bord',
             href: '/admin',
             label: '',
             labelColor: 'gray',
         },
         {
-            icon: HiUser,
-            text: 'Profile',
-            href: '/profile',
-            label: '',
-            labelColor: 'gray',
-        },
-        {
             icon: HiViewBoards,
-            text: 'Requests',
+            text: 'Demandes',
             href: '/admin/requests',
             label: '',
             labelColor: 'gray',
         },
         {
             icon: HiInbox,
-            text: 'Establishment',
+            text: 'Etablissements',
             href: '/admin/establishment',
             label: '',
             labelColor: 'gray',
@@ -48,14 +41,14 @@ const AdminLayout = ({ children }) => {
         },
         {
             icon: HiTable,
-            text: 'Reviews',
+            text: 'Feedbacks',
             href: '/admin/feedback',
             label: '',
             labelColor: 'gray',
         },
         {
             icon: HiUser,
-            text: 'Users',
+            text: 'Utilisateurs',
             href: '/admin/users',
             label: '',
             labelColor: 'gray',

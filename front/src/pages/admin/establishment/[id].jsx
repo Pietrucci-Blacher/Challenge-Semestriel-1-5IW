@@ -104,7 +104,7 @@ export default function ShowEstablishment() {
 
     useEffect(() => {
         getEstablishmentById(id);
-    }, [id]);
+    }, [getEstablishmentById, id]);
 
     const handleDelete = async (event) => {
         try {

@@ -2,13 +2,18 @@ import { useEstablishment } from '@/hooks/useEstablishment';
 import { useEffect } from 'react';
 import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
+import Spinner from '@/components/Spinner';
 
 export default function ListAllEstablishment() {
     const { establishments, getAllEstablishments } = useEstablishment();
 
     useEffect(() => {
         getAllEstablishments();
-    }, []);
+    }, [getAllEstablishments]);
+
+    if (!establishments) {
+        return <Spinner />;
+    }
 
     const renderEstablishments = establishments
         ? establishments.map((establishment) => (

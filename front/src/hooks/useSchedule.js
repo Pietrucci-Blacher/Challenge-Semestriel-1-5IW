@@ -4,14 +4,14 @@ import {
     deleteScheduleService,
     deleteAdminScheduleService,
     getEstablishmentSchedulesService,
-    getSchedulesByUserAndEstablishmentService,
-    getUserSchedulesService,
+    getSchedulesByTeacherAndEstablishmentService,
+    getTeacherSchedulesService,
     updateScheduleService,
     getScheduleByIdService,
 } from '@/services/scheduleService';
 
 export const useSchedule = () => {
-    const [userId, setUserId] = useState(null);
+    const [teacherId, setTeacherId] = useState(null);
     const [establishmentId, setEstablishmentId] = useState(null);
     const [schedule, setSchedule] = useState(null);
     const [schedules, setSchedules] = useState([]);
@@ -26,7 +26,7 @@ export const useSchedule = () => {
             };
             const response = await addScheduleService(payload);
         },
-        [userId],
+        [teacherId],
     );
 
     const updateSchedule = useCallback(
@@ -36,13 +36,13 @@ export const useSchedule = () => {
                 (schedule) => schedule.id === +id,
             );
             if (scheduleIndex !== -1) {
-                const updatedUserSchedules = [...schedules];
-                updatedUserSchedules[scheduleIndex] = {
-                    ...updatedUserSchedules[scheduleIndex],
+                const updatedTeacherSchedules = [...schedules];
+                updatedTeacherSchedules[scheduleIndex] = {
+                    ...updatedTeacherSchedules[scheduleIndex],
                     ...schedule,
                 };
                 setSchedules([]);
-                setSchedules(updatedUserSchedules);
+                setSchedules(updatedTeacherSchedules);
             }
         },
         [schedules],
@@ -85,12 +85,13 @@ export const useSchedule = () => {
         [schedules],
     );
 
-    const getUserSchedules = useCallback(
-        async (userId) => {
+    const getTeacherSchedules = useCallback(
+        async (teacherId) => {
+            console.log(teacherId);
             try {
-                const data = await getUserSchedulesService({ userId });
+                const data = await getTeacherSchedulesService({ teacherId });
                 const schedulesData = data['hydra:member'] ?? [];
-                setUserId(userId);
+                setTeacherId(teacherId);
                 setSchedules(schedulesData);
             } catch (error) {
                 console.error(
@@ -99,7 +100,7 @@ export const useSchedule = () => {
                 );
             }
         },
-        [userId],
+        [teacherId],
     );
 
     const getEstablishmentSchedules = useCallback(async (establishmentId) => {
@@ -110,7 +111,7 @@ export const useSchedule = () => {
             });
             const schedulesData = data['hydra:member'] ?? [];
             setSchedules(schedulesData);
-            setEstablishmentId(userId);
+            setEstablishmentId(teacherId);
         } catch (error) {
             console.error(
                 'Erreur lors de la récupération des indisponibilités:',
@@ -119,16 +120,15 @@ export const useSchedule = () => {
         }
     }, []);
 
-    const getSchedulesByUserAndEstablishment = useCallback(
-        async ({ establishmentId, userId }) => {
+    const getSchedulesByTeacherAndEstablishment = useCallback(
+        async ({ establishmentId, teacherId }) => {
             try {
-                const data = await getSchedulesByUserAndEstablishmentService({
-                    establishmentId,
-                    userId,
-                });
+                const data = await getSchedulesByTeacherAndEstablishmentService(
+                    { establishmentId, teacherId },
+                );
                 const schedulesData = data['hydra:member'] ?? [];
                 setSchedules(schedulesData);
-                setUserId(userId);
+                setTeacherId(teacherId);
             } catch (error) {
                 console.error(
                     'Erreur lors de la récupération des indisponibilités:',
@@ -154,14 +154,14 @@ export const useSchedule = () => {
     return {
         schedules,
         schedule,
-        // schedulesByUserAndEstablishment,
+        // schedulesByTeacherAndEstablishment,
         addSchedule,
         updateSchedule,
         deleteSchedule,
-        getUserSchedules,
+        getTeacherSchedules,
         getEstablishmentSchedules,
-        getSchedulesByUserAndEstablishment,
         getScheduleById,
         deleteAdminSchedule,
+        getSchedulesByTeacherAndEstablishment,
     };
 };

@@ -54,8 +54,17 @@ const ScheduleSelector = ({ onSelectSchedule, range, unavailableSlots }) => {
         } else {
             value = { date: selectedDate, time: selectedTimeSlot };
         }
+        const startTime = new Date(`${selectedDate}T${selectedTimeSlot}`);
+        startTime.setHours(startTime.getHours() + 1);
+        const endTime = new Date(startTime);
+        endTime.setMinutes(startTime.getMinutes() + range);
+        const formattedStartTime = startTime.toISOString();
+        const formattedEndTime = endTime.toISOString();
         setSelectedTime(value);
-        onSelectSchedule(value);
+        onSelectSchedule({
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+        });
     };
 
     const goToNextWeek = () => {

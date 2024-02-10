@@ -62,7 +62,7 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['establishment:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
