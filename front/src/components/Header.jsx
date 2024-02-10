@@ -12,7 +12,7 @@ export default function Header() {
                     <Image
                         alt="Flowbite logo"
                         height="32"
-                        src="/images/logo.svg"
+                        src="/favicons/icon.svg"
                         width="32"
                     />
                 </Navbar.Brand>
@@ -39,7 +39,7 @@ export default function Header() {
                                 </span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/profile">
-                                Profile
+                                Profil
                             </Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item href="/auth/logout">
