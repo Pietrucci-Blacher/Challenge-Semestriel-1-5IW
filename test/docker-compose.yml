@@ -10,7 +10,7 @@ services:
       target: server
     volumes:
       - .:/srv/app
-    links:
+    depends_on:
       - php
     ports:
       - '8888:80'

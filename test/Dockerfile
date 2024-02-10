@@ -55,6 +55,8 @@ COPY . /srv/app/
 
 RUN APP_ENV=prod composer run auto-scripts
 
+EXPOSE 9000
+
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
 
 #<<<<<<<<<<Start: PHP-FPM Image For the Dev Environment Target>>>>>>>>>>#
