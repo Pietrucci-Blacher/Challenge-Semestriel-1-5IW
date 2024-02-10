@@ -53,6 +53,9 @@ RUN composer install --no-dev --no-scripts
 
 COPY . /srv/app/
 
+RUN chown -R www-data:www-data /srv/app/var && \
+    chmod -R 775 /srv/app/var
+
 RUN APP_ENV=prod composer run auto-scripts
 
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
