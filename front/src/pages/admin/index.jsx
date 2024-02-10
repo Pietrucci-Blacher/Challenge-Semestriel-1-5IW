@@ -203,38 +203,40 @@ export default function AdminIndex() {
                         </div>
                         <div className="p-4">
                             <Table>
-                                <thead>
-                                    <tr>
-                                        <th className="w-[100px]">Id</th>
-                                        <th>Customer</th>
-                                        <th>Company</th>
-                                        <th>Teacher</th>
-                                        <th>Course Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                <Table.Head>
+                                    <Table.HeadCell className="w-[100px]">
+                                        Id
+                                    </Table.HeadCell>
+                                    <Table.HeadCell>Customer</Table.HeadCell>
+                                    <Table.HeadCell>Company</Table.HeadCell>
+                                    <Table.HeadCell>Teacher</Table.HeadCell>
+                                    <Table.HeadCell>Course Date</Table.HeadCell>
+                                </Table.Head>
+                                <Table.Body>
                                     {recentBookings.map((booking) => (
-                                        <tr key={booking.id}>
-                                            <td>{booking.id}</td>
-                                            <td>
+                                        <Table.Row key={booking.id}>
+                                            <Table.Cell>
+                                                {booking.id}
+                                            </Table.Cell>
+                                            <Table.Cell>
                                                 {booking.customer.firstname}{' '}
                                                 {booking.customer.lastname}
-                                            </td>
-                                            <td>
+                                            </Table.Cell>
+                                            <Table.Cell>
                                                 {booking.establishment.name}
-                                            </td>
-                                            <td>
+                                            </Table.Cell>
+                                            <Table.Cell>
                                                 {booking.teacher.firstname}{' '}
                                                 {booking.teacher.lastname}
-                                            </td>
-                                            <td>
+                                            </Table.Cell>
+                                            <Table.Cell>
                                                 {dayjs(
                                                     booking.schedule.startTime,
                                                 ).format('DD/MM/YYYY')}
-                                            </td>
-                                        </tr>
+                                            </Table.Cell>
+                                        </Table.Row>
                                     ))}
-                                </tbody>
+                                </Table.Body>
                             </Table>
                         </div>
                     </Card>

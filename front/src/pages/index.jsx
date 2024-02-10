@@ -13,8 +13,6 @@ export default function Index() {
 
     return (
         <div>
-            {t('home')}
-            <br />
             <Link href="/auth/login">Login</Link>
 
             <br />
