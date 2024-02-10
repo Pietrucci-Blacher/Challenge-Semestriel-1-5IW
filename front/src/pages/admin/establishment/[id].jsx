@@ -163,6 +163,24 @@ export default function ShowEstablishment() {
         }
     };
 
+    const renderServices = establishmentServices
+        ? establishmentServices.flat().map((service) => (
+              <Table.Row key={service.id}>
+                  <Table.Cell>{service.title}</Table.Cell>
+                  <Table.Cell>{service.description}</Table.Cell>
+                  <Table.Cell>{service.price}</Table.Cell>
+                  <Table.Cell>
+                      <a
+                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                          href={`/admin/services/${service.id}`}
+                      >
+                          Voir
+                      </a>
+                  </Table.Cell>
+              </Table.Row>
+          ))
+        : 'Chargement en cours';
+
     return (
         <>
             <Tabs aria-label="Default tabs" style="default">
@@ -258,32 +276,15 @@ export default function ShowEstablishment() {
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Service pour {establishment?.name}:
                         </h1>
-                        <>
-                            {establishmentServices.length > 0 ? (
-                                establishmentServices.map((service, index) => (
-                                    <div className="mt-2" key={index}>
-                                        <p className="text-xl font-bold">
-                                            Service {index + 1}
-                                        </p>
-                                        <p>Title: {service.title}</p>
-                                        <p>Prix: {service.price}</p>
-                                        <p className="editor-html">
-                                            Body:{' '}
-                                            {convertDataToHtml(
-                                                service.body.blocks,
-                                            )}
-                                        </p>
-                                        <p>
-                                            Description: {service.description}
-                                        </p>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="mt-2">
-                                    <p>Aucun service</p>
-                                </div>
-                            )}
-                        </>
+                        <Table hoverable className="mt-2">
+                            <Table.Head>
+                                <Table.HeadCell>Titre</Table.HeadCell>
+                                <Table.HeadCell>Description</Table.HeadCell>
+                                <Table.HeadCell>Prix</Table.HeadCell>
+                                <Table.HeadCell>Actions</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body>{renderServices}</Table.Body>
+                        </Table>
                     </div>
                 </Tabs.Item>
                 <Tabs.Item title="Schedule" icon={HiUserCircle}>
