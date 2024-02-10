@@ -49,7 +49,9 @@ export default function Services() {
                         onChange={handleInputSearchChange}
                         className="w-full"
                     />
-                    <Button className="ml-2" onClick={() => setOpenModal(true)}>Filtrer</Button>
+                    <Button className="ml-2" onClick={() => setOpenModal(true)}>
+                        Filtrer
+                    </Button>
                 </div>
             </div>
             <div className="flex flex-wrap mx-2 ">
