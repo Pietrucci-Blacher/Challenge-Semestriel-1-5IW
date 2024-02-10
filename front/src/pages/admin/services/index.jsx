@@ -8,26 +8,28 @@ export default function ListAllServices() {
         getAllServices();
     }, []);
 
-    const renderServices = services
-        ? services.map((service) => (
-              <Table.Row key={service.id}>
-                  <Table.Cell>{service.title}</Table.Cell>
-                  <Table.Cell>{service.description}</Table.Cell>
-                  <Table.Cell>{service.price}</Table.Cell>
-                  <Table.Cell>
-                      {service.author.firstname} {service.author.lastname}
-                  </Table.Cell>
-                  <Table.Cell>
-                      <a
-                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                          href={`/admin/services/${service.id}`}
-                      >
-                          Voir
-                      </a>
-                  </Table.Cell>
-              </Table.Row>
-          ))
-        : 'Chargement en cours';
+    if (!services) {
+        return <div>Chargement en cours...</div>; // Show loading state outside of the table
+    }
+
+    const renderServices = services.map((service) => (
+        <Table.Row key={service.id}>
+            <Table.Cell>{service.title}</Table.Cell>
+            <Table.Cell>{service.description}</Table.Cell>
+            <Table.Cell>{service.price}</Table.Cell>
+            <Table.Cell>
+                {service.author.firstname} {service.author.lastname}
+            </Table.Cell>
+            <Table.Cell>
+                <a
+                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    href={`/admin/services/${service.id}`}
+                >
+                    Voir
+                </a>
+            </Table.Cell>
+        </Table.Row>
+    ));
 
     return (
         <Table>
