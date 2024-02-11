@@ -23,8 +23,8 @@ jobs:
       - name: Build and push PHP Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: Dockerfile
+          context: ./test
+          file: ./test/Dockerfile
           push: true
           tags: ossama98/monapp_php:latest
           target: php
@@ -32,14 +32,15 @@ jobs:
       - name: Build and push Server Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: Dockerfile
+          context: ./test
+          file: ./test/Dockerfile
           push: true
           build-args: |
             SERVER_NAME=monserver.com
             PHP_CONTAINER_NAME=php
           tags: ossama98/monapp_server:latest
           target: server
+          working-directory: ./test
 
   deploy_to_gce:
     needs: build_and_push
