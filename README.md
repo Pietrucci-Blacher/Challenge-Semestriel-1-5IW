@@ -16,3 +16,8 @@
 | Faire l'envoi du mail                                                         | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/101 |
 | Feedback                                                                      | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/250 |
 | Dashboard Admin avec statistiques                                             | Maxime PIETRUCCI-BLACHER | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/262 |
+| Map Google                                                                    | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/258 |
+| hotfix/maps                                                                   | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/355 |
+| Admin Schedule                                                                | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/344 |
+| Admin Establishment                                                           | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/344 |
+| Admin Provider                                                                | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/344 |
