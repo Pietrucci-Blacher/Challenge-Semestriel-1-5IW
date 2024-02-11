@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CD Pipeline
 
 on:
   push:
@@ -66,5 +66,3 @@ jobs:
             docker exec php composer install
             docker run --name monapp_server -d --network monapp_network -p 80:80 ossama98/monapp_server:latest
           EOF
-
-    # Ajoutez les étapes nécessaires pour déployer sur GCE si vous avez besoin d'une automatisation complète
