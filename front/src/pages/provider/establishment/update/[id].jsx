@@ -23,7 +23,7 @@ export default function UpdateEstablishment() {
 
     useEffect(() => {
         getEstablishmentById(id);
-    }, [id]);
+    }, [getEstablishmentById, id]);
 
     useEffect(() => {
         setFormData({
