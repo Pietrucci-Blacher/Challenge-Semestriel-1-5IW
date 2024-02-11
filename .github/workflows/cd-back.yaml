@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: test
+        working-directory: ./test
     steps:
       - uses: actions/checkout@v2
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
