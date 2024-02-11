@@ -79,8 +79,7 @@ RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} && \
 #<<<<<<<<<<Start: Server Image Target>>>>>>>>>>#
 FROM httpd:2 as server
 
-# Copier la configuration Apache
-COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
+
 
 # Copier le contenu public de l'application Symfony
 COPY --from=php /srv/app/public /srv/app/public
@@ -96,6 +95,9 @@ ARG PHP_CONTAINER_NAME
 # Vous pouvez maintenant utiliser ces ARGs dans votre Dockerfile. Par exemple, définir des ENVs basées sur ces ARGs
 ENV SERVER_NAME=${SERVER_NAME} \
     PHP_CONTAINER_NAME=${PHP_CONTAINER_NAME}
+
+# Copier la configuration Apache
+COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
 
 # Configurer le script d'entrée comme point d'entrée du conteneur
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
