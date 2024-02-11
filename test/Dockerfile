@@ -56,6 +56,10 @@ COPY . /srv/app/
 RUN chown -R www-data:www-data /srv/app/var && \
     chmod -R 775 /srv/app/var
 
+RUN mkdir -p /srv/app/public/media && \
+  chown -R www-data:www-data /srv/app/public/media && \
+  chmod -R 755 /srv/app/public/media
+
 RUN APP_ENV=prod composer run auto-scripts
 
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
@@ -74,7 +78,27 @@ RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} && \
 #<<<<<<<<<<Start: Server Image Target>>>>>>>>>>#
 FROM httpd:2 as server
 
+# Copier la configuration Apache
 COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
 
+# Copier le contenu public de l'application Symfony
 COPY --from=php /srv/app/public /srv/app/public
+
+# Copier le script d'entrée et le rendre exécutable
+COPY ./.docker/httpd/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Définir les variables d'environnement par défaut (ces valeurs peuvent être surchargées au démarrage du conteneur)
+ARG SERVER_NAME
+ARG PHP_CONTAINER_NAME
+
+# Vous pouvez maintenant utiliser ces ARGs dans votre Dockerfile. Par exemple, définir des ENVs basées sur ces ARGs
+ENV SERVER_NAME=${SERVER_NAME} \
+    PHP_CONTAINER_NAME=${PHP_CONTAINER_NAME}
+
+# Configurer le script d'entrée comme point d'entrée du conteneur
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Commande par défaut pour démarrer Apache
 #<<<<<<<<<<End: Server Image Target>>>>>>>>>>#
+
