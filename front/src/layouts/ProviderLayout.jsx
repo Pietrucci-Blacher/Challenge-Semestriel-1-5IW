@@ -16,13 +16,6 @@ const sidebarContent = [
         labelColor: 'gray',
     },
     {
-        icon: HiUser,
-        text: 'Profile',
-        href: '/profile',
-        label: '',
-        labelColor: 'gray',
-    },
-    {
         icon: HiInbox,
         text: 'Establishment',
         href: '/provider/establishment',
