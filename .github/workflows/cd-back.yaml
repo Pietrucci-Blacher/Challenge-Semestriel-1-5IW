@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy to GCE
         run: |
-          ssh -o StrictHostKeyChecking=no username@your_gce_instance_external_ip << EOF
+          ssh -o StrictHostKeyChecking=no daossama.98@35.195.76.184 << EOF
             docker stop php monapp_server || true
             docker rm php monapp_server || true
             docker pull ossama98/monapp_php:latest
