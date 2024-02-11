@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import {
-    banUnbanUserService,
     deleteUserService,
     editUserService,
     getUserService,
@@ -29,14 +28,6 @@ export const useDatatable = () => {
         }
     }, []);
 
-    const banUser = useCallback(async (id) => {
-        try {
-            await banUnbanUserService(id);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }, []);
-
     const editUser = useCallback(async (id, data) => {
         try {
             await editUserService(id, data);
@@ -46,6 +37,7 @@ export const useDatatable = () => {
     }, []);
 
     const deleteUser = useCallback(async (id) => {
+        console.log('id', id);
         try {
             await deleteUserService(id);
         } catch (error) {
@@ -56,10 +48,10 @@ export const useDatatable = () => {
     return {
         fetchAllUsersData,
         fetchUserData,
-        banUser,
         editUser,
         deleteUser,
         userDetails,
         data,
+        setData,
     };
 };

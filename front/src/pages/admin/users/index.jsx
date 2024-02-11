@@ -2,8 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 
 import DataTable from '@/components/DataTable';
-
-// Define the UsersPage component
 const UsersPage = () => {
     const itemPerPage = 10;
     return (
