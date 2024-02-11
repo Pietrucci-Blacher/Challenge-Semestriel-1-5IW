@@ -53,7 +53,8 @@ RUN composer install --no-dev --no-scripts
 
 COPY . /srv/app/
 
-RUN chown -R www-data:www-data /srv/app/var && \
+RUN mkdir -p /srv/app/var && \
+    chown -R www-data:www-data /srv/app/var && \
     chmod -R 775 /srv/app/var
 
 RUN mkdir -p /srv/app/public/media && \
