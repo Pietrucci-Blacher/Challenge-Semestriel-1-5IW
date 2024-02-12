@@ -122,7 +122,6 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         setSortOrder(isAsc ? 'desc' : 'asc');
         setSortColumn(column);
 
-        // Assurez-vous que la transformation et le tri sont effectués ensemble
         const sortedAndTransformedData = data
             .map((user) => {
                 return { ...user, roles: getHighestRoleLabel(user.roles) };
@@ -153,7 +152,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         setSearchTerm(searchTerm);
 
         if (!searchTerm.trim()) {
-            updateAndTransformData(data); // Si aucun terme de recherche, réinitialise avec les données complètes
+            updateAndTransformData(data);
             return;
         }
 
@@ -165,11 +164,16 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                 .includes(searchTerm);
         });
 
-        updateAndTransformData(filteredData); // Applique la transformation après la recherche
+        updateAndTransformData(filteredData);
     };
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        if (
+            pageNumber >= 1 &&
+            pageNumber <= Math.ceil(data.length / itemsPerPage)
+        ) {
+            setCurrentPage(pageNumber);
+        }
     };
 
     const handleRowClick = (userId) => {
@@ -218,10 +222,20 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const handleDeleteSelected = async () => {
         try {
             await Promise.all(selectedRows.map((userId) => deleteUser(userId)));
-            fetchData(endpoint);
+            sortedData(endpoint);
             setSelectedRows([]);
         } catch (error) {
             console.error('Error deleting selected users:', error);
+        }
+    };
+
+    const handleEditUser = (userId, event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        try {
+        } catch (error) {
+            console.error('Error editing user:', error);
         }
     };
 

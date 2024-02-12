@@ -7,7 +7,7 @@ const UsersPage = () => {
     return (
         <>
             <Head>
-                <title>Users Table</title>
+                <title>Coursia - Users table</title>
             </Head>
             <main>
                 <DataTable
