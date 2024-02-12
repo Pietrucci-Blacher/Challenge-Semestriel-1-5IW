@@ -10,7 +10,6 @@ import { HiAdjustments, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
 import { useTeam } from '@/hooks/useTeam';
 
-
 export default function Profile() {
     const { acceptInvite, declineInvite } = useTeam();
     const { user, verifyUser, fetchUser } = useAuthContext();

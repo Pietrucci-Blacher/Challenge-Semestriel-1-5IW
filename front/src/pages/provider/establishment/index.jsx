@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
 import { useEstablishment } from '@/hooks/useEstablishment';
 import MapComponent from '@/components/Map';
 import EstablishmentTable from '@/components/EstablishmentTable';
+import { useContext, useEffect } from 'react';
+import { Button as FlowbiteButton, Table } from 'flowbite-react';
+import Link from 'next/link';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function ListAllEstablishment() {
     const { establishments, getAllEstablishments } = useEstablishment();
