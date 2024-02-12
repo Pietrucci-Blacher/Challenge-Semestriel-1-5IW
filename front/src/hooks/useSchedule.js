@@ -66,7 +66,6 @@ export const useSchedule = () => {
 
     const getTeacherSchedules = useCallback(
         async (teacherId) => {
-            console.log(teacherId);
             try {
                 const data = await getTeacherSchedulesService({ teacherId });
                 const schedulesData = data['hydra:member'] ?? [];
@@ -101,6 +100,8 @@ export const useSchedule = () => {
 
     const getSchedulesByTeacherAndEstablishment = useCallback(
         async ({ establishmentId, teacherId }) => {
+
+            console.log(establishmentId, teacherId)
             try {
                 const data = await getSchedulesByTeacherAndEstablishmentService(
                     { establishmentId, teacherId },

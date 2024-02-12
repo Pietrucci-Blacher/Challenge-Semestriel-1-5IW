@@ -51,7 +51,7 @@ export default function ShowEstablishment() {
     const {
         schedules,
         getEstablishmentSchedules,
-        getSchedulesByUserAndEstablishment,
+        getSchedulesByTeacherAndEstablishment,
     } = useSchedule();
     const {
         feedbacks,
@@ -131,9 +131,9 @@ export default function ShowEstablishment() {
         const userId = event.target.value;
         if (!userId) getEstablishmentSchedules(id);
         else
-            getSchedulesByUserAndEstablishment({
+            await getSchedulesByTeacherAndEstablishment({
                 establishmentId: id,
-                userId: userId,
+                teacherId: userId,
             });
     };
 

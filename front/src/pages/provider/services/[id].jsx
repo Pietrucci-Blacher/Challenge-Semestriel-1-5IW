@@ -42,6 +42,7 @@ export default function ShowService() {
     } = useFeedback();
 
     useEffect(() => {
+        if(!id) return
         getService(id);
         getFeedbacksFromServiceId(id);
         getServiceNote(id);

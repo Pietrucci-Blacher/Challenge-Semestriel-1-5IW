@@ -34,6 +34,12 @@ use App\Attributes\UserField;
                 'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
             ]
         ),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/services',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'author', fromClass: User::class),
+            ]
+        ),
         new GetCollection(),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],

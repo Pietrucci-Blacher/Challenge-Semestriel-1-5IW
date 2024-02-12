@@ -6,10 +6,9 @@ import { Button, Button as FlowbiteButton, Tabs } from 'flowbite-react';
 import PasswordResetForm from '@/components/PasswordResetForm';
 import useUserAccount from '@/hooks/useUserAccount';
 import Link from 'next/link';
-import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
+import { HiAdjustments, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
 import { useTeam } from '@/hooks/useTeam';
-import MapComponent from '@/components/Map';
 
 export default function Profile() {
     const { acceptInvite, declineInvite } = useTeam();
@@ -102,7 +101,6 @@ export default function Profile() {
                 >
                     Faire une demande pour devenir prestataire
                 </FlowbiteButton>
-                <MapComponent></MapComponent>
             </Tabs.Item>
             <Tabs.Item title="Profile" icon={HiUserCircle}>
                 This is{' '}
@@ -151,18 +149,6 @@ export default function Profile() {
                 ) : (
                     <div>Chargement...</div>
                 )}
-            </Tabs.Item>
-            <Tabs.Item title="Contacts" icon={HiClipboardList}>
-                This is{' '}
-                <span className="font-medium text-gray-800 dark:text-white">
-                    Contacts tab&apos;s associated content
-                </span>
-                . Clicking another tab will toggle the visibility of this one
-                for the next. The tab JavaScript swaps classes to control the
-                content visibility and styling.
-            </Tabs.Item>
-            <Tabs.Item disabled title="Disabled">
-                Disabled content
             </Tabs.Item>
         </Tabs>
     );

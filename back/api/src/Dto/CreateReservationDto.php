@@ -10,5 +10,4 @@ class CreateReservationDto
     public $startTime;
     public $endTime;
     public $specialRequests = null;
-
 }
