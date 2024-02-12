@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import nextI18NextConfig from '../../../next-i18next.config';
+import Head from 'next/head';
 export default function Login() {
     const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();
@@ -56,6 +57,9 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+            <Head>
+                <title>Coursia - Login</title>
+            </Head>
             <div className="relative m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-4/12 p-6 sm:p-12 gap-2">
                     <div className="flex items-center justify-center gap-2">
