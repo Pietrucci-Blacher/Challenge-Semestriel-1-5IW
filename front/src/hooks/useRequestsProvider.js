@@ -4,7 +4,7 @@ import {
     getRequestService,
     updateRequestService,
 } from '@/services/requestsToBeProvider';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function useRequestsProvider() {
     const [requests, setRequests] = useState([]);
@@ -13,15 +13,15 @@ export default function useRequestsProvider() {
         await applyToBeProviderService(payload);
     };
 
-    const getListOfRequests = async () => {
+    const getListOfRequests = useCallback(async () => {
         const response = await getListOfRequestsService();
         setRequests(response['hydra:member']);
-    };
+    }, []);
 
-    const getRequest = async (payload) => {
+    const getRequest = useCallback(async (payload) => {
         const response = await getRequestService(payload);
         setRequest(response);
-    };
+    }, []);
 
     const approveRequest = async (payload) => {
         Object.assign(payload, { status: 'approved' });
