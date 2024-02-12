@@ -14,9 +14,6 @@ dependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.7
     version: 0.5.7(tailwindcss@3.4.1)
-  '@tanstack/react-query':
-    specifier: ^5.17.19
-    version: 5.17.19(react@18.2.0)
   formik:
     specifier: ^2.4.5
     version: 2.4.5(react@18.2.0)
@@ -24,10 +21,10 @@ dependencies:
     specifier: ^4.0.2
     version: 4.0.2
   next:
-    specifier: ^14.1.0
+    specifier: ^14.0.3
     version: 14.1.0(@babel/core@7.23.7)(react-dom@18.2.0)(react@18.2.0)
   postcss:
-    specifier: ^8.4.33
+    specifier: ^8.4.32
     version: 8.4.33
   react:
     specifier: ^18.2.0
@@ -35,37 +32,40 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-query:
+    specifier: ^3.39.3
+    version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
   '@babel/core':
-    specifier: ^7.23.7
+    specifier: ^7.23.5
     version: 7.23.7
   '@popperjs/core':
     specifier: ^2.11.8
     version: 2.11.8
   '@types/node':
-    specifier: ^20.11.5
+    specifier: ^20.10.3
     version: 20.11.5
   '@types/react':
-    specifier: ^18.2.48
+    specifier: ^18.2.41
     version: 18.2.48
   '@types/react-dom':
-    specifier: ^18.2.18
+    specifier: ^18.2.17
     version: 18.2.18
   autoprefixer:
-    specifier: ^10.4.17
+    specifier: ^10.4.16
     version: 10.4.17(postcss@8.4.33)
   eslint:
-    specifier: ^8.56.0
+    specifier: ^8.55.0
     version: 8.56.0
   eslint-config-next:
-    specifier: ^14.1.0
+    specifier: ^14.0.3
     version: 14.1.0(eslint@8.56.0)(typescript@5.3.3)
   tailwindcss:
-    specifier: ^3.4.1
+    specifier: ^3.3.5
     version: 3.4.1
   typescript:
-    specifier: ^5.3.3
+    specifier: ^5.3.2
     version: 5.3.3
 
 packages:
@@ -872,19 +872,6 @@ packages:
     dependencies:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.1
-    dev: false
-
-  /@tanstack/query-core@5.17.19:
-    resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
-    dev: false
-
-  /@tanstack/react-query@5.17.19(react@18.2.0):
-    resolution: {integrity: sha512-qaQENB6/03Gj3dFZGvdmUoqeUGlGm7P1p0RmaR04Bf1Ib1T9lLGimcC9T3oCFbrx0b2ZF21ngjFZNjj9uPJMcg==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      '@tanstack/query-core': 5.17.19
-      react: 18.2.0
     dev: false
 
   /@types/hoist-non-react-statics@3.3.5:

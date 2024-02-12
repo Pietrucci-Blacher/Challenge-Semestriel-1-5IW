@@ -6,16 +6,23 @@ services:
     build:
       context: ./api
       target: frankenphp_prod
+    volumes:
+      - ./api:/app
+      - /app/var
+      - ./api/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./api/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
     environment:
       APP_SECRET: ${APP_SECRET}
-      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
-      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      BREVO_API_KEY: "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"
 
   pwa:
      build:
       context: ./pwa
       target: prod
-
+     volumes:
+       - ./pwa:/srv/app
   database:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
