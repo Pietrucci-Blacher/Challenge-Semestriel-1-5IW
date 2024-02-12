@@ -100,8 +100,6 @@ export const useSchedule = () => {
 
     const getSchedulesByTeacherAndEstablishment = useCallback(
         async ({ establishmentId, teacherId }) => {
-
-            console.log(establishmentId, teacherId)
             try {
                 const data = await getSchedulesByTeacherAndEstablishmentService(
                     { establishmentId, teacherId },

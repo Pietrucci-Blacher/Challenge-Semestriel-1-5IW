@@ -36,7 +36,6 @@ class CreateReservation extends AbstractController
         $service = $this->serviceRepository->findOneBy(["id" => $createReservationDto->service_id]);
         $teacher = $this->userRepository->findOneBy(["id" => $createReservationDto->teacher_id]);
 
-        dd($establishment, $service, $teacher, $createReservationDto);
         if (!$establishment || !$service || !$teacher) {
             // Return a 404 Not Found response with an error message
             return new Response(

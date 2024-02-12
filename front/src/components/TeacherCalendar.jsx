@@ -8,7 +8,6 @@ import { useAuthContext } from '@/providers/AuthProvider';
 import { useSchedule } from '@/hooks/useSchedule';
 
 export default function TeacherCalendar({ establishmentId }) {
-    console.log("establishmentId", establishmentId)
     const { user } = useAuthContext();
     const {
         schedules,
@@ -58,7 +57,10 @@ export default function TeacherCalendar({ establishmentId }) {
         if (teacherId && establishmentId) {
             setTeacherId(teacherId);
             setEstablishment(establishmentId);
-            getSchedulesByTeacherAndEstablishment({ establishmentId, teacherId  });
+            getSchedulesByTeacherAndEstablishment({
+                establishmentId,
+                teacherId,
+            });
         }
     }, [user, establishmentId]);
 
@@ -105,7 +107,10 @@ export default function TeacherCalendar({ establishmentId }) {
             e.preventDefault();
             const scheduleToCreate = { ...newSchedule, establishment };
             await addSchedule(scheduleToCreate);
-            getSchedulesByTeacherAndEstablishment({ establishmentId, teacherId  });
+            getSchedulesByTeacherAndEstablishment({
+                establishmentId,
+                teacherId,
+            });
             setNewSchedule({
                 title: '',
                 start: '',

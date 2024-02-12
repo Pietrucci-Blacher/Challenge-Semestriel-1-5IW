@@ -24,18 +24,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
 import EstablishmentReservations from '@/components/EstablishmentReservations';
-import {
-    HiStar,
-    HiSpeakerphone,
-    HiOutlineUpload,
-    HiOutlineHeart,
-    HiViewGrid,
-    HiBadgeCheck,
-    HiKey,
-    HiOutlineArrowRight,
-    HiArrowDown,
-} from 'react-icons/hi';
+import { HiStar, HiOutlineHeart } from 'react-icons/hi';
 import { Rating } from '@/components/Rating';
+import { useToast } from '@/hooks/useToast';
 
 export default function ShowEstablishment() {
     const router = useRouter();
@@ -60,7 +51,7 @@ export default function ShowEstablishment() {
         getEstablishmentNote,
     } = useFeedback();
     const [points, setPoints] = useState([]);
-
+    const { createToastMessage } = useToast();
     const userColors = {};
 
     const generateRandomColor = () => {
@@ -129,8 +120,9 @@ export default function ShowEstablishment() {
 
     const handleSelectEmployee = async (event) => {
         const userId = event.target.value;
-        if (!userId) getEstablishmentSchedules(id);
-        else
+        if (!userId) {
+            await getEstablishmentSchedules(id);
+        } else {
             await getSchedulesByTeacherAndEstablishment({
                 establishmentId: id,
                 teacherId: userId,
