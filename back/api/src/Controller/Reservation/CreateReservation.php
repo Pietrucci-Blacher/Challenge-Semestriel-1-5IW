@@ -31,7 +31,6 @@ class CreateReservation extends AbstractController
 
     public function __invoke(CreateReservationDto $createReservationDto)
     {
-        dd($createReservationDto);
         $establishment = $this->establishmentRepository->findOneBy(["id" => $createReservationDto->establishment_id]);
         $service = $this->serviceRepository->findOneBy(["id" => $createReservationDto->service_id]);
         $teacher = $this->userRepository->findOneBy(["id" => $createReservationDto->teacher_id]);
