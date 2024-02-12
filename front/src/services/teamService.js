@@ -10,15 +10,17 @@ const reInviteMemberToTeamService = async (memberId) => {
     return await httpClient.get(`${BASE_URL}/${memberId}/resend_notification`);
 };
 
-const acceptInviteService = async ({ id, status }) => {
-    return await httpClient.patch(`${BASE_URL}/${id}`, { status });
+const acceptInviteService = async ({ id, joinRequestStatus }) => {
+    console.log('acceptInviteService', id, joinRequestStatus);
+    return await httpClient.patch(`${BASE_URL}/${id}`, { joinRequestStatus });
 };
 
-const declineInviteService = async ({ id, status }) => {
-    return await httpClient.patch(`${BASE_URL}/${id}`, { status });
+const declineInviteService = async ({ id, joinRequestStatus }) => {
+    console.log('declineInviteService', id, joinRequestStatus);
+    return await httpClient.patch(`${BASE_URL}/${id}`, { joinRequestStatus });
 };
 
-const removeMemberFromTeamService = async ({ id }) => {
+const removeMemberFromTeamService = async (id) => {
     return await httpClient.delete(`${BASE_URL}/${id}`);
 };
 
@@ -30,7 +32,8 @@ const getEstablishmentTeamInvitationService = async (establishmentId) => {
 };
 
 const getUserInvitationService = async (userId) => {
-    return await httpClient.get(`users/${userId}/${BASE_URL}`);
+    const response = await httpClient.get(`users/${userId}/${BASE_URL}`);
+    return response['hydra:member'] ?? [];
 };
 
 export {
