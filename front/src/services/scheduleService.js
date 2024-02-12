@@ -24,10 +24,10 @@ export const getEstablishmentSchedulesService = ({ establishmentId }) => {
 
 export const getSchedulesByTeacherAndEstablishmentService = ({
     establishmentId,
-    userId,
+    teacherId,
 }) => {
     return httpClient.get(
-        `establishments/${establishmentId}/users/${userId}/schedules`,
+        `establishments/${establishmentId}/users/${teacherId}/schedules`,
     );
 };
 

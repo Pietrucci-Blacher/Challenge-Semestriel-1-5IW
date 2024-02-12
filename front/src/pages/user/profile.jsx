@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { HiAdjustments, HiUserCircle } from 'react-icons/hi';
 import { MdDashboard } from 'react-icons/md';
 import { useTeam } from '@/hooks/useTeam';
-import MapComponent from '@/components/Map';
 
 export default function Profile() {
     const { acceptInvite, declineInvite } = useTeam();
@@ -102,7 +101,6 @@ export default function Profile() {
                 >
                     Faire une demande pour devenir prestataire
                 </FlowbiteButton>
-                <MapComponent></MapComponent>
             </Tabs.Item>
             <Tabs.Item title="Profile" icon={HiUserCircle}>
                 This is{' '}
