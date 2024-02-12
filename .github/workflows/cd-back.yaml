@@ -1,0 +1,26 @@
+name: Deploy to GCE
+
+on:
+  push:
+    branches:
+      - cd/pipline
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 'actions/checkout@v4'
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.gcp_credentials }}'
+
+      - id: 'compute-ssh'
+        uses: 'google-github-actions/ssh-compute@v1'
+        with:
+          instance_name: 'instance-4'
+          zone: 'europe-west1-b'
+          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+          command: 'docker run Hello world'
+
