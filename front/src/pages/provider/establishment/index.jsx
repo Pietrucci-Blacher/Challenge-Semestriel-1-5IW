@@ -44,7 +44,9 @@ export default function ListEstablishment() {
                     <Table.HeadCell>Code postal</Table.HeadCell>
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
-                <Table.Body>{renderEstablishments}</Table.Body>
+                <Table.Body className="divide-y divide-gray-700">
+                    {renderEstablishments}
+                </Table.Body>
             </Table>
             <FlowbiteButton
                 className="my-2"
