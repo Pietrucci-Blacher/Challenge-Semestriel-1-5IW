@@ -77,32 +77,20 @@ RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} && \
 
 #<<<<<<<<<<End: PHP-FPM Image For the Dev Environment Target>>>>>>>>>>#
 
-#<<<<<<<<<<Start: Server Image Target>>>>>>>>>>#
-FROM httpd:2 as server
+#<<<<<<<<<<Start: Nginx Image Target>>>>>>>>>>#
+FROM nginx:alpine as server
 
+# Supprimer la configuration par défaut de Nginx
+RUN rm /etc/nginx/conf.d/default.conf
 
+# Copier la configuration personnalisée de Nginx
+COPY ./.docker/nginx/conf.d/app.conf /etc/nginx/conf.d/
 
 # Copier le contenu public de l'application Symfony
 COPY --from=php /srv/app/public /srv/app/public
 
-# Copier le script d'entrée et le rendre exécutable
-COPY ./.docker/httpd/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Définir le travailleur en tant qu'utilisateur non root pour des raisons de sécurité
+RUN chown -R nginx:nginx /srv/app/public && chmod -R 755 /srv/app/public
 
-# Définir les variables d'environnement par défaut (ces valeurs peuvent être surchargées au démarrage du conteneur)
-ARG SERVER_NAME
-ARG PHP_CONTAINER_NAME
-
-# Vous pouvez maintenant utiliser ces ARGs dans votre Dockerfile. Par exemple, définir des ENVs basées sur ces ARGs
-ENV SERVER_NAME=${SERVER_NAME} \
-    PHP_CONTAINER_NAME=${PHP_CONTAINER_NAME}
-
-# Copier la configuration Apache
-COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
-
-# Configurer le script d'entrée comme point d'entrée du conteneur
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-# Commande par défaut pour démarrer Apache
-#<<<<<<<<<<End: Server Image Target>>>>>>>>>>#
+#<<<<<<<<<<End: Nginx Image Target>>>>>>>>>>#
 
