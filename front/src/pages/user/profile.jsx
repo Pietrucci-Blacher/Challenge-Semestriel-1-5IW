@@ -116,9 +116,10 @@ export default function Profile() {
                 <h2>Rôle de l'utilisateur : {user?.roles}</h2>
                 {user ? (
                     <>
-                        <form 
+                        <form
                             className="flex max-w-md flex-col gap-4"
-                            onSubmit={handleProfileUpdateSubmit}>
+                            onSubmit={handleProfileUpdateSubmit}
+                        >
                             <div>
                                 <Input
                                     label="firstname"
@@ -135,7 +136,6 @@ export default function Profile() {
                                     onChange={handleLastNameChange}
                                     value={formData.lastname}
                                     className="block w-full py-1 "
-
                                 />
                                 <Input
                                     label="Email"
@@ -144,15 +144,14 @@ export default function Profile() {
                                     onChange={handleEmailChange}
                                     value={formData.email}
                                     className="block w-full py-1 "
-
                                 />
                             </div>
                             <GenericButton label="Mettre à jour le profile" />
                         </form>
-                        <div className='my-4'></div>
-                            <PasswordResetForm
-                                onSubmit={handlePasswordResetSubmit}
-                            />
+                        <div className="my-4"></div>
+                        <PasswordResetForm
+                            onSubmit={handlePasswordResetSubmit}
+                        />
                     </>
                 ) : (
                     <div>Chargement...</div>

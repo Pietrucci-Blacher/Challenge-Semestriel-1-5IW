@@ -9,8 +9,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import nextI18NextConfig from '../../../next-i18next.config';
 import { useTranslation } from 'next-i18next';
 
-
-
 export default function AskResetPassword() {
     const [email, setEmail] = useState('');
     const { askResetPassword, isLoading, error } = useResetPassword();
@@ -22,7 +20,7 @@ export default function AskResetPassword() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const {email} = formData;
+        const { email } = formData;
         if (email === '') {
             createToastMessage('error', 'Email is required');
             return;
@@ -48,16 +46,17 @@ export default function AskResetPassword() {
                     </div>
                     <div className="flex flex-col items-center">
                         <div className="w-full flex-1 mt-8">
-
-                            <form 
-                                onSubmit={handleSubmit} 
+                            <form
+                                onSubmit={handleSubmit}
                                 className="w-full max-w-md bg-white rounded-lg shadow p-8 space-y-8"
                             >
-                                <h1 className="text-3xl text-center font-extrabold">{t('titleReset')}</h1>
+                                <h1 className="text-3xl text-center font-extrabold">
+                                    {t('titleReset')}
+                                </h1>
                                 <div>
                                     <label
-                                            htmlFor="email"
-                                            className="block mb-2 text-sm font-medium text-gray-900"
+                                        htmlFor="email"
+                                        className="block mb-2 text-sm font-medium text-gray-900"
                                     >
                                         {t('yourEmail')}
                                     </label>
@@ -74,7 +73,11 @@ export default function AskResetPassword() {
                                     />
                                 </div>
                                 <GenericButton
-                                    label={isLoading ? 'Envoi en cours...' : 'Réinitialiser le mot de passe'}
+                                    label={
+                                        isLoading
+                                            ? 'Envoi en cours...'
+                                            : 'Réinitialiser le mot de passe'
+                                    }
                                     onClick={handleSubmit}
                                     disabled={isLoading}
                                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-8 py-1 text-center focus:outline-none focus:ring-4 focus:ring-blue-300"
