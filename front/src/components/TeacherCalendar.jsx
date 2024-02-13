@@ -11,7 +11,7 @@ export default function TeacherCalendar({ establishmentId }) {
     const { user } = useAuthContext();
     const {
         schedules,
-        getSchedulesByUserAndEstablishment,
+        getSchedulesByTeacherAndEstablishment,
         addSchedule,
         updateSchedule,
         deleteSchedule,
@@ -21,7 +21,7 @@ export default function TeacherCalendar({ establishmentId }) {
     const [currentSchedule, setCurrentSchedule] = useState(null);
     const [points, setPoints] = useState([]);
     const [establishment, setEstablishment] = useState(null);
-    const [userId, setUserId] = useState(null);
+    const [teacherId, setTeacherId] = useState(null);
     const [newSchedule, setNewSchedule] = useState({
         title: '',
         start: '',
@@ -53,11 +53,14 @@ export default function TeacherCalendar({ establishmentId }) {
     };
 
     useEffect(() => {
-        const userId = user?.id;
-        if (userId && establishmentId) {
-            setUserId(userId);
+        const teacherId = user?.id;
+        if (teacherId && establishmentId) {
+            setTeacherId(teacherId);
             setEstablishment(establishmentId);
-            getSchedulesByUserAndEstablishment({ userId, establishmentId });
+            getSchedulesByTeacherAndEstablishment({
+                establishmentId,
+                teacherId,
+            });
         }
     }, [user, establishmentId]);
 
@@ -104,7 +107,10 @@ export default function TeacherCalendar({ establishmentId }) {
             e.preventDefault();
             const scheduleToCreate = { ...newSchedule, establishment };
             await addSchedule(scheduleToCreate);
-            getSchedulesByUserAndEstablishment({ userId, establishmentId });
+            getSchedulesByTeacherAndEstablishment({
+                establishmentId,
+                teacherId,
+            });
             setNewSchedule({
                 title: '',
                 start: '',

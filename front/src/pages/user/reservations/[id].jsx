@@ -4,9 +4,22 @@ import { useEffect, useState } from 'react';
 import { useSchedule } from '@/hooks/useSchedule';
 import ScheduleSelector from '@/components/ScheduleSelector';
 import { Button, Label, Modal, Textarea } from 'flowbite-react';
+import { createFeedback } from '@/services/feedbackService';
+import Feedback from '@/components/Feedback';
+import { useFeedback } from '@/hooks/useFeedback';
+import { useToast } from '@/hooks/useToast';
 
 export default function Id() {
     const router = useRouter();
+    const { createToastMessage } = useToast();
+    const {
+        feedbacks,
+        detailed,
+        getFeedbacksFromEstablishmentId,
+        getEstablishmentNote,
+        getFeedbacksFromServiceId,
+        getServiceNote,
+    } = useFeedback();
     const {
         reservation,
         fetchReservation,
@@ -21,7 +34,9 @@ export default function Id() {
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
     const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+    const [openFeedbackModal, setOpenFeedbackModal] = useState(false);
     const [specialRequest, setSpecialRequest] = useState('');
+
     useEffect(() => {
         const { id } = router.query;
         if (!id) return;
@@ -75,6 +90,20 @@ export default function Id() {
         setIsAppointmentModalOpen(false);
     };
 
+    const handleCloseFeedback = async (value) => {
+        setOpenFeedbackModal(false);
+
+        await createFeedback({
+            reviewer: `users/${reservation?.customer?.id}`,
+            service: `services/${reservation?.service?.id}`,
+            note: value.resultJson.average,
+            comment: value.comment,
+            detailedNote: value.resultJson.service,
+        });
+
+        createToastMessage('success', 'Votre avis a bien été envoyé');
+    };
+
     const handleCancelNewAppointment = () => {
         setIsAppointmentModalOpen(false);
         setSelectedSchedule({});
@@ -119,6 +148,13 @@ export default function Id() {
                 </Button>
                 <Button onClick={() => setIsAppointmentModalOpen(true)}>
                     Reprendre la meme reservation
+                </Button>
+                <Button
+                    className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
+                    color="gray"
+                    onClick={() => setOpenFeedbackModal(true)}
+                >
+                    Laisser un avis sur le service
                 </Button>
             </div>
 
@@ -222,6 +258,37 @@ export default function Id() {
                 <Modal.Footer>
                     <Button onClick={handleNewAppointment}>Confirmer</Button>
                     <Button color="gray" onClick={handleCancelNewAppointment}>
+                        Annuler
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal
+                show={openFeedbackModal}
+                onClose={() => setOpenFeedbackModal(false)}
+                size="6xl"
+            >
+                <Modal.Header>test</Modal.Header>
+                <Modal.Body>
+                    <div className="my-8 w-fit ">
+                        <h1 className="text-2xl">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
+                            Avis sur l'établissement{' '}
+                            {reservation?.service?.title}
+                        </h1>
+                        <br />
+                        <p>Nous aimerions entendre votre avis !</p>
+                        <br />
+                        <Feedback
+                            showFeedback="service"
+                            onCloseModal={handleCloseFeedback}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        color="gray"
+                        onClick={() => setOpenFeedbackModal(false)}
+                    >
                         Annuler
                     </Button>
                 </Modal.Footer>

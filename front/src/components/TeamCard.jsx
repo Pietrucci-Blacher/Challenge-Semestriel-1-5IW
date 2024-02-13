@@ -69,24 +69,24 @@ export function TeamCard({ members, onReinviteMember, onRemoveMember }) {
                                             Relancer
                                         </Button>
                                         <Button
-                                            color="gray"
+                                            color="failure"
                                             onClick={() =>
                                                 openConfirmModal(element.id)
                                             }
                                         >
                                             <HiTrash className="mr-3 h-4 w-4" />
-                                            Messages
+                                            Supprimer
                                         </Button>
                                     </Button.Group>
                                 ) : (
                                     <Button
-                                        color="gray"
+                                        color="failure"
                                         onClick={() =>
                                             openConfirmModal(element.id)
                                         }
                                     >
                                         <HiTrash className="mr-3 h-4 w-4" />
-                                        Messages
+                                        Supprimer
                                     </Button>
                                 )}
                             </div>
