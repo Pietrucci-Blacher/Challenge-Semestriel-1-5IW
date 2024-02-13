@@ -132,7 +132,7 @@ export default function Profile() {
             </Tabs.Item>
 
             <Tabs.Item title="Modifier ton profile" icon={HiAdjustments}>
-                <h2>Rôle de l'utilisateur : {user?.roles}</h2>
+                <h2>Rôle de l&apos;utilisateur : {user?.roles}</h2>
                 {user ? (
                     <>
                         <form
