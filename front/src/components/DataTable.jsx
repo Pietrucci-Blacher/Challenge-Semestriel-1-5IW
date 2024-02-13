@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDatatable } from '@/hooks/useDatatable';
 import dayjs from 'dayjs';
+import { Button, Modal } from 'flowbite-react';
+import { useToast } from '@/hooks/useToast';
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [sortedData, setSortedData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +18,9 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [expandedRows, setExpandedRows] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
+    const { createToastMessage } = useToast();
     const {
         userDetails,
         setUserDetails,
@@ -167,27 +172,31 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const handleDelete = async (userId, event) => {
         event.preventDefault();
         event.stopPropagation();
+        setUserToDelete(userId);
+        setIsDeleteModalOpen(true);
+    };
 
-        const isConfirmed = window.confirm(
-            'Are you sure you want to delete this user?',
-        );
-
-        if (isConfirmed) {
-            try {
-                await deleteUser(userId);
-
-                setSortedData((prevData) =>
-                    prevData.filter((row) => row.id !== userId),
-                );
-
-                if (selectedRow === userId) {
-                    setSelectedRow(null);
-                    setUserDetails(null);
-                }
-            } catch (error) {
-                console.error('Error deleting user:', error);
+    const confirmDelete = async () => {
+        try {
+            await deleteUser(userToDelete);
+            setSortedData((prevData) =>
+                prevData.filter((row) => row.id !== userToDelete),
+            );
+            if (selectedRow === userToDelete) {
+                setSelectedRow(null);
+                setUserDetails(null);
             }
+            setIsDeleteModalOpen(false);
+            setUserToDelete(null);
+            createToastMessage('success', 'User deleted successfully');
+        } catch (error) {
+            console.error('Error deleting user:', error);
         }
+    };
+
+    const cancelDelete = () => {
+        setIsDeleteModalOpen(false);
+        setUserToDelete(null);
     };
 
     const handleDeleteSelected = async () => {
@@ -244,7 +253,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                 lastname,
                 email,
             });
-
+            createToastMessage('success', 'User updated successfully');
             fetchUserData(userId);
             fetchAllUsersData();
             setEditingUserId(null);
@@ -675,6 +684,22 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                     </li>
                 </ul>
             </nav>
+            {isDeleteModalOpen && (
+                <Modal show={isDeleteModalOpen} onClose={cancelDelete}>
+                    <Modal.Header>Confirm Delete</Modal.Header>
+                    <Modal.Body>
+                        <p>Are you sure you want to delete this user?</p>
+                    </Modal.Body>
+                    <Modal.Footer className="flex justify-end">
+                        <Button color="gray" onClick={cancelDelete}>
+                            Cancel
+                        </Button>
+                        <Button color="failure" onClick={confirmDelete}>
+                            Delete
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
         </div>
     );
 };

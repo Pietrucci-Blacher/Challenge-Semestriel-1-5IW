@@ -79,7 +79,6 @@ export const useDatatable = () => {
     }, []);
 
     const deleteUser = useCallback(async (id) => {
-        console.log('id', id);
         try {
             await deleteUserService(id);
         } catch (error) {
