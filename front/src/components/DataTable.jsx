@@ -15,12 +15,14 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [selectedRow, setSelectedRow] = useState(null);
     const [expandedRows, setExpandedRows] = useState([]);
+    const [editingUserId, setEditingUserId] = useState(null);
     const {
         userDetails,
         setUserDetails,
         data,
         fetchUserData,
         fetchAllUsersData,
+        editUser,
         deleteUser,
     } = useDatatable();
 
@@ -143,6 +145,10 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     };
 
     const handleRowClick = (userId) => {
+        if (editingUserId && editingUserId !== userId) {
+            setEditingUserId(null);
+        }
+
         setExpandedRows((prevExpandedRows) =>
             prevExpandedRows.includes(userId)
                 ? prevExpandedRows.filter((rowId) => rowId !== userId)
@@ -162,7 +168,6 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         event.preventDefault();
         event.stopPropagation();
 
-        // Display confirmation dialog
         const isConfirmed = window.confirm(
             'Are you sure you want to delete this user?',
         );
@@ -195,13 +200,25 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         }
     };
 
-    const handleEditUser = (userId, event) => {
+    const handleEditUser = async (userId, event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        try {
-        } catch (error) {
-            console.error('Error editing user:', error);
+        if (!userDetails[userId]) {
+            // Charger les détails de l'utilisateur si nécessaire
+            await fetchUserData(userId).then((userData) => {
+                setUserDetails((prevDetails) => ({
+                    ...prevDetails,
+                    [userId]: userData,
+                }));
+            });
+        }
+
+        setEditingUserId(userId);
+
+        // S'assurer que l'expandRow est ouvert pour cet utilisateur
+        if (!expandedRows.includes(userId)) {
+            setExpandedRows([...expandedRows, userId]);
         }
     };
 
@@ -215,6 +232,23 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
             ),
         )
         .slice(startIndex, endIndex);
+
+    const handleUpdateUser = async (event, userId) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const firstname = formData.get('firstname');
+        const lastname = formData.get('lastname');
+        const email = formData.get('email');
+
+        await editUser(userId, {
+            firstname,
+            lastname,
+            email,
+        });
+
+        setEditingUserId(null);
+        fetchAllUsersData();
+    };
 
     return (
         <div className="overflow-x-auto">
@@ -365,7 +399,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                         className="font-medium mr-2 text-blue-600 dark:text-blue-500 hover:underline"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            handleEditUser(row.id);
+                                            handleEditUser(row.id, e);
                                         }}
                                     >
                                         Edit
@@ -387,7 +421,102 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                         colSpan={columns.length + 2}
                                         className="p-4"
                                     >
-                                        {userDetails[row.id] ? (
+                                        {editingUserId === row.id ? (
+                                            <form
+                                                onSubmit={(event) =>
+                                                    handleUpdateUser(
+                                                        event,
+                                                        row.id,
+                                                    )
+                                                }
+                                                className="p-4 rounded-lg shadow bg-white space-y-4"
+                                            >
+                                                <h3 className="text-lg font-semibold text-gray-700">
+                                                    Edit User Details
+                                                </h3>
+                                                <div className="flex flex-wrap -mx-2">
+                                                    <div className="w-full sm:w-1/2 px-2 mb-4">
+                                                        <label
+                                                            htmlFor={`user-firstname-${row.id}`}
+                                                            className="block text-sm font-medium text-gray-700"
+                                                        >
+                                                            First Name
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id={`user-firstname-${row.id}`}
+                                                            name="firstname"
+                                                            defaultValue={
+                                                                userDetails[
+                                                                    row.id
+                                                                ].firstname
+                                                            }
+                                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="w-full sm:w-1/2 px-2 mb-4">
+                                                        <label
+                                                            htmlFor={`user-lastname-${row.id}`}
+                                                            className="block text-sm font-medium text-gray-700"
+                                                        >
+                                                            Last Name
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            id={`user-lastname-${row.id}`}
+                                                            name="lastname"
+                                                            defaultValue={
+                                                                userDetails[
+                                                                    row.id
+                                                                ].lastname
+                                                            }
+                                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="w-full sm:w-1/2 px-2 mb-4">
+                                                        <label
+                                                            htmlFor={`user-email-${row.id}`}
+                                                            className="block text-sm font-medium text-gray-700"
+                                                        >
+                                                            Email
+                                                        </label>
+                                                        <input
+                                                            type="email"
+                                                            id={`user-email-${row.id}`}
+                                                            name="email"
+                                                            defaultValue={
+                                                                userDetails[
+                                                                    row.id
+                                                                ]?.email || ''
+                                                            }
+                                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-end">
+                                                    <button
+                                                        type="button"
+                                                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l mr-2"
+                                                        onClick={() =>
+                                                            setEditingUserId(
+                                                                null,
+                                                            )
+                                                        }
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r"
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        ) : userDetails[row.id] ? (
                                             <div className="p-4 rounded-lg shadow bg-white">
                                                 <h3 className="text-lg font-semibold text-gray-700 mb-4">
                                                     User Details
