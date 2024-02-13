@@ -3,6 +3,7 @@ FROM php:8.2-fpm-alpine as php
 
 RUN apk update
 RUN apk add curl
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Installing and enabling required PHP extension
 
