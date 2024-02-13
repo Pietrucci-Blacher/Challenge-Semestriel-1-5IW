@@ -51,6 +51,7 @@ export default function Login() {
 
         if (user.roles.includes('ROLE_ADMIN')) router.push('/admin');
         else if (user.roles.includes('ROLE_PROVIDER')) router.push('/provider');
+        else if (user.roles.includes('ROLE_TEACHER')) router.push('/teacher');
         else router.push('/profile');
     }, [user, isLogged, router]);
 

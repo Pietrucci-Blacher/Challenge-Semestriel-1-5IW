@@ -14,6 +14,7 @@ export const useTeam = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
     const [establishmentTeam, setEstablishmentTeam] = useState([]);
     const [workplaces, setWorkplaces] = useState([]);
+    const [userPengingInvitation, setUserPengingInvitation] = useState([]);
 
     const addMemberToTeam = async (payload) => {
         return await addMemberToTeamService(payload);
@@ -24,17 +25,17 @@ export const useTeam = () => {
     };
 
     const acceptInvite = async (payload) => {
-        payload = { ...payload, status: 'Approved' };
+        payload = { ...payload, joinRequestStatus: 'Approved' };
         await acceptInviteService(payload);
     };
 
     const declineInvite = async (payload) => {
-        payload = { ...payload, status: 'Declined' };
+        payload = { ...payload, joinRequestStatus: 'Rejected' };
         await declineInviteService(payload);
     };
 
-    const removeMemberFromTeam = async (payload) => {
-        return await removeMemberFromTeamService(payload);
+    const removeMemberFromTeam = async (id) => {
+        return await removeMemberFromTeamService(id);
     };
 
     const getEstablishmentTeam = useCallback(async (establishmentId) => {
@@ -46,17 +47,25 @@ export const useTeam = () => {
 
     const getWorkplaces = useCallback(async (userId) => {
         const data = await getUserInvitationService(userId);
-        const establishmentUser = data['hydra:member'];
-        const approvedInvitations = establishmentUser.filter(
+        const approvedInvitations = data.filter(
             (invitation) => invitation.joinRequestStatus === 'Approved',
         );
         setWorkplaces(approvedInvitations);
         setUserId(userId);
     }, []);
 
+    const getUserPendingInvitation = useCallback(async (userId) => {
+        const data = await getUserInvitationService(userId);
+        const pendingInvitation = data.filter(
+            (invitation) => invitation.joinRequestStatus === 'Pending',
+        );
+        setUserPengingInvitation(pendingInvitation);
+    }, []);
+
     return {
         establishmentTeam,
         workplaces,
+        userPengingInvitation,
         addMemberToTeam,
         reInviteMemberToTeam,
         acceptInvite,
@@ -64,5 +73,6 @@ export const useTeam = () => {
         removeMemberFromTeam,
         getEstablishmentTeam,
         getWorkplaces,
+        getUserPendingInvitation,
     };
 };
