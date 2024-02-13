@@ -93,6 +93,7 @@ export const useDatatable = () => {
         editUser,
         deleteUser,
         userDetails,
+        setUserDetails,
         data,
         setData,
     };

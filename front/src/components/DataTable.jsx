@@ -204,22 +204,20 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!userDetails[userId]) {
-            // Charger les détails de l'utilisateur si nécessaire
-            await fetchUserData(userId).then((userData) => {
-                setUserDetails((prevDetails) => ({
-                    ...prevDetails,
-                    [userId]: userData,
-                }));
-            });
+        if (!userDetails[userId] || userDetails[userId] === undefined) {
+            await fetchUserData(userId);
+        }
+
+        if (!expandedRows.includes(userId)) {
+            setExpandedRows((prevExpandedRows) =>
+                prevExpandedRows.includes(userId)
+                    ? prevExpandedRows.filter((rowId) => rowId !== userId)
+                    : [...prevExpandedRows, userId],
+            );
+            setSelectedRow(userId);
         }
 
         setEditingUserId(userId);
-
-        // S'assurer que l'expandRow est ouvert pour cet utilisateur
-        if (!expandedRows.includes(userId)) {
-            setExpandedRows([...expandedRows, userId]);
-        }
     };
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -240,14 +238,19 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         const lastname = formData.get('lastname');
         const email = formData.get('email');
 
-        await editUser(userId, {
-            firstname,
-            lastname,
-            email,
-        });
+        try {
+            await editUser(userId, {
+                firstname,
+                lastname,
+                email,
+            });
 
-        setEditingUserId(null);
-        fetchAllUsersData();
+            fetchUserData(userId);
+            fetchAllUsersData();
+            setEditingUserId(null);
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
     };
 
     return (
