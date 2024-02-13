@@ -9,7 +9,7 @@ import { normalize } from '@/utils/data';
 
 export const useDatatable = () => {
     const [data, setData] = useState([]);
-    const [userDetails, setUserDetails] = useState(null);
+    const [userDetails, setUserDetails] = useState({});
     const fetchAllUsersData = useCallback(async () => {
         try {
             const response = await getUsersService();
@@ -22,7 +22,10 @@ export const useDatatable = () => {
     const fetchUserData = useCallback(async (id) => {
         try {
             const response = await getUserService(id);
-            setUserDetails(response);
+            setUserDetails((prevDetails) => ({
+                ...prevDetails,
+                [id]: response,
+            }));
         } catch (error) {
             console.error('Error fetching user:', error);
         }

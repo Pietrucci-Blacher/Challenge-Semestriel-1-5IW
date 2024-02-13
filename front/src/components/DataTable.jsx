@@ -422,12 +422,13 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                         colSpan={columns.length + 2}
                                         className="p-4"
                                     >
-                                        {/* User details content */}
-                                        {userDetails ? (
+                                        {userDetails[row.id] ? (
                                             <div>
                                                 <h3>User Details</h3>
-                                                <p>User ID: {userDetails.id}</p>
-                                                {/* Add more details based on your data structure */}
+                                                <p>
+                                                    User ID:{' '}
+                                                    {userDetails[row.id].id}
+                                                </p>
                                             </div>
                                         ) : (
                                             <p>Loading user details...</p>
