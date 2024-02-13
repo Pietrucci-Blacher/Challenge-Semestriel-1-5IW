@@ -2,7 +2,7 @@ import { useAuthContext } from '@/providers/AuthProvider';
 import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
 import GenericButton from '@/components/GenericButton';
-import { Button, Button as FlowbiteButton, Tabs } from 'flowbite-react';
+import { Badge, Button, Button as FlowbiteButton, Tabs } from 'flowbite-react';
 import PasswordResetForm from '@/components/PasswordResetForm';
 import useUserAccount from '@/hooks/useUserAccount';
 import Link from 'next/link';
@@ -11,7 +11,12 @@ import { MdDashboard } from 'react-icons/md';
 import { useTeam } from '@/hooks/useTeam';
 
 export default function Profile() {
-    const { acceptInvite, declineInvite } = useTeam();
+    const {
+        userPengingInvitation,
+        acceptInvite,
+        declineInvite,
+        getUserPendingInvitation,
+    } = useTeam();
     const { user, verifyUser, fetchUser } = useAuthContext();
     const { userProfile, updateProfile } = useUserAccount(user?.id);
     const [formData, setFormData] = useState({ ...userProfile });
@@ -28,8 +33,9 @@ export default function Profile() {
             const pendingRequests = getPendingRequest(userProfile?.teamMembers);
             setPendingRequests(pendingRequests);
             setFormData({ ...userProfile });
+            getUserPendingInvitation(user.id);
         }
-    }, [user, userProfile, verifyUser]);
+    }, [user, userProfile, verifyUser, getUserPendingInvitation]);
 
     const handleFirstNameChange = (value) => {
         setFormData({ ...formData, firstname: value });
@@ -56,37 +62,50 @@ export default function Profile() {
     }
 
     const acceptDemand = async (id) => {
-        acceptInvite({ id });
+        await acceptInvite({ id });
+        getUserPendingInvitation(user.id);
     };
     const declineDemand = async (id) => {
-        declineInvite({ id });
+        await declineInvite({ id });
+        getUserPendingInvitation(user.id);
     };
     return (
         <Tabs aria-label="Default tabs" style="default">
             <Tabs.Item title="Dashboard" icon={MdDashboard} active>
                 <div>
-                    {pendingRequests.length > 0 && (
+                    {userPengingInvitation.length > 0 && (
                         <div>
                             <h2>
                                 Mes demandes en attentes pour rejoindre des
                                 etablissements
                             </h2>
-                            {pendingRequests.map((request) => (
-                                <div key={request.id}>
+                            {userPengingInvitation.map((request) => (
+                                <div
+                                    className="flex items-center space-x-8 my-2"
+                                    key={request.id}
+                                >
                                     <span>{request.establishment.name}</span>
-                                    <span>{request.status}</span>
-                                    <Button
-                                        onClick={() => acceptDemand(request.id)}
-                                    >
-                                        Accepter la demande
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            declineDemand(request.id)
-                                        }
-                                    >
-                                        Refuser la demande
-                                    </Button>
+                                    <Badge color="warning" className="ml-2">
+                                        {request.joinRequestStatus}
+                                    </Badge>
+                                    <Button.Group>
+                                        <Button
+                                            color="gray"
+                                            onClick={() =>
+                                                acceptDemand(request.id)
+                                            }
+                                        >
+                                            Accepter la demande
+                                        </Button>
+                                        <Button
+                                            color="failure"
+                                            onClick={() =>
+                                                declineDemand(request.id)
+                                            }
+                                        >
+                                            Refuser la demande
+                                        </Button>
+                                    </Button.Group>
                                 </div>
                             ))}
                         </div>

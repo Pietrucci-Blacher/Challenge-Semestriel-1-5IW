@@ -12,8 +12,8 @@ use App\Entity\User;
 class Email {
     private BrevoConfiguration $config;
     private TransactionalEmailsApi $apiInstance;
-    // TODO : change email when we have a name
-    public static string $emailFrom = 'email@email.fr';
+    public static string $emailFrom = 'contact@coursia.fr';
+    public static string $orgName="Coursia";
 
     public function __construct()
     {
@@ -54,7 +54,7 @@ class Email {
     public function sendWelcomeEmail(string $emailTo, string $name, string $token)
     {
         $subject = 'Bienvenue';
-        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez NOM DU SITE.<br><br> Pour confirmer votre adresse email, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['FRONT_URL'].'/auth/confirm-email/'.$token.'">Confirmer l\'adresse email</a>';
+        $body = 'Bonjour '.$name.',<br><br> Bienvenue chez '.Email::$orgName.'.<br><br> Pour confirmer votre adresse email, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['FRONT_URL'].'/auth/confirm-email/'.$token.'">Confirmer l\'adresse email</a>';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
@@ -108,6 +108,13 @@ class Email {
     {
         $subject = 'Réservation';
         $body = 'Bonjour '.$name.',<br><br> Votre réservation a bien été prise en compte.';
+        $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
+    }
+
+    public function sendTeamInvitation(string $emailTo, string $name)
+    {
+        $subject = 'Invatation dans une équipe';
+        $body = 'Bonjour '.$name.', <br><br> Vous avez été inviter dans une équipe, veuillez vous connectez pour accepter ou refuser cette invitation';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 }

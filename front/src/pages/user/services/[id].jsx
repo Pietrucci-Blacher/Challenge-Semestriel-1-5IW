@@ -399,12 +399,12 @@ export default function Id() {
                             <RatingList />
                         </div>
                         <ReviewsList />
-                        <button
+                        {/*<button
                             className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
                             onClick={() => setMore('feedback')}
                         >
                             Ajouter un avis
-                        </button>
+                        </button>*/}
                     </p>
                 </div>
             </div>
