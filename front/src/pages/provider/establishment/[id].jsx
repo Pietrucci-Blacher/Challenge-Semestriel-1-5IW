@@ -151,14 +151,25 @@ export default function ShowEstablishment() {
         }
     };
 
+    const handleReinviteMember = async (memberId) => {
+        try {
+            await reInviteMemberToTeam(memberId);
+            getEstablishmentTeam(id);
+            createToastMessage('success', 'Invitation envoyée');
+        } catch (error) {
+            createToastMessage('error', 'Une erreur est survenue');
+        }
+    };
+
     const handleRemoveMember = async (memberId) => {
         try {
             await removeMemberFromTeam(memberId);
             getEstablishmentTeam(id);
+            createToastMessage('success', "Membre retiré de l'équipe");
         } catch (error) {
             createToastMessage('error', 'Une erreur est survenue');
         }
-    }
+    };
 
     const handleSelectEmployee = async (event) => {
         const userId = event.target.value;
@@ -237,7 +248,7 @@ export default function ShowEstablishment() {
                         </h1>
                         <TeamCard
                             members={establishmentTeam}
-                            onReinviteMember={reInviteMemberToTeam}
+                            onReinviteMember={handleReinviteMember}
                             onRemoveMember={handleRemoveMember}
                         />
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

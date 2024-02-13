@@ -11,12 +11,10 @@ const reInviteMemberToTeamService = async (memberId) => {
 };
 
 const acceptInviteService = async ({ id, joinRequestStatus }) => {
-    console.log('acceptInviteService', id, joinRequestStatus);
     return await httpClient.patch(`${BASE_URL}/${id}`, { joinRequestStatus });
 };
 
 const declineInviteService = async ({ id, joinRequestStatus }) => {
-    console.log('declineInviteService', id, joinRequestStatus);
     return await httpClient.patch(`${BASE_URL}/${id}`, { joinRequestStatus });
 };
 
