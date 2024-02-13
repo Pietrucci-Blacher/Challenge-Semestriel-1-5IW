@@ -14,7 +14,7 @@ export const useTeam = () => {
     const [establishmentId, setEstablishmentId] = useState(null);
     const [establishmentTeam, setEstablishmentTeam] = useState([]);
     const [workplaces, setWorkplaces] = useState([]);
-    const [userPengingInvitation, setUserPengingInvitation] = useState([])
+    const [userPengingInvitation, setUserPengingInvitation] = useState([]);
 
     const addMemberToTeam = async (payload) => {
         return await addMemberToTeamService(payload);
@@ -60,7 +60,7 @@ export const useTeam = () => {
             (invitation) => invitation.joinRequestStatus === 'Pending',
         );
         setUserPengingInvitation(pendingInvitation);
-    }, [])
+    }, []);
 
     return {
         establishmentTeam,
@@ -73,6 +73,6 @@ export const useTeam = () => {
         removeMemberFromTeam,
         getEstablishmentTeam,
         getWorkplaces,
-        getUserPendingInvitation ,
+        getUserPendingInvitation,
     };
 };

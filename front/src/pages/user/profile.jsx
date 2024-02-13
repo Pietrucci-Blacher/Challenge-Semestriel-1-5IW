@@ -80,7 +80,10 @@ export default function Profile() {
                                 etablissements
                             </h2>
                             {userPengingInvitation.map((request) => (
-                                <div className="flex items-center space-x-8 my-2" key={request.id}>
+                                <div
+                                    className="flex items-center space-x-8 my-2"
+                                    key={request.id}
+                                >
                                     <span>{request.establishment.name}</span>
                                     <Badge color="warning" className="ml-2">
                                         {request.joinRequestStatus}
