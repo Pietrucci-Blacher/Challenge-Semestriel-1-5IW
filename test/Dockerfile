@@ -3,7 +3,7 @@ FROM php:8.2-fpm-alpine as php
 
 RUN apk update
 RUN apk add curl
-ENV COMPOSER_ALLOW_SUPERUSER=1
+
 
 # Installing and enabling required PHP extension
 
@@ -30,7 +30,7 @@ RUN apk add libzip-dev && apk add zip && \
     docker-php-ext-install zip
 
 # Installing Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.6.6 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir /srv/app/
 
