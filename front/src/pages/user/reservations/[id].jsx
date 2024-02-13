@@ -151,7 +151,8 @@ export default function Id() {
                 </Button>
                 <Button
                     className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
-                    color="gray" onClick={() => setOpenFeedbackModal(true)}
+                    color="gray"
+                    onClick={() => setOpenFeedbackModal(true)}
                 >
                     Laisser un avis sur le service
                 </Button>
