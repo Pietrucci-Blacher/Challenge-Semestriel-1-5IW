@@ -1,20 +1,20 @@
-import { useAuthContext } from '@/providers/AuthProvider';
-import { useEffect, useState } from 'react';
+import {useAuthContext} from '@/providers/AuthProvider';
+import {useEffect, useState} from 'react';
 import Input from '@/components/Input';
 import GenericButton from '@/components/GenericButton';
-import { Button, Button as FlowbiteButton, Tabs } from 'flowbite-react';
+import {Button, Button as FlowbiteButton, Tabs} from 'flowbite-react';
 import PasswordResetForm from '@/components/PasswordResetForm';
 import useUserAccount from '@/hooks/useUserAccount';
 import Link from 'next/link';
-import { HiAdjustments, HiUserCircle } from 'react-icons/hi';
-import { MdDashboard } from 'react-icons/md';
-import { useTeam } from '@/hooks/useTeam';
+import {HiAdjustments, HiUserCircle} from 'react-icons/hi';
+import {MdDashboard} from 'react-icons/md';
+import {useTeam} from '@/hooks/useTeam';
 
 export default function Profile() {
-    const { acceptInvite, declineInvite } = useTeam();
-    const { user, verifyUser, fetchUser } = useAuthContext();
-    const { userProfile, updateProfile } = useUserAccount(user?.id);
-    const [formData, setFormData] = useState({ ...userProfile });
+    const {acceptInvite, declineInvite} = useTeam();
+    const {user, verifyUser, fetchUser} = useAuthContext();
+    const {userProfile, updateProfile} = useUserAccount(user?.id);
+    const [formData, setFormData] = useState({...userProfile});
     const [pendingRequests, setPendingRequests] = useState([]);
 
     const getPendingRequest = (requests = []) => {
@@ -27,18 +27,18 @@ export default function Profile() {
         } else {
             const pendingRequests = getPendingRequest(userProfile?.teamMembers);
             setPendingRequests(pendingRequests);
-            setFormData({ ...userProfile });
+            setFormData({...userProfile});
         }
     }, [user, userProfile, verifyUser]);
 
     const handleFirstNameChange = (value) => {
-        setFormData({ ...formData, firstname: value });
+        setFormData({...formData, firstname: value});
     };
     const handleLastNameChange = (value) => {
-        setFormData({ ...formData, lastname: value });
+        setFormData({...formData, lastname: value});
     };
     const handleEmailChange = (value) => {
-        setFormData({ ...formData, email: value });
+        setFormData({...formData, email: value});
     };
 
     const handleProfileUpdateSubmit = async (event) => {
@@ -48,7 +48,7 @@ export default function Profile() {
     };
 
     const handlePasswordResetSubmit = async (password) => {
-        await updateProfile({ password });
+        await updateProfile({password});
     };
 
     if (!user) {
@@ -56,10 +56,10 @@ export default function Profile() {
     }
 
     const acceptDemand = async (id) => {
-        acceptInvite({ id });
+        acceptInvite({id});
     };
     const declineDemand = async (id) => {
-        declineInvite({ id });
+        declineInvite({id});
     };
     return (
         <Tabs aria-label="Default tabs" style="default">
@@ -140,7 +140,7 @@ export default function Profile() {
                                     value={formData.email}
                                 />
                             </div>
-                            <GenericButton label="Update Profile" />
+                            <GenericButton label="Update Profile"/>
                         </form>
                         <PasswordResetForm
                             onSubmit={handlePasswordResetSubmit}
