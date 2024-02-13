@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use App\Service\Email;
 
 class InviteTeamInvitationController extends AbstractController
 {
@@ -22,15 +23,23 @@ class InviteTeamInvitationController extends AbstractController
     private Security $security;
     private AuthorizationCheckerInterface $authorizationChecker;
     private TeamInvitationRepository $teamInvitationRepository;
+    private Email $email;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, Security $security, EstablishmentRepository $establishmentRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, TeamInvitationRepository $teamInvitationRepository)
-    {
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker,
+        Security $security,
+        EstablishmentRepository $establishmentRepository,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        TeamInvitationRepository $teamInvitationRepository
+    ) {
         $this->establishmentRepository = $establishmentRepository;
         $this->teamInvitationRepository = $teamInvitationRepository;
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
         $this->security = $security;
         $this->authorizationChecker = $authorizationChecker;
+        $this->email = new Email();
     }
 
     public function __invoke(InviteTeamInvitationDto $inviteTeamInvitationDto)
@@ -72,8 +81,8 @@ class InviteTeamInvitationController extends AbstractController
 
         $this->entityManager->persist($teamInvitation);
         $this->entityManager->flush();
-        // TODO:
-        // Envoyer un mail à l'utilisateur pour lui informer
+
+        $this->email->sendTeamInvitation($email, $user->getFirstname());
         return $teamInvitation;
     }
 }

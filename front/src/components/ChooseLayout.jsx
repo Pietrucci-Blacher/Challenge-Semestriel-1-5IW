@@ -73,7 +73,8 @@ const ChooseLayout = ({ children }) => {
                 <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
                     {!(
                         path.startsWith('/auth/login') ||
-                        path.startsWith('/auth/register')
+                        path.startsWith('/auth/register') ||
+                        path.startsWith('/reset-password/ask')
                     ) && (
                         <div>
                             <Header />

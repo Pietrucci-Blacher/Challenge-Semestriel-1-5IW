@@ -15,6 +15,9 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
 use App\Controller\GetEstablishmentNote;
+use App\Controller\GetServiceNote;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -28,9 +31,24 @@ use App\Controller\GetEstablishmentNote;
             uriVariables: ['id' => new Link(toProperty: 'establishment', fromClass: Feedback::class)],
             normalizationContext: ['groups' => ['feedback:read']],
         ),
+        new GetCollection(
+            uriTemplate: '/services/{id}/feedback',
+            uriVariables: ['id' => new Link(toProperty: 'service', fromClass: Feedback::class)],
+            normalizationContext: ['groups' => ['feedback:read']],
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{id}/feedback',
+            uriVariables: ['id' => new Link(toProperty: 'reviewer', fromClass: Feedback::class)],
+            normalizationContext: ['groups' => ['feedback:read']],
+        ),
         new Get(
             uriTemplate: '/establishments/{id}/note',
             controller: GetEstablishmentNote::class,
+            read: false,
+        ),
+        new Get(
+            uriTemplate: '/services/{id}/note',
+            controller: GetServiceNote::class,
             read: false,
         ),
         new GetCollection(
@@ -46,10 +64,11 @@ use App\Controller\GetEstablishmentNote;
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Delete(
-            security: 'is_granted("ROLE_ADMIN") or object.getReviewer() == user',
+            security: 'is_granted("ROLE_ADMIN")',
         ),
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['comment' => 'partial'])]
 class Feedback
 {
     #[ORM\Id]

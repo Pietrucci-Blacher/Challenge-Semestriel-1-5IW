@@ -49,6 +49,19 @@ export default function CreateEstablishment() {
             return;
         }
 
+        const address = `${street}, ${city}, ${zipCode}`;
+        const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+                address,
+            )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
+        );
+        const data = await response.json();
+
+        if (data.results.length === 0) {
+            createToastMessage('error', "L'adresse n'existe pas");
+            return;
+        }
+
         try {
             const establishment = await createEstablishment({
                 name,

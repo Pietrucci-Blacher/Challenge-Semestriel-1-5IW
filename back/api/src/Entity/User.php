@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
@@ -57,9 +58,13 @@ use App\Controller\Auth\EmailConfirmationController;
             processor: UserPasswordHasher::class
         ),
         new Patch(
-            security: 'is_granted("ROLE_USER") and object == user',
+            security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
             processor: UserPasswordHasher::class
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
+            securityMessage: 'Vous ne pouvez supprimer que votre propre compte ou un administrateur peut supprimer un utilisateur.'
         )
     ]
 )]
@@ -68,15 +73,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read'])]
+    #[Groups(['user:read', 'auth:me','team_invitation:read', 'feedback:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'feedback:read', 'service:read', 'feedback:read', 'reservation:read'])]
+    #[Groups(['user:read', 'user:write', 'auth:me', 'provider_request:read', 'establishment:read', 'schedule:read', 'team_invitation:read', 'service:read', 'feedback:read', 'reservation:read'])]
     private ?string $lastname = null;
 
     #[Assert\NotBlank]

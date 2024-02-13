@@ -11,7 +11,7 @@ class UserIsActiveChecker implements UserCheckerInterface
     public function checkPreAuth(UserInterface $user)
     {
         if (!$user->getIsActive()) {
-//            throw new CustomUserMessageAuthenticationException('Your account is not active.');
+            throw new CustomUserMessageAuthenticationException('Your account is not active.');
         }
     }
 
