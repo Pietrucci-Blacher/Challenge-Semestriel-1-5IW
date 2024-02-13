@@ -14,16 +14,17 @@ export default function Input({
     className = '',
 }) {
     const [inputType, setInputType] = useState(type);
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(type === 'text');
     const [showLabel, setShowLabel] = useState(false);
 
     const handleChange = (e) => {
         onChange(e.target.value);
     };
 
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible);
+    const togglePasswordVisibility = (event) => {
+        event.stopPropagation();
         setInputType(inputType === 'password' ? 'text' : 'password');
+        setIsPasswordVisible(inputType !== 'password');
         if (required) {
             setShowLabel(!showLabel);
         }
@@ -52,6 +53,7 @@ export default function Input({
                 />
                 {type === 'password' && (
                     <button
+                        type="button"
                         onClick={togglePasswordVisibility}
                         className="absolute right-5 top-1/2 transform -translate-y-1/2"
                     >
