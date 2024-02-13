@@ -35,3 +35,7 @@ jobs:
         run: docker rm -f php
       - name: launch container php
         run: docker run --name php -d --network monapp_network ossama98/monapp_php
+      - name: install dependencies
+        run: docker exec php composer install
+      - name: generate keypair
+        run: docker exec php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
