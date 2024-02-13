@@ -24,48 +24,14 @@ jobs:
           push: true
           tags: ossama98/monapp_php:latest
           target: php
-#          cache:
 
-      - name: Build and push Server Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./test
-          file: ./test/Dockerfile
-          push: true
-          build-args: |
-            SERVER_NAME=monserver.com
-            PHP_CONTAINER_NAME=php
-          tags: ossama98/monapp_server:latest
-          target: server
-
-  deploy_to_gce:
+  deploy_to_ec2:
     needs: build_and_push
-    runs-on: ubuntu-latest
+    runs-on: instance-back
     steps:
-
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-          version: '>=  363.0.0'
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
-
-      - name: Deploy to GCE
-        run: |
-          ssh -o StrictHostKeyChecking=no daossama.98@35.195.76.184 << EOF
-            docker stop php monapp_server || true
-            docker rm php monapp_server || true
-            docker pull ossama98/monapp_php:latest
-            docker pull ossama98/monapp_server:latest
-            docker network create monapp_network || true
-            docker run --name php -d ossama98/monapp_php:latest
-            docker network connect monapp_network php
-            docker exec php composer install
-            docker run --name monapp_server -d --network monapp_network -p 80:80 ossama98/monapp_server:latest
-          EOF
+      - name: Pull image from docker hub
+        run: docker pull ossama98/monapp_php:latest
+      - name: delete old container
+        run: docker rm -f php
+      - name: launch container php
+        run: docker run --name php -d --network monapp_network ossama98/monapp_php
