@@ -27,7 +27,7 @@ jobs:
 
   deploy_to_ec2:
     needs: build_and_push
-    runs-on: instance-back
+    runs-on: instance-ec2
     steps:
       - name: Pull image from docker hub
         run: docker pull ossama98/monapp_php:latest
