@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Input from '@/components/Input';
 import GenericButton from '@/components/GenericButton';
 
-
 export default function PasswordResetForm({ onSubmit }) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,9 +22,7 @@ export default function PasswordResetForm({ onSubmit }) {
     };
 
     return (
-        <form 
-            className='flex max-w-md flex-col gap-4'
-            onSubmit={handleSubmit}>
+        <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmit}>
             <div>
                 <Input
                     label="Nouveau mot de passe"
@@ -46,7 +43,7 @@ export default function PasswordResetForm({ onSubmit }) {
                     className="block w-full py-1 "
                 />
             </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}    
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <GenericButton label="Réinitialiser le mot de passe" />
         </form>
     );

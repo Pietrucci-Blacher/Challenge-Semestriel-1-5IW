@@ -47,7 +47,7 @@ export default function CreateEstablishment() {
         const address = `${street}, ${city}, ${zipCode}`;
         const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-                address
+                address,
             )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
         );
         const data = await response.json();
@@ -75,7 +75,7 @@ export default function CreateEstablishment() {
             createToastMessage('error', error);
         }
     };
-    
+
     return (
         <div>
             <h1>Create</h1>

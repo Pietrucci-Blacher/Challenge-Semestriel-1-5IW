@@ -42,7 +42,7 @@ const MapComponent = () => {
                     const address = `${establishment.street}, ${establishment.city}, ${establishment.zipCode}`;
                     const response = await fetch(
                         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-                            address
+                            address,
                         )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
                     );
                     const data = await response.json();
@@ -57,7 +57,7 @@ const MapComponent = () => {
                             photo: '/images/immeubles-parisiens-paris-zigzag.jpg',
                             //photo: establishment.photoEstablishment,
                             city: establishment.city,
-                            zipCode: establishment.zipCode
+                            zipCode: establishment.zipCode,
                         };
                     }
                 } catch (error) {

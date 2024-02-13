@@ -87,7 +87,9 @@ export default function Id() {
         const formattedDate = dayjs(schedule.startTime).format('DD/MM/YYYY');
         setSelectedDate(formattedDate);
 
-        const startTime = dayjs(schedule.startTime).subtract(1, 'hour').format('HH:mm');        
+        const startTime = dayjs(schedule.startTime)
+            .subtract(1, 'hour')
+            .format('HH:mm');
         setSelectedTime(startTime);
     };
 
@@ -255,7 +257,6 @@ export default function Id() {
     const hours_service = Math.floor(service?.duration / 60);
     const minutes_service = service?.duration % 60;
 
-
     return (
         <>
             <div className="container">
@@ -295,14 +296,16 @@ export default function Id() {
                             </p>
                         </div>
                         <div className="col-span-1">
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                            Date de creation :{' '}
-                            {new Date(service?.establishment?.createdAt).toLocaleString('fr-FR')}
-                        </p>
+                            <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
+                                Date de creation :{' '}
+                                {new Date(
+                                    service?.establishment?.createdAt,
+                                ).toLocaleString('fr-FR')}
+                            </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Adresse : {service?.establishment?.street}{' '},
+                                Adresse : {service?.establishment?.street} ,
                                 {service?.establishment?.city}{' '}
                                 {service?.establishment?.zipCode}
                             </p>

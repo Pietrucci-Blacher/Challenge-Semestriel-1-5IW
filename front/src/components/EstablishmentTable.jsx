@@ -21,7 +21,10 @@ export default function EstablishmentTablePagination({ establishments }) {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
     // Établissements à afficher sur la page actuelle
-    const currentEstablishments = establishments.slice(indexOfFirstItem, indexOfLastItem);
+    const currentEstablishments = establishments.slice(
+        indexOfFirstItem,
+        indexOfLastItem,
+    );
 
     // Nombre total de pages
     const totalPages = Math.ceil(establishments.length / itemsPerPage);
@@ -38,11 +41,13 @@ export default function EstablishmentTablePagination({ establishments }) {
             <Table.Cell>{establishment.city}</Table.Cell>
             <Table.Cell>{establishment.zipCode}</Table.Cell>
             <Table.Cell>
-                {establishment.owner.firstname}{' '}
-                {establishment.owner.lastname}
+                {establishment.owner.firstname} {establishment.owner.lastname}
             </Table.Cell>
             <Table.Cell>
-                <Link className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" href={`/establishment/${establishment.id}`}>
+                <Link
+                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    href={`/establishment/${establishment.id}`}
+                >
                     Voir
                 </Link>
             </Table.Cell>
@@ -65,7 +70,7 @@ export default function EstablishmentTablePagination({ establishments }) {
                 </Table.Body>
             </Table>
             <Pagination
-                className='pb-2'
+                className="pb-2"
                 layout="navigation"
                 currentPage={currentPage}
                 totalPages={totalPages}
