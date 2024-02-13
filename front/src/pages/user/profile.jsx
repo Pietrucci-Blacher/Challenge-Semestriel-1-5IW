@@ -122,7 +122,7 @@ export default function Profile() {
                 </FlowbiteButton>
             </Tabs.Item>
             <Tabs.Item title="Profile" icon={HiUserCircle}>
-                This is{' '}
+                This is
                 <span className="font-medium text-gray-800 dark:text-white">
                     Dashboard tab&apos;s associated content
                 </span>

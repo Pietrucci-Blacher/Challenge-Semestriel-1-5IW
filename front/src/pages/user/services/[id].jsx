@@ -82,7 +82,6 @@ export default function Id() {
     const [selectedTime, setSelectedTime] = useState('');
 
     const handleSelectSchedule = (schedule) => {
-        console.log('Horaire sélectionné :', schedule); // Vérifier les données d'horaire sélectionnées
         setSelectedSchedule(schedule);
 
         const formattedDate = dayjs(schedule.startTime).format('DD/MM/YYYY');

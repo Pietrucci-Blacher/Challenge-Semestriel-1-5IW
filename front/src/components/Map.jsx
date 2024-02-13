@@ -60,7 +60,6 @@ const MapComponent = () => {
                             zipCode: establishment.zipCode
                         };
                     }
-                    console.log("map", response)
                 } catch (error) {
                     console.error(
                         'Erreur lors de la récupération des données de géocodage :',
