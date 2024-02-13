@@ -51,16 +51,15 @@ export default function UpdateEstablishment() {
     const handleInputZipCodeChange = (value) => {
         setFormData({ ...formData, zipCode: value });
     };
-    
+
     const handleInputPhotoEstablishmentChange = (file) => {
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             const url = event.target.result;
             setFormData({ ...formData, photoEstablishment: url });
         };
         reader.readAsDataURL(file);
     };
-    
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
@@ -136,7 +135,11 @@ export default function UpdateEstablishment() {
                 </div>
                 <div>
                     {formData.photoEstablishment && (
-                        <img src={formData.photoEstablishment} alt="Photo de l'établissement" style={{ maxWidth: '200px' }} />
+                        <img
+                            src={formData.photoEstablishment}
+                            alt="Photo de l'établissement"
+                            style={{ maxWidth: '200px' }}
+                        />
                     )}
                     <Input
                         label="Photo de l'établissement"

@@ -46,7 +46,7 @@ const MapComponent = () => {
                         )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
                     );
                     const data = await response.json();
-                    
+
                     if (data.results && data.results.length > 0) {
                         const location = data.results[0].geometry.location;
                         return {
@@ -54,7 +54,9 @@ const MapComponent = () => {
                             name: establishment.name,
                             street: establishment.street,
                             position: { lat: location.lat, lng: location.lng },
-                            photo: establishment.photoEstablishment || '/images/immeubles-parisiens-paris-zigzag.jpg',                           
+                            photo:
+                                establishment.photoEstablishment ||
+                                '/images/immeubles-parisiens-paris-zigzag.jpg',
                             city: establishment.city,
                             zipCode: establishment.zipCode,
                         };
