@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDatatable } from '@/hooks/useDatatable';
+import dayjs from 'dayjs';
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [sortedData, setSortedData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -381,21 +382,92 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                 </td>
                             </tr>
                             {expandedRows.includes(row.id) && (
-                                <tr>
+                                <tr className="bg-gray-50">
                                     <td
                                         colSpan={columns.length + 2}
                                         className="p-4"
                                     >
                                         {userDetails[row.id] ? (
-                                            <div>
-                                                <h3>User Details</h3>
-                                                <p>
-                                                    User ID:{' '}
-                                                    {userDetails[row.id].id}
-                                                </p>
+                                            <div className="p-4 rounded-lg shadow bg-white">
+                                                <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                                                    User Details
+                                                </h3>
+                                                <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                                                    <div className="sm:col-span-1">
+                                                        <dt className="text-sm font-medium text-gray-500">
+                                                            User ID
+                                                        </dt>
+                                                        <dd className="mt-1 text-sm text-gray-900">
+                                                            {
+                                                                userDetails[
+                                                                    row.id
+                                                                ].id
+                                                            }
+                                                        </dd>
+                                                    </div>
+                                                    <div className="sm:col-span-1">
+                                                        <dt className="text-sm font-medium text-gray-500">
+                                                            Full name
+                                                        </dt>
+                                                        <dd className="mt-1 text-sm text-gray-900">
+                                                            {
+                                                                userDetails[
+                                                                    row.id
+                                                                ].firstname
+                                                            }{' '}
+                                                            {
+                                                                userDetails[
+                                                                    row.id
+                                                                ].lastname
+                                                            }
+                                                        </dd>
+                                                    </div>
+                                                    <div className="sm:col-span-1">
+                                                        <dt className="text-sm font-medium text-gray-500">
+                                                            Email
+                                                        </dt>
+                                                        <dd className="mt-1 text-sm text-gray-900">
+                                                            {
+                                                                userDetails[
+                                                                    row.id
+                                                                ].email
+                                                            }
+                                                        </dd>
+                                                    </div>
+                                                    <div className="sm:col-span-1">
+                                                        <dt className="text-sm font-medium text-gray-500">
+                                                            Birthdate
+                                                        </dt>
+                                                        <dd className="mt-1 text-sm text-gray-900">
+                                                            {dayjs(
+                                                                userDetails[
+                                                                    row.id
+                                                                ].birthdate,
+                                                            ).format(
+                                                                'DD/MM/YYYY',
+                                                            )}
+                                                        </dd>
+                                                    </div>
+                                                    <div className="sm:col-span-2">
+                                                        <dt className="text-sm font-medium text-gray-500">
+                                                            Account Created
+                                                        </dt>
+                                                        <dd className="mt-1 text-sm text-gray-900">
+                                                            {dayjs(
+                                                                userDetails[
+                                                                    row.id
+                                                                ].createdAt,
+                                                            ).format(
+                                                                'DD/MM/YYYY HH:mm',
+                                                            )}
+                                                        </dd>
+                                                    </div>
+                                                </dl>
                                             </div>
                                         ) : (
-                                            <p>Loading user details...</p>
+                                            <p className="text-center text-gray-500">
+                                                Loading user details...
+                                            </p>
                                         )}
                                     </td>
                                 </tr>
