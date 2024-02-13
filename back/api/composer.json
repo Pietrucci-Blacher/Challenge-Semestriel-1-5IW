@@ -8,7 +8,7 @@
         "api-platform/core": "^3.2@beta",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^2.16",
+        "doctrine/orm": "^3.0",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "getbrevo/brevo-php": "1.x.x",
         "lexik/jwt-authentication-bundle": "^2.19",
