@@ -153,11 +153,11 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
 
         if (!searchTerm.trim()) {
             updateAndTransformData(data);
+            setCurrentPage(1);
             return;
         }
 
         const filteredData = data.filter((user) => {
-            // Combine la recherche sur plusieurs colonnes ou adaptez selon votre besoin
             return Object.values(user)
                 .join(' ')
                 .toLowerCase()
@@ -165,6 +165,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         });
 
         updateAndTransformData(filteredData);
+        setCurrentPage(1);
     };
 
     const handlePageChange = (pageNumber) => {
