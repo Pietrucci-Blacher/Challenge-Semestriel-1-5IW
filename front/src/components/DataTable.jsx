@@ -30,38 +30,9 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         }
     }, [fetchAllUsersData, fetchUserData, selectedRow]);
 
-    const getHighestRoleLabel = (roles) => {
-        if (!Array.isArray(roles)) {
-            roles = [roles];
-        }
-
-        const roleHierarchy = {
-            ROLE_USER: 1,
-            ROLE_TEACHER: 2,
-            ROLE_PROVIDER: 3,
-            ROLE_ADMIN: 4,
-        };
-
-        const roleLabels = {
-            ROLE_USER: 'Utilisateur',
-            ROLE_TEACHER: 'Enseignant',
-            ROLE_PROVIDER: 'Fournisseur',
-            ROLE_ADMIN: 'Administrateur',
-        };
-
-        let highestRole = roles.reduce((prev, current) => {
-            return roleHierarchy[current] > roleHierarchy[prev]
-                ? current
-                : prev;
-        }, 'ROLE_USER');
-
-        return roleLabels[highestRole];
-    };
-
     const updateAndTransformData = useCallback((dataToTransform) => {
         const transformedData = dataToTransform.map((user) => {
-            const highestRoleLabel = getHighestRoleLabel(user.roles);
-            return { ...user, roles: highestRoleLabel };
+            return { ...user };
         });
         setSortedData(transformedData);
     }, []);
@@ -104,8 +75,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     useEffect(() => {
         if (data && data.length > 0) {
             const transformedData = data.map((user) => {
-                const highestRoleLabel = getHighestRoleLabel(user.roles);
-                return { ...user, roles: highestRoleLabel };
+                return { ...user };
             });
             setSortedData(transformedData);
         }
@@ -124,17 +94,11 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
 
         const sortedAndTransformedData = data
             .map((user) => {
-                return { ...user, roles: getHighestRoleLabel(user.roles) };
+                return { ...user };
             })
             .sort((a, b) => {
                 let valueA = a[column];
                 let valueB = b[column];
-
-                // Si le tri est sur les rôles, utilisez les labels transformés
-                if (column === 'roles') {
-                    valueA = getHighestRoleLabel(a.roles);
-                    valueB = getHighestRoleLabel(b.roles);
-                }
 
                 if (typeof valueA === 'string') valueA = valueA.toLowerCase();
                 if (typeof valueB === 'string') valueB = valueB.toLowerCase();

@@ -13,26 +13,31 @@ export const useDatatable = () => {
 
     const getHighestRoleLabel = (roles) => {
         const roleHierarchy = {
-            ROLE_USER: 1,
-            ROLE_TEACHER: 2,
-            ROLE_PROVIDER: 3,
             ROLE_ADMIN: 4,
+            ROLE_PROVIDER: 3,
+            ROLE_TEACHER: 2,
+            ROLE_USER: 1,
         };
 
         const roleLabels = {
-            ROLE_USER: 'Utilisateur',
-            ROLE_TEACHER: 'Enseignant',
-            ROLE_PROVIDER: 'Fournisseur',
             ROLE_ADMIN: 'Administrateur',
+            ROLE_PROVIDER: 'Client',
+            ROLE_TEACHER: 'Enseignant',
+            ROLE_USER: 'Utilisateur',
         };
 
-        const highestRole = roles.reduce((prev, current) => {
-            return roleHierarchy[current] > roleHierarchy[prev]
-                ? current
-                : prev;
+        const rolesArray = Array.isArray(roles) ? roles : [roles];
+
+        let highestRoleRank = 0;
+        let highestRoleKey = 'ROLE_USER';
+        rolesArray.forEach((role) => {
+            if (roleHierarchy[role] > highestRoleRank) {
+                highestRoleRank = roleHierarchy[role];
+                highestRoleKey = role;
+            }
         });
 
-        return roleLabels[highestRole];
+        return roleLabels[highestRoleKey];
     };
 
     const fetchAllUsersData = useCallback(async () => {
