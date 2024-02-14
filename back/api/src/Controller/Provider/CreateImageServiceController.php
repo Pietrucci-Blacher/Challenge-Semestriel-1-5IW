@@ -10,7 +10,7 @@ use App\Entity\Service;
 use App\Repository\ServiceRepository;
 
 #[AsController]
-final class UpdateServiceController extends AbstractController
+final class CreateImageServiceController extends AbstractController
 {
     private ServiceRepository $serviceRepository;
 
@@ -21,17 +21,14 @@ final class UpdateServiceController extends AbstractController
 
     public function __invoke(Request $request, $id): Service
     {
-        $uploadedFile = $request->files->get('image');
+        $uploadedFile = $request->files->get('file');
 
-        $service = $this->serviceRepository->find($id);
-        if (!$service) {
-            throw new BadRequestHttpException('Service not found');
+        if (!$uploadedFile) {
+            throw new BadRequestHttpException('"file" is required');
         }
 
-        if ($uploadedFile) {
-            $service->file = $uploadedFile;
-            $this->serviceRepository->save($service);
-        }
+        $service = new Service();
+        $service->file = $uploadedFile;
 
         return $service;
     }
