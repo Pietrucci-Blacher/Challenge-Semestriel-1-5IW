@@ -32,12 +32,14 @@ export default function ShowEstablishment() {
             <p>Rue: {establishment.street}</p>
             <p>Ville: {establishment.city}</p>
             <p>Code postal: {establishment.zipCode}</p>
+            <img class="h-auto max-w-xs"
+                src={establishment.photoEstablishment} />
             <p>
                 Propriétaire: {establishment.owner.firstname}{' '}
                 {establishment.owner.lastname}
             </p>
         </div>
-    ) : (
+    ): (
         'Chargement...'
     );
 

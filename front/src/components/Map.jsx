@@ -54,8 +54,7 @@ const MapComponent = () => {
                             name: establishment.name,
                             street: establishment.street,
                             position: { lat: location.lat, lng: location.lng },
-                            photo: '/images/immeubles-parisiens-paris-zigzag.jpg',
-                            //photo: establishment.photoEstablishment,
+                            photo: establishment.photoEstablishment || '/images/immeubles-parisiens-paris-zigzag.jpg',
                             city: establishment.city,
                             zipCode: establishment.zipCode,
                         };
