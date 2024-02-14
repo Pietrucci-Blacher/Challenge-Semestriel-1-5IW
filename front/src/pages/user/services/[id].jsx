@@ -287,7 +287,7 @@ export default function Id() {
 
                 <div className="mt-8">
                     <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
-                        Info sur l'Établissement :
+                        Info sur l&eapos;Établissement :
                     </h2>
                     <div className=" grid grid-cols-3 gap-4">
                         <div className="col-span-1">
