@@ -43,7 +43,6 @@ use App\Attributes\UserField;
         ),
         new GetCollection(),
         new Post(
-            controller: CreateImageServiceController::class,
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']],
@@ -114,18 +113,22 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
-    #[ApiProperty(openapiContext: [
-        'type' => 'string',
-        'format' => 'binary'
-    ])]
-    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")]
-    #[Assert\NotNull(groups: ['media_object_create'])]
-    #[Groups(['service:write'])]
-    public ?File $image = null;
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ApiProperty(types: ['https://schema.org/image'])]
+    public ?MediaObject $image = null;
+    /* #[ApiProperty(openapiContext: [ */
+    /*     'type' => 'string', */
+    /*     'format' => 'binary' */
+    /* ])] */
+    /* #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")] */
+    /* #[Assert\NotNull(groups: ['media_object_create'])] */
+    /* #[Groups(['service:write'])] */
+    /* public ?File $image = null; */
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(['service:read'])]
-    public ?string $imagePath = null;
+    /* #[ORM\Column(nullable: true)] */
+    /* #[Groups(['service:read'])] */
+    /* public ?string $imagePath = null; */
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
