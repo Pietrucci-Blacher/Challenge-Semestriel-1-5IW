@@ -19,17 +19,18 @@ final class CreateImageServiceController extends AbstractController
         $this->serviceRepository = $serviceRepository;
     }
 
-    public function __invoke(Request $request, $id): Service
+    public function __invoke(Request $request): Service
     {
-        $uploadedFile = $request->files->get('file');
+        $uploadedFile = $request->files->get('image');
 
         if (!$uploadedFile) {
-            throw new BadRequestHttpException('"file" is required');
+            throw new BadRequestHttpException('"image" is required');
         }
 
-        $service = new Service();
-        $service->file = $uploadedFile;
+        if (!in_array($uploadedFile->getMimeType(), ['image/jpeg', 'image/png'])) {
+            throw new BadRequestHttpException('The file must be a jpeg or a png');
+        }
 
-        return $service;
+        return $request->attributes->get('data');
     }
 }

@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Provider\UpdateServiceController;
-use App\Controller\Provider\CreateImageServiceController ;
+use App\Controller\Provider\CreateImageServiceController;
 use App\Attributes\UserField;
 
 #[Vich\Uploadable]
@@ -43,10 +43,11 @@ use App\Attributes\UserField;
         ),
         new GetCollection(),
         new Post(
+            controller: CreateImageServiceController::class,
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']],
-            security: 'is_granted("ROLE_PROVIDER")'
+            security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
@@ -99,7 +100,6 @@ class Service
     #[ORM\Column]
     #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
-
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -113,22 +113,18 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    #[ApiProperty(types: ['https://schema.org/image'])]
-    public ?MediaObject $image = null;
-    /* #[ApiProperty(openapiContext: [ */
-    /*     'type' => 'string', */
-    /*     'format' => 'binary' */
-    /* ])] */
-    /* #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")] */
-    /* #[Assert\NotNull(groups: ['media_object_create'])] */
-    /* #[Groups(['service:write'])] */
-    /* public ?File $image = null; */
+    #[ApiProperty(openapiContext: [
+        'type' => 'string',
+        'format' => 'binary'
+    ])]
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "imagePath")]
+    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Groups(['service:write'])]
+    public ?File $image = null;
 
-    /* #[ORM\Column(nullable: true)] */
-    /* #[Groups(['service:read'])] */
-    /* public ?string $imagePath = null; */
+    #[ORM\Column(nullable: true)]
+    #[Groups(['service:read'])]
+    public ?string $imagePath = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
