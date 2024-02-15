@@ -23,7 +23,6 @@ export default function ApplyToBeProvider() {
         getUserRequest(id);
     }, [user]);
     useEffect(() => {
-        console.log('request', request);
     }, [request]);
 
     const handleSubmit = async (e) => {
