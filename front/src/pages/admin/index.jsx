@@ -231,7 +231,7 @@ export default function AdminIndex() {
                                             </Table.Cell>
                                             <Table.Cell>
                                                 {dayjs(
-                                                    booking.schedule.startTime,
+                                                    booking.schedule?.startTime,
                                                 ).format('DD/MM/YYYY')}
                                             </Table.Cell>
                                         </Table.Row>
