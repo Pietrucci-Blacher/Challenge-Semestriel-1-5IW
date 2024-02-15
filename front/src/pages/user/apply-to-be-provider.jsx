@@ -1,19 +1,28 @@
-import { FileInput, Label } from 'flowbite-react';
+import { FileInput, Label, TextInput } from 'flowbite-react';
 import Input from '@/components/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GenericButton from '@/components/GenericButton';
 import useRequestsProvider from '@/hooks/useRequestsProvider';
 import { useToast } from '@/hooks/useToast';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function ApplyToBeProvider() {
-    const { applyToBeProvider } = useRequestsProvider();
+    const { user } = useAuthContext();
+    const { request, getUserRequest, applyToBeProvider } =
+        useRequestsProvider();
     const { createToastMessage } = useToast();
     const [kbis, setKbis] = useState('');
     const [file, setFile] = useState(null);
     const handleFileChange = (e) => {
-        const file = e.target.files[0]; // Récupérer le premier fichier
-        setFile(file); // Mettre à jour l'état avec ce fichier
+        const file = e.target.files[0];
+        setFile(file);
     };
+    useEffect(() => {
+        const id = user?.id;
+        if (!id) return;
+        getUserRequest(id);
+    }, [user]);
+    useEffect(() => {}, [request]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,30 +36,57 @@ export default function ApplyToBeProvider() {
             createToastMessage('error', e.detail);
         }
     };
+
     return (
         <>
-            <h2>Postuler pour devenir prestataire.</h2>
-            <form onSubmit={handleSubmit}>
-                <Input
-                    label="Votre Kbis"
-                    required
-                    type="text"
-                    name="kbis"
-                    value={kbis}
-                    onChange={setKbis}
-                />
-                <div id="fileUpload" className="max-w-md">
-                    <div className="mb-2 block">
-                        <Label htmlFor="file" value="Upload file" />
+            {request !== null && request['hydra:totalItems'] === 0 ? (
+                <>
+                    <h2>Postuler pour devenir prestataire.</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="max-w-md">
+                            <div className="mb-2 block">
+                                <Label
+                                    htmlFor="kbis"
+                                    value="Votre numero de kbis"
+                                />
+                            </div>
+                            <TextInput
+                                label="Votre Kbis"
+                                id="kbis"
+                                required
+                                type="text"
+                                name="kbis"
+                                value={kbis}
+                                onChange={(e) => setKbis(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="max-w-md">
+                            <div className="mb-2 block">
+                                <Label htmlFor="file" value="Upload file" />
+                            </div>
+                            <FileInput
+                                id="file"
+                                helperText="Envoyer votre Kbis en pdf"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                        <GenericButton label="soumettre la demande" />
+                    </form>
+                </>
+            ) : request !== null && request['hydra:totalItems'] > 0 ? (
+                <>
+                    <h2>Vous avez déjà fait votre demande</h2>
+                    <div>
+                        Le statut de votre demande est:{' '}
+                        {request['hydra:member'][0]['status']}
                     </div>
-                    <FileInput
-                        id="file"
-                        helperText="Envoyer votre Kbis en pdf"
-                        onChange={handleFileChange}
-                    />
-                </div>
-                <GenericButton label="soumettre la demande" />
-            </form>
+                </>
+            ) : (
+                <>
+                    <h2>En cours de chargement</h2>
+                </>
+            )}
         </>
     );
 }

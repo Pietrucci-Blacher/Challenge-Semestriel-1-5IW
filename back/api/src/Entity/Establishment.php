@@ -62,7 +62,7 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['establishment:read', 'team_invitation:read', 'service:read'])]
+    #[Groups(['establishment:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
@@ -104,9 +104,12 @@ class Establishment
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoEstablishment = null;
+
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
     private Collection $feedback;
-
+  
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
@@ -311,6 +314,16 @@ class Establishment
         return $this;
     }
 
+    public function getPhotoEstablishment(): ?string
+    {
+        return $this->photoEstablishment;
+    }
+
+    public function setPhotoEstablishment(?string $photoEstablishment): static
+    {
+        $this->photoEstablishment = $photoEstablishment;
+    }
+  
     /**
      * @return Collection<int, Feedback>
      */
@@ -325,19 +338,6 @@ class Establishment
             $this->feedback->add($feedback);
             $feedback->setEstablishment($this);
         }
-
-        return $this;
-    }
-
-    public function removeFeedback(Feedback $feedback): static
-    {
-        if ($this->feedback->removeElement($feedback)) {
-            // set the owning side to null (unless already changed)
-            if ($feedback->getEstablishment() === $this) {
-                $feedback->setEstablishment(null);
-            }
-        }
-
         return $this;
     }
 

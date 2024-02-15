@@ -6,13 +6,13 @@ export default function Header() {
     const { user } = useAuthContext();
 
     return (
-        <header className="sticky top-0">
+        <header className="sticky top-0 z-50">
             <Navbar fluid rounded>
                 <Navbar.Brand href="/">
                     <Image
                         alt="Flowbite logo"
                         height="32"
-                        src="/images/logo.svg"
+                        src="/favicons/icon.svg"
                         width="32"
                     />
                 </Navbar.Brand>
@@ -22,6 +22,7 @@ export default function Header() {
                     {user && (
                         <Dropdown
                             inline
+                            className="z-50"
                             label={
                                 <Avatar
                                     alt="User settings"
@@ -38,9 +39,9 @@ export default function Header() {
                                     {user.email}
                                 </span>
                             </Dropdown.Header>
-                            <Dropdown.Item>Dashboard</Dropdown.Item>
-                            <Dropdown.Item>Settings</Dropdown.Item>
-                            <Dropdown.Item>Earnings</Dropdown.Item>
+                            <Dropdown.Item href="/profile">
+                                Profil
+                            </Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item href="/auth/logout">
                                 Sign out
@@ -54,15 +55,14 @@ export default function Header() {
                     <Navbar.Link href="#" active>
                         Home
                     </Navbar.Link>
-                    <Navbar.Link href="#">About</Navbar.Link>
-                    <Navbar.Link href="/services">Services</Navbar.Link>
-                    <Navbar.Link href="#">Contact</Navbar.Link>
                     {user && (
-                        <Navbar.Link href="/establishment/">
-                            Etablissements
-                        </Navbar.Link>
+                        <>
+                            <Navbar.Link href="/services">Services</Navbar.Link>
+                            <Navbar.Link href="/establishment/">
+                                Etablissements
+                            </Navbar.Link>
+                        </>
                     )}
-                    <Navbar.Link href="#">Services</Navbar.Link>
                 </Navbar.Collapse>
             </Navbar>
         </header>
