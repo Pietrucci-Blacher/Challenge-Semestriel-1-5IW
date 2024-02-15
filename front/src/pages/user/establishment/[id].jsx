@@ -35,7 +35,6 @@ const ShowEstablishment = () => {
 
     const { service, getGetServicesPerEstablishment } = useService();
 
-
     const {
         feedbacks,
         detailed,
@@ -57,7 +56,9 @@ const ShowEstablishment = () => {
         getEstablishmentById(id);
     }, [getEstablishmentById, id]);
 
-    const images = establishment?.photoEstablishment || '/images/immeubles-parisiens-paris-zigzag.jpg';
+    const images =
+        establishment?.photoEstablishment ||
+        '/images/immeubles-parisiens-paris-zigzag.jpg';
 
     const Review = ({ name, date, imageSrc, content, note }) => (
         <li className="mb-[40px] pr-16">
@@ -206,7 +207,6 @@ const ShowEstablishment = () => {
         getFeedbacksFromEstablishmentId(id);
         getEstablishmentNote(id);
         getGetServicesPerEstablishment(id);
-
     }, [
         id,
         getEstablishmentById,
@@ -240,14 +240,16 @@ const ShowEstablishment = () => {
                                 <span className="mx-1">·</span>
                             </div>
                             <p className="underline cursor-pointer font-semibold ml-1">
-                                <a 
+                                <a
                                     href={`https://www.google.com/maps/search/?api=1&query=${establishment?.street}, ${establishment?.city} ${establishment?.zipCode}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="underline cursor-pointer font-semibold ml-1"
                                 >
-                                    {establishment?.street}, {establishment?.city} {' '} {establishment?.zipCode}
-                                </a>                         
+                                    {establishment?.street},{' '}
+                                    {establishment?.city}{' '}
+                                    {establishment?.zipCode}
+                                </a>
                             </p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -276,7 +278,7 @@ const ShowEstablishment = () => {
                             />
                         </div>
                     </div>
-                        {/* <ul className="right w-1/2 flex flex-wrap">
+                    {/* <ul className="right w-1/2 flex flex-wrap">
                             {[1, 2, 3, 4].map((i) => (
                                 <li
                                     className="corners relative ml-2 mb-2 h-1/2"
@@ -359,7 +361,7 @@ const ShowEstablishment = () => {
                     <div className="sticky top-32 right-0 transition-all ease-out duration-300 my-12 mx-4 p-6 bg-white rounded-lg shadow-lg h-min w-[31%]">
                         <div className="flex justify-between items-center text-xl font-semibold whitespace-nowrap mb-6 text-[22px]">
                             <p className="flex items-center font-normal text-[15px]">
-                            <span className="text-[22px] font-semibold">
+                                <span className="text-[22px] font-semibold">
                                     Services
                                 </span>{' '}
                             </p>
@@ -374,9 +376,7 @@ const ShowEstablishment = () => {
                         </div>
 
                         <Link href="/services">
-                            <button
-                                className="block w-full text-white font-semibold text-base py-3.5 rounded transition-transform active:scale-95 duration-300 bg-gradient-to-r from-red-600 via-red-700 to-red-800 border-none cursor-pointer"
-                            >
+                            <button className="block w-full text-white font-semibold text-base py-3.5 rounded transition-transform active:scale-95 duration-300 bg-gradient-to-r from-red-600 via-red-700 to-red-800 border-none cursor-pointer">
                                 Voir la disponibilité
                             </button>
                         </Link>
