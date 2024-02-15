@@ -21,8 +21,10 @@ export default function EstablishmentTablePagination({ establishments, baseUrl }
         return <Spinner />;
     }
 
-    const filteredEstablishments = establishments.filter(establishment =>
-        establishment[filterType].toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredEstablishments = establishments.filter((establishment) =>
+        establishment[filterType]
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
     );
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -84,7 +86,12 @@ export default function EstablishmentTablePagination({ establishments, baseUrl }
                     className="mr-2"
                 />
                 {/* Utilisez un menu déroulant simple pour regrouper les boutons de filtre */}
-                <select label="Filtrer par" className="mr-2" value={filterType} onChange={(e) => handleFilterTypeChange(e.target.value)}>
+                <select
+                    label="Filtrer par"
+                    className="mr-2"
+                    value={filterType}
+                    onChange={(e) => handleFilterTypeChange(e.target.value)}
+                >
                     <option value="name">Nom</option>
                     <option value="street">Rue</option>
                     <option value="city">Ville</option>

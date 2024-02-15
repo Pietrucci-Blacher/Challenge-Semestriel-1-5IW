@@ -3,8 +3,6 @@ import { useEstablishment } from '@/hooks/useEstablishment';
 import MapComponent from '@/components/Map';
 import EstablishmentTable from '@/components/EstablishmentTable';
 
-
-
 export default function ListAllEstablishment() {
     const { establishments, getAllEstablishments } = useEstablishment();
 
