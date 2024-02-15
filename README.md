@@ -24,3 +24,8 @@
 | Gerer ses services                                                            | Teddy GAUTHIER           | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/245                                                                          |
 | Verification des emails utilisateur                                           | Teddy GAUTHIER           | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/257                                                                          |
 | Feedback backend                                                              | Teddy GAUTHIER           | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/295 https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/360 |
+| Map Google                                                                    | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/258 |
+| hotfix/maps                                                                   | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/355 |
+| Admin Schedule                                                                | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/344 |
+| Admin Establishment                                                           | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/344 |
+| Admin Provider                                                                | Iliès SLIM               | https://github.com/Pietrucci-Blacher/Challenge-Semestriel-1-5IW/pull/363 |

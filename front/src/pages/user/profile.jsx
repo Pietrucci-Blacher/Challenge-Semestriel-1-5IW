@@ -121,21 +121,14 @@ export default function Profile() {
                     Faire une demande pour devenir prestataire
                 </FlowbiteButton>
             </Tabs.Item>
-            <Tabs.Item title="Profile" icon={HiUserCircle}>
-                This is{' '}
-                <span className="font-medium text-gray-800 dark:text-white">
-                    Dashboard tab&apos;s associated content
-                </span>
-                . Clicking another tab will toggle the visibility of this one
-                for the next. The tab JavaScript swaps classes to control the
-                content visibility and styling.
-            </Tabs.Item>
-
             <Tabs.Item title="Modifier ton profile" icon={HiAdjustments}>
-                <h2>profile role {user?.roles}</h2>
+                <h2>Rôle de l&apos;utilisateur : {user?.roles}</h2>
                 {user ? (
                     <>
-                        <form onSubmit={handleProfileUpdateSubmit}>
+                        <form
+                            className="flex max-w-md flex-col gap-4"
+                            onSubmit={handleProfileUpdateSubmit}
+                        >
                             <div>
                                 <Input
                                     label="firstname"
@@ -143,6 +136,7 @@ export default function Profile() {
                                     placeholder="firstname"
                                     onChange={handleFirstNameChange}
                                     value={formData.firstname}
+                                    className="block w-full py-1 "
                                 />
                                 <Input
                                     label="lastname"
@@ -150,6 +144,7 @@ export default function Profile() {
                                     placeholder="lastname"
                                     onChange={handleLastNameChange}
                                     value={formData.lastname}
+                                    className="block w-full py-1 "
                                 />
                                 <Input
                                     label="Email"
@@ -157,10 +152,12 @@ export default function Profile() {
                                     placeholder="Email"
                                     onChange={handleEmailChange}
                                     value={formData.email}
+                                    className="block w-full py-1 "
                                 />
                             </div>
-                            <GenericButton label="Update Profile" />
+                            <GenericButton label="Mettre à jour le profile" />
                         </form>
+                        <div className="my-4"></div>
                         <PasswordResetForm
                             onSubmit={handlePasswordResetSubmit}
                         />

@@ -129,8 +129,13 @@ export default function Id() {
                 </div>
                 <br />
                 <div>
-                    Start date : {reservation?.startTime} <br />
-                    End date : {reservation?.endTime}
+                    Start date :{' '}
+                    {new Date(reservation?.startTime).toLocaleString('fr-FR')}{' '}
+                    <br />
+                    End date :{' '}
+                    {new Date(reservation?.endTime).toLocaleString(
+                        'fr-FR',
+                    )}{' '}
                 </div>
                 <br />
                 <div>

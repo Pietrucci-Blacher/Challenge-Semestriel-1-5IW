@@ -1,9 +1,19 @@
-import Link from 'next/link';
+import { useEffect } from 'react';
+import { useEstablishment } from '@/hooks/useEstablishment';
+import MapComponent from '@/components/Map';
+import EstablishmentTable from '@/components/EstablishmentTable';
+
 export default function ListAllEstablishment() {
+    const { establishments, getAllEstablishments } = useEstablishment();
+
+    useEffect(() => {
+        getAllEstablishments();
+    }, [getAllEstablishments]);
+
     return (
-        <>
-            <h1>Les etablissements</h1>
-            <Link href={`/establishment/2`}>Test</Link>
-        </>
+        <div>
+            <EstablishmentTable establishments={establishments} />
+            <MapComponent />
+        </div>
     );
 }
