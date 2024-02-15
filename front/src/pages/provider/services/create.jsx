@@ -22,7 +22,7 @@ export default function CreateService() {
     const [editorData, setEditorData] = useState();
 
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);
@@ -66,9 +66,6 @@ export default function CreateService() {
     const handleInputDurationChange = (value) => {
         setFormData({ ...formData, duration: parseInt(value) });
     };
-
-    console.log('formData', formData);
-
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
         const { title, description, price, duration, establishment_id } =

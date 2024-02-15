@@ -10,15 +10,10 @@ export default function Planning() {
     const { workplaces, getWorkplaces } = useTeam();
     const [selectedEstablishment, setSelectedEstablishment] = useState(null);
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getWorkplaces(id);
     }, [user, getWorkplaces]);
-
-    useEffect(() => {
-        console.log('workplaces', workplaces);
-    }, [workplaces]);
-
     const handleSelectEstablishment = (event) => {
         const selectedEstablishment = event.target.value;
         if (!selectedEstablishment) setSelectedEstablishment(null);

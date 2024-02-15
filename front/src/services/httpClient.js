@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: 'https://localhost',
+    baseURL: 'https://back.goldenbookingcode.info/',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -39,9 +39,12 @@ const handleResponseError = async (error) => {
         if (!refreshToken) {
             return Promise.reject(error);
         }
-        const response = await axios.post('https://localhost/token/refresh', {
-            refresh_token: refreshToken,
-        });
+        const response = await axios.post(
+            `https://back.goldenbookingcode.info/token/refresh`,
+            {
+                refresh_token: refreshToken,
+            },
+        );
         const newJwtToken = response?.data?.token;
         const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {
@@ -69,7 +72,6 @@ const makeRequest = async (method, url, data, config) => {
         });
     } catch (error) {
         throw error.response?.data;
-    } finally {
     }
 };
 
@@ -83,7 +85,6 @@ httpClient.post = async function (url, data, config) {
         ...config,
         headers,
     };
-    console.log(data);
     return await makeRequest('post', url, data, config);
 };
 

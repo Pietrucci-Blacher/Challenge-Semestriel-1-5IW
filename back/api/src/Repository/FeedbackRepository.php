@@ -31,6 +31,16 @@ class FeedbackRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByServiceId($value): ?array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.service = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Feedback[] Returns an array of Feedback objects
 //     */

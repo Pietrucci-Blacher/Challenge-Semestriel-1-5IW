@@ -1,4 +1,12 @@
 {
     "home": "Home",
-    "change-locale": "Change locale"
+    "about": "About",
+    "logoAlt": "App logo",
+    "userSettings": "User settings",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "login": "Login",
+    "register": "Register",
+    "change-locale": "Change locale",
+    "contact": "Contact"
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 /**
  * Create url parameters from filter object
@@ -22,7 +23,7 @@ export const urlParameters = (filter) => {
  * convert EditorJS data to React HTML
  *
  * @param {object} blocks - EditorJS data
- * @returns {React} React HTML
+ * @returns {JSX.Element} React HTML
  */
 export const convertDataToHtml = (blocks) => {
     const convertedHtml = blocks.map((block, key) => {
@@ -38,15 +39,19 @@ export const convertDataToHtml = (blocks) => {
             return <hr key={key} />;
         } else if (block.type === 'image') {
             return (
-                <img
+                <Image
                     key={key}
                     src={block.data.file.url}
                     alt={block.data.caption}
                 />
             );
         } else if (block.type === 'list') {
+            const style =
+                block.data.style === 'ordered' ? 'list-decimal' : 'list-disc';
             const listItems = block.data.items.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li key={i} className={style}>
+                    {item}
+                </li>
             ));
             return <ul key={key}>{listItems}</ul>;
         }
