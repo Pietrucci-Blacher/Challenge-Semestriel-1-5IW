@@ -104,16 +104,6 @@ export default function Profile() {
                 </FlowbiteButton>
                 <MapComponent></MapComponent>
             </Tabs.Item>
-            <Tabs.Item title="Profile" icon={HiUserCircle}>
-                This is{' '}
-                <span className="font-medium text-gray-800 dark:text-white">
-                    Dashboard tab&apos;s associated content
-                </span>
-                . Clicking another tab will toggle the visibility of this one
-                for the next. The tab JavaScript swaps classes to control the
-                content visibility and styling.
-            </Tabs.Item>
-
             <Tabs.Item title="Modifier ton profile" icon={HiAdjustments}>
                 <h2>profile role {user?.roles}</h2>
                 {user ? (
