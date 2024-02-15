@@ -64,7 +64,7 @@ export default function Services() {
                             className="max-w-sm card-hover transform transition-transform duration-1000 hover:scale-105"
                             renderImage={() => (
                                 <img
-                                    src={`https://localhost/media/${service.imagePath}`}
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service.imagePath}`}
                                     alt="Picture of the author"
                                     className="w-full rounded-t-lg h-48 object-cover"
                                     width={500}
