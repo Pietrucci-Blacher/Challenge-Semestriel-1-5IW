@@ -16,8 +16,11 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(undefined);
-    const [isLogged, setIsLogged] = useState(undefined);
+    const [isLogged, setIsLogged] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
     const verifyUser = useCallback(async () => {
+        setIsLoading(true);
         let storedUser = getUserFromSession();
         if (!storedUser) {
             try {
@@ -26,12 +29,15 @@ export const AuthProvider = ({ children }) => {
                 console.error('Erreur lors de la vérification', error);
                 setUser(null);
                 setIsLogged(false);
+            } finally {
+                setIsLoading(false);
             }
         } else {
             setUser(storedUser);
             setIsLogged(true);
+            setIsLoading(false);
         }
-    }, [setUser, setIsLogged]);
+    }, []);
 
     const fetchUser = async () => {
         try {
@@ -40,12 +46,14 @@ export const AuthProvider = ({ children }) => {
             setIsLogged(true);
             storeUserInSession(fetchedUser);
         } catch {
-            throw 'error recuperation user';
+            throw new Error('Erreur lors de la récupération de l’utilisateur.');
         }
     };
+
     useEffect(() => {
         verifyUser();
     }, [verifyUser]);
+
     return (
         <AuthContext.Provider
             value={{
@@ -55,6 +63,7 @@ export const AuthProvider = ({ children }) => {
                 setIsLogged,
                 verifyUser,
                 fetchUser,
+                isLoading,
             }}
         >
             {children}

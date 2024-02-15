@@ -44,6 +44,7 @@ export default function Header() {
                     {user ? (
                         <Dropdown
                             inline
+                            className="z-50"
                             label={
                                 <Avatar
                                     alt={t('userSettings')}
@@ -114,10 +115,10 @@ export default function Header() {
                                 {t('services')}
                             </Navbar.Link>
                             <Navbar.Link
-                                href="/dashboard"
+                                href="/establishment"
                                 className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
                             >
-                                {t('dashboard')}
+                                {t('establishments')}
                             </Navbar.Link>
                         </>
                     )}
