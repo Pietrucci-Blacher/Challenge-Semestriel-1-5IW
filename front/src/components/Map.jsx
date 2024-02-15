@@ -9,7 +9,6 @@ import { useEstablishment } from '@/hooks/useEstablishment';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
 
-
 const MapComponent = () => {
     const [map, setMap] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -146,11 +145,14 @@ const MapComponent = () => {
                                 }}
                             >
                                 <a
-                                    href={        
-                                        user.roles[0] === 'ROLE_USER' ? `establishment/${selectedMarker.id}` :
-                                        user.roles[0] === 'ROLE_PROVIDER' ? `establishment/${selectedMarker.id}` :
-                                        user.roles[0] === 'ROLE_ADMIN' ? `establishment/${selectedMarker.id}` :
-                                        '#'
+                                    href={
+                                        user.roles[0] === 'ROLE_USER'
+                                            ? `establishment/${selectedMarker.id}`
+                                            : user.roles[0] === 'ROLE_PROVIDER'
+                                              ? `establishment/${selectedMarker.id}`
+                                              : user.roles[0] === 'ROLE_ADMIN'
+                                                ? `establishment/${selectedMarker.id}`
+                                                : '#'
                                     }
                                 >
                                     <p

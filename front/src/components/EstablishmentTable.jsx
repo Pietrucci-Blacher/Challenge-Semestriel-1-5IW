@@ -5,8 +5,10 @@ import Spinner from '@/components/Spinner';
 import Input from '@/components/Input';
 import { useAuthContext } from '@/providers/AuthProvider';
 
-
-export default function EstablishmentTablePagination({ establishments, baseUrl }) {
+export default function EstablishmentTablePagination({
+    establishments,
+    baseUrl,
+}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState('');
@@ -60,17 +62,20 @@ export default function EstablishmentTablePagination({ establishments, baseUrl }
                 {establishment.owner.firstname} {establishment.owner.lastname}
             </Table.Cell>
             <Table.Cell>
-            <Link
-                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                href={
-                    user.roles[0] === 'ROLE_USER' ? `establishment/${establishment.id}` :
-                    user.roles[0] === 'ROLE_PROVIDER' ? `establishment/${establishment.id}` :
-                    user.roles[0] === 'ROLE_ADMIN' ? `establishment/${establishment.id}` :
-                    '#'
-                }
-            >
-                Voir
-            </Link>
+                <Link
+                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    href={
+                        user.roles[0] === 'ROLE_USER'
+                            ? `establishment/${establishment.id}`
+                            : user.roles[0] === 'ROLE_PROVIDER'
+                              ? `establishment/${establishment.id}`
+                              : user.roles[0] === 'ROLE_ADMIN'
+                                ? `establishment/${establishment.id}`
+                                : '#'
+                    }
+                >
+                    Voir
+                </Link>
             </Table.Cell>
         </Table.Row>
     ));
