@@ -4,7 +4,7 @@ import { Sidebar as FlowbiteSidebar } from 'flowbite-react';
 const Sidebar = function ({ content = [] }) {
     return (
         <FlowbiteSidebar>
-            <FlowbiteSidebar.Items className="flex flex-col h-full justify-between">
+            <FlowbiteSidebar.Items className="flex flex-col h-full">
                 <FlowbiteSidebar.ItemGroup>
                     {content.map((element, index) => (
                         <FlowbiteSidebar.Item key={index} {...element}>

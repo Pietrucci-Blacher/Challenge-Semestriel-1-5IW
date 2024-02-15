@@ -1,20 +1,25 @@
-import {useAuthContext} from '@/providers/AuthProvider';
-import {useEffect, useState} from 'react';
+import { useAuthContext } from '@/providers/AuthProvider';
+import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
 import GenericButton from '@/components/GenericButton';
-import {Button, Button as FlowbiteButton, Tabs} from 'flowbite-react';
+import { Badge, Button, Button as FlowbiteButton, Tabs } from 'flowbite-react';
 import PasswordResetForm from '@/components/PasswordResetForm';
 import useUserAccount from '@/hooks/useUserAccount';
 import Link from 'next/link';
-import {HiAdjustments, HiUserCircle} from 'react-icons/hi';
-import {MdDashboard} from 'react-icons/md';
-import {useTeam} from '@/hooks/useTeam';
+import { HiAdjustments, HiUserCircle } from 'react-icons/hi';
+import { MdDashboard } from 'react-icons/md';
+import { useTeam } from '@/hooks/useTeam';
 
 export default function Profile() {
-    const {acceptInvite, declineInvite} = useTeam();
-    const {user, verifyUser, fetchUser} = useAuthContext();
-    const {userProfile, updateProfile} = useUserAccount(user?.id);
-    const [formData, setFormData] = useState({...userProfile});
+    const {
+        userPengingInvitation,
+        acceptInvite,
+        declineInvite,
+        getUserPendingInvitation,
+    } = useTeam();
+    const { user, verifyUser, fetchUser } = useAuthContext();
+    const { userProfile, updateProfile } = useUserAccount(user?.id);
+    const [formData, setFormData] = useState({ ...userProfile });
     const [pendingRequests, setPendingRequests] = useState([]);
 
     const getPendingRequest = (requests = []) => {
@@ -27,18 +32,19 @@ export default function Profile() {
         } else {
             const pendingRequests = getPendingRequest(userProfile?.teamMembers);
             setPendingRequests(pendingRequests);
-            setFormData({...userProfile});
+            setFormData({ ...userProfile });
+            getUserPendingInvitation(user.id);
         }
-    }, [user, userProfile, verifyUser]);
+    }, [user, userProfile, verifyUser, getUserPendingInvitation]);
 
     const handleFirstNameChange = (value) => {
-        setFormData({...formData, firstname: value});
+        setFormData({ ...formData, firstname: value });
     };
     const handleLastNameChange = (value) => {
-        setFormData({...formData, lastname: value});
+        setFormData({ ...formData, lastname: value });
     };
     const handleEmailChange = (value) => {
-        setFormData({...formData, email: value});
+        setFormData({ ...formData, email: value });
     };
 
     const handleProfileUpdateSubmit = async (event) => {
@@ -48,7 +54,7 @@ export default function Profile() {
     };
 
     const handlePasswordResetSubmit = async (password) => {
-        await updateProfile({password});
+        await updateProfile({ password });
     };
 
     if (!user) {
@@ -56,37 +62,50 @@ export default function Profile() {
     }
 
     const acceptDemand = async (id) => {
-        acceptInvite({id});
+        await acceptInvite({ id });
+        getUserPendingInvitation(user.id);
     };
     const declineDemand = async (id) => {
-        declineInvite({id});
+        await declineInvite({ id });
+        getUserPendingInvitation(user.id);
     };
     return (
         <Tabs aria-label="Default tabs" style="default">
             <Tabs.Item title="Dashboard" icon={MdDashboard} active>
                 <div>
-                    {pendingRequests.length > 0 && (
+                    {userPengingInvitation.length > 0 && (
                         <div>
                             <h2>
                                 Mes demandes en attentes pour rejoindre des
                                 etablissements
                             </h2>
-                            {pendingRequests.map((request) => (
-                                <div key={request.id}>
+                            {userPengingInvitation.map((request) => (
+                                <div
+                                    className="flex items-center space-x-8 my-2"
+                                    key={request.id}
+                                >
                                     <span>{request.establishment.name}</span>
-                                    <span>{request.status}</span>
-                                    <Button
-                                        onClick={() => acceptDemand(request.id)}
-                                    >
-                                        Accepter la demande
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            declineDemand(request.id)
-                                        }
-                                    >
-                                        Refuser la demande
-                                    </Button>
+                                    <Badge color="warning" className="ml-2">
+                                        {request.joinRequestStatus}
+                                    </Badge>
+                                    <Button.Group>
+                                        <Button
+                                            color="gray"
+                                            onClick={() =>
+                                                acceptDemand(request.id)
+                                            }
+                                        >
+                                            Accepter la demande
+                                        </Button>
+                                        <Button
+                                            color="failure"
+                                            onClick={() =>
+                                                declineDemand(request.id)
+                                            }
+                                        >
+                                            Refuser la demande
+                                        </Button>
+                                    </Button.Group>
                                 </div>
                             ))}
                         </div>
@@ -103,7 +122,7 @@ export default function Profile() {
                 </FlowbiteButton>
             </Tabs.Item>
             <Tabs.Item title="Profile" icon={HiUserCircle}>
-                This is{' '}
+                This is
                 <span className="font-medium text-gray-800 dark:text-white">
                     Dashboard tab&apos;s associated content
                 </span>
@@ -113,10 +132,13 @@ export default function Profile() {
             </Tabs.Item>
 
             <Tabs.Item title="Modifier ton profile" icon={HiAdjustments}>
-                <h2>profile role {user?.roles}</h2>
+                <h2>Rôle de l&apos;utilisateur : {user?.roles}</h2>
                 {user ? (
                     <>
-                        <form onSubmit={handleProfileUpdateSubmit}>
+                        <form
+                            className="flex max-w-md flex-col gap-4"
+                            onSubmit={handleProfileUpdateSubmit}
+                        >
                             <div>
                                 <Input
                                     label="firstname"
@@ -124,6 +146,7 @@ export default function Profile() {
                                     placeholder="firstname"
                                     onChange={handleFirstNameChange}
                                     value={formData.firstname}
+                                    className="block w-full py-1 "
                                 />
                                 <Input
                                     label="lastname"
@@ -131,6 +154,7 @@ export default function Profile() {
                                     placeholder="lastname"
                                     onChange={handleLastNameChange}
                                     value={formData.lastname}
+                                    className="block w-full py-1 "
                                 />
                                 <Input
                                     label="Email"
@@ -138,10 +162,12 @@ export default function Profile() {
                                     placeholder="Email"
                                     onChange={handleEmailChange}
                                     value={formData.email}
+                                    className="block w-full py-1 "
                                 />
                             </div>
-                            <GenericButton label="Update Profile"/>
+                            <GenericButton label="Mettre à jour le profile" />
                         </form>
+                        <div className="my-4"></div>
                         <PasswordResetForm
                             onSubmit={handlePasswordResetSubmit}
                         />

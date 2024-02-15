@@ -34,6 +34,7 @@ import { useFeedback } from '@/hooks/useFeedback';
 import ModalComponent from '@/components/Modal';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { Rating } from '@/components/Rating';
+import dayjs from 'dayjs';
 
 export default function Id() {
     const { user } = useAuthContext();
@@ -77,8 +78,19 @@ export default function Id() {
         if (!idEmployee) return;
         getTeacherSchedules(idEmployee);
     };
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedTime, setSelectedTime] = useState('');
+
     const handleSelectSchedule = (schedule) => {
         setSelectedSchedule(schedule);
+
+        const formattedDate = dayjs(schedule.startTime).format('DD/MM/YYYY');
+        setSelectedDate(formattedDate);
+
+        const startTime = dayjs(schedule.startTime)
+            .subtract(1, 'hour')
+            .format('HH:mm');
+        setSelectedTime(startTime);
     };
 
     const handleReserve = () => {
@@ -243,6 +255,9 @@ export default function Id() {
         <></>
     );
 
+    const hours_service = Math.floor(service?.duration / 60);
+    const minutes_service = service?.duration % 60;
+
     return (
         <>
             <div className="container">
@@ -258,7 +273,7 @@ export default function Id() {
                             {renderBody}
                         </p>
                         <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                            Duration: {service?.duration} min
+                            Durées: {hours_service}h{minutes_service}
                         </p>
                         <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words">
                             {service?.price} €
@@ -273,23 +288,25 @@ export default function Id() {
 
                 <div className="mt-8">
                     <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
-                        Establishment Info :
+                        Info sur l&eapos;Établissement :
                     </h2>
                     <div className=" grid grid-cols-3 gap-4">
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Name : {service?.establishment?.name}
+                                Nom : {service?.establishment?.name}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
                                 Date de creation :{' '}
-                                {service?.establishment?.createdAt}
+                                {new Date(
+                                    service?.establishment?.createdAt,
+                                ).toLocaleString('fr-FR')}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Adresse : {service?.establishment?.street}{' '}
+                                Adresse : {service?.establishment?.street} ,
                                 {service?.establishment?.city}{' '}
                                 {service?.establishment?.zipCode}
                             </p>
@@ -400,12 +417,12 @@ export default function Id() {
                             <RatingList />
                         </div>
                         <ReviewsList />
-                        <button
+                        {/*<button
                             className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
                             onClick={() => setMore('feedback')}
                         >
                             Ajouter un avis
-                        </button>
+                        </button>*/}
                     </p>
                 </div>
             </div>
@@ -417,7 +434,7 @@ export default function Id() {
                             <div className="mb-2 block">
                                 <Label
                                     htmlFor=""
-                                    value={`Vous sur le point de reserver un crenau de ${service?.duration} minutes`}
+                                    value={`Vous êtes sur le point de reserver un crénaux de ${hours_service}h${minutes_service}`}
                                     className="text-xl"
                                 />
                             </div>
@@ -428,8 +445,8 @@ export default function Id() {
                                 />
                             </div>
                             <ul className="list-disc pl-5 space-y-2">
-                                <li>Date : {selectedSchedule?.date}</li>
-                                <li>Heure : {selectedSchedule?.time}</li>
+                                <li>Date : {selectedDate}</li>
+                                <li>Heure : {selectedTime}</li>
                                 <li>
                                     Professeur :{' '}
                                     {getTeacherInfo(selectedTeacher)}

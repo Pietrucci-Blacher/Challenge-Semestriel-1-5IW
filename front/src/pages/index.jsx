@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import nextI18NextConfig from '../../next-i18next.config';
 import { useTranslation } from 'next-i18next';
+import Head from 'next/head'; // Import Head from next/head
 
 export default function Index() {
     const { t, i18n } = useTranslation('common');
@@ -13,6 +14,9 @@ export default function Index() {
 
     return (
         <div>
+            <Head>
+                <title>Coursia</title>
+            </Head>
             <Link href="/auth/login">Login</Link>
 
             <br />
