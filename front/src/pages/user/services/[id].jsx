@@ -171,7 +171,6 @@ export default function Id() {
         specialRequest.length > 0
             ? (payload['specialRequest'] = specialRequest)
             : payload;
-        console.log('payload', payload);
         setOpenModal(false);
         await createReservation(payload);
         await getTeacherSchedules(selectedTeacher);
