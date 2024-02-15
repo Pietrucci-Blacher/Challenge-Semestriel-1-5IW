@@ -13,34 +13,42 @@ const ChooseLayout = ({ children }) => {
     const { user, isLogged, isLoading } = useAuthContext();
     const router = useRouter();
 
+    const protectedRoutes = ['/user', '/teacher', '/provider', '/admin'];
+
     const canAccessRoute = () => {
         const path = router.pathname;
-        const roles = user?.roles.map((role) => role.toLowerCase()) || [];
-
-        if (path.startsWith('/admin') && !roles.includes('role_admin')) {
-            return false;
-        } else if (
-            path.startsWith('/provider') &&
-            !roles.includes('role_provider')
+        if (
+            !protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
         ) {
-            return false;
-        } else if (
-            path.startsWith('/teacher') &&
-            !roles.includes('role_teacher')
-        ) {
-            return false;
-        } else if (path.startsWith('/user') && !roles.includes('role_user')) {
-            return false;
+            return true; // Route publique, pas besoin de vérification
         }
-        return true;
+
+        // Vérification des rôles pour l'accès aux routes protégées
+        const roles = user?.roles.map((role) => role.toLowerCase()) || [];
+        if (
+            (path.startsWith('/admin') && roles.includes('role_admin')) ||
+            (path.startsWith('/provider') && roles.includes('role_provider')) ||
+            (path.startsWith('/teacher') && roles.includes('role_teacher')) ||
+            (path.startsWith('/user') && roles.includes('role_user'))
+        ) {
+            return true; // L'utilisateur a le bon rôle pour accéder à la route
+        }
+
+        return false; // Accès non autorisé
     };
 
     useEffect(() => {
-        if (isLoading) return;
-        const needsAuth =
-            router.pathname !== '/' && !router.pathname.startsWith('/auth');
+        if (isLoading) return; // Attendre la fin du chargement pour décider
+        const path = router.pathname;
 
-        if (!isLogged && needsAuth) {
+        if (
+            !isLogged &&
+            protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
+        ) {
             router.push('/auth/login');
             return;
         }
@@ -49,8 +57,28 @@ const ChooseLayout = ({ children }) => {
             router.push('/404'); // ou '/403' pour Accès Refusé
             return;
         }
-    }, [isLoading, isLogged, router, user]);
+    }, [isLoading, isLogged, router]);
 
+    if (isLoading) {
+        // Afficher le spinner uniquement sur les routes protégées pendant le chargement
+        const path = router.pathname;
+        if (
+            protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
+        ) {
+            return (
+                <div className="flex justify-center items-center h-screen">
+                    <Spinner
+                        aria-label="Extra large spinner example"
+                        size="xl"
+                    />
+                </div>
+            );
+        }
+    }
+
+    // Sélection du layout en fonction du rôle de l'utilisateur
     let Layout = DefaultLayout;
     if (user && !isLoading) {
         const roles = user.roles.map((role) => role.toLowerCase());
@@ -65,30 +93,14 @@ const ChooseLayout = ({ children }) => {
         }
     }
 
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Spinner aria-label="Extra large spinner example" size="xl" />
-            </div>
-        );
-    }
-
+    // Contenu principal
     return (
         <Flowbite>
             <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
-                {isLogged ? (
-                    <>
-                        <Header />
-                        <div className="flex flex-row h-screen">
-                            <Layout>{children}</Layout>
-                        </div>
-                    </>
-                ) : (
-                    <Spinner
-                        aria-label="Extra large spinner example"
-                        size="xl"
-                    />
-                )}
+                <Header />
+                <div className="flex flex-row h-screen">
+                    <Layout>{children}</Layout>
+                </div>
             </div>
         </Flowbite>
     );

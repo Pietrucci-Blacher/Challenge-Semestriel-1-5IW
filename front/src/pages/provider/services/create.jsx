@@ -22,7 +22,7 @@ export default function CreateService() {
     const [editorData, setEditorData] = useState();
 
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);

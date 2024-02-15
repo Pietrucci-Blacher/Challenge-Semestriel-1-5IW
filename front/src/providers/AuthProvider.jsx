@@ -19,6 +19,17 @@ export const AuthProvider = ({ children }) => {
     const [isLogged, setIsLogged] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const fetchUser = useCallback(async () => {
+        try {
+            const fetchedUser = await fetchCurrentUser();
+            setUser(fetchedUser);
+            setIsLogged(true);
+            storeUserInSession(fetchedUser);
+        } catch {
+            throw new Error('Erreur lors de la récupération de l’utilisateur.');
+        }
+    }, []);
+
     const verifyUser = useCallback(async () => {
         setIsLoading(true);
         let storedUser = getUserFromSession();
@@ -37,18 +48,7 @@ export const AuthProvider = ({ children }) => {
             setIsLogged(true);
             setIsLoading(false);
         }
-    }, []);
-
-    const fetchUser = async () => {
-        try {
-            const fetchedUser = await fetchCurrentUser();
-            setUser(fetchedUser);
-            setIsLogged(true);
-            storeUserInSession(fetchedUser);
-        } catch {
-            throw new Error('Erreur lors de la récupération de l’utilisateur.');
-        }
-    };
+    }, [fetchUser]);
 
     useEffect(() => {
         verifyUser();
