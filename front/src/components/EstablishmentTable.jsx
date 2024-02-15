@@ -3,12 +3,15 @@ import { Pagination, Table, Button } from 'flowbite-react'; // Importez le compo
 import Link from 'next/link';
 import Spinner from '@/components/Spinner';
 import Input from '@/components/Input';
+import { useAuthContext } from '@/providers/AuthProvider';
 
-export default function EstablishmentTablePagination({ establishments }) {
+
+export default function EstablishmentTablePagination({ establishments, baseUrl }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('name');
+    const { user } = useAuthContext();
 
     useEffect(() => {
         setCurrentPage(1);
@@ -55,12 +58,17 @@ export default function EstablishmentTablePagination({ establishments }) {
                 {establishment.owner.firstname} {establishment.owner.lastname}
             </Table.Cell>
             <Table.Cell>
-                <Link
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    href={`/establishment/${establishment.id}`}
-                >
-                    Voir
-                </Link>
+            <Link
+                className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                href={
+                    user.roles[0] === 'ROLE_USER' ? `establishment/${establishment.id}` :
+                    user.roles[0] === 'ROLE_PROVIDER' ? `establishment/${establishment.id}` :
+                    user.roles[0] === 'ROLE_ADMIN' ? `establishment/${establishment.id}` :
+                    '#'
+                }
+            >
+                Voir
+            </Link>
             </Table.Cell>
         </Table.Row>
     ));

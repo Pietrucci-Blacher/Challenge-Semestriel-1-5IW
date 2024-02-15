@@ -7,6 +7,8 @@ import {
 } from '@react-google-maps/api';
 import { useEstablishment } from '@/hooks/useEstablishment';
 import Image from 'next/image';
+import { useAuthContext } from '@/providers/AuthProvider';
+
 
 const MapComponent = () => {
     const [map, setMap] = useState(null);
@@ -14,6 +16,7 @@ const MapComponent = () => {
     const { establishments, getAllEstablishments } = useEstablishment();
     const [center, setCenter] = useState({ lat: 48.8566, lng: 2.3522 });
     const [zoom, setZoom] = useState(12);
+    const { user } = useAuthContext();
 
     const [mapOptions, setMapOptions] = useState({
         zoomControl: true,
@@ -141,7 +144,12 @@ const MapComponent = () => {
                                 }}
                             >
                                 <a
-                                    href={`/provider/establishment/${selectedMarker.id}`}
+                                    href={        
+                                        user.roles[0] === 'ROLE_USER' ? `establishment/${selectedMarker.id}` :
+                                        user.roles[0] === 'ROLE_PROVIDER' ? `establishment/${selectedMarker.id}` :
+                                        user.roles[0] === 'ROLE_ADMIN' ? `establishment/${selectedMarker.id}` :
+                                        '#'
+                                    }
                                 >
                                     <p
                                         style={{

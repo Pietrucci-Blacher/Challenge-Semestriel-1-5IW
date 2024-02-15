@@ -24,7 +24,6 @@ import { useAuthContext } from '@/providers/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { Rating } from '@/components/Rating';
 import Link from 'next/link';
-import { useService } from '@/hooks/useService';
 
 const ShowEstablishment = () => {
     const { user } = useAuthContext();
