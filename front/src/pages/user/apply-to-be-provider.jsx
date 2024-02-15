@@ -18,7 +18,7 @@ export default function ApplyToBeProvider() {
         setFile(file);
     };
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getUserRequest(id);
     }, [user]);
