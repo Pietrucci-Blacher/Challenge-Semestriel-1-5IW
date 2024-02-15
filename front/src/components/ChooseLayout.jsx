@@ -14,6 +14,7 @@ const ChooseLayout = ({ children }) => {
     const router = useRouter();
 
     const protectedRoutes = ['/user', '/teacher', '/provider', '/admin'];
+    const noHeaderRoutes = ['/auth/login', '/auth/register'];
 
     const canAccessRoute = () => {
         const path = router.pathname;
@@ -27,16 +28,12 @@ const ChooseLayout = ({ children }) => {
 
         // Vérification des rôles pour l'accès aux routes protégées
         const roles = user?.roles.map((role) => role.toLowerCase()) || [];
-        if (
+        return (
             (path.startsWith('/admin') && roles.includes('role_admin')) ||
             (path.startsWith('/provider') && roles.includes('role_provider')) ||
             (path.startsWith('/teacher') && roles.includes('role_teacher')) ||
             (path.startsWith('/user') && roles.includes('role_user'))
-        ) {
-            return true; // L'utilisateur a le bon rôle pour accéder à la route
-        }
-
-        return false; // Accès non autorisé
+        );
     };
 
     useEffect(() => {
@@ -55,7 +52,6 @@ const ChooseLayout = ({ children }) => {
 
         if (isLogged && !canAccessRoute()) {
             router.push('/404'); // ou '/403' pour Accès Refusé
-            return;
         }
     }, [isLoading, isLogged, router]);
 
@@ -97,7 +93,7 @@ const ChooseLayout = ({ children }) => {
     return (
         <Flowbite>
             <div className="grid grid-rows-[auto,1fr] h-screen dark:bg-gray-900">
-                <Header />
+                {!noHeaderRoutes.includes(router.pathname) && <Header />}
                 <div className="flex flex-row h-screen">
                     <Layout>{children}</Layout>
                 </div>

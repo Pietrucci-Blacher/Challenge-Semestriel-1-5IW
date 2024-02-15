@@ -10,7 +10,7 @@ use App\Entity\Service;
 use App\Repository\ServiceRepository;
 
 #[AsController]
-final class UpdateServiceController extends AbstractController
+final class CreateImageServiceController extends AbstractController
 {
     private ServiceRepository $serviceRepository;
 
@@ -19,11 +19,15 @@ final class UpdateServiceController extends AbstractController
         $this->serviceRepository = $serviceRepository;
     }
 
-    public function __invoke(Request $request, $id): Service
+    public function __invoke(Request $request): Service
     {
         $uploadedFile = $request->files->get('image');
 
-        if ($uploadedFile && !in_array($uploadedFile->getMimeType(), ['image/jpeg', 'image/png'])) {
+        if (!$uploadedFile) {
+            throw new BadRequestHttpException('"image" is required');
+        }
+
+        if (!in_array($uploadedFile->getMimeType(), ['image/jpeg', 'image/png'])) {
             throw new BadRequestHttpException('The file must be a jpeg or a png');
         }
 
