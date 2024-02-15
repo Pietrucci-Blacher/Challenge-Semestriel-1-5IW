@@ -169,7 +169,7 @@ const ShowEstablishment = () => {
                 modalContent = (
                     <div>
                         <h1 className="text-2xl">
-                            Avis sur l'établissement
+                            Avis sur l&apos;établissement
                             {establishment?.name}
                         </h1>
                         <br />
