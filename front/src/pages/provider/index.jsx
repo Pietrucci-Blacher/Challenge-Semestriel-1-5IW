@@ -12,7 +12,7 @@ export default function Provider() {
     // const { establishments, getMyEstablishments } = useTeamMember();
 
     useEffect(() => {
-        const  id = user?.id ;
+        const id = user?.id;
         if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);

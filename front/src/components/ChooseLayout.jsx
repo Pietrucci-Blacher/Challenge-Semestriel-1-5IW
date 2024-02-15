@@ -17,16 +17,22 @@ const ChooseLayout = ({ children }) => {
 
     const canAccessRoute = () => {
         const path = router.pathname;
-        if (!protectedRoutes.some(protectedRoute => path.startsWith(protectedRoute))) {
+        if (
+            !protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
+        ) {
             return true; // Route publique, pas besoin de vérification
         }
 
         // Vérification des rôles pour l'accès aux routes protégées
-        const roles = user?.roles.map(role => role.toLowerCase()) || [];
-        if ((path.startsWith('/admin') && roles.includes('role_admin')) ||
+        const roles = user?.roles.map((role) => role.toLowerCase()) || [];
+        if (
+            (path.startsWith('/admin') && roles.includes('role_admin')) ||
             (path.startsWith('/provider') && roles.includes('role_provider')) ||
             (path.startsWith('/teacher') && roles.includes('role_teacher')) ||
-            (path.startsWith('/user') && roles.includes('role_user'))) {
+            (path.startsWith('/user') && roles.includes('role_user'))
+        ) {
             return true; // L'utilisateur a le bon rôle pour accéder à la route
         }
 
@@ -37,7 +43,12 @@ const ChooseLayout = ({ children }) => {
         if (isLoading) return; // Attendre la fin du chargement pour décider
         const path = router.pathname;
 
-        if (!isLogged && protectedRoutes.some(protectedRoute => path.startsWith(protectedRoute))) {
+        if (
+            !isLogged &&
+            protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
+        ) {
             router.push('/auth/login');
             return;
         }
@@ -51,10 +62,17 @@ const ChooseLayout = ({ children }) => {
     if (isLoading) {
         // Afficher le spinner uniquement sur les routes protégées pendant le chargement
         const path = router.pathname;
-        if (protectedRoutes.some(protectedRoute => path.startsWith(protectedRoute))) {
+        if (
+            protectedRoutes.some((protectedRoute) =>
+                path.startsWith(protectedRoute),
+            )
+        ) {
             return (
                 <div className="flex justify-center items-center h-screen">
-                    <Spinner aria-label="Extra large spinner example" size="xl" />
+                    <Spinner
+                        aria-label="Extra large spinner example"
+                        size="xl"
+                    />
                 </div>
             );
         }
@@ -63,7 +81,7 @@ const ChooseLayout = ({ children }) => {
     // Sélection du layout en fonction du rôle de l'utilisateur
     let Layout = DefaultLayout;
     if (user && !isLoading) {
-        const roles = user.roles.map(role => role.toLowerCase());
+        const roles = user.roles.map((role) => role.toLowerCase());
         if (roles.includes('role_admin')) {
             Layout = AdminLayout;
         } else if (roles.includes('role_provider')) {
