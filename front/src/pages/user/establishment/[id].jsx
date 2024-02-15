@@ -1,6 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useEstablishment } from '@/hooks/useEstablishment';
+import { useService } from '@/hooks/useService';
+
 import {
     HiStar,
     HiSpeakerphone,
@@ -21,22 +23,19 @@ import { createFeedback } from '@/services/feedbackService';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useFeedback } from '@/hooks/useFeedback';
 import { Rating } from '@/components/Rating';
-export const DateView = () => {
-    /*    return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div className="dateview">
-                <DateCalendar disablePast showDaysOutsideCurrentMonth />
-                <DateCalendar disablePast showDaysOutsideCurrentMonth />
-            </div>
-        </LocalizationProvider>
-    );*/
-};
+import Link from 'next/link';
+import { useService } from '@/hooks/useService';
+
 const ShowEstablishment = () => {
     const { user } = useAuthContext();
     const router = useRouter();
     const { id } = router.query;
     const { establishment, getEstablishmentById } = useEstablishment();
     const { createToastMessage } = useToast();
+
+    const { service, getGetServicesPerEstablishment } = useService();
+
+
     const {
         feedbacks,
         detailed,
@@ -54,116 +53,15 @@ const ShowEstablishment = () => {
             );
     };
 
-    const baseUrl = 'https://fakeimg.pl/'; // Replace with your desired base URL for real images
+    useEffect(() => {
+        getEstablishmentById(id);
+    }, [getEstablishmentById, id]);
 
-    const images = establishment?.images || [
-        {
-            id: 1,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 1',
-        },
-        {
-            id: 2,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 2',
-        },
-        {
-            id: 3,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 3',
-        },
-        {
-            id: 4,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 4',
-        },
-        {
-            id: 5,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 5',
-        },
-        {
-            id: 6,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 6',
-        },
-        {
-            id: 7,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 7',
-        },
-        {
-            id: 8,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 8',
-        },
-        {
-            id: 9,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 9',
-        },
-        {
-            id: 10,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 10',
-        },
-        {
-            id: 11,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 11',
-        },
-        {
-            id: 12,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 12',
-        },
-        {
-            id: 13,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 13',
-        },
-        {
-            id: 14,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 14',
-        },
-        {
-            id: 15,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 15',
-        },
-        {
-            id: 16,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 16',
-        },
-        {
-            id: 17,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 17',
-        },
-        {
-            id: 18,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 18',
-        },
-        {
-            id: 19,
-            baseUrl: `${baseUrl}/300`,
-            description: 'Real Image 19',
-        },
-    ];
+    const images = establishment?.photoEstablishment || '/images/immeubles-parisiens-paris-zigzag.jpg';
 
     const Review = ({ name, date, imageSrc, content, note }) => (
         <li className="mb-[40px] pr-16">
             <div className="mb-4">
-                {/*<Image
-                    className="float-left mr-3 rounded-[100%]"
-                    src={imageSrc}
-                    width={40}
-                    height={40}
-                    alt={`Profile of ${name}`}
-                />*/}
                 <p className="block font-semibold text-base">
                     {name}
                     <span className="ml-2">
@@ -271,7 +169,6 @@ const ShowEstablishment = () => {
                 modalContent = (
                     <div>
                         <h1 className="text-2xl">
-                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Avis sur l'établissement
                             {establishment?.name}
                         </h1>
@@ -308,11 +205,14 @@ const ShowEstablishment = () => {
         getEstablishmentById(id);
         getFeedbacksFromEstablishmentId(id);
         getEstablishmentNote(id);
+        getGetServicesPerEstablishment(id);
+
     }, [
         id,
         getEstablishmentById,
         getFeedbacksFromEstablishmentId,
         getEstablishmentNote,
+        getGetServicesPerEstablishment,
     ]);
 
     return (
@@ -340,7 +240,14 @@ const ShowEstablishment = () => {
                                 <span className="mx-1">·</span>
                             </div>
                             <p className="underline cursor-pointer font-semibold ml-1">
-                                {establishment?.city} , {establishment?.zipCode}
+                                <a 
+                                    href={`https://www.google.com/maps/search/?api=1&query=${establishment?.street}, ${establishment?.city} ${establishment?.zipCode}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline cursor-pointer font-semibold ml-1"
+                                >
+                                    {establishment?.street}, {establishment?.city} {' '} {establishment?.zipCode}
+                                </a>                         
                             </p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -357,18 +264,19 @@ const ShowEstablishment = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="mt-6 rounded-xl overflow-hidden flex relative max-h-[550px] h-[70vh] min-h-[19rem]">
-                        <div className="w-1/2 overflow-hidden relative group">
+                    <div className="mt-6 rounded-xl overflow-hidden flex justify-center items-center relative h-[70vh] min-h-[19rem]">
+                        <div className="w-7/10 overflow-hidden relative group rounded-xl">
                             <Image
-                                className="left full-width full-height object-cover transition-opacity duration-200 group-hover:opacity-30 cursor-pointer"
-                                width={1200}
-                                height={750}
-                                src={images[0].baseUrl}
+                                className="object-cover transition-opacity duration-200 group-hover:opacity-30 cursor-pointer"
+                                width={1500} // Augmentez la largeur
+                                height={1000} // Augmentez la hauteur
+                                src={images}
                                 quality={100}
                                 alt="Main picture of establishment"
                             />
                         </div>
-                        <ul className="right w-1/2 flex flex-wrap">
+                    </div>
+                        {/* <ul className="right w-1/2 flex flex-wrap">
                             {[1, 2, 3, 4].map((i) => (
                                 <li
                                     className="corners relative ml-2 mb-2 h-1/2"
@@ -392,31 +300,10 @@ const ShowEstablishment = () => {
                         <button className="absolute flex items-center bottom-5 right-5 md:bottom-5 md:right-5 rounded-lg px-3 py-1.5 border border-solid border-gray-800 bg-white font-semibold transition-all duration-200 focus:outline-none active:transform active:scale-90 z-50">
                             <HiViewGrid className="mr-2" />
                             <p>Show all photos</p>
-                        </button>
-                    </div>
+                        </button> */}
                 </section>
                 <section className="flex justify-between relative">
                     <div className="w-3/5">
-                        <div className="relative w-full py-12 pb-6 border-b border-[#21212126]">
-                            <h1 className="text-[22px] mb-2">
-                                Treehouse hosted by Veluvana
-                            </h1>
-                            <p className="text-lg">
-                                2 guests <span> · </span>1 bedroom
-                                <span> · </span>1 bed
-                                <span> · </span>1.5 baths
-                            </p>
-                            <div className="absolute right-1 top-12 w-14 h-14 overflow-hidden">
-                                <Image
-                                    src="https://a0.muscache.com/im/pictures/user/bb9ba580-9b3b-4402-ac92-3976abe1a178.jpg?im_w=240"
-                                    width={56}
-                                    height={56}
-                                    alt="host"
-                                    className="w-full h-full rounded-full"
-                                />
-                                <HiBadgeCheck className="absolute bottom-0 right-[-5px] w-[22px] h-[22px]" />
-                            </div>
-                        </div>
                         <div className="container2">
                             <ul className="py-8 border-b border-gray-300">
                                 <li className="flex justify-start mt-0">
@@ -472,10 +359,9 @@ const ShowEstablishment = () => {
                     <div className="sticky top-32 right-0 transition-all ease-out duration-300 my-12 mx-4 p-6 bg-white rounded-lg shadow-lg h-min w-[31%]">
                         <div className="flex justify-between items-center text-xl font-semibold whitespace-nowrap mb-6 text-[22px]">
                             <p className="flex items-center font-normal text-[15px]">
-                                <span className="text-[22px] font-semibold">
-                                    € 472
+                            <span className="text-[22px] font-semibold">
+                                    Services
                                 </span>{' '}
-                                night
                             </p>
                             <div className="flex items-center text-[15px]">
                                 <HiStar className="mr-1" />
@@ -487,47 +373,13 @@ const ShowEstablishment = () => {
                             </div>
                         </div>
 
-                        <div className="rounded border border-solid border-black cursor-pointer mb-4">
-                            <div className="flex w-full">
-                                <div className="w-1/2 border-b border-r border-solid border-black h-14 flex pl-3 items-start flex-col justify-center">
-                                    <h3 className="text-[10px] font-bold text-center leading-[12px]">
-                                        CHECK-IN
-                                    </h3>
-                                    <p className="text-[14px] text-center text-gray-700">
-                                        Add date
-                                    </p>
-                                </div>
-                                <div className="w-1/2 border-b border-solid border-black h-14 flex pl-3 items-start flex-col justify-center">
-                                    <h3 className="text-[10px] font-bold text-center leading-[12px]">
-                                        CHECKOUT
-                                    </h3>
-                                    <p className="text-[14px] text-center text-gray-700">
-                                        Add date
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="h-14 flex pl-3 relative items-start flex-col justify-center">
-                                <h3 className="text-[10px] font-bold text-center leading-[12px]">
-                                    GUESTS
-                                </h3>
-                                <p className="text-[14px] text-gray-700">
-                                    Add date
-                                </p>
-                                <button className="absolute right-6">
-                                    <HiArrowDown />
-                                </button>
-                            </div>
-                        </div>
-
-                        <button
-                            className="w-full text-white font-semibold text-base py-3.5 rounded transition-transform active:scale-95 duration-300 "
-                            style={{
-                                background:
-                                    'linear-gradient(to right, #e61e4d 0%, #e31c5f 50%, #d70466 100%)',
-                            }}
-                        >
-                            Voir la disponibilité
-                        </button>
+                        <Link href="/services">
+                            <button
+                                className="block w-full text-white font-semibold text-base py-3.5 rounded transition-transform active:scale-95 duration-300 bg-gradient-to-r from-red-600 via-red-700 to-red-800 border-none cursor-pointer"
+                            >
+                                Voir la disponibilité
+                            </button>
+                        </Link>
                     </div>
                 </section>
                 <div
