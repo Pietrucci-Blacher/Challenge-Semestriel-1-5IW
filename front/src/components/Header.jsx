@@ -6,7 +6,15 @@ import Link from 'next/link';
 
 export default function Header() {
     const { user } = useAuthContext();
-    const { t } = useTranslation('common');
+    const { t, i18n } = useTranslation('common');
+    const changeTo = i18n.language === 'en' ? 'fr' : 'en'; // Corrected to use language codes
+
+    const handleLanguageChange = () => {
+        i18n.changeLanguage(changeTo); // Now correctly changes to 'fr' or 'en'
+    };
+
+    const flag = changeTo === 'en' ? '🇬🇧' : '🇫🇷';
+    const languageLabel = changeTo === 'en' ? 'English' : 'Français';
 
     return (
         <header className="sticky top-0 z-50 bg-white shadow-lg">
@@ -24,8 +32,15 @@ export default function Header() {
                     </span>
                 </Navbar.Brand>
 
-                <div className="flex md:order-2">
-                    <DarkThemeToggle className="mx-4" />
+                <div className="flex md:order-2 items-center gap-x-4">
+                    <button
+                        onClick={handleLanguageChange}
+                        className="px-4 py-2 text-sm font-medium flex items-center gap-x-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300"
+                        title="Change Language"
+                    >
+                        {flag} {languageLabel}
+                    </button>
+
                     {user ? (
                         <Dropdown
                             inline
