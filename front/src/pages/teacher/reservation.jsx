@@ -1,20 +1,17 @@
-import {useAuthContext} from "@/providers/AuthProvider";
-import {useEffect, useState} from "react";
-import {useSchedule} from "@/hooks/useSchedule";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import {Breadcrumb} from "flowbite-react";
-import {HiHome} from "react-icons/hi";
+import { useAuthContext } from '@/providers/AuthProvider';
+import { useEffect, useState } from 'react';
+import { useSchedule } from '@/hooks/useSchedule';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { Breadcrumb } from 'flowbite-react';
+import { HiHome } from 'react-icons/hi';
 
 export default function Reservation() {
-    const {user} = useAuthContext();
-    const [points, setPoints] = useState([])
-    const {
-        schedules,
-        getTeacherSchedules
-    } = useSchedule();
+    const { user } = useAuthContext();
+    const [points, setPoints] = useState([]);
+    const { schedules, getTeacherSchedules } = useSchedule();
     useEffect(() => {
         const teacherId = user?.id;
         if (teacherId) {
@@ -41,10 +38,10 @@ export default function Reservation() {
             end.setHours(end.getHours() - 1);
             point['end'] = end.toISOString();
             point['color'] = '#c0bdda';
-            return point
+            return point;
         }
-        return {}
-    }
+        return {};
+    };
     useEffect(() => {
         const points = [];
         schedules?.forEach((element) => {
@@ -52,7 +49,6 @@ export default function Reservation() {
         });
         setPoints(points);
     }, [schedules]);
-
 
     return (
         <>
@@ -82,11 +78,7 @@ export default function Reservation() {
                 slotMaxTime="19:00:00"
                 allDaySlot={false}
                 nowIndicator={true}
-                plugins={[
-                    dayGridPlugin,
-                    interactionPlugin,
-                    timeGridPlugin,
-                ]}
+                plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
                 headerToolbar={{
                     left: 'prev,next today',
                     center: 'title',
@@ -94,5 +86,5 @@ export default function Reservation() {
                 }}
             />
         </>
-    )
+    );
 }

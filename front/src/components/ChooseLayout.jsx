@@ -15,13 +15,19 @@ const ChooseLayout = ({ children }) => {
 
     const canAccessRoute = () => {
         const path = router.pathname;
-        const roles = user?.roles.map(role => role.toLowerCase()) || [];
+        const roles = user?.roles.map((role) => role.toLowerCase()) || [];
 
         if (path.startsWith('/admin') && !roles.includes('role_admin')) {
             return false;
-        } else if (path.startsWith('/provider') && !roles.includes('role_provider')) {
+        } else if (
+            path.startsWith('/provider') &&
+            !roles.includes('role_provider')
+        ) {
             return false;
-        } else if (path.startsWith('/teacher') && !roles.includes('role_teacher')) {
+        } else if (
+            path.startsWith('/teacher') &&
+            !roles.includes('role_teacher')
+        ) {
             return false;
         } else if (path.startsWith('/user') && !roles.includes('role_user')) {
             return false;
@@ -31,7 +37,8 @@ const ChooseLayout = ({ children }) => {
 
     useEffect(() => {
         if (isLoading) return;
-        const needsAuth = router.pathname !== '/' && !router.pathname.startsWith('/auth');
+        const needsAuth =
+            router.pathname !== '/' && !router.pathname.startsWith('/auth');
 
         if (!isLogged && needsAuth) {
             router.push('/auth/login');
@@ -46,7 +53,7 @@ const ChooseLayout = ({ children }) => {
 
     let Layout = DefaultLayout;
     if (user && !isLoading) {
-        const roles = user.roles.map(role => role.toLowerCase());
+        const roles = user.roles.map((role) => role.toLowerCase());
         if (roles.includes('role_admin')) {
             Layout = AdminLayout;
         } else if (roles.includes('role_provider')) {
@@ -77,7 +84,10 @@ const ChooseLayout = ({ children }) => {
                         </div>
                     </>
                 ) : (
-                    <Spinner aria-label="Extra large spinner example" size="xl" />
+                    <Spinner
+                        aria-label="Extra large spinner example"
+                        size="xl"
+                    />
                 )}
             </div>
         </Flowbite>

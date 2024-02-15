@@ -20,7 +20,7 @@ export default function Request() {
         try {
             approveRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
-            router.push('/admin/requests')
+            router.push('/admin/requests');
         } catch (e) {
             createToastMessage(
                 'error',
@@ -33,7 +33,7 @@ export default function Request() {
         try {
             declineRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
-            router.push('/admin/requests')
+            router.push('/admin/requests');
         } catch (e) {
             createToastMessage(
                 'error',

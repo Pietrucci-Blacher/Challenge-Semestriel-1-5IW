@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/providers/AuthProvider';
-import {useEstablishment} from "@/hooks/useEstablishment";
+import { useEstablishment } from '@/hooks/useEstablishment';
 
 export default function ListEstablishment() {
     const { user } = useAuthContext();
@@ -38,7 +38,10 @@ export default function ListEstablishment() {
                 <Table.Cell>{establishment.city}</Table.Cell>
                 <Table.Cell>{establishment.zipCode}</Table.Cell>
                 <Table.Cell>
-                    <Link href={`/provider/establishment/${establishment.id}`} passHref>
+                    <Link
+                        href={`/provider/establishment/${establishment.id}`}
+                        passHref
+                    >
                         <a className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                             Voir
                         </a>

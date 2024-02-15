@@ -48,7 +48,7 @@ export default function TeacherCalendar({ establishmentId }) {
         point['end'] = end.toISOString();
         if (schedule['reservation']) {
             point['color'] = '#c0bdda';
-            return  {}
+            return {};
         }
         return point;
     };

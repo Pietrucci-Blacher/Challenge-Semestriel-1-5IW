@@ -1,10 +1,11 @@
 import {
     applyToBeProviderService,
     getListOfRequestsService,
-    getRequestService, getUserRequestService,
+    getRequestService,
+    getUserRequestService,
     updateRequestService,
 } from '@/services/requestsToBeProvider';
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
 
 export default function useRequestsProvider() {
     const [requests, setRequests] = useState([]);
@@ -16,7 +17,6 @@ export default function useRequestsProvider() {
     const getUserRequest = useCallback(async (userId) => {
         const response = await getUserRequestService(userId);
         setRequest(response);
-
     }, []);
 
     const getListOfRequests = useCallback(async () => {
@@ -30,12 +30,12 @@ export default function useRequestsProvider() {
     }, []);
 
     const approveRequest = async (payload) => {
-        Object.assign(payload, {status: 'approved'});
+        Object.assign(payload, { status: 'approved' });
         await updateRequestService(payload);
     };
 
     const declineRequest = async (payload) => {
-        Object.assign(payload, {status: 'rejected'});
+        Object.assign(payload, { status: 'rejected' });
         await updateRequestService(payload);
     };
 
@@ -47,6 +47,6 @@ export default function useRequestsProvider() {
         getRequest,
         approveRequest,
         declineRequest,
-        getUserRequest
+        getUserRequest,
     };
 }

@@ -27,5 +27,5 @@ export {
     getListOfRequestsService,
     getRequestService,
     updateRequestService,
-    getUserRequestService
+    getUserRequestService,
 };

@@ -7,7 +7,8 @@ import { useService } from '@/hooks/useService';
 
 export default function ListServices() {
     const { user } = useAuthContext();
-    const { servicesPerEstablishment, getGetServicesPerEstablishment } = useService();
+    const { servicesPerEstablishment, getGetServicesPerEstablishment } =
+        useService();
     const { establishments, getMyEstablishments } = useEstablishment();
 
     useEffect(() => {
@@ -18,7 +19,9 @@ export default function ListServices() {
 
     useEffect(() => {
         if (!establishments || establishments.length === 0) return;
-        const establishmentIds = establishments.map((establishment) => establishment.id);
+        const establishmentIds = establishments.map(
+            (establishment) => establishment.id,
+        );
         getGetServicesPerEstablishment(establishmentIds);
     }, [establishments, getGetServicesPerEstablishment]);
 

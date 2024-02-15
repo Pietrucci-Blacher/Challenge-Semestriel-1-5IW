@@ -1,15 +1,16 @@
-import {FileInput, Label, TextInput} from 'flowbite-react';
+import { FileInput, Label, TextInput } from 'flowbite-react';
 import Input from '@/components/Input';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import GenericButton from '@/components/GenericButton';
 import useRequestsProvider from '@/hooks/useRequestsProvider';
-import {useToast} from '@/hooks/useToast';
-import {useAuthContext} from "@/providers/AuthProvider";
+import { useToast } from '@/hooks/useToast';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function ApplyToBeProvider() {
-    const {user} = useAuthContext()
-    const {request, getUserRequest, applyToBeProvider} = useRequestsProvider();
-    const {createToastMessage} = useToast();
+    const { user } = useAuthContext();
+    const { request, getUserRequest, applyToBeProvider } =
+        useRequestsProvider();
+    const { createToastMessage } = useToast();
     const [kbis, setKbis] = useState('');
     const [file, setFile] = useState(null);
     const handleFileChange = (e) => {
@@ -17,12 +18,12 @@ export default function ApplyToBeProvider() {
         setFile(file);
     };
     useEffect(() => {
-        const {id} = user
-        if (!id) return
-        getUserRequest(id)
+        const { id } = user;
+        if (!id) return;
+        getUserRequest(id);
     }, [user]);
     useEffect(() => {
-        console.log("request", request)
+        console.log('request', request);
     }, [request]);
 
     const handleSubmit = async (e) => {
@@ -46,7 +47,10 @@ export default function ApplyToBeProvider() {
                     <form onSubmit={handleSubmit}>
                         <div className="max-w-md">
                             <div className="mb-2 block">
-                                <Label htmlFor="kbis" value="Votre numero de kbis" />
+                                <Label
+                                    htmlFor="kbis"
+                                    value="Votre numero de kbis"
+                                />
                             </div>
                             <TextInput
                                 label="Votre Kbis"
@@ -76,7 +80,8 @@ export default function ApplyToBeProvider() {
                 <>
                     <h2>Vous avez déjà fait votre demande</h2>
                     <div>
-                        Le statut de votre demande est: {request['hydra:member'][0]['status']}
+                        Le statut de votre demande est:{' '}
+                        {request['hydra:member'][0]['status']}
                     </div>
                 </>
             ) : (
