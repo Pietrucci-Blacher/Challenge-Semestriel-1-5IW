@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}`,
+    baseURL: 'https://back.goldenbookingcode.info/',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -40,7 +40,7 @@ const handleResponseError = async (error) => {
             return Promise.reject(error);
         }
         const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_API_URL}token/refresh`,
+            `https://back.goldenbookingcode.info/token/refresh`,
             {
                 refresh_token: refreshToken,
             },
