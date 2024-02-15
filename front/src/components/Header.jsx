@@ -6,7 +6,7 @@ export default function Header() {
     const {user} = useAuthContext();
 
     return (
-        <header className="sticky top-0">
+        <header className="sticky top-0 z-50">
             <Navbar fluid rounded>
                 <Navbar.Brand href="/">
                     <Image
@@ -22,6 +22,7 @@ export default function Header() {
                     {user && (
                         <Dropdown
                             inline
+                            className="z-50"
                             label={
                                 <Avatar
                                     alt="User settings"
