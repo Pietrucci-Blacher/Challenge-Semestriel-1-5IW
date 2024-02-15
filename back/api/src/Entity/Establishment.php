@@ -62,7 +62,7 @@ class Establishment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['establishment:read', 'team_invitation:read', 'service:read', 'reservation:read'])]
+    #[Groups(['establishment:read', 'team_invitation:read', 'service:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'establishments')]
@@ -94,6 +94,10 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
+    private ?string $photoEstablishment = null;
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: TeamInvitation::class, orphanRemoval: true)]
     private Collection $teamInvitations;
@@ -103,9 +107,6 @@ class Establishment
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $photoEstablishment = null;
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
     private Collection $feedback;
@@ -223,6 +224,17 @@ class Establishment
 
         return $this;
     }
+    public function getPhotoEstablishment(): ?string
+    {
+        return $this->photoEstablishment;
+    }
+
+    public function setPhotoEstablishment(?string $photoEstablishment): static
+    {
+        $this->photoEstablishment = $photoEstablishment;
+        return $this;
+    }
+  
 
     /**
      * @return Collection<int, TeamInvitation>
@@ -314,16 +326,6 @@ class Establishment
         return $this;
     }
 
-    public function getPhotoEstablishment(): ?string
-    {
-        return $this->photoEstablishment;
-    }
-
-    public function setPhotoEstablishment(?string $photoEstablishment): static
-    {
-        $this->photoEstablishment = $photoEstablishment;
-    }
-  
     /**
      * @return Collection<int, Feedback>
      */
