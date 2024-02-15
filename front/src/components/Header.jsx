@@ -7,14 +7,14 @@ import Link from 'next/link';
 export default function Header() {
     const { user } = useAuthContext();
     const { t, i18n } = useTranslation('common');
-    const changeTo = i18n.language === 'en' ? 'fr' : 'en'; // Corrected to use language codes
+    const changeTo = i18n.language === 'en' ? 'fr' : 'en';
 
     const handleLanguageChange = () => {
-        i18n.changeLanguage(changeTo); // Now correctly changes to 'fr' or 'en'
+        i18n.changeLanguage(changeTo);
     };
 
-    const flag = changeTo === 'en' ? '🇬🇧' : '🇫🇷';
-    const languageLabel = changeTo === 'en' ? 'English' : 'Français';
+    const flag = changeTo === 'fr' ? '🇬🇧' : '🇫🇷';
+    const languageLabel = changeTo === 'fr' ? 'English' : 'Français';
 
     return (
         <header className="sticky top-0 z-50 bg-white shadow-lg">
