@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -39,6 +40,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             denormalizationContext: ['groups' => ['provider_request:update']]
         ),
         new Get(),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/provider_requests',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'createdBy', fromClass: User::class),
+            ]
+//            security:
+
+
+        ),
         new GetCollection()
     ],
     normalizationContext: ['groups' => ['provider_request:read']]

@@ -6,7 +6,7 @@ export default function Header() {
     const { user } = useAuthContext();
 
     return (
-        <header className="sticky top-0">
+        <header className="sticky top-0 z-50">
             <Navbar fluid rounded>
                 <Navbar.Brand href="/">
                     <Image
@@ -22,6 +22,7 @@ export default function Header() {
                     {user && (
                         <Dropdown
                             inline
+                            className="z-50"
                             label={
                                 <Avatar
                                     alt="User settings"
@@ -54,15 +55,14 @@ export default function Header() {
                     <Navbar.Link href="#" active>
                         Home
                     </Navbar.Link>
-                    <Navbar.Link href="#">About</Navbar.Link>
-                    <Navbar.Link href="/services">Services</Navbar.Link>
-                    <Navbar.Link href="#">Contact</Navbar.Link>
                     {user && (
-                        <Navbar.Link href="/establishment/">
-                            Etablissements
-                        </Navbar.Link>
+                        <>
+                            <Navbar.Link href="/services">Services</Navbar.Link>
+                            <Navbar.Link href="/establishment/">
+                                Etablissements
+                            </Navbar.Link>
+                        </>
                     )}
-                    <Navbar.Link href="#">Services</Navbar.Link>
                 </Navbar.Collapse>
             </Navbar>
         </header>
