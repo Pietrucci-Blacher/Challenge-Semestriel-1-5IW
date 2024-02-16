@@ -173,7 +173,7 @@ export default function UpdateService() {
                         onChange={handleFileChange}
                     />
                 </div>
-                <GenericButton label="Modifier un etablisement" />
+                <GenericButton label="Modifier un Service" />
             </form>
             <FlowbiteButton
                 className="my-2"
