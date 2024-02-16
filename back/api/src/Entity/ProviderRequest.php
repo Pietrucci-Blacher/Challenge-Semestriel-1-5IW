@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -25,10 +26,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            uriTemplate: '/users/{userId}/provider_requests',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'createdBy', fromClass: ProviderRequest::class),
+            ],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
+        ),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:create']]
+            denormalizationContext: ['groups' => ['provider_request:create']],
+            validationContext: ['groups' => ['Default', 'provider_request:create']],
         ),
         new Patch(
             normalizationContext: ['groups' => ['provider_request:read']],
@@ -36,8 +45,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             security: 'is_granted("ROLE_ADMIN")'
         ),
         new Get(
-            security: 'is_granted("ROLE_ADMIN") or object.getCreatedBy() == user)',
-            securityMessage: 'Vous ne pouvez voir votre propre profil.'
+            security: 'is_granted("ROLE_ADMIN") or object.getCreatedBy() == user',
+            securityMessage: 'Vous ne pouvez voir votre propre demande.'
         ),
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
@@ -79,8 +88,6 @@ class ProviderRequest
     )]
     #[Groups(["provider_request:create"])]
     public ?File $file = null;
-
-
 
     #[ORM\Column(nullable: true)]
     #[Groups(["provider_request:read"])]
