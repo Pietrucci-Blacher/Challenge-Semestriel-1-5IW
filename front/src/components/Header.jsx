@@ -14,8 +14,8 @@ export default function Header() {
         changeLanguage(changeTo)
     };
 
-    const flag = changeTo === 'fr' ? '🇬🇧' : '🇫🇷';
-    const languageLabel = changeTo === 'fr' ? 'English' : 'Français';
+    const flag = changeTo !== 'fr' ? '🇬🇧' : '🇫🇷';
+    const languageLabel = changeTo !== 'fr' ? 'English' : 'Français';
 
     return (
         <header className="sticky top-0 z-50 bg-white shadow-lg">
