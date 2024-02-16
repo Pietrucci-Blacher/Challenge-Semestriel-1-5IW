@@ -19,11 +19,15 @@ jobs:
       - name: Build and push PHP Docker image
         uses: docker/build-push-action@v5
         with:
+          build_args: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
           context: ./test
           file: ./test/Dockerfile
           push: true
           tags: ossama98/monapp_php:latest
           target: php
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          cache-to: type=inline
 
   deploy_to_ec2:
     needs: build_and_push
