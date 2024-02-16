@@ -101,12 +101,6 @@ export default function Header() {
                     >
                         {t('home')}
                     </Navbar.Link>
-                    <Navbar.Link
-                        href="/about"
-                        className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
-                    >
-                        {t('about')}
-                    </Navbar.Link>
                     {user && (
                         <>
                             <Navbar.Link
