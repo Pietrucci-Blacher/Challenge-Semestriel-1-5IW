@@ -20,7 +20,7 @@ export const getEstablishmentReservations = (establishmentId) => {
 };
 
 export const getServiceReservations = (serviceId) => {
-    return httpClient.get(`services/${serviceId}//reservations`);
+    return httpClient.get(`services/${serviceId}/reservations`);
 };
 
 export const updateReservation = ({ reservationId, startTime, endTime }) => {

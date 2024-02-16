@@ -17,6 +17,7 @@ export const useReservation = () => {
     const createReservation = useCallback(async (payload) => {
         const response = await addReservation(payload);
     }, []);
+    const [teacherReservations, setTeacherReservations] = useState([]);
 
     const fetchReservation = useCallback(async (reservationId) => {
         try {
@@ -50,7 +51,7 @@ export const useReservation = () => {
 
     const fetchTeacherReservations = useCallback(async (teacherId) => {
         const response = await getTeacherReservations(teacherId);
-        setReservations(response);
+        setTeacherReservations(response);
     }, []);
 
     const fetchEstablishmentReservations = useCallback(
@@ -74,10 +75,12 @@ export const useReservation = () => {
     return {
         reservation,
         reservations,
+        teacherReservations,
         createReservation,
         fetchReservation,
         fetchUserReservations,
         fetchEstablishmentReservations,
+        fetchTeacherReservations,
         moveReservation,
         deleteReservation,
     };
