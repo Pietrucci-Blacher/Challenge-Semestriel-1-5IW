@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/useToast';
 
 export default function Request() {
     const { createToastMessage } = useToast();
-    const { request, getRequest, approveRequest, declineRequest } =
+    const { request, getRequest, isLoading, approveRequest, declineRequest } =
         useRequestsProvider();
     const router = useRouter();
     const { id } = router.query;
@@ -44,28 +44,41 @@ export default function Request() {
 
     return (
         <>
-            <h2>hello {id}</h2>
             {request ? (
-                <div>
-                    <div>
-                        <h5>Information de la demande</h5>
-                        <span>Status: {request?.status}</span>
+                <div className="max-w-4xl mx-auto my-8 p-4 shadow-lg">
+                    <div className="mb-6">
+                        <h5 className="text-xl font-semibold mb-2">
+                            Information de la demande pour la Requetes:
+                        </h5>
+                        <span className="font-cool">
+                            Status: {request?.status}
+                        </span>
                     </div>
-                    <div>
-                        <h5>Information user</h5>
-                        <span>
+                    <div className="mb-6">
+                        <h5 className="text-xl font-semibold mb-2">
+                            Information user
+                        </h5>
+                        <span className="font-cool">
                             Lastname: {request?.createdBy?.lastname}
                         </span>{' '}
                         <br />
-                        <span>
+                        <span className="font-cool">
                             Firstname: {request?.createdBy?.firstname}
                         </span>{' '}
                         <br />
-                        <span>Email: {request?.createdBy?.email}</span>
+                        <span className="font-cool">
+                            Email: {request?.createdBy?.email}
+                        </span>
                     </div>
-                    <div>
-                        <h5>Information de l&apos;organisme</h5>
-                        <span>Numero Kbis: {request?.kbis}</span>
+                    <div className="mb-6">
+                        <h5 className="text-xl font-semibold mb-2">
+                            Information de l&apos;organisme
+                        </h5>
+                        <span className="font-cool">
+                            Numero Kbis: {request?.kbis}
+                        </span>
+                    </div>
+                    <div className="mb-6">
                         <FlowbiteButton
                             as={Link}
                             href={`http://localhost/media/${request?.filePath}`}
@@ -73,17 +86,22 @@ export default function Request() {
                             Voir le Kbis en format PDF
                         </FlowbiteButton>
                     </div>
-
-                    <div>
-                        <GenericButton
-                            label="Accepter la demande"
-                            onClick={handleApproveRequest}
-                        />
-                        <br />
-                        <GenericButton
-                            label="Refuser la demande"
-                            onClick={handleDeclineRequest}
-                        />
+                    <div className="flex gap-4 mb-6">
+                        {request?.status === 'pending' && (
+                            <>
+                                <GenericButton
+                                    label="Accepter la demande"
+                                    onClick={handleApproveRequest}
+                                    isLoading={isLoading}
+                                />
+                                <br />
+                                <GenericButton
+                                    label="Refuser la demande"
+                                    onClick={handleDeclineRequest}
+                                    isLoading={isLoading}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             ) : (

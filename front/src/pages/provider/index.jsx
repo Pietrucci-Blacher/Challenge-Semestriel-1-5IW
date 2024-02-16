@@ -16,9 +16,8 @@ export default function Provider() {
         useService();
     const { establishments, getMyEstablishments } = useEstablishment();
     const { teamMembers, getCountTeamMembers } = useTeam();
-    /*
-    const { bookingsGraph, recentBookings } = useService();
-*/
+    const { getProviderNumberEmployees } = useTeam();
+    const { getLastBookings } = useService();
 
     useEffect(() => {
         const { id } = user;

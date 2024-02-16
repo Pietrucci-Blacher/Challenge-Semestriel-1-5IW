@@ -68,7 +68,7 @@ class Email {
     public function sendResetPasswordEmail(string $emailTo, string $name, string $token)
     {
         $subject = 'Réinitialisation de mot de passe';
-        $body = 'Bonjour '.$name.',<br><br> Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['API_URL'].'/auth/reset-password/validate/'.$token.'">Réinitialiser le mot de passe</a>';
+        $body = 'Bonjour '.$name.',<br><br> Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien ci-dessous : <br><br> <a href="'.$_ENV['FRONT_URL'].'/reset-password/update/'.$token.'">Réinitialiser le mot de passe</a>';
         $this->sendEmail(Email::$emailFrom, $emailTo, $subject, $body);
     }
 
