@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Provider;
 
-use App\Entity\User;
-use App\Entity\Establishment;
+use App\Repository\EstablishmentRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Serializer\SerializerInterface;
-use App\Repository\UserRepository;
-use App\Repository\EstablishmentRepository;
 
 #[AsController]
 class CountTeamInvitation extends AbstractController
