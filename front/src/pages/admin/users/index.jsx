@@ -11,7 +11,9 @@ const UsersPage = () => {
             </Head>
             <main>
                 <DataTable
-                    endpoint={'https://localhost/users/'}
+                    endpoint={
+                        '${process.env.NEXT_PUBLIC_BACKEND_API_URL}users/'
+                    }
                     title="Users table"
                     itemsPerPage={itemPerPage}
                     selectableColumns={[

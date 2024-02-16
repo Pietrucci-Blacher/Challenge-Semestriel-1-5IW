@@ -1,9 +1,9 @@
-import { useService } from '@/hooks/useService';
 import { useEffect } from 'react';
 import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useEstablishment } from '@/hooks/useEstablishment';
+import { useService } from '@/hooks/useService';
 
 export default function ListServices() {
     const { user } = useAuthContext();
@@ -12,37 +12,50 @@ export default function ListServices() {
     const { establishments, getMyEstablishments } = useEstablishment();
 
     useEffect(() => {
-        const { id } = user;
-        if (!id) return;
-        getMyEstablishments(id);
+        if (user?.id) {
+            getMyEstablishments(user.id);
+        }
     }, [user, getMyEstablishments]);
 
     useEffect(() => {
-        if (!establishments) return;
+        if (!establishments || establishments.length === 0) return;
         const establishmentIds = establishments.map(
             (establishment) => establishment.id,
         );
         getGetServicesPerEstablishment(establishmentIds);
     }, [establishments, getGetServicesPerEstablishment]);
 
-    const renderServices = servicesPerEstablishment
-        ? servicesPerEstablishment.flat().map((service) => (
-              <Table.Row key={service.id}>
-                  <Table.Cell>{service.title}</Table.Cell>
-                  <Table.Cell>{service.description}</Table.Cell>
-                  <Table.Cell>{service.price}</Table.Cell>
-                  <Table.Cell>{service.establishment_id}</Table.Cell>
-                  <Table.Cell>
-                      <a
-                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                          href={`/provider/services/${service.id}`}
-                      >
-                          Voir
-                      </a>
-                  </Table.Cell>
-              </Table.Row>
-          ))
-        : 'Chargement en cours';
+    // Gérer le rendu conditionnel en fonction de l'état de `servicesPerEstablishment`
+    let content;
+    if (!servicesPerEstablishment) {
+        content = (
+            <Table.Row>
+                <Table.Cell colSpan="5">Chargement en cours...</Table.Cell>
+            </Table.Row>
+        );
+    } else if (servicesPerEstablishment.length === 0) {
+        content = (
+            <Table.Row>
+                <Table.Cell colSpan="5">Aucun service trouvé.</Table.Cell>
+            </Table.Row>
+        );
+    } else {
+        content = servicesPerEstablishment.flat().map((service) => (
+            <Table.Row key={service.id}>
+                <Table.Cell>{service.title}</Table.Cell>
+                <Table.Cell>{service.description}</Table.Cell>
+                <Table.Cell>{service.price}</Table.Cell>
+                <Table.Cell>{service.establishment_id}</Table.Cell>
+                <Table.Cell>
+                    <Link href={`/provider/services/${service.id}`} passHref>
+                        <a className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
+                            Voir
+                        </a>
+                    </Link>
+                </Table.Cell>
+            </Table.Row>
+        ));
+    }
 
     return (
         <>
@@ -51,10 +64,10 @@ export default function ListServices() {
                     <Table.HeadCell>Titre</Table.HeadCell>
                     <Table.HeadCell>Description</Table.HeadCell>
                     <Table.HeadCell>Prix</Table.HeadCell>
-                    <Table.HeadCell>Etablissement</Table.HeadCell>
+                    <Table.HeadCell>Établissement</Table.HeadCell>
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
-                <Table.Body>{renderServices}</Table.Body>
+                <Table.Body>{content}</Table.Body>
             </Table>
             <FlowbiteButton
                 className="my-2"
