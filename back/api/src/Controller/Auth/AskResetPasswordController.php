@@ -5,6 +5,7 @@ namespace App\Controller\Auth;
 use App\Dto\AskResetPasswordDto;
 use App\Entity\ResetPassword;
 use App\Repository\UserRepository;
+use App\Service\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,10 +51,8 @@ class AskResetPasswordController extends AbstractController
 
         $this->entityManager->persist($resetPassword);
         $this->entityManager->flush();
-
-        return new Response($resetPassword->getToken(), Response::HTTP_OK);
-        // TODO:
-        // Envoyer un email à l'utilisateur avec un lien pour réinitialiser son mot de passe
-        // return new Response(null, Response::HTTP_OK);
+        $emailService = new Email();
+        $emailService->sendResetPasswordEmail($email, $email, $resetPassword->getToken());
+        return new Response(null, Response::HTTP_OK);
     }
 }

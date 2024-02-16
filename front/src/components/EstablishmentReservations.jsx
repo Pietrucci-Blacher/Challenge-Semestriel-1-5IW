@@ -7,10 +7,5 @@ export default function EstablishmentReservations({ establishmentId }) {
         if (!establishmentId) return;
         fetchEstablishmentReservations(establishmentId);
     }, [establishmentId, fetchEstablishmentReservations]);
-    console.log('ok', establishmentId);
-    return (
-        <>
-            <h2>establishment {establishmentId}</h2>
-        </>
-    );
+    return <h2>establishment {establishmentId}</h2>;
 }

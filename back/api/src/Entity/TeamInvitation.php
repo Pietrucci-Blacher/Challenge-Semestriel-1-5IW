@@ -17,6 +17,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\Provider\CountTeamInvitation;
 
 #[ORM\Entity(repositoryClass: TeamInvitationRepository::class)]
 #[ApiResource(
@@ -35,6 +36,12 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'userId' => new Link(toProperty: 'member', fromClass: User::class),
             ],
             normalizationContext: ['groups' => ['team_invitation:read']],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
+        ),
+        new Get(
+            uriTemplate: '/users/{userId}/team_invitations/{status}/count',
+            controller: CountTeamInvitation::class,
+            read: false,
         ),
         new Post(
             controller: InviteTeamInvitationController::class,

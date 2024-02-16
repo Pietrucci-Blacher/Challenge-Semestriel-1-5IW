@@ -31,7 +31,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-//          security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_USER")',
         ),
         new GetCollection(
             uriTemplate: '/users/{userId}/establishments',
@@ -41,11 +41,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
             security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
         ),
         new Post(
-            security: 'is_granted("ROLE_PROVIDER")',
-        ),
-        new Put(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos établissements.',
+            security: 'is_granted("ROLE_PROVIDER")'
         ),
         new Patch(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
@@ -94,7 +90,7 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $photoEstablishment = null;
@@ -110,7 +106,7 @@ class Establishment
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
     private Collection $feedback;
-  
+
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
@@ -234,7 +230,7 @@ class Establishment
         $this->photoEstablishment = $photoEstablishment;
         return $this;
     }
-  
+
 
     /**
      * @return Collection<int, TeamInvitation>
@@ -325,6 +321,7 @@ class Establishment
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Feedback>

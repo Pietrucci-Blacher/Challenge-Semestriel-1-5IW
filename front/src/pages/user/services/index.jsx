@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Modal } from 'flowbite-react';
 import Input from '@/components/Input';
 import Slider from '@/components/Slider';
-import Image from 'next/image';
 
 export default function Services() {
     const { services, getAllServices, getServicesByFilters } = useService();
@@ -95,15 +94,15 @@ export default function Services() {
                     <Slider
                         id="minPrice"
                         label={`Prix minimum: ${formData.minPrice}€`}
-                        value={formData.minPrice}
-                        max="3000"
+                        value={formData.minPrice.toString()}
+                        max={3000}
                         onChange={handleSliderMinPriceChange}
                     />
                     <Slider
                         id="maxPrice"
                         label={`Prix maximum: ${formData.maxPrice}€`}
-                        value={formData.maxPrice}
-                        max="3000"
+                        value={formData.maxPrice.toString()}
+                        max={3000}
                         onChange={handleSliderMaxPriceChange}
                     />
                 </Modal.Body>
