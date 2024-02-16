@@ -15,5 +15,16 @@ const editUserService = async (id, data) => {
 const deleteUserService = async (id) => {
     return await httpClient.delete(`users/${id}`);
 };
+const updateUserRoleService = async ({ userRole, userId }) => {
+    return await httpClient.patch(`users/${userId}/change_role`, {
+        roles: [userRole],
+    });
+};
 
-export { getUsersService, getUserService, editUserService, deleteUserService };
+export {
+    getUsersService,
+    getUserService,
+    editUserService,
+    deleteUserService,
+    updateUserRoleService,
+};

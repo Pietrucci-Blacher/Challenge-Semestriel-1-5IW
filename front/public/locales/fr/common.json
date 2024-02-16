@@ -1,4 +1,12 @@
 {
     "home": "Accueil",
-    "change-locale": "Changer de langue"
+    "about": "À propos",
+    "logoAlt": "Logo de l'application",
+    "userSettings": "Paramètres de l'utilisateur",
+    "profile": "Profil",
+    "signOut": "Déconnexion",
+    "login": "Connexion",
+    "register": "Inscription",
+    "change-locale": "Changer de langue",
+    "contact": "Contact"
 }

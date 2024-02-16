@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
+use App\Attributes\UserField;
 use App\Controller\Reservation\CreateReservation;
 use App\Dto\CreateReservationDto;
 use App\Repository\ReservationRepository;
@@ -61,8 +62,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Delete()
     ],
-    normalizationContext: ['groups' => ['reservation:read']],
-    denormalizationContext: ['groups' => ['reservation:write']]
+    normalizationContext: ['groups' => ['reservation:read']]
+
 )]
 #[UniqueEntity(
     fields: ['teacher', 'startTime', 'endTime'],
@@ -78,39 +79,38 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?User $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?Establishment $establishment = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?Service $service = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $endTime = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?string $specialRequests = null;
 
     #[ORM\ManyToOne(inversedBy: 'teacherReservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['reservation:read', 'reservation:write'])]
+    #[Groups(['reservation:read'])]
     private ?User $teacher = null;
 
     #[ORM\OneToOne(inversedBy: 'reservation', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['reservation:read', 'reservation:write'])]
     private ?Schedule $schedule = null;
 
     public function getId(): ?int

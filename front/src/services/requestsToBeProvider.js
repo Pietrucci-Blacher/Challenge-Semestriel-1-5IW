@@ -6,6 +6,10 @@ const applyToBeProviderService = async (payload) => {
     });
 };
 
+const getUserRequestService = async (userId) => {
+    return await httpClient.get(`users/${userId}/provider_requests`);
+};
+
 const getListOfRequestsService = async () => {
     return await httpClient.get('provider_requests');
 };
@@ -23,4 +27,5 @@ export {
     getListOfRequestsService,
     getRequestService,
     updateRequestService,
+    getUserRequestService,
 };

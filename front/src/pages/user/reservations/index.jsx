@@ -8,7 +8,7 @@ export default function Reservations() {
     const { reservations, fetchUserReservations } = useReservation();
 
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         fetchUserReservations(id);
     }, [user]);

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Modal } from 'flowbite-react';
 import Input from '@/components/Input';
 import Slider from '@/components/Slider';
-import Image from 'next/image';
 
 export default function Services() {
     const { services, getAllServices, getServicesByFilters } = useService();
@@ -64,7 +63,7 @@ export default function Services() {
                             className="max-w-sm card-hover transform transition-transform duration-1000 hover:scale-105"
                             renderImage={() => (
                                 <img
-                                    src={`https://localhost/media/${service.imagePath}`}
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service.imagePath}`}
                                     alt="Picture of the author"
                                     className="w-full rounded-t-lg h-48 object-cover"
                                     width={500}
@@ -95,15 +94,15 @@ export default function Services() {
                     <Slider
                         id="minPrice"
                         label={`Prix minimum: ${formData.minPrice}€`}
-                        value={formData.minPrice}
-                        max="3000"
+                        value={formData.minPrice.toString()}
+                        max={3000}
                         onChange={handleSliderMinPriceChange}
                     />
                     <Slider
                         id="maxPrice"
                         label={`Prix maximum: ${formData.maxPrice}€`}
-                        value={formData.maxPrice}
-                        max="3000"
+                        value={formData.maxPrice.toString()}
+                        max={3000}
                         onChange={handleSliderMaxPriceChange}
                     />
                 </Modal.Body>
