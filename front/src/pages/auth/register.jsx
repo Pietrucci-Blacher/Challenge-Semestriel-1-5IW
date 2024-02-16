@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import {useTranslationContext} from "@/providers/TranslationProvider";
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Register() {
     const { register } = useAuth();

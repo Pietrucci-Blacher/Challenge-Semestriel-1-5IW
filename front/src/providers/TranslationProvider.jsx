@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { loadTranslationsService } from "@/services/translationService";
+import { loadTranslationsService } from '@/services/translationService';
 
 const TranslationContext = createContext();
 
@@ -20,7 +20,10 @@ export const TranslationProvider = ({ children }) => {
         const loadTranslations = async () => {
             if (!loadedTranslations[language]) {
                 const data = await loadTranslationsService(language);
-                setLoadedTranslations(prev => ({...prev, [language]: data}));
+                setLoadedTranslations((prev) => ({
+                    ...prev,
+                    [language]: data,
+                }));
                 setTranslations(data);
             } else {
                 setTranslations(loadedTranslations[language]);
@@ -31,7 +34,9 @@ export const TranslationProvider = ({ children }) => {
     }, [language, loadedTranslations]);
 
     return (
-        <TranslationContext.Provider value={{ translations, changeLanguage, language, t }}>
+        <TranslationContext.Provider
+            value={{ translations, changeLanguage, language, t }}
+        >
             {children}
         </TranslationContext.Provider>
     );

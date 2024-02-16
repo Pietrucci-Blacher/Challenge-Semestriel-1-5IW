@@ -16,7 +16,7 @@ const registerService = async ({ lastname, firstname, email, password }) => {
 
 const fetchCurrentUser = async () => {
     const jwtToken = sessionStorage.getItem('token');
-    if(!jwtToken) return null
+    if (!jwtToken) return null;
     return await httpClient.get('auth/me');
 };
 

@@ -5,7 +5,7 @@ import GenericButton from '@/components/GenericButton';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import { useRouter } from 'next/router';
-import {useTranslationContext} from "@/providers/TranslationProvider";
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function AskResetPassword() {
     const [email, setEmail] = useState('');

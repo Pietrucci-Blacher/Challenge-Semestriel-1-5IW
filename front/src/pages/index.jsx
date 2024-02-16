@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Button, Card, Footer } from 'flowbite-react';
 import Image from 'next/image';
-import {useTranslationContext} from "@/providers/TranslationProvider";
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Index() {
     const { t } = useTranslationContext();

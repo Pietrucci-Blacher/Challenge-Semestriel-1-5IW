@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/useToast';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import Head from 'next/head';
-import {useTranslationContext} from "@/providers/TranslationProvider";
+import { useTranslationContext } from '@/providers/TranslationProvider';
 export default function Login() {
     const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();

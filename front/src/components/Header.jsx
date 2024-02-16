@@ -2,7 +2,7 @@ import { Avatar, DarkThemeToggle, Dropdown, Navbar } from 'flowbite-react';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
 import Link from 'next/link';
-import {useTranslationContext} from "@/providers/TranslationProvider";
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Header() {
     const { user } = useAuthContext();
@@ -11,7 +11,7 @@ export default function Header() {
     const changeTo = language === 'en' ? 'fr' : 'en';
 
     const handleLanguageChange = () => {
-        changeLanguage(changeTo)
+        changeLanguage(changeTo);
     };
 
     const flag = changeTo !== 'fr' ? '🇬🇧' : '🇫🇷';
