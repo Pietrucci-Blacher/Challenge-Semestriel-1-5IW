@@ -5,23 +5,18 @@ import GenericButton from '@/components/GenericButton';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import nextI18NextConfig from '../../../next-i18next.config';
-import { useTranslation } from 'next-i18next';
 import { useToast } from '@/hooks/useToast';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function AskResetPassword() {
     const [email, setEmail] = useState('');
     const { askResetPassword, isLoading, error } = useResetPassword();
     const router = useRouter();
-    const { t, i18n } = useTranslation('resetPage');
+    const { t } = useTranslationContext();
     const [formData, setFormData] = useState({
         email: '',
     });
-    const { createToastMessage } = useToast();
-    const handleEmailChange = (event) => {
-        setFormData({ ...formData, email: event.target.value });
-    };
+    const createToastMessage = useToast();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,6 +25,10 @@ export default function AskResetPassword() {
             return;
         }
         await askResetPassword(formData.email);
+    };
+
+    const handleEmailChange = (event) => {
+        setFormData({ ...formData, email: event.target.value });
     };
 
     return (
@@ -115,19 +114,4 @@ export default function AskResetPassword() {
             </div>
         </div>
     );
-}
-
-export async function getStaticProps(context) {
-    const { locale } = context;
-
-    return {
-        props: {
-            // pass the translation props to the page component
-            ...(await serverSideTranslations(
-                locale ?? 'fr',
-                ['resetPage'],
-                nextI18NextConfig,
-            )),
-        },
-    };
 }

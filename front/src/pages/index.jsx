@@ -1,12 +1,10 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import nextI18NextConfig from '../../next-i18next.config';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { Button, Card, Footer } from 'flowbite-react';
 import Image from 'next/image';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Index() {
-    const { t, i18n } = useTranslation('common');
+    const { t } = useTranslationContext();
 
     // Using the previously defined fake data arrays for features, courses, and testimonials
     const features = [
@@ -163,18 +161,4 @@ export default function Index() {
             </Footer>
         </section>
     );
-}
-
-export async function getStaticProps(context) {
-    const { locale } = context;
-
-    return {
-        props: {
-            ...(await serverSideTranslations(
-                locale ?? 'fr',
-                ['common'],
-                nextI18NextConfig,
-            )),
-        },
-    };
 }

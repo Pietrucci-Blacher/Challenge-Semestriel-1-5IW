@@ -1,20 +1,21 @@
 import { Avatar, DarkThemeToggle, Dropdown, Navbar } from 'flowbite-react';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Header() {
     const { user } = useAuthContext();
-    const { t, i18n } = useTranslation('common');
-    const changeTo = i18n.language === 'en' ? 'fr' : 'en';
+    const { changeLanguage, language, t } = useTranslationContext();
+
+    const changeTo = language === 'en' ? 'fr' : 'en';
 
     const handleLanguageChange = () => {
-        i18n.changeLanguage(changeTo);
+        changeLanguage(changeTo);
     };
 
-    const flag = changeTo === 'fr' ? '🇬🇧' : '🇫🇷';
-    const languageLabel = changeTo === 'fr' ? 'English' : 'Français';
+    const flag = changeTo !== 'fr' ? '🇬🇧' : '🇫🇷';
+    const languageLabel = changeTo !== 'fr' ? 'English' : 'Français';
 
     return (
         <header className="sticky top-0 z-50 bg-white shadow-lg">
