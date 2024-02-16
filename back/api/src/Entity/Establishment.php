@@ -90,7 +90,7 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $photoEstablishment = null;
@@ -230,7 +230,7 @@ class Establishment
         $this->photoEstablishment = $photoEstablishment;
         return $this;
     }
-  
+
 
     /**
      * @return Collection<int, TeamInvitation>
@@ -322,15 +322,6 @@ class Establishment
         return $this;
     }
 
-    public function getPhotoEstablishment(): ?string
-    {
-        return $this->photoEstablishment;
-    }
-
-    public function setPhotoEstablishment(?string $photoEstablishment): static
-    {
-        $this->photoEstablishment = $photoEstablishment;
-    }
 
     /**
      * @return Collection<int, Feedback>
