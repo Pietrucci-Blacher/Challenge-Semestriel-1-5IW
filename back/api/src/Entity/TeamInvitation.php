@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'userId' => new Link(toProperty: 'member', fromClass: User::class),
             ],
             normalizationContext: ['groups' => ['team_invitation:read']],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
         ),
         new Post(
             controller: InviteTeamInvitationController::class,
