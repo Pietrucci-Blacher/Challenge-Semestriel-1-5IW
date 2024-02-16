@@ -42,6 +42,8 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         ),
         new Post(
             security: 'is_granted("ROLE_PROVIDER")',
+            controller: CreateImageEstablishmentController::class,
+            inputFormats: ['multipart' => ['multipart/form-data']],
         ),
         new Put(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
@@ -94,6 +96,15 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
+    
+    #[ApiProperty(openapiContext: [
+        'type' => 'string',
+        'format' => 'binary'
+    ])]
+    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "photoEstablishment")]
+    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
+    public ?File $image = null;
     
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
