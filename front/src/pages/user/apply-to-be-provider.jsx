@@ -30,7 +30,7 @@ export default function ApplyToBeProvider() {
         formData.append('kbis', kbis);
         formData.append('file', file);
         try {
-            const response = await applyToBeProvider(formData);
+            await applyToBeProvider(formData);
             createToastMessage('success', 'votre demande a bien été envoyé');
         } catch (e) {
             createToastMessage('error', e.detail);

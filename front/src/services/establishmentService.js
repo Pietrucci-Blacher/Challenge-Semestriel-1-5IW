@@ -6,6 +6,7 @@ export const createEstablishment = ({ name, street, city, zipCode }) => {
         street,
         city,
         zipCode,
+        photoEstablishment,
     });
 };
 
@@ -30,6 +31,7 @@ export const deleteEstablishment = (id) => {
  *     street: string,
  *     city: string,
  *     zipCode: string,
+ *     photoEstablishment: string,
  * }} content - establishment content
  */
 export const updateEstablishment = (id, content) => {

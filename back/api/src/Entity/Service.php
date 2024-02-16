@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Provider\UpdateServiceController;
+use App\Controller\Provider\CreateImageServiceController;
 use App\Attributes\UserField;
 
 #[Vich\Uploadable]
@@ -42,10 +43,11 @@ use App\Attributes\UserField;
         ),
         new GetCollection(),
         new Post(
+            controller: CreateImageServiceController::class,
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']],
-            security: 'is_granted("ROLE_PROVIDER")'
+            security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
@@ -98,7 +100,6 @@ class Service
     #[ORM\Column]
     #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
-
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
