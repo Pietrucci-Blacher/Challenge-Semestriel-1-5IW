@@ -6,12 +6,11 @@ import {Chart, registerables} from 'chart.js';
 import 'chart.js/auto';
 import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
 import {SpeedInsights} from '@vercel/speed-insights/next';
-import PropTypes from 'prop-types';
 import {TranslationProvider} from "@/providers/TranslationProvider";
 
 Chart.register(...registerables);
 
-function MyApp({Component, pageProps}) {
+export default function MyApp({Component, pageProps}) {
     return (
         <TranslationProvider>
             <ToastProvider>
@@ -26,7 +25,3 @@ function MyApp({Component, pageProps}) {
     );
 }
 
-MyApp.propsTypes = {
-    Component: PropTypes.elementType.isRequired,
-    pageProps: PropTypes.object.isRequired,
-};
