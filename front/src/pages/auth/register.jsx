@@ -6,16 +6,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import nextI18NextConfig from '../../../next-i18next.config';
 import Head from 'next/head';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Register() {
     const { register } = useAuth();
     const { createToastMessage } = useToast();
-    const { t, i18n } = useTranslation('registerPage');
+    const { t } = useTranslationContext();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
@@ -196,19 +194,4 @@ export default function Register() {
             </div>
         </div>
     );
-}
-
-export async function getStaticProps(context) {
-    const { locale } = context;
-
-    return {
-        props: {
-            // pass the translation props to the page component
-            ...(await serverSideTranslations(
-                locale ?? 'fr',
-                ['registerPage'],
-                nextI18NextConfig,
-            )),
-        },
-    };
 }
