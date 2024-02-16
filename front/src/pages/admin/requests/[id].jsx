@@ -1,23 +1,24 @@
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import useRequestsProvider from '@/hooks/useRequestsProvider';
-import {useEffect} from 'react';
-import {Button as FlowbiteButton} from 'flowbite-react';
+import { useEffect } from 'react';
+import { Button as FlowbiteButton } from 'flowbite-react';
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
-import {useToast} from '@/hooks/useToast';
+import { useToast } from '@/hooks/useToast';
 
 export default function Request() {
-    const {createToastMessage} = useToast();
-    const {request, getRequest, isLoading, approveRequest, declineRequest} = useRequestsProvider();
+    const { createToastMessage } = useToast();
+    const { request, getRequest, isLoading, approveRequest, declineRequest } =
+        useRequestsProvider();
     const router = useRouter();
-    const {id} = router.query;
+    const { id } = router.query;
     useEffect(() => {
-        getRequest({id});
+        getRequest({ id });
     }, [getRequest, id]);
 
     const handleApproveRequest = () => {
         try {
-            approveRequest({id});
+            approveRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
             router.push('/admin/requests');
         } catch (e) {
@@ -30,7 +31,7 @@ export default function Request() {
 
     const handleDeclineRequest = () => {
         try {
-            declineRequest({id});
+            declineRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
             router.push('/admin/requests');
         } catch (e) {
@@ -60,11 +61,11 @@ export default function Request() {
                         <span className="font-cool">
                             Lastname: {request?.createdBy?.lastname}
                         </span>{' '}
-                        <br/>
+                        <br />
                         <span className="font-cool">
                             Firstname: {request?.createdBy?.firstname}
                         </span>{' '}
-                        <br/>
+                        <br />
                         <span className="font-cool">
                             Email: {request?.createdBy?.email}
                         </span>
@@ -86,14 +87,14 @@ export default function Request() {
                         </FlowbiteButton>
                     </div>
                     <div className="flex gap-4 mb-6">
-                        {request?.status === "pending" && (
+                        {request?.status === 'pending' && (
                             <>
                                 <GenericButton
                                     label="Accepter la demande"
                                     onClick={handleApproveRequest}
                                     isLoading={isLoading}
                                 />
-                                <br/>
+                                <br />
                                 <GenericButton
                                     label="Refuser la demande"
                                     onClick={handleDeclineRequest}
@@ -101,10 +102,7 @@ export default function Request() {
                                 />
                             </>
                         )}
-
-
                     </div>
-
                 </div>
             ) : (
                 'Chargement'

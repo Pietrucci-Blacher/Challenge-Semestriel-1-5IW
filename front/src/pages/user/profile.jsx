@@ -144,7 +144,7 @@ export default function Profile() {
                                     className="block w-full py-1 "
                                 />
                             </div>
-                            <GenericButton label="Mettre à jour le profile"/>
+                            <GenericButton label="Mettre à jour le profile" />
                         </form>
                         <div className="my-4"></div>
                         <PasswordResetForm
@@ -169,5 +169,5 @@ export default function Profile() {
                 </form>
             </Tabs.Item>
         </Tabs>
-);
+    );
 }

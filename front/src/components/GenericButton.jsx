@@ -10,7 +10,13 @@ export default function GenericButton({
     ...props
 }) {
     return (
-        <FlowbiteButton onClick={onClick} className={className} type="submit" disabled={isLoading} isProcessing={isLoading}>
+        <FlowbiteButton
+            onClick={onClick}
+            className={className}
+            type="submit"
+            disabled={isLoading}
+            isProcessing={isLoading}
+        >
             {label}
         </FlowbiteButton>
     );

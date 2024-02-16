@@ -39,12 +39,9 @@ const handleResponseError = async (error) => {
         if (!refreshToken) {
             return Promise.reject(error);
         }
-        const response = await axios.post(
-            `https://localhost/token/refresh`,
-            {
-                refresh_token: refreshToken,
-            },
-        );
+        const response = await axios.post(`https://localhost/token/refresh`, {
+            refresh_token: refreshToken,
+        });
         const newJwtToken = response?.data?.token;
         const newRefreshToken = response?.data?.refresh_token;
         if (newJwtToken.length > 0 && newRefreshToken.length > 0) {

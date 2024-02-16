@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
 import {
     askResetPasswordRequest,
     checkResetTokenRequest,
@@ -18,7 +18,6 @@ export function useResetPassword() {
             setIsLoading(false);
         }
     }
-
 
     const checkResetToken = useCallback(async (token) => {
         setIsLoading(true);

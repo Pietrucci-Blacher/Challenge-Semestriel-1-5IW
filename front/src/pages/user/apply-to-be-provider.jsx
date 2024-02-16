@@ -8,7 +8,8 @@ import { useAuthContext } from '@/providers/AuthProvider';
 
 export default function ApplyToBeProvider() {
     const { user } = useAuthContext();
-    const { request, getUserRequest, applyToBeProvider, isLoading} = useRequestsProvider();
+    const { request, getUserRequest, applyToBeProvider, isLoading } =
+        useRequestsProvider();
     const { createToastMessage } = useToast();
     const [kbis, setKbis] = useState('');
     const [file, setFile] = useState(null);
@@ -62,7 +63,10 @@ export default function ApplyToBeProvider() {
 
                         <div className="max-w-md mb-4">
                             <div className="mb-2 block">
-                                <Label htmlFor="dropzone-file" value="Upload file"/>
+                                <Label
+                                    htmlFor="dropzone-file"
+                                    value="Upload file"
+                                />
                             </div>
                             <div className="flex w-full items-center justify-center">
                                 <Label
@@ -86,15 +90,29 @@ export default function ApplyToBeProvider() {
                                             />
                                         </svg>
                                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span className="font-semibold">Click to upload</span> or drag and drop
+                                            <span className="font-semibold">
+                                                Click to upload
+                                            </span>{' '}
+                                            or drag and drop
                                         </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Pdf de taille maximun 1MB</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            Pdf de taille maximun 1MB
+                                        </p>
                                     </div>
-                                    <FileInput id="dropzone-file" className="hidden" onChange={handleFileChange} accept="application/pdf" required/>
+                                    <FileInput
+                                        id="dropzone-file"
+                                        className="hidden"
+                                        onChange={handleFileChange}
+                                        accept="application/pdf"
+                                        required
+                                    />
                                 </Label>
                             </div>
-                        </div >
-                        <GenericButton label="Soumettre la demande" isLoading={isLoading}/>
+                        </div>
+                        <GenericButton
+                            label="Soumettre la demande"
+                            isLoading={isLoading}
+                        />
                     </form>
                 </div>
             ) : request !== null && request['hydra:totalItems'] > 0 ? (

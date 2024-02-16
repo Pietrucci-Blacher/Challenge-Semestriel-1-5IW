@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
 import Input from '@/components/Input';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import Image from 'next/image';
@@ -16,7 +16,7 @@ export default function Register() {
     const { t } = useTranslationContext();
     const router = useRouter();
     useEffect(() => {
-        console.log("isadmin@adminaa.com", isLoading)
+        console.log('isadmin@adminaa.com', isLoading);
     }, [isLoading]);
     const [formData, setFormData] = useState({
         firstname: '',

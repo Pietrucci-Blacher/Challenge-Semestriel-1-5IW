@@ -1,5 +1,5 @@
 import * as service from '@/services/feedbackService';
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
 
 export const useFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);
@@ -29,9 +29,8 @@ export const useFeedback = () => {
         try {
             const response = await service.getServiceNote(id);
             setNote(response);
-
         } catch (e) {
-            console.error("error fetching notes", e)
+            console.error('error fetching notes', e);
         }
     }, []);
 

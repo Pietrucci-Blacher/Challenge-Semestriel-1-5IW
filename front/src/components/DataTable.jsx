@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDatatable } from '@/hooks/useDatatable';
 import dayjs from 'dayjs';
-import {Button, Modal, Select} from 'flowbite-react';
+import { Button, Modal, Select } from 'flowbite-react';
 import { useToast } from '@/hooks/useToast';
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [sortedData, setSortedData] = useState([]);
@@ -29,7 +29,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         fetchAllUsersData,
         editUser,
         deleteUser,
-        updateUserRole
+        updateUserRole,
     } = useDatatable();
 
     useEffect(() => {
@@ -249,7 +249,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         const email = formData.get('email');
         const role = formData.get('role');
         if (role) {
-            updateUserRole(role, userId)
+            updateUserRole(role, userId);
         }
         try {
             await editUser(userId, {
@@ -518,12 +518,23 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                                         >
                                                             Role
                                                         </label>
-                                                        <Select name="role" id="user-roles">
+                                                        <Select
+                                                            name="role"
+                                                            id="user-roles"
+                                                        >
                                                             <option value=""></option>
-                                                            <option value="ADMIN">Administrateur</option>
-                                                            <option value="PROVIDER">Prestataire</option>
-                                                            <option value="TEACHER">Enseignant</option>
-                                                            <option value="USER">Utilisateur</option>
+                                                            <option value="ADMIN">
+                                                                Administrateur
+                                                            </option>
+                                                            <option value="PROVIDER">
+                                                                Prestataire
+                                                            </option>
+                                                            <option value="TEACHER">
+                                                                Enseignant
+                                                            </option>
+                                                            <option value="USER">
+                                                                Utilisateur
+                                                            </option>
                                                         </Select>
                                                     </div>
                                                 </div>

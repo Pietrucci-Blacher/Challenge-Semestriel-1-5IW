@@ -3,7 +3,8 @@ import {
     deleteUserService,
     editUserService,
     getUserService,
-    getUsersService, updateUserRoleService,
+    getUsersService,
+    updateUserRoleService,
 } from '@/services/datatableService';
 import { normalize } from '@/utils/data';
 
@@ -87,9 +88,9 @@ export const useDatatable = () => {
     }, []);
 
     const updateUserRole = useCallback(async (role, userId) => {
-        const userRole = `ROLE_${role}`
+        const userRole = `ROLE_${role}`;
         try {
-            await updateUserRoleService({userRole, userId});
+            await updateUserRoleService({ userRole, userId });
         } catch (error) {
             console.error('Error updating user:', error);
         }
@@ -104,6 +105,6 @@ export const useDatatable = () => {
         setUserDetails,
         data,
         setData,
-        updateUserRole
+        updateUserRole,
     };
 };

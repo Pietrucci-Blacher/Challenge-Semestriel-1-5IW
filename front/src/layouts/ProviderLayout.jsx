@@ -28,7 +28,7 @@ const sidebarContent = [
         href: '/provider/services',
         label: '',
         labelColor: 'gray',
-    }
+    },
 ];
 const ProviderLayout = ({ children }) => {
     return (

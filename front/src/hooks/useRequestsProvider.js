@@ -10,52 +10,52 @@ import { useCallback, useState } from 'react';
 export default function useRequestsProvider() {
     const [requests, setRequests] = useState([]);
     const [request, setRequest] = useState(null);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const applyToBeProvider = async (payload) => {
-        setIsLoading(true)
+        setIsLoading(true);
         await applyToBeProviderService(payload);
-        setIsLoading(false)
+        setIsLoading(false);
     };
 
     const getUserRequest = useCallback(async (userId) => {
-        setIsLoading(true)
+        setIsLoading(true);
         const response = await getUserRequestService(userId);
         setRequest(response);
-        setIsLoading(false)
+        setIsLoading(false);
     }, []);
 
     const getListOfRequests = useCallback(async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         const response = await getListOfRequestsService();
         setRequests(response['hydra:member']);
-        setIsLoading(false)
+        setIsLoading(false);
     }, []);
 
     const getRequest = useCallback(async (payload) => {
-        setIsLoading(true)
+        setIsLoading(true);
         const response = await getRequestService(payload);
         setRequest(response);
-        setIsLoading(false)
+        setIsLoading(false);
     }, []);
 
     const approveRequest = async (payload) => {
-        setIsLoading(true)
+        setIsLoading(true);
         Object.assign(payload, { status: 'approved' });
         await updateRequestService(payload);
-        setIsLoading(false)
+        setIsLoading(false);
     };
 
     const declineRequest = async (payload) => {
-        setIsLoading(true)
+        setIsLoading(true);
         Object.assign(payload, { status: 'rejected' });
         await updateRequestService(payload);
-        setIsLoading(false)
+        setIsLoading(false);
     };
 
     return {
         request,
         requests,
-        isLoading ,
+        isLoading,
         applyToBeProvider,
         getListOfRequests,
         getRequest,
