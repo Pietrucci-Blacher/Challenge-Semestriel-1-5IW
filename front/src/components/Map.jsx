@@ -146,13 +146,10 @@ const MapComponent = () => {
                             >
                                 <a
                                     href={
-                                        user.roles[0] === 'ROLE_USER'
-                                            ? `establishment/${selectedMarker.id}`
-                                            : user.roles[0] === 'ROLE_PROVIDER'
-                                              ? `establishment/${selectedMarker.id}`
-                                              : user.roles[0] === 'ROLE_ADMIN'
-                                                ? `establishment/${selectedMarker.id}`
-                                                : '#'
+                                        user.roles[0] === 'ROLE_USER' ? `establishment/${selectedMarker.id}`
+                                        : user.roles[0] === 'ROLE_PROVIDER' || 'ROLE_TEACHER' ? `establishment/${selectedMarker.id}`
+                                        : user.roles[0] === 'ROLE_ADMIN' || 'ROLE_TEACHER' ? `establishment/${selectedMarker.id}`
+                                        : '#'
                                     }
                                 >
                                     <p
