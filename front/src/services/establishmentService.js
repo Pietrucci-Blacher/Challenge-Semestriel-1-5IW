@@ -6,7 +6,6 @@ export const createEstablishment = ({ name, street, city, zipCode }) => {
         street,
         city,
         zipCode,
-        photoEstablishment,
     });
 };
 
