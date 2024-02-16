@@ -24,7 +24,7 @@ const removeMemberFromTeamService = async (id) => {
 
 const getEstablishmentTeamInvitationService = async (userId, status) => {
     const response = await httpClient.get(
-        `users/${userId}/team_invitations/${status}/count`,
+        `establishments/${userId}/team_invitations/`,
     );
     return response['hydra:member'] ?? [];
 };
