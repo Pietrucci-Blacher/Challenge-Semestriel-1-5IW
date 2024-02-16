@@ -65,13 +65,10 @@ export default function EstablishmentTablePagination({
                 <Link
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                     href={
-                        user.roles[0] === 'ROLE_USER'
-                            ? `establishment/${establishment.id}`
-                            : user.roles[0] === 'ROLE_PROVIDER'
-                              ? `establishment/${establishment.id}`
-                              : user.roles[0] === 'ROLE_ADMIN'
-                                ? `establishment/${establishment.id}`
-                                : '#'
+                        user.roles[0] === 'ROLE_USER' ? `establishment/${establishment.id}`
+                        : user.roles[0] === 'ROLE_PROVIDER' || 'ROLE_TEACHER' ? `establishment/${establishment.id}`
+                        : user.roles[0] === 'ROLE_ADMIN' || 'ROLE_TEACHER' ? `establishment/${establishment.id}`
+                        : '#'
                     }
                 >
                     Voir

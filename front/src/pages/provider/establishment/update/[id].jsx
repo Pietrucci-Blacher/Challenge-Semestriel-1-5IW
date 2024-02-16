@@ -19,6 +19,7 @@ export default function UpdateEstablishment() {
         street: '',
         city: '',
         zipCode: '',
+        // photoEstablishment: null,
     });
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function UpdateEstablishment() {
             street: establishment?.street || '',
             city: establishment?.city || '',
             zipCode: establishment?.zipCode || '',
+            // photoEstablishment: establishment?.photoEstablishment || '',
         });
     }, [establishment]);
 
@@ -46,9 +48,30 @@ export default function UpdateEstablishment() {
         setFormData({ ...formData, city: value });
     };
 
-    const handleInputZipCodeChange = (value) => {
-        setFormData({ ...formData, zipCode: value });
+    // const handleInputZipCodeChange = (value) => {
+    //     setFormData({ ...formData, zipCode: value });
+    // };
+
+    const handleInputPhotoEstablishmentChange = (file) => {
+        console.log("Type de fichier :", file instanceof Blob); // Vérifiez le type de fichier
+    
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const url = event.target.result;
+            setFormData({ ...formData, photoEstablishment: url });
+        };
+        reader.onerror = function (event) {
+            console.error("Une erreur s'est produite lors de la lecture du fichier :", event.target.error);
+        };
+    
+        if (file instanceof Blob) {
+            reader.readAsDataURL(file); // Si le fichier est un Blob, commencez la lecture
+        } else {
+            console.error("Le paramètre passé à la méthode readAsDataURL n'est pas un Blob.");
+        }
     };
+    
+    
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
@@ -65,6 +88,7 @@ export default function UpdateEstablishment() {
                 street,
                 city,
                 zipCode,
+                // photoEstablishment,
             });
 
             if (!establishment) {
@@ -121,6 +145,36 @@ export default function UpdateEstablishment() {
                         onChange={handleInputZipCodeChange}
                     />
                 </div>
+{/* 
+                <div>
+                    {formData.photoEstablishment && (
+                        <img
+                            src={formData.photoEstablishment}
+                            alt="Photo de l'établissement"
+                            style={{ maxWidth: '200px' }}
+                        />
+                    )}
+                    <Input
+                        label="Photo de l'établissement"
+                        type="text"
+                        placeholder="Entrer une photo de l'établissement"
+                        value={formData.photoEstablishment}
+                        onChange={handleInputPhotoEstablishmentChange}
+                    />
+                </div> */}
+                {/* <div>
+                    <label>Photo de l'établissement</label>
+                    <div>
+                        {formData.photoEstablishment && (
+                            <img src={formData.photoEstablishment} alt="Photo de l'établissement" style={{ maxWidth: '200px' }} />
+                        )}
+                        <input
+                            type="file"
+                            onChange={(e) => handleInputPhotoEstablishmentChange(e.target.files[0])}
+                        />
+                        <console className="log">{formData.photoEstablishment}</console>
+                    </div>
+                </div> */}
                 <GenericButton label="Modifier un etablisement" />
             </form>
             <FlowbiteButton

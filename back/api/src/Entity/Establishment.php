@@ -90,7 +90,6 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $photoEstablishment = null;

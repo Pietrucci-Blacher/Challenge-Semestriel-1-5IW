@@ -14,7 +14,9 @@ export default function Input({
     className = '',
 }) {
     const [inputType, setInputType] = useState(type);
-    const [isPasswordVisible, setIsPasswordVisible] = useState(type === 'text');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(
+        type !== 'password',
+    );
     const [showLabel, setShowLabel] = useState(true);
 
     const handleChange = (e) => {
@@ -23,8 +25,9 @@ export default function Input({
 
     const togglePasswordVisibility = (event) => {
         event.stopPropagation();
-        setInputType(inputType === 'password' ? 'text' : 'password');
-        setIsPasswordVisible(inputType !== 'password');
+        const nextInputType = inputType === 'password' ? 'text' : 'password';
+        setInputType(nextInputType);
+        setIsPasswordVisible(!isPasswordVisible);
     };
 
     const labelElem = label && (
