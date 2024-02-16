@@ -39,12 +39,12 @@ export default function ListEstablishment() {
                 <Table.Cell>{establishment.city}</Table.Cell>
                 <Table.Cell>{establishment.zipCode}</Table.Cell>
                 <Table.Cell>
-                    <Link
+                    <FlowbiteButton
+                        as={Link}
                         href={`/provider/establishment/${establishment.id}`}
-                        passHref
                     >
                         Voir
-                    </Link>
+                    </FlowbiteButton>
                 </Table.Cell>
             </Table.Row>
         ));
@@ -70,7 +70,6 @@ export default function ListEstablishment() {
                 Créer un établissement
             </FlowbiteButton>
             <MapComponent />
-
         </>
     );
 }
