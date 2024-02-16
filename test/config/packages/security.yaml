@@ -13,6 +13,12 @@ security:
         auth_routes:
             pattern: ^/auth/register
             security: false
+        translations:
+            pattern: ^/translations
+            security: false
+        media:
+            pattern: ^/media
+            security: false
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -41,11 +47,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/media, roles: PUBLIC_ACCESS }
+        - { path: ^/translations, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI
         - { path: ^/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-
     role_hierarchy:
         ROLE_USER:        []
         ROLE_TEACHER:     [ROLE_USER]
