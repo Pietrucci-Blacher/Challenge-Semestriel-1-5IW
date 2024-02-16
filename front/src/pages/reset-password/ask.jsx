@@ -5,6 +5,7 @@ import GenericButton from '@/components/GenericButton';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
 import { useRouter } from 'next/router';
+import { useToast } from '@/hooks/useToast';
 import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function AskResetPassword() {
@@ -12,18 +13,22 @@ export default function AskResetPassword() {
     const { askResetPassword, isLoading, error } = useResetPassword();
     const router = useRouter();
     const { t } = useTranslationContext();
-    const [formData] = useState({
+    const [formData, setFormData] = useState({
         email: '',
     });
+    const createToastMessage = useToast();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const { email } = formData;
-        if (email === '') {
-            createToastMessage('error', 'Email is required');
+        if (formData.email === '') {
+            createToastMessage('error', t('emailRequired'));
             return;
         }
-        await askResetPassword(email);
+        await askResetPassword(formData.email);
+    };
+
+    const handleEmailChange = (event) => {
+        setFormData({ ...formData, email: event.target.value });
     };
 
     return (
@@ -58,13 +63,13 @@ export default function AskResetPassword() {
                                     >
                                         {t('yourEmail')}
                                     </label>
-                                    <Input
+                                    <input
                                         type="email"
                                         name="email"
                                         id="email"
                                         placeholder="Email"
-                                        onChange={setEmail}
-                                        value={email}
+                                        onChange={handleEmailChange}
+                                        value={formData.email}
                                         autoComplete="email"
                                         className="block w-full px-2.5 py-3"
                                         required

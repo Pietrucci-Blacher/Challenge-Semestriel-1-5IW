@@ -36,6 +36,7 @@ use App\Controller\Provider\CountTeamInvitation;
                 'userId' => new Link(toProperty: 'member', fromClass: User::class),
             ],
             normalizationContext: ['groups' => ['team_invitation:read']],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
         ),
         new Get(
             uriTemplate: '/users/{userId}/team_invitations/{status}/count',

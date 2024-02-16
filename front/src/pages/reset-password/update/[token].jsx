@@ -13,6 +13,7 @@ export default function UpdatePassword() {
         useResetPassword();
 
     useEffect(() => {
+        // console.log("ok")
         if (token) {
             checkResetToken(token);
         }
@@ -37,7 +38,7 @@ export default function UpdatePassword() {
 
     return (
         <div>
-            {token}
+            Changer votre password
             {isTokenValid === true ? (
                 <PasswordResetForm onSubmit={handlePasswordReset} />
             ) : (
