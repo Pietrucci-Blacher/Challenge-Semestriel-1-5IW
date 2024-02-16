@@ -27,16 +27,26 @@ export default function ShowEstablishment() {
     };
 
     const renderEstablishment = establishment ? (
-        <div>
-            <h1>{establishment.name}</h1>
-            <p>Rue: {establishment.street}</p>
-            <p>Ville: {establishment.city}</p>
-            <p>Code postal: {establishment.zipCode}</p>
+        <div >            
+            <h2 className="text-lg font-semibold">{establishment.name}</h2>
+            <div className="mt-4 space-y-1">
+                <p>Rue: {establishment.street}</p>
+                <p>Ville: {establishment.city}</p>
+                <p>Code postal: {establishment.zipCode}</p>
+            </div>
             <img
-                class="h-auto max-w-xs"
+                alt="Paris street view"
+                className="mt-4 h-48 w-full"
+                height="200"
+                style={{
+                    aspectRatio: "600/200",
+                    objectFit: "cover",
+                }}
+                width="600"
                 src={establishment.photoEstablishment}
+
             />
-            <p>
+            <p className="mt-4">
                 Propriétaire: {establishment.owner.firstname}{' '}
                 {establishment.owner.lastname}
             </p>
@@ -47,22 +57,30 @@ export default function ShowEstablishment() {
 
     return (
         <>
-            <div>{renderEstablishment}</div>
-            <GenericButton onClick={handleDelete} label="Supprimer" />
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href={`/admin/establishment/update/${id}`}
-            >
-                Modifier
-            </FlowbiteButton>
-            <FlowbiteButton
-                className="my-2"
-                as={Link}
-                href="/admin/establishment"
-            >
-                Retour
-            </FlowbiteButton>
+            <div className="w-full mx-auto bg-white p-6 rounded-lg shadow-lg">
+                {renderEstablishment}
+                <div className="mt-4 flex gap-4">
+                    <GenericButton
+                        onClick={handleDelete}
+                        className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
+                        label="Supprimer"
+                    />
+                    <FlowbiteButton
+                        className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
+                        as={Link}
+                        href={`/admin/establishment/update/${id}`}
+                    >
+                        Modifier
+                    </FlowbiteButton>
+                    <FlowbiteButton
+                        className="bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
+                        as={Link}
+                        href="/admin/establishment"
+                    >
+                        Retour
+                    </FlowbiteButton>
+                </div>
+            </div>
         </>
     );
 }

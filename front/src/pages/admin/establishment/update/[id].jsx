@@ -19,6 +19,7 @@ export default function UpdateEstablishment() {
         street: '',
         city: '',
         zipCode: '',
+        // photoEstablishment: '',
     });
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function UpdateEstablishment() {
             street: establishment?.street || '',
             city: establishment?.city || '',
             zipCode: establishment?.zipCode || '',
+            // photoEstablishment: establishment?.photoEstablishment || '',
         });
     }, [establishment]);
 
@@ -50,6 +52,10 @@ export default function UpdateEstablishment() {
         setFormData({ ...formData, zipCode: value });
     };
 
+    // const handleInputPhotoEstablishmentChange = (value) => {
+    //     setFormData({ ...formData, photoEstablishment: value });
+    // };
+
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
         const { name, street, city, zipCode } = formData;
@@ -65,6 +71,7 @@ export default function UpdateEstablishment() {
                 street,
                 city,
                 zipCode,
+                // photoEstablishment,
             });
 
             if (!establishment) {
@@ -121,6 +128,15 @@ export default function UpdateEstablishment() {
                         onChange={handleInputZipCodeChange}
                     />
                 </div>
+                {/* <div>
+                    <Input
+                        label="Photo"
+                        type="text"
+                        placeholder="Entrer une photo"
+                        value={formData.photoEstablishment}
+                        onChange={handleInputPhotoEstablishmentChange}
+                    />
+                </div> */}
                 <GenericButton label="Modifier un etablisement" />
             </form>
             <FlowbiteButton
