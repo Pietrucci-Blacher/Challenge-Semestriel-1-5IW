@@ -1,0 +1,4 @@
+get_translations:
+    path: '/translations/{language}'
+    controller: App\Controller\TranslationController::getTranslations
+    methods: ['GET']
