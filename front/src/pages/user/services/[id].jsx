@@ -2,13 +2,7 @@
 import { useRouter } from 'next/router';
 import { useService } from '@/hooks/useService';
 import { useEffect, useState, memo } from 'react';
-import {
-    Button,
-    Card,
-    Label,
-    Modal,
-    Select,
-} from 'flowbite-react';
+import { Button, Card, Label, Modal, Select } from 'flowbite-react';
 import Image from 'next/image';
 import { useTeam } from '@/hooks/useTeam';
 import { useSchedule } from '@/hooks/useSchedule';
@@ -17,7 +11,7 @@ import { useReservation } from '@/hooks/useReservation';
 import { useFeedback } from '@/hooks/useFeedback';
 import { useAuthContext } from '@/providers/AuthProvider';
 import dayjs from 'dayjs';
-import {convertDataToHtml} from "@/utils/utils";
+import { convertDataToHtml } from '@/utils/utils';
 
 export default function Id() {
     const { user } = useAuthContext();
@@ -75,7 +69,6 @@ export default function Id() {
         setOpenModal(true);
     };
 
-
     const renderBody = service?.body?.blocks ? (
         <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3 editor-html-no-bg">
             {convertDataToHtml(service?.body?.blocks)}
@@ -83,7 +76,6 @@ export default function Id() {
     ) : (
         <></>
     );
-
 
     const handleConfirmReservation = async () => {
         const { startTime, endTime } = selectedSchedule;
@@ -103,7 +95,6 @@ export default function Id() {
         setSpecialRequest('');
         setSelectedSchedule({});
     };
-
 
     const getTeacherInfo = (userId) => {
         const teacher = establishmentTeam.find(
@@ -136,12 +127,13 @@ export default function Id() {
                             {service?.price} €
                         </p>
                     </Card>
-                    {service?.imagePath && (<img
-                        className="w-full object-cover rounded-lg col-span-1"
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service?.imagePath}`}
-                        alt="..."
-                    />)}
-
+                    {service?.imagePath && (
+                        <img
+                            className="w-full object-cover rounded-lg col-span-1"
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service?.imagePath}`}
+                            alt="..."
+                        />
+                    )}
                 </div>
 
                 <div className="mt-8">
@@ -261,7 +253,6 @@ export default function Id() {
                         </div>
                     </div>
                 </div>
-
             </div>
             <Modal show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>Reservation</Modal.Header>
