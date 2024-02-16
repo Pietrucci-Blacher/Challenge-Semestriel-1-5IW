@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
+use App\Controller\UpdateUserRoleController;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -61,6 +62,16 @@ use App\Controller\Auth\EmailConfirmationController;
             security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
             processor: UserPasswordHasher::class
+        ),
+        new Patch(
+            uriTemplate: '/users/{id}/change_role',
+            controller: UpdateUserRoleController::class,
+            openapiContext: [
+                'summary' => 'Change le rôle d\'un utilisateur.',
+                'description' => 'Permet à un administrateur de changer le rôle d\'un utilisateur.',
+            ],
+            security: 'is_granted("ROLE_ADMIN")',
+            securityMessage: 'Seuls les administrateurs peuvent changer les rôles des utilisateurs.'
         ),
         new Delete(
             security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',

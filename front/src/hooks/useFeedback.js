@@ -1,5 +1,5 @@
 import * as service from '@/services/feedbackService';
-import { useCallback, useState } from 'react';
+import {useCallback, useState} from 'react';
 
 export const useFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);
@@ -26,8 +26,13 @@ export const useFeedback = () => {
     }, []);
 
     const getServiceNote = useCallback(async (id) => {
-        const response = await service.getServiceNote(id);
-        setNote(response);
+        try {
+            const response = await service.getServiceNote(id);
+            setNote(response);
+
+        } catch (e) {
+            console.error("error fetching notes", e)
+        }
     }, []);
 
     const getFeedbacksFromUserId = useCallback(async (id) => {

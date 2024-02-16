@@ -3,7 +3,7 @@ import {
     deleteUserService,
     editUserService,
     getUserService,
-    getUsersService,
+    getUsersService, updateUserRoleService,
 } from '@/services/datatableService';
 import { normalize } from '@/utils/data';
 
@@ -21,7 +21,7 @@ export const useDatatable = () => {
 
         const roleLabels = {
             ROLE_ADMIN: 'Administrateur',
-            ROLE_PROVIDER: 'Client',
+            ROLE_PROVIDER: 'Prestataire',
             ROLE_TEACHER: 'Enseignant',
             ROLE_USER: 'Utilisateur',
         };
@@ -86,6 +86,15 @@ export const useDatatable = () => {
         }
     }, []);
 
+    const updateUserRole = useCallback(async (role, userId) => {
+        const userRole = `ROLE_${role}`
+        try {
+            await updateUserRoleService({userRole, userId});
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
+    }, []);
+
     return {
         fetchAllUsersData,
         fetchUserData,
@@ -95,5 +104,6 @@ export const useDatatable = () => {
         setUserDetails,
         data,
         setData,
+        updateUserRole
     };
 };

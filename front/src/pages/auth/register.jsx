@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
 import Input from '@/components/Input';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import Image from 'next/image';
@@ -11,11 +11,13 @@ import Head from 'next/head';
 import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Register() {
-    const { register } = useAuth();
+    const { isLoading, register } = useAuth();
     const { createToastMessage } = useToast();
     const { t } = useTranslationContext();
     const router = useRouter();
-
+    useEffect(() => {
+        console.log("isadmin@adminaa.com", isLoading)
+    }, [isLoading]);
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -153,6 +155,7 @@ export default function Register() {
                                     />
                                 </div>
                                 <GenericButton
+                                    isLoading={isLoading}
                                     label={t('register')}
                                     onClick={handleSubmitRegister}
                                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-8 py-1 text-center focus:outline-none focus:ring-4 focus:ring-blue-300"

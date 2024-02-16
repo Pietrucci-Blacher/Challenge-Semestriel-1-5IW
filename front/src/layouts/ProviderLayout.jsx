@@ -28,14 +28,7 @@ const sidebarContent = [
         href: '/provider/services',
         label: '',
         labelColor: 'gray',
-    },
-    {
-        icon: HiUser,
-        text: 'Teams',
-        href: '/provider/establishment/team',
-        label: '',
-        labelColor: 'gray',
-    },
+    }
 ];
 const ProviderLayout = ({ children }) => {
     return (
