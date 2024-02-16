@@ -53,25 +53,28 @@ export default function UpdateEstablishment() {
     // };
 
     const handleInputPhotoEstablishmentChange = (file) => {
-        console.log("Type de fichier :", file instanceof Blob); // Vérifiez le type de fichier
-    
+        console.log('Type de fichier :', file instanceof Blob); // Vérifiez le type de fichier
+
         const reader = new FileReader();
         reader.onload = function (event) {
             const url = event.target.result;
             setFormData({ ...formData, photoEstablishment: url });
         };
         reader.onerror = function (event) {
-            console.error("Une erreur s'est produite lors de la lecture du fichier :", event.target.error);
+            console.error(
+                "Une erreur s'est produite lors de la lecture du fichier :",
+                event.target.error,
+            );
         };
-    
+
         if (file instanceof Blob) {
             reader.readAsDataURL(file); // Si le fichier est un Blob, commencez la lecture
         } else {
-            console.error("Le paramètre passé à la méthode readAsDataURL n'est pas un Blob.");
+            console.error(
+                "Le paramètre passé à la méthode readAsDataURL n'est pas un Blob.",
+            );
         }
     };
-    
-    
 
     const handleSubmitUpdate = async (event) => {
         event.preventDefault();
@@ -145,7 +148,7 @@ export default function UpdateEstablishment() {
                         onChange={handleInputZipCodeChange}
                     />
                 </div>
-{/* 
+                {/* 
                 <div>
                     {formData.photoEstablishment && (
                         <img
