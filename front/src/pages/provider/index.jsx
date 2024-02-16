@@ -8,6 +8,7 @@ import { HiOfficeBuilding, HiShoppingCart, HiUserGroup } from 'react-icons/hi';
 import { useTeam } from '@/hooks/useTeam';
 import { Card, Table } from 'flowbite-react';
 import CurvedlineChart from '@/components/Stats/CurvedLineChart';
+import dayjs from 'dayjs';
 
 export default function Provider() {
     const { user } = useAuthContext();
@@ -15,6 +16,9 @@ export default function Provider() {
         useService();
     const { establishments, getMyEstablishments } = useEstablishment();
     const { teamMembers, getCountTeamMembers } = useTeam();
+    /*
+    const { bookingsGraph, recentBookings } = useService();
+*/
 
     useEffect(() => {
         const { id } = user;
@@ -35,6 +39,72 @@ export default function Provider() {
         if (!id) return;
         getCountTeamMembers(id, 'approved');
     }, [getCountTeamMembers, teamMembers, user]);
+    /*
+    function formatMonth(isoString) {
+        return dayjs(isoString).format('YYYY-MM');
+    }
+
+    const reservationCountsByMonth = bookingsGraph.reduce(
+        (acc, { startTime }) => {
+            const month = formatMonth(startTime);
+            acc[month] = (acc[month] || 0) + 1;
+            return acc;
+        },
+        {},
+    );
+
+    const sortedMonths = Object.keys(reservationCountsByMonth).sort((a, b) =>
+        dayjs(a).isAfter(dayjs(b)) ? 1 : -1,
+    );
+
+    const myChartData = {
+        labels: sortedMonths,
+        datasets: [
+            {
+                label: 'Bookings per Month',
+                data: sortedMonths.map(
+                    (month) => reservationCountsByMonth[month],
+                ),
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                tension: 0.4,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Month',
+                },
+                type: 'time',
+                time: {
+                    unit: 'month',
+                    parser: 'YYYY-MM',
+                    tooltipFormat: 'MMMM YYYY',
+                    displayFormats: {
+                        month: 'MMM YYYY',
+                    },
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Number of Bookings',
+                },
+                beginAtZero: true,
+            },
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    };*/
 
     return (
         <div className="flex h-full bg-gray-50 dark:bg-gray-900">
@@ -73,7 +143,7 @@ export default function Provider() {
                         ),
                     })}
                 </div>
-                {/*                <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+                {/*<div className="flex flex-col gap-6 md:flex-row md:gap-8">
                     <Card className="w-full md:w-1/2">
                         <div className="p-4">
                             <h5 className="text-lg font-semibold">
