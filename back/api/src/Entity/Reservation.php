@@ -57,7 +57,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: CreateReservationDto::class,
             name: 'add_reservation',
         ),
-        new Patch(),
+        new Patch(
+            security: "object.getCustomer() == user",
+        ),
         new Delete()
     ],
     normalizationContext: ['groups' => ['reservation:read']]

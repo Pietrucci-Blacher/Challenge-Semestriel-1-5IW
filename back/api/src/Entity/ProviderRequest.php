@@ -26,18 +26,30 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            uriTemplate: '/users/{userId}/provider_requests',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'createdBy', fromClass: ProviderRequest::class),
+            ],
+            security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
+        ),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:create']]
-        ),
-        new Put(
-            normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:update']]
+            denormalizationContext: ['groups' => ['provider_request:create']],
+            validationContext: ['groups' => ['Default', 'provider_request:create']],
         ),
         new Patch(
             normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:update']]
+            denormalizationContext: ['groups' => ['provider_request:update']],
+            security: 'is_granted("ROLE_ADMIN")'
+        ),
+        new Get(
+            security: 'is_granted("ROLE_ADMIN") or object.getCreatedBy() == user',
+            securityMessage: 'Vous ne pouvez voir votre propre demande.'
+        ),
+        new GetCollection(
+            security: 'is_granted("ROLE_ADMIN")',
         ),
         new Get(),
         new GetCollection(
@@ -80,7 +92,11 @@ class ProviderRequest
         'format' => 'binary'
     ])]
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
-    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Assert\NotNull(message: "Le fichier est obligatoire.", groups: ['provider_request:create'])]
+    #[Assert\File(
+        mimeTypes: ['application/pdf'],
+        groups: ['provider_request:create']
+    )]
     #[Groups(["provider_request:create"])]
     public ?File $file = null;
 
@@ -153,12 +169,14 @@ class ProviderRequest
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist(): void {
+    public function onPrePersist(): void
+    {
         $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $event): void {
+    public function onPreUpdate(PreUpdateEventArgs $event): void
+    {
         $this->updatedAt = new \DateTimeImmutable();
     }
 }

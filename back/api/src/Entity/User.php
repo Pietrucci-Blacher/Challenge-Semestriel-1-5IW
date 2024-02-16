@@ -48,20 +48,18 @@ use App\Controller\Auth\EmailConfirmationController;
             name: 'auth_me',
         ),
         new GetCollection(
-            security: 'is_granted("ROLE_USER")',
+            security: 'is_granted("ROLE_ADMIN")',
         ),
         new Post(
             uriTemplate: '/auth/register',
-            processor: UserPasswordHasher::class),
-        new Put(
-            security: 'is_granted("ROLE_USER") and object == user',
-            securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
+            denormalizationContext: ['groups' => ['user:write']],
             processor: UserPasswordHasher::class
         ),
         new Patch(
+            denormalizationContext: ['groups' => ['user:write']],
             security: 'is_granted("ROLE_USER") and object == user or is_granted("ROLE_ADMIN")',
             securityMessage: 'Vous ne pouvez mettre à jour que votre propre profil.',
-            processor: UserPasswordHasher::class
+            processor: UserPasswordHasher::class,
         ),
         new Patch(
             uriTemplate: '/users/{id}/change_role',
@@ -112,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Assert\NotBlank(groups: ['user:create'])]
-    #[Groups(['user:create', 'user:update'])]
+    #[Groups(['user:create', 'user:update', 'user:write'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column]
@@ -132,10 +130,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $emailConfirmationToken = null;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
-//    #[Groups('user:read')]
-    private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Establishment::class, orphanRemoval: true)]
     private Collection $establishments;
@@ -160,7 +154,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->birthdate = new DateTimeImmutable();
         $this->establishments = new ArrayCollection();
@@ -304,35 +297,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getAuthor() === $this) {
-                $comment->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * A visual identifier that represents this user.
