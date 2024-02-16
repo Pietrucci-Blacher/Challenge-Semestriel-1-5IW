@@ -20,6 +20,7 @@ export default function Request() {
         try {
             approveRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
+            router.push('/admin/requests');
         } catch (e) {
             createToastMessage(
                 'error',
@@ -32,6 +33,7 @@ export default function Request() {
         try {
             declineRequest({ id });
             createToastMessage('success', 'La demande a bien été mis à jour');
+            router.push('/admin/requests');
         } catch (e) {
             createToastMessage(
                 'error',
@@ -45,11 +47,17 @@ export default function Request() {
             {request ? (
                 <div className="max-w-4xl mx-auto my-8 p-4 shadow-lg">
                     <div className="mb-6">
-                        <h5 className="text-xl font-semibold mb-2">Information de la demande pour la Requetes: {id}</h5>
-                        <span className="font-cool">Status: {request?.status}</span>
+                        <h5 className="text-xl font-semibold mb-2">
+                            Information de la demande pour la Requetes: {id}
+                        </h5>
+                        <span className="font-cool">
+                            Status: {request?.status}
+                        </span>
                     </div>
                     <div className="mb-6">
-                        <h5 className="text-xl font-semibold mb-2">Information user</h5>
+                        <h5 className="text-xl font-semibold mb-2">
+                            Information user
+                        </h5>
                         <span className="font-cool">
                             Lastname: {request?.createdBy?.lastname}
                         </span>{' '}
@@ -82,13 +90,13 @@ export default function Request() {
                         />
                     </div>
                     <div className="mb-6">
-                            <FlowbiteButton
-                                as={Link}
-                                href={`http://localhost/media/${request?.filePath}`}
-                            >
-                                Voir le Kbis en format PDF
-                            </FlowbiteButton>
-                        </div>
+                        <FlowbiteButton
+                            as={Link}
+                            href={`http://localhost/media/${request?.filePath}`}
+                        >
+                            Voir le Kbis en format PDF
+                        </FlowbiteButton>
+                    </div>
                 </div>
             ) : (
                 'Chargement'

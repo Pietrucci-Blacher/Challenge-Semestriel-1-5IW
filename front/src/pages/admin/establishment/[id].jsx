@@ -27,7 +27,7 @@ export default function ShowEstablishment() {
     };
 
     const renderEstablishment = establishment ? (
-        <div >            
+        <div>
             <h2 className="text-lg font-semibold">{establishment.name}</h2>
             <div className="mt-4 space-y-1">
                 <p>Rue: {establishment.street}</p>
@@ -39,12 +39,11 @@ export default function ShowEstablishment() {
                 className="mt-4 h-48 w-full"
                 height="200"
                 style={{
-                    aspectRatio: "600/200",
-                    objectFit: "cover",
+                    aspectRatio: '600/200',
+                    objectFit: 'cover',
                 }}
                 width="600"
                 src={establishment.photoEstablishment}
-
             />
             <p className="mt-4">
                 Propriétaire: {establishment.owner.firstname}{' '}
