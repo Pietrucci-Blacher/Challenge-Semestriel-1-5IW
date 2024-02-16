@@ -280,7 +280,7 @@ export default function Id() {
                     </Card>
                     <img
                         className="w-full object-cover rounded-lg col-span-1"
-                        src={`https://localhost/media/${service?.imagePath}`}
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service?.imagePath}`}
                         alt="..."
                     />
                 </div>

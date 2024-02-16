@@ -51,6 +51,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
         ),
+        new Get(),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/provider_requests',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'createdBy', fromClass: User::class),
+            ]
+//            security:
+
+
+        ),
+        new GetCollection()
     ],
     normalizationContext: ['groups' => ['provider_request:read']]
 )]

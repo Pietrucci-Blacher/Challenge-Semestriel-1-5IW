@@ -6,17 +6,15 @@ import { useEffect, useState } from 'react';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import nextI18NextConfig from '../../../next-i18next.config';
 import Head from 'next/head';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 export default function Login() {
     const { createToastMessage } = useToast();
     const { user, isLogged } = useAuthContext();
     const { login } = useAuth();
-    const { t, i18n } = useTranslation('loginPage');
+    const { t } = useTranslationContext();
     const router = useRouter();
 
     const [formData, setFormData] = useState({
@@ -170,19 +168,4 @@ export default function Login() {
             </div>
         </div>
     );
-}
-
-export async function getStaticProps(context) {
-    const { locale } = context;
-
-    return {
-        props: {
-            // pass the translation props to the page component
-            ...(await serverSideTranslations(
-                locale ?? 'fr',
-                ['loginPage'],
-                nextI18NextConfig,
-            )),
-        },
-    };
 }

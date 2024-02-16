@@ -10,7 +10,7 @@ export default function Planning() {
     const { workplaces, getWorkplaces } = useTeam();
     const [selectedEstablishment, setSelectedEstablishment] = useState(null);
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getWorkplaces(id);
     }, [user, getWorkplaces]);

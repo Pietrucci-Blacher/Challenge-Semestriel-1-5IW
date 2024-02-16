@@ -18,7 +18,7 @@ export default function Provider() {
     const { getLastBookings } = useService();
 
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getMyEstablishments(id);
     }, [user, getMyEstablishments]);

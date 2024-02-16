@@ -1,23 +1,23 @@
 import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
 import Input from '@/components/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import Image from 'next/image';
 import { HomeIcon } from '@heroicons/react/16/solid';
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import nextI18NextConfig from '../../../next-i18next.config';
 import Head from 'next/head';
+import { useTranslationContext } from '@/providers/TranslationProvider';
 
 export default function Register() {
-    const { register } = useAuth();
+    const { isLoading, register } = useAuth();
     const { createToastMessage } = useToast();
-    const { t, i18n } = useTranslation('registerPage');
+    const { t } = useTranslationContext();
     const router = useRouter();
-
+    useEffect(() => {
+        console.log('isadmin@adminaa.com', isLoading);
+    }, [isLoading]);
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -155,6 +155,7 @@ export default function Register() {
                                     />
                                 </div>
                                 <GenericButton
+                                    isLoading={isLoading}
                                     label={t('register')}
                                     onClick={handleSubmitRegister}
                                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-8 py-1 text-center focus:outline-none focus:ring-4 focus:ring-blue-300"
@@ -196,19 +197,4 @@ export default function Register() {
             </div>
         </div>
     );
-}
-
-export async function getStaticProps(context) {
-    const { locale } = context;
-
-    return {
-        props: {
-            // pass the translation props to the page component
-            ...(await serverSideTranslations(
-                locale ?? 'fr',
-                ['registerPage'],
-                nextI18NextConfig,
-            )),
-        },
-    };
 }

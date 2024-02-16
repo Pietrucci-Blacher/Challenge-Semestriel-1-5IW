@@ -4,28 +4,14 @@ import { HiChartPie, HiInbox, HiShoppingBag, HiTable } from 'react-icons/hi';
 const sidebarContent = [
     {
         icon: HiInbox,
-        text: 'Establishment',
-        href: '/teacher/',
-        label: '',
-        labelColor: 'gray',
-    },
-    {
-        icon: HiShoppingBag,
-        text: 'Services',
-        href: '/teacher/',
+        text: 'My reservations',
+        href: '/teacher/reservation',
         label: '',
         labelColor: 'gray',
     },
     {
         icon: HiTable,
-        text: 'Reviews',
-        href: '#',
-        label: '',
-        labelColor: 'gray',
-    },
-    {
-        icon: HiTable,
-        text: 'Planning',
+        text: 'My Planning',
         href: '/teacher/planning',
         label: '',
         labelColor: 'gray',

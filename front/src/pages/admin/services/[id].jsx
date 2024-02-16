@@ -45,7 +45,7 @@ export default function ShowService() {
             </div>
             <div className="w-[500px] rounded overflow-hidden">
                 <Image
-                    src={`https://localhost/media/${service.imagePath}`}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service.imagePath}`}
                     alt="image"
                     layout="responsive"
                     width={500}

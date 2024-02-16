@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const httpClient = axios.create({
-    baseURL: 'https://localhost',
+    baseURL: `https://localhost/`,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -39,7 +39,7 @@ const handleResponseError = async (error) => {
         if (!refreshToken) {
             return Promise.reject(error);
         }
-        const response = await axios.post('https://localhost/token/refresh', {
+        const response = await axios.post(`https://localhost/token/refresh`, {
             refresh_token: refreshToken,
         });
         const newJwtToken = response?.data?.token;
@@ -69,7 +69,6 @@ const makeRequest = async (method, url, data, config) => {
         });
     } catch (error) {
         throw error.response?.data;
-    } finally {
     }
 };
 

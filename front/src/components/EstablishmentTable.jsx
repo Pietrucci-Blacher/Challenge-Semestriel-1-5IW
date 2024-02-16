@@ -1,37 +1,55 @@
-// EstablishmentTablePagination.jsx
 import { useEffect, useState } from 'react';
-import { Pagination, Table } from 'flowbite-react'; // Importez le composant de pagination et de tableau
+import { Pagination, Table, Button } from 'flowbite-react'; // Importez le composant Button
 import Link from 'next/link';
-import Spinner from '@/components/Spinner'; // Importez le composant Spinner
+import Spinner from '@/components/Spinner';
+import Input from '@/components/Input';
+import { useAuthContext } from '@/providers/AuthProvider';
 
-export default function EstablishmentTablePagination({ establishments }) {
+export default function EstablishmentTablePagination({
+    establishments,
+    baseUrl,
+}) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5); // Nombre d'établissements par page
+    const [itemsPerPage] = useState(5);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterType, setFilterType] = useState('name');
+    const { user } = useAuthContext();
 
     useEffect(() => {
-        setCurrentPage(1); // Réinitialiser la page actuelle lorsque les établissements changent
+        setCurrentPage(1);
     }, [establishments]);
 
     if (!establishments) {
-        return <Spinner />; // Afficher le Spinner tant que les établissements sont en cours de chargement
+        return <Spinner />;
     }
 
-    // Index du premier et du dernier établissement sur la page actuelle
+    const filteredEstablishments = establishments.filter((establishment) =>
+        establishment[filterType]
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+    );
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-    // Établissements à afficher sur la page actuelle
-    const currentEstablishments = establishments.slice(
+    const currentEstablishments = filteredEstablishments.slice(
         indexOfFirstItem,
         indexOfLastItem,
     );
 
-    // Nombre total de pages
-    const totalPages = Math.ceil(establishments.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredEstablishments.length / itemsPerPage);
 
-    // Fonction pour changer de page
     const onPageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchTerm(value);
+        setCurrentPage(1);
+    };
+
+    const handleFilterTypeChange = (type) => {
+        setFilterType(type);
+        setCurrentPage(1);
     };
 
     const renderEstablishments = currentEstablishments.map((establishment) => (
@@ -46,7 +64,15 @@ export default function EstablishmentTablePagination({ establishments }) {
             <Table.Cell>
                 <Link
                     className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    href={`/establishment/${establishment.id}`}
+                    href={
+                        user.roles[0] === 'ROLE_USER'
+                            ? `establishment/${establishment.id}`
+                            : user.roles[0] === 'ROLE_PROVIDER'
+                              ? `establishment/${establishment.id}`
+                              : user.roles[0] === 'ROLE_ADMIN'
+                                ? `establishment/${establishment.id}`
+                                : '#'
+                    }
                 >
                     Voir
                 </Link>
@@ -56,6 +82,28 @@ export default function EstablishmentTablePagination({ establishments }) {
 
     return (
         <div>
+            <div className="mb-4 flex">
+                <Input
+                    type="text"
+                    placeholder="Rechercher un établissement"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="mr-2"
+                />
+                {/* Utilisez un menu déroulant simple pour regrouper les boutons de filtre */}
+                <select
+                    label="Filtrer par"
+                    className="mr-2"
+                    value={filterType}
+                    onChange={(e) => handleFilterTypeChange(e.target.value)}
+                >
+                    <option value="name">Nom</option>
+                    <option value="street">Rue</option>
+                    <option value="city">Ville</option>
+                    <option value="zipCode">Code postal</option>
+                    {/* Ajoutez d'autres types de filtres si nécessaire */}
+                </select>
+            </div>
             <Table hoverable>
                 <Table.Head>
                     <Table.HeadCell>Nom</Table.HeadCell>
