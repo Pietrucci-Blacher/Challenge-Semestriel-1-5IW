@@ -30,16 +30,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             normalizationContext: ['groups' => ['provider_request:read']],
             denormalizationContext: ['groups' => ['provider_request:create']]
         ),
-        new Put(
-            normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:update']]
-        ),
         new Patch(
             normalizationContext: ['groups' => ['provider_request:read']],
-            denormalizationContext: ['groups' => ['provider_request:update']]
+            denormalizationContext: ['groups' => ['provider_request:update']],
+            security: 'is_granted("ROLE_ADMIN")'
         ),
-        new Get(),
-        new GetCollection()
+        new Get(
+            security: 'is_granted("ROLE_ADMIN") or object.getCreatedBy() == user)',
+            securityMessage: 'Vous ne pouvez voir votre propre profil.'
+        ),
+        new GetCollection(
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
     ],
     normalizationContext: ['groups' => ['provider_request:read']]
 )]
@@ -70,9 +72,15 @@ class ProviderRequest
         'format' => 'binary'
     ])]
     #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "filePath")]
-    #[Assert\NotNull(groups: ['media_object_create'])]
+    #[Assert\NotNull(message: "Le fichier est obligatoire.", groups: ['provider_request:create'])]
+    #[Assert\File(
+        mimeTypes: ['application/pdf'],
+        groups: ['provider_request:create']
+    )]
     #[Groups(["provider_request:create"])]
     public ?File $file = null;
+
+
 
     #[ORM\Column(nullable: true)]
     #[Groups(["provider_request:read"])]
@@ -143,12 +151,14 @@ class ProviderRequest
     }
 
     #[ORM\PrePersist]
-    public function onPrePersist(): void {
+    public function onPrePersist(): void
+    {
         $this->createdAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
-    public function onPreUpdate(PreUpdateEventArgs $event): void {
+    public function onPreUpdate(PreUpdateEventArgs $event): void
+    {
         $this->updatedAt = new \DateTimeImmutable();
     }
 }
