@@ -3,7 +3,7 @@ name: CD Pipeline
 on:
   push:
     branches:
-      - feat/pipline-cd
+      - main
 
 jobs:
   build_and_push:
