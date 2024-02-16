@@ -112,17 +112,6 @@ export default function Profile() {
                     )}
                 </div>
 
-                <FlowbiteButton
-                    as={Link}
-                    href="/apply-to-be-provider"
-                    outline
-                    gradientDuoTone="cyanToBlue"
-                >
-                    Faire une demande pour devenir prestataire
-                </FlowbiteButton>
-            </Tabs.Item>
-            <Tabs.Item title="Modifier ton profile" icon={HiAdjustments}>
-                <h2>Rôle de l&apos;utilisateur : {user?.roles}</h2>
                 {user ? (
                     <>
                         <form
@@ -165,6 +154,19 @@ export default function Profile() {
                 ) : (
                     <div>Chargement...</div>
                 )}
+                <form
+                    className="flex max-w-md flex-col gap-4 mt-4"
+                    onSubmit={handleProfileUpdateSubmit}
+                >
+                    <FlowbiteButton
+                        as={Link}
+                        href="/apply-to-be-provider"
+                        outline
+                        gradientDuoTone="cyanToBlue"
+                    >
+                        Faire une demande pour devenir prestataire
+                    </FlowbiteButton>
+                </form>
             </Tabs.Item>
         </Tabs>
     );

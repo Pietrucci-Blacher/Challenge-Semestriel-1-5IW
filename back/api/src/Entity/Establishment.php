@@ -31,7 +31,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['establishment:read']],
-//          security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_USER")',
         ),
         new GetCollection(
             uriTemplate: '/users/{userId}/establishments',
@@ -41,13 +41,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
             security: " is_granted('ROLE_ADMIN') or is_granted('VIEW_MY_RESOURCES', request)"
         ),
         new Post(
-            security: 'is_granted("ROLE_PROVIDER")',
-            controller: CreateImageEstablishmentController::class,
-            inputFormats: ['multipart' => ['multipart/form-data']],
-        ),
-        new Put(
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
-            securityMessage: 'Vous ne pouvez modifier que vos établissements.',
+            security: 'is_granted("ROLE_PROVIDER")'
         ),
         new Patch(
             security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getOwner() == user)',
@@ -96,16 +90,6 @@ class Establishment
     #[ORM\Column(length: 5, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $zipCode = null;
-    
-    #[ApiProperty(openapiContext: [
-        'type' => 'string',
-        'format' => 'binary'
-    ])]
-    #[Vich\UploadableField(mapping: "media_object", fileNameProperty: "photoEstablishment")]
-    #[Assert\NotNull(groups: ['media_object_create'])]
-    #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
-    public ?File $image = null;
-    
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['establishment:read', 'establishment:write', 'team_invitation:read', 'service:read'])]
     private ?string $photoEstablishment = null;
@@ -121,7 +105,7 @@ class Establishment
 
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Feedback::class)]
     private Collection $feedback;
-  
+
     #[ORM\OneToMany(mappedBy: 'establishment', targetEntity: Reservation::class, orphanRemoval: true)]
     private Collection $reservations;
 
@@ -245,7 +229,7 @@ class Establishment
         $this->photoEstablishment = $photoEstablishment;
         return $this;
     }
-  
+
 
     /**
      * @return Collection<int, TeamInvitation>
@@ -336,6 +320,7 @@ class Establishment
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Feedback>

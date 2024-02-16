@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
             uriTemplate: '/users/{userId}/schedules',
             uriVariables: [
                 'userId' => new Link(toProperty: 'assignedTo', fromClass: Schedule::class),
-            ],
+            ]
         ),
         new GetCollection(
             uriTemplate: '/establishments/{establishmentId}/schedules',

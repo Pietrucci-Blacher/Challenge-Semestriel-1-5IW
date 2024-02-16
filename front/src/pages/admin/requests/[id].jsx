@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/useToast';
 
 export default function Request() {
     const { createToastMessage } = useToast();
-    const { request, getRequest, approveRequest, declineRequest } =
+    const { request, getRequest, isLoading, approveRequest, declineRequest } =
         useRequestsProvider();
     const router = useRouter();
     const { id } = router.query;
@@ -72,16 +72,30 @@ export default function Request() {
                             Numero Kbis: {request?.kbis}
                         </span>
                     </div>
+                    <div className="mb-6">
+                        <FlowbiteButton
+                            as={Link}
+                            href={`http://localhost/media/${request?.filePath}`}
+                        >
+                            Voir le Kbis en format PDF
+                        </FlowbiteButton>
+                    </div>
                     <div className="flex gap-4 mb-6">
-                        <GenericButton
-                            label="Accepter la demande"
-                            onClick={handleApproveRequest}
-                        />
-                        <br />
-                        <GenericButton
-                            label="Refuser la demande"
-                            onClick={handleDeclineRequest}
-                        />
+                        {request?.status === 'pending' && (
+                            <>
+                                <GenericButton
+                                    label="Accepter la demande"
+                                    onClick={handleApproveRequest}
+                                    isLoading={isLoading}
+                                />
+                                <br />
+                                <GenericButton
+                                    label="Refuser la demande"
+                                    onClick={handleDeclineRequest}
+                                    isLoading={isLoading}
+                                />
+                            </>
+                        )}
                     </div>
                     <div className="mb-6">
                             <FlowbiteButton

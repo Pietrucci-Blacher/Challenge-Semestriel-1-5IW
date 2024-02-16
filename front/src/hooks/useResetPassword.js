@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     askResetPasswordRequest,
     checkResetTokenRequest,
@@ -19,7 +19,7 @@ export function useResetPassword() {
         }
     }
 
-    async function checkResetToken(token) {
+    const checkResetToken = useCallback(async (token) => {
         setIsLoading(true);
         try {
             await checkResetTokenRequest(token);
@@ -29,7 +29,7 @@ export function useResetPassword() {
             setIsLoading(false);
             setIsTokenValid(false);
         }
-    }
+    }, []);
 
     async function updatePassword(token, newPassword) {
         setIsLoading(true);

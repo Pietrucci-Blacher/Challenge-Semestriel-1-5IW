@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDatatable } from '@/hooks/useDatatable';
 import dayjs from 'dayjs';
-import { Button, Modal } from 'flowbite-react';
+import { Button, Modal, Select } from 'flowbite-react';
 import { useToast } from '@/hooks/useToast';
 const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
     const [sortedData, setSortedData] = useState([]);
@@ -29,6 +29,7 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         fetchAllUsersData,
         editUser,
         deleteUser,
+        updateUserRole,
     } = useDatatable();
 
     useEffect(() => {
@@ -246,7 +247,10 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
         const firstname = formData.get('firstname');
         const lastname = formData.get('lastname');
         const email = formData.get('email');
-
+        const role = formData.get('role');
+        if (role) {
+            updateUserRole(role, userId);
+        }
         try {
             await editUser(userId, {
                 firstname,
@@ -506,6 +510,32 @@ const DataTable = ({ endpoint, title, itemsPerPage, selectableColumns }) => {
                                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                             required
                                                         />
+                                                    </div>
+                                                    <div className="w-full sm:w-1/2 px-2 mb-4">
+                                                        <label
+                                                            htmlFor={`user-role-${row.id}`}
+                                                            className="block text-sm font-medium text-gray-700"
+                                                        >
+                                                            Role
+                                                        </label>
+                                                        <Select
+                                                            name="role"
+                                                            id="user-roles"
+                                                        >
+                                                            <option value=""></option>
+                                                            <option value="ADMIN">
+                                                                Administrateur
+                                                            </option>
+                                                            <option value="PROVIDER">
+                                                                Prestataire
+                                                            </option>
+                                                            <option value="TEACHER">
+                                                                Enseignant
+                                                            </option>
+                                                            <option value="USER">
+                                                                Utilisateur
+                                                            </option>
+                                                        </Select>
                                                     </div>
                                                 </div>
                                                 <div className="flex justify-end">
