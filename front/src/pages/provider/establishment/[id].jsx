@@ -303,7 +303,7 @@ export default function ShowEstablishment() {
                                     <p>City: {establishment.city}</p>
                                     <p>Zip Code: {establishment.zipCode}</p>
                                     <img
-                                        class="h-auto max-w-xs"
+                                        className="h-auto max-w-xs"
                                         src={establishment.photoEstablishment}
                                     />
                                 </div>
