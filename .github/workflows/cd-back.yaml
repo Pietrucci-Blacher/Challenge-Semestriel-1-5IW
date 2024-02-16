@@ -24,6 +24,8 @@ jobs:
           push: true
           tags: ossama98/monapp_php:latest
           target: php
+          cache-from: type=registry,ref=ossama98/monapp_php:latest
+          cache-to: type=inline
 
   deploy_to_ec2:
     needs: build_and_push
