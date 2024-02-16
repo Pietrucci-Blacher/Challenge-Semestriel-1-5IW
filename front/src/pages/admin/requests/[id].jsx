@@ -48,7 +48,7 @@ export default function Request() {
                 <div className="max-w-4xl mx-auto my-8 p-4 shadow-lg">
                     <div className="mb-6">
                         <h5 className="text-xl font-semibold mb-2">
-                            Information de la demande pour la Requetes:
+                            Information de la demande pour la Requetes: {id}
                         </h5>
                         <span className="font-cool">
                             Status: {request?.status}
@@ -102,6 +102,14 @@ export default function Request() {
                                 />
                             </>
                         )}
+                    </div>
+                    <div className="mb-6">
+                        <FlowbiteButton
+                            as={Link}
+                            href={`http://localhost/media/${request?.filePath}`}
+                        >
+                            Voir le Kbis en format PDF
+                        </FlowbiteButton>
                     </div>
                 </div>
             ) : (

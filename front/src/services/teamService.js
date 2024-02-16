@@ -22,9 +22,9 @@ const removeMemberFromTeamService = async (id) => {
     return await httpClient.delete(`${BASE_URL}/${id}`);
 };
 
-const getEstablishmentTeamInvitationService = async (establishmentId) => {
+const getEstablishmentTeamInvitationService = async (userId, status) => {
     const response = await httpClient.get(
-        `establishments/${establishmentId}/${BASE_URL}`,
+        `users/${userId}/team_invitations/${status}/count`,
     );
     return response['hydra:member'] ?? [];
 };
@@ -32,6 +32,11 @@ const getEstablishmentTeamInvitationService = async (establishmentId) => {
 const getUserInvitationService = async (userId) => {
     const response = await httpClient.get(`users/${userId}/${BASE_URL}`);
     return response['hydra:member'] ?? [];
+};
+
+const getCountTeamMembersByStatusService = async (status) => {
+    const response = await httpClient.get(`/s?joinRequestStatus=${status}`);
+    return response['hydra:totalItems'] ?? 0;
 };
 
 export {

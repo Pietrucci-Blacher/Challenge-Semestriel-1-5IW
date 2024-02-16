@@ -3,6 +3,7 @@ import { Button as FlowbiteButton, Table } from 'flowbite-react';
 import Link from 'next/link';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useEstablishment } from '@/hooks/useEstablishment';
+import MapComponent from '@/components/Map';
 
 export default function ListEstablishment() {
     const { user } = useAuthContext();
@@ -38,14 +39,12 @@ export default function ListEstablishment() {
                 <Table.Cell>{establishment.city}</Table.Cell>
                 <Table.Cell>{establishment.zipCode}</Table.Cell>
                 <Table.Cell>
-                    <Link
+                    <FlowbiteButton
+                        as={Link}
                         href={`/provider/establishment/${establishment.id}`}
-                        passHref
                     >
-                        <a className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                            Voir
-                        </a>
-                    </Link>
+                        Voir
+                    </FlowbiteButton>
                 </Table.Cell>
             </Table.Row>
         ));
@@ -70,6 +69,7 @@ export default function ListEstablishment() {
             >
                 Créer un établissement
             </FlowbiteButton>
+            <MapComponent />
         </>
     );
 }

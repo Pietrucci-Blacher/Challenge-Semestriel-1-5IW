@@ -47,11 +47,12 @@ export default function ListServices() {
                 <Table.Cell>{service.price}</Table.Cell>
                 <Table.Cell>{service.establishment_id}</Table.Cell>
                 <Table.Cell>
-                    <Link href={`/provider/services/${service.id}`} passHref>
-                        <a className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                            Voir
-                        </a>
-                    </Link>
+                    <FlowbiteButton
+                        as={Link}
+                        href={`/provider/services/${service.id}`}
+                    >
+                        Voir
+                    </FlowbiteButton>
                 </Table.Cell>
             </Table.Row>
         ));

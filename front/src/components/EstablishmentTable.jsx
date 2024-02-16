@@ -67,9 +67,10 @@ export default function EstablishmentTablePagination({
                     href={
                         user.roles[0] === 'ROLE_USER'
                             ? `establishment/${establishment.id}`
-                            : user.roles[0] === 'ROLE_PROVIDER'
+                            : user.roles[0] === 'ROLE_PROVIDER' ||
+                                'ROLE_TEACHER'
                               ? `establishment/${establishment.id}`
-                              : user.roles[0] === 'ROLE_ADMIN'
+                              : user.roles[0] === 'ROLE_ADMIN' || 'ROLE_TEACHER'
                                 ? `establishment/${establishment.id}`
                                 : '#'
                     }

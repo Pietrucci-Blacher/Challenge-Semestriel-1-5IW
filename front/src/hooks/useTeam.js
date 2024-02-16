@@ -15,6 +15,7 @@ export const useTeam = () => {
     const [establishmentTeam, setEstablishmentTeam] = useState([]);
     const [workplaces, setWorkplaces] = useState([]);
     const [userPengingInvitation, setUserPengingInvitation] = useState([]);
+    const [teamMembers, setTeamMembers] = useState([]);
 
     const addMemberToTeam = async (payload) => {
         return await addMemberToTeamService(payload);
@@ -40,7 +41,7 @@ export const useTeam = () => {
 
     const getEstablishmentTeam = useCallback(async (establishmentId) => {
         const data =
-            await getEstablishmentTeamInvitationService(establishmentId);
+            await getEstablishmentTeamInvitationService(establishmentId, 'Approved');
         setEstablishmentTeam(data);
         setEstablishmentId(establishmentId);
     }, []);
@@ -62,6 +63,14 @@ export const useTeam = () => {
         setUserPengingInvitation(pendingInvitation);
     }, []);
 
+    const getCountTeamMembers = async (userId, status) => {
+        const data = await getEstablishmentTeamInvitationService(
+            userId,
+            status,
+        );
+        setTeamMembers(data.length);
+    };
+
     return {
         establishmentTeam,
         workplaces,
@@ -74,5 +83,7 @@ export const useTeam = () => {
         getEstablishmentTeam,
         getWorkplaces,
         getUserPendingInvitation,
+        teamMembers,
+        getCountTeamMembers,
     };
 };
