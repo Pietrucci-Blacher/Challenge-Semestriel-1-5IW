@@ -40,7 +40,7 @@ export default function ListEstablishment() {
                 <Table.Cell>
                     <FlowbiteButton
                         as={Link}
-                        href="/provider/establishment/${establishment.id}"
+                        href={`/provider/establishment/${establishment.id}`}
                     >
                         Voir
                     </FlowbiteButton>
