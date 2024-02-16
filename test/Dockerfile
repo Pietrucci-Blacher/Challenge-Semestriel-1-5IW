@@ -1,10 +1,6 @@
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine as php
 
-ARG DATABASE_URL
-
-ENV DATABASE_URL=${DATABASE_URL}
-
 RUN apk update
 RUN apk add curl
 
