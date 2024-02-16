@@ -1,32 +1,55 @@
 import { Avatar, DarkThemeToggle, Dropdown, Navbar } from 'flowbite-react';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
+import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 
 export default function Header() {
     const { user } = useAuthContext();
+    const { t, i18n } = useTranslation('common');
+    const changeTo = i18n.language === 'en' ? 'fr' : 'en';
+
+    const handleLanguageChange = () => {
+        i18n.changeLanguage(changeTo);
+    };
+
+    const flag = changeTo === 'fr' ? '🇬🇧' : '🇫🇷';
+    const languageLabel = changeTo === 'fr' ? 'English' : 'Français';
 
     return (
-        <header className="sticky top-0">
-            <Navbar fluid rounded>
+        <header className="sticky top-0 z-50 bg-white shadow-lg">
+            <Navbar fluid={true} rounded={true}>
                 <Navbar.Brand href="/">
                     <Image
-                        alt="Flowbite logo"
+                        alt={t('logoAlt')}
                         height="32"
-                        src="/images/logo.svg"
+                        src="/favicons/icon.svg"
                         width="32"
+                        className="mr-3 h-8"
                     />
+                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+                        Coursia
+                    </span>
                 </Navbar.Brand>
 
-                <div className="flex md:order-2">
-                    <DarkThemeToggle className="mx-4" />
-                    {user && (
+                <div className="flex md:order-2 items-center gap-x-4">
+                    <button
+                        onClick={handleLanguageChange}
+                        className="px-4 py-2 text-sm font-medium flex items-center gap-x-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300"
+                        title="Change Language"
+                    >
+                        {flag} {languageLabel}
+                    </button>
+
+                    {user ? (
                         <Dropdown
                             inline
+                            className="z-50"
                             label={
                                 <Avatar
-                                    alt="User settings"
+                                    alt={t('userSettings')}
                                     img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                                    rounded
+                                    rounded={true}
                                 />
                             }
                         >
@@ -39,30 +62,72 @@ export default function Header() {
                                 </span>
                             </Dropdown.Header>
                             <Dropdown.Item href="/profile">
-                                Profile
+                                {t('profile')}
                             </Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item href="/auth/logout">
-                                Sign out
+                                {t('signOut')}
                             </Dropdown.Item>
                         </Dropdown>
+                    ) : (
+                        <div className="flex gap-x-2">
+                            <Link
+                                href="/auth/login"
+                                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                {t('login')}
+                            </Link>
+                            <Link
+                                href="/auth/register"
+                                className="px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50 focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                {t('register')}
+                            </Link>
+                        </div>
                     )}
+
                     <Navbar.Toggle />
                 </div>
 
-                <Navbar.Collapse>
-                    <Navbar.Link href="#" active>
-                        Home
+                <Navbar.Collapse
+                    className="navbar-collapse"
+                    style={{ listStyleType: 'none', paddingLeft: 0 }}
+                >
+                    <Navbar.Link
+                        href="/"
+                        active
+                        className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
+                    >
+                        {t('home')}
                     </Navbar.Link>
-                    <Navbar.Link href="#">About</Navbar.Link>
-                    <Navbar.Link href="/services">Services</Navbar.Link>
-                    <Navbar.Link href="#">Contact</Navbar.Link>
+                    <Navbar.Link
+                        href="/about"
+                        className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
+                    >
+                        {t('about')}
+                    </Navbar.Link>
                     {user && (
-                        <Navbar.Link href="/establishment/">
-                            Etablissements
-                        </Navbar.Link>
+                        <>
+                            <Navbar.Link
+                                href="/services"
+                                className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
+                            >
+                                {t('services')}
+                            </Navbar.Link>
+                            <Navbar.Link
+                                href="/establishment"
+                                className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
+                            >
+                                {t('establishments')}
+                            </Navbar.Link>
+                        </>
                     )}
-                    <Navbar.Link href="#">Services</Navbar.Link>
+                    <Navbar.Link
+                        href="/contact"
+                        className="list-none px-2 py-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded"
+                    >
+                        {t('contact')}
+                    </Navbar.Link>
                 </Navbar.Collapse>
             </Navbar>
         </header>

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import GenericButton from '@/components/GenericButton';
 import { useService } from '@/hooks/useService';
 import { convertDataToHtml } from '@/utils/utils';
+import Spinner from '@/components/Spinner';
+import Image from 'next/image';
 
 export default function ShowService() {
     const router = useRouter();
@@ -41,14 +43,18 @@ export default function ShowService() {
                     {convertDataToHtml(service.body.blocks)}
                 </div>
             </div>
-            <img
-                className="w-[500px] rounded"
-                src={`https://localhost/media/${service.imagePath}`}
-                alt="image"
-            />
+            <div className="w-[500px] rounded overflow-hidden">
+                <Image
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service.imagePath}`}
+                    alt="image"
+                    layout="responsive"
+                    width={500}
+                    height={Math.round(500 * 0.75)} // Assuming you want to maintain a  4:3 aspect ratio
+                />
+            </div>
         </>
     ) : (
-        'Chargement...'
+        <Spinner />
     );
 
     return (

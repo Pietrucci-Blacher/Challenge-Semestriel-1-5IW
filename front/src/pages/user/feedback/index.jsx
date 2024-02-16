@@ -20,7 +20,7 @@ export default function ListFeedback() {
     const { feedbacks, getFeedbacksFromUserId } = useFeedback();
 
     useEffect(() => {
-        const { id } = user;
+        const id = user?.id;
         if (!id) return;
         getFeedbacksFromUserId(id);
     }, [user, getFeedbacksFromUserId]);

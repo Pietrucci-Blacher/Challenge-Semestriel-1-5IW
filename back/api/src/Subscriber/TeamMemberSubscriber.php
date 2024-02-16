@@ -3,7 +3,7 @@
 namespace App\Subscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use App\Entity\TeamMember;
+use App\Entity\TeamInvitation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -29,13 +29,13 @@ final class TeamMemberSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
         $statusCode = $response->getStatusCode();
         $resourceClass = $request->attributes->get("_api_resource_class");
-        if ($resourceClass !== TeamMember::class) return;
+        if ($resourceClass !== TeamInvitation::class) return;
         if ($statusCode === 200 && $method === "PATCH"){
             /**
              * @var $currentData TeamMember
              */
             $currentData = $request->attributes->get("data");
-            $currentStatus = $currentData->getStatus();
+            $currentStatus = $currentData->getJoinRequestStatus();
             if ($currentStatus === "Approved"){
                 $user = $currentData->getMember();
                 $user->setRoles(["ROLE_TEACHER"]);

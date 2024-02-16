@@ -2,7 +2,6 @@
 
 namespace App\Controller\Provider;
 
-use App\Entity\MediaObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -24,16 +23,10 @@ final class UpdateServiceController extends AbstractController
     {
         $uploadedFile = $request->files->get('image');
 
-        $service = $this->serviceRepository->find($id);
-        if (!$service) {
-            throw new BadRequestHttpException('Service not found');
+        if ($uploadedFile && !in_array($uploadedFile->getMimeType(), ['image/jpeg', 'image/png'])) {
+            throw new BadRequestHttpException('The file must be a jpeg or a png');
         }
 
-        if ($uploadedFile) {
-            $service->file = $uploadedFile;
-            $this->serviceRepository->save($service);
-        }
-
-        return $service;
+        return $request->attributes->get('data');
     }
 }

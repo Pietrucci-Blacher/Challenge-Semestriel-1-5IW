@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Provider\UpdateServiceController;
+use App\Controller\Provider\CreateImageServiceController;
 use App\Attributes\UserField;
 
 #[Vich\Uploadable]
@@ -34,17 +35,22 @@ use App\Attributes\UserField;
                 'establishmentId' => new Link(toProperty: 'establishment', fromClass: Establishment::class),
             ]
         ),
+        new GetCollection(
+            uriTemplate: '/users/{userId}/services',
+            uriVariables: [
+                'userId' => new Link(toProperty: 'author', fromClass: User::class),
+            ]
+        ),
         new GetCollection(),
         new Post(
+            controller: CreateImageServiceController::class,
             inputFormats: ['multipart' => ['multipart/form-data']],
             normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:write']],
-            security: 'is_granted("ROLE_PROVIDER")'
+            security: 'is_granted("ROLE_PROVIDER")',
         ),
         new Get(
             normalizationContext: ['groups' => ['service:read']],
-            security: 'is_granted("ROLE_ADMIN") or (is_granted("ROLE_PROVIDER") and object.getAuthor() == user)',
-            securityMessage: 'Vous ne pouvez accéder qu\'à vos établissements.',
         ),
         new Post(
             uriTemplate: '/services/{id}/update',
@@ -71,7 +77,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['service:read'])]
+    #[Groups(['service:read', 'reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -83,7 +89,7 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['service:read', 'service:write'])]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
     private ?float $price = null;
 
@@ -91,8 +97,8 @@ class Service
     #[Groups(['service:read', 'service:write'])]
     private ?array $body = [];
 
-    #[ORM\Column()]
-    #[Groups(['service:read', 'service:write'])]
+    #[ORM\Column]
+    #[Groups(['service:read', 'service:write', 'reservation:read'])]
     #[Context(['disable_type_enforcement' => true])]
     private ?int $duration = null;
 

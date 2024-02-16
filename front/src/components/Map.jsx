@@ -6,6 +6,8 @@ import {
     InfoWindow,
 } from '@react-google-maps/api';
 import { useEstablishment } from '@/hooks/useEstablishment';
+import Image from 'next/image';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 const MapComponent = () => {
     const [map, setMap] = useState(null);
@@ -13,6 +15,7 @@ const MapComponent = () => {
     const { establishments, getAllEstablishments } = useEstablishment();
     const [center, setCenter] = useState({ lat: 48.8566, lng: 2.3522 });
     const [zoom, setZoom] = useState(12);
+    const { user } = useAuthContext();
 
     const [mapOptions, setMapOptions] = useState({
         zoomControl: true,
@@ -32,15 +35,16 @@ const MapComponent = () => {
 
     useEffect(() => {
         getAllEstablishments();
-    }, []);
+    }, [getAllEstablishments]);
 
     useEffect(() => {
         Promise.all(
             (establishments || []).map(async (establishment) => {
                 try {
+                    const address = `${establishment.street}, ${establishment.city}, ${establishment.zipCode}`;
                     const response = await fetch(
                         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-                            establishment.street,
+                            address,
                         )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
                     );
                     const data = await response.json();
@@ -52,8 +56,9 @@ const MapComponent = () => {
                             name: establishment.name,
                             street: establishment.street,
                             position: { lat: location.lat, lng: location.lng },
-                            photo: 'images/immeubles-parisiens-paris-zigzag.jpg',
-                            //photo: establishment.photoEstablishment,
+                            photo:
+                                establishment.photoEstablishment ||
+                                '/images/immeubles-parisiens-paris-zigzag.jpg',
                             city: establishment.city,
                             zipCode: establishment.zipCode,
                         };
@@ -140,7 +145,15 @@ const MapComponent = () => {
                                 }}
                             >
                                 <a
-                                    href={`/provider/establishment/${selectedMarker.id}`}
+                                    href={
+                                        user.roles[0] === 'ROLE_USER'
+                                            ? `establishment/${selectedMarker.id}`
+                                            : user.roles[0] === 'ROLE_PROVIDER'
+                                              ? `establishment/${selectedMarker.id}`
+                                              : user.roles[0] === 'ROLE_ADMIN'
+                                                ? `establishment/${selectedMarker.id}`
+                                                : '#'
+                                    }
                                 >
                                     <p
                                         style={{
@@ -151,15 +164,21 @@ const MapComponent = () => {
                                     >
                                         {selectedMarker.name}
                                     </p>
-                                    <img
-                                        src={selectedMarker.photo}
-                                        alt="image1"
+                                    <div
                                         style={{
                                             maxWidth: '100%',
                                             height: 'auto',
-                                            borderRadius: '5px 5px 0 0',
+                                            borderRadius: '5px  5px  0  0',
                                         }}
-                                    />
+                                    >
+                                        <Image
+                                            src={selectedMarker.photo}
+                                            alt="image1"
+                                            layout="responsive"
+                                            width={36}
+                                            height={36}
+                                        />
+                                    </div>
                                 </a>
                                 <div
                                     style={{

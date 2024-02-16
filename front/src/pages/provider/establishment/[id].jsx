@@ -23,21 +23,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { MdDashboard } from 'react-icons/md';
 import { convertDataToHtml } from '@/utils/utils';
-import {
-    HiStar,
-    HiSpeakerphone,
-    HiOutlineUpload,
-    HiOutlineHeart,
-    HiViewGrid,
-    HiBadgeCheck,
-    HiKey,
-    HiOutlineArrowRight,
-    HiArrowDown,
-} from 'react-icons/hi';
+import EstablishmentReservations from '@/components/EstablishmentReservations';
+import { HiStar, HiOutlineHeart } from 'react-icons/hi';
 import { Rating } from '@/components/Rating';
+import { useToast } from '@/hooks/useToast';
+import { Badge, Card, Modal } from 'flowbite-react';
+import Input from '@/components/Input';
 
 export default function ShowEstablishment() {
     const router = useRouter();
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [memberEmail, setMemberEmail] = useState('');
     const { id } = router.query;
     const { establishment, getEstablishmentById } = useEstablishment();
     const { establishmentServices, getEstablishmentServices } = useService();
@@ -46,11 +42,12 @@ export default function ShowEstablishment() {
         getEstablishmentTeam,
         reInviteMemberToTeam,
         removeMemberFromTeam,
+        addMemberToTeam,
     } = useTeam();
     const {
         schedules,
         getEstablishmentSchedules,
-        getSchedulesByUserAndEstablishment,
+        getSchedulesByTeacherAndEstablishment,
     } = useSchedule();
     const {
         feedbacks,
@@ -59,8 +56,20 @@ export default function ShowEstablishment() {
         getEstablishmentNote,
     } = useFeedback();
     const [points, setPoints] = useState([]);
-
+    const { createToastMessage } = useToast();
     const userColors = {};
+
+    const handleInputEmail = (value) => {
+        setMemberEmail(value);
+    };
+
+    const openConfirmModal = (memberId) => {
+        setShowConfirmModal(true);
+    };
+
+    const closeConfirmModal = () => {
+        setShowConfirmModal(false);
+    };
 
     const generateRandomColor = () => {
         const letters = '0123456789ABCDEF';
@@ -126,14 +135,52 @@ export default function ShowEstablishment() {
         }
     };
 
+    const handleAddMember = async (event) => {
+        try {
+            if (!id || !memberEmail) return;
+            const payload = {
+                email: memberEmail,
+                establishment: `establishments/${id}`,
+            };
+            await addMemberToTeam(payload);
+            getEstablishmentTeam(id);
+            setShowConfirmModal(false);
+            setMemberEmail('');
+        } catch (error) {
+            createToastMessage('error', 'Une erreur est survenue');
+        }
+    };
+
+    const handleReinviteMember = async (memberId) => {
+        try {
+            await reInviteMemberToTeam(memberId);
+            getEstablishmentTeam(id);
+            createToastMessage('success', 'Invitation envoyée');
+        } catch (error) {
+            createToastMessage('error', 'Une erreur est survenue');
+        }
+    };
+
+    const handleRemoveMember = async (memberId) => {
+        try {
+            await removeMemberFromTeam(memberId);
+            getEstablishmentTeam(id);
+            createToastMessage('success', "Membre retiré de l'équipe");
+        } catch (error) {
+            createToastMessage('error', 'Une erreur est survenue');
+        }
+    };
+
     const handleSelectEmployee = async (event) => {
         const userId = event.target.value;
-        if (!userId) getEstablishmentSchedules(id);
-        else
-            getSchedulesByUserAndEstablishment({
+        if (!userId) {
+            await getEstablishmentSchedules(id);
+        } else {
+            await getSchedulesByTeacherAndEstablishment({
                 establishmentId: id,
-                userId: userId,
+                teacherId: userId,
             });
+        }
     };
 
     const RatingList = memo(() => (
@@ -192,15 +239,18 @@ export default function ShowEstablishment() {
                     <div className="my-4 w-1/2">
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Equipe pour {establishment?.name}:
+                            <FlowbiteButton
+                                color="info"
+                                onClick={openConfirmModal}
+                            >
+                                Inviter
+                            </FlowbiteButton>
                         </h1>
-                        <>
-                            <TeamCard
-                                members={establishmentTeam}
-                                onReinviteMember={reInviteMemberToTeam}
-                                onRemoveMember={removeMemberFromTeam}
-                            />
-                        </>
-
+                        <TeamCard
+                            members={establishmentTeam}
+                            onReinviteMember={handleReinviteMember}
+                            onRemoveMember={handleRemoveMember}
+                        />
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Planning de mon equipe:
                         </h1>
@@ -240,23 +290,25 @@ export default function ShowEstablishment() {
                 </Tabs.Item>
                 <Tabs.Item title="Etablissement Info" icon={MdDashboard}>
                     <div className="mt-4">
-                        <>
-                            {establishment && (
-                                <>
-                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {establishment.name}
-                                        <HiStar className="inline-block mx-1" />
-                                        {detailed.note}
-                                    </h1>
-                                    <RatingList />
-                                    <div className="mt-2">
-                                        <p>Street: {establishment.street}</p>
-                                        <p>City: {establishment.city}</p>
-                                        <p>Zip Code: {establishment.zipCode}</p>
-                                    </div>
-                                </>
-                            )}
-                        </>
+                        {establishment && (
+                            <>
+                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {establishment.name}
+                                    <HiStar className="inline-block mx-1" />
+                                    {detailed.note}
+                                </h1>
+                                <RatingList />
+                                <div className="mt-2">
+                                    <p>Street: {establishment.street}</p>
+                                    <p>City: {establishment.city}</p>
+                                    <p>Zip Code: {establishment.zipCode}</p>
+                                    <img
+                                        class="h-auto max-w-xs"
+                                        src={establishment.photoEstablishment}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                     <GenericButton onClick={handleDelete} label="Supprimer" />
                     <FlowbiteButton
@@ -295,39 +347,62 @@ export default function ShowEstablishment() {
                         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             Feedback pour {establishment?.name}:
                         </h1>
-                        <>
-                            {feedbacks.length > 0 ? (
-                                feedbacks.map((feedback, index) => (
-                                    <div className="mt-2" key={index}>
-                                        <p>
-                                            {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
-                                            <HiStar className="inline-block mx-1" />
-                                            {feedback.note}
-                                        </p>
-                                        <p>
-                                            {Object.keys(
-                                                feedback.detailedNote,
-                                            ).map((key) =>
+                        {feedbacks.length > 0 ? (
+                            feedbacks.map((feedback, index) => (
+                                <div className="mt-2" key={index}>
+                                    <p>
+                                        {`${feedback.reviewer.firstname} ${feedback.reviewer.lastname}`}
+                                        <HiStar className="inline-block mx-1" />
+                                        {feedback.note}
+                                    </p>
+                                    <p>
+                                        {Object.keys(feedback.detailedNote).map(
+                                            (key) =>
                                                 Rating(
                                                     key,
                                                     feedback.detailedNote,
                                                 ),
-                                            )}
-                                        </p>
-                                        <p className="py-2">
-                                            {feedback.comment}
-                                        </p>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="mt-2">
-                                    <p>Aucun feedback</p>
+                                        )}
+                                    </p>
+                                    <p className="py-2">{feedback.comment}</p>
                                 </div>
-                            )}
-                        </>
+                            ))
+                        ) : (
+                            <div className="mt-2">
+                                <p>Aucun feedback</p>
+                            </div>
+                        )}
                     </div>
                 </Tabs.Item>
+                <Tabs.Item title="Reservations" icon={HiUserCircle}>
+                    <EstablishmentReservations establishmentId={id} />
+                </Tabs.Item>
             </Tabs>
+            <Modal show={showConfirmModal} onClose={closeConfirmModal}>
+                <Modal.Header>Inviter un utilisateur</Modal.Header>
+                <Modal.Body>
+                    <div className="space-y-6">
+                        <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            Inviter un utilisateur à votre équipe
+                            <Input
+                                type="text"
+                                placeholder="email"
+                                value={memberEmail}
+                                onChange={handleInputEmail}
+                                className="w-full"
+                            />
+                        </p>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <FlowbiteButton color="gray" onClick={handleAddMember}>
+                        Inviter
+                    </FlowbiteButton>
+                    <FlowbiteButton color="gray" onClick={closeConfirmModal}>
+                        Retour
+                    </FlowbiteButton>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 }

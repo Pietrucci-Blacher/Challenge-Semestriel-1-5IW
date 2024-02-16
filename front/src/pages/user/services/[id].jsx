@@ -34,6 +34,7 @@ import { useFeedback } from '@/hooks/useFeedback';
 import ModalComponent from '@/components/Modal';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { Rating } from '@/components/Rating';
+import dayjs from 'dayjs';
 
 export default function Id() {
     const { user } = useAuthContext();
@@ -52,7 +53,7 @@ export default function Id() {
 
     const { service, getService } = useService();
     const { establishmentTeam, getEstablishmentTeam } = useTeam();
-    const { schedules, getUserSchedules } = useSchedule();
+    const { schedules, getTeacherSchedules } = useSchedule();
     const { createReservation } = useReservation();
 
     const router = useRouter();
@@ -62,7 +63,7 @@ export default function Id() {
         getService(id);
         getFeedbacksFromServiceId(id);
         getServiceNote(id);
-    }, [router, getService, getFeedbacksFromServiceId, getServiceNote]);
+    }, [id, router, getService, getFeedbacksFromServiceId, getServiceNote]);
 
     useEffect(() => {
         if (!service) return;
@@ -75,15 +76,26 @@ export default function Id() {
         const idEmployee = e.target.value;
         setSelectedTeacher(idEmployee);
         if (!idEmployee) return;
-        getUserSchedules(idEmployee);
+        getTeacherSchedules(idEmployee);
     };
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedTime, setSelectedTime] = useState('');
+
     const handleSelectSchedule = (schedule) => {
         setSelectedSchedule(schedule);
+
+        const formattedDate = dayjs(schedule.startTime).format('DD/MM/YYYY');
+        setSelectedDate(formattedDate);
+
+        const startTime = dayjs(schedule.startTime)
+            .subtract(1, 'hour')
+            .format('HH:mm');
+        setSelectedTime(startTime);
     };
 
     const handleReserve = () => {
-        const { date, time } = selectedSchedule;
-        if (!date && !time) {
+        const { startTime, endTime } = selectedSchedule;
+        if (!startTime && !endTime) {
             // TODOS:
             // utilise le toast pour retourner un probl
         }
@@ -148,22 +160,10 @@ export default function Id() {
     RatingList.displayName = 'RatingList';
 
     const handleConfirmReservation = async () => {
-        const { date, time } = selectedSchedule;
-        const duration = service?.duration;
-        const timezoneOffset = 60;
-
-        const startTime = new Date(`${date}T${time}`);
-        startTime.setHours(startTime.getHours() + 1);
-        const endTime = new Date(startTime);
-
-        endTime.setMinutes(startTime.getMinutes() + duration);
-
-        const formattedStartTime = startTime.toISOString();
-        const formattedEndTime = endTime.toISOString();
-
+        const { startTime, endTime } = selectedSchedule;
         const payload = {
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
+            startTime: startTime,
+            endTime: endTime,
             establishment_id: service?.establishment?.id,
             service_id: service?.id,
             teacher_id: selectedTeacher,
@@ -173,7 +173,7 @@ export default function Id() {
             : payload;
         setOpenModal(false);
         await createReservation(payload);
-        await getUserSchedules(selectedTeacher);
+        await getTeacherSchedules(selectedTeacher);
         setSpecialRequest('');
         setSelectedSchedule({});
     };
@@ -254,53 +254,58 @@ export default function Id() {
         <></>
     );
 
+    const hours_service = Math.floor(service?.duration / 60);
+    const minutes_service = service?.duration % 60;
+
     return (
         <>
             <div className="container">
-                <div className="grid h-56 grid-cols-3 gap-4 sm:h-64 xl:h-80 2xl:h-96">
-                    <Carousel indicators={false} className="col-span-1">
-                        <img
-                            className="w-full h-full object-cover"
-                            src={`https://localhost/media/${service?.imagePath}`}
-                            alt="..."
-                        />
-                    </Carousel>
-                    <div className="col-span-2 overflow-auto">
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
+                <div className="lg:grid grid-cols-3 gap-4">
+                    <Card className="col-span-2 mb-4">
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
                             {service?.title}
                         </h2>
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
                             {service?.description}
                         </p>
-                        {renderBody}
-                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words my-3">
-                            Duration: {service?.duration} min
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
+                            {renderBody}
                         </p>
-                        <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words mt-4">
+                        <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
+                            Durées: {hours_service}h{minutes_service}
+                        </p>
+                        <p className="font-bold tracking-tight text-gray-900 dark:text-white break-words">
                             {service?.price} €
                         </p>
-                    </div>
+                    </Card>
+                    <img
+                        className="w-full object-cover rounded-lg col-span-1"
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service?.imagePath}`}
+                        alt="..."
+                    />
                 </div>
 
                 <div className="mt-8">
                     <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words mb-4">
-                        Establishment Info :
+                        Info sur l&eapos;Établissement :
                     </h2>
                     <div className=" grid grid-cols-3 gap-4">
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Name : {service?.establishment?.name}
+                                Nom : {service?.establishment?.name}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
                                 Date de creation :{' '}
-                                {service?.establishment?.createdAt}
+                                {new Date(
+                                    service?.establishment?.createdAt,
+                                ).toLocaleString('fr-FR')}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="font-normal text-gray-700 dark:text-gray-400 break-words">
-                                Adresse : {service?.establishment?.street}{' '}
+                                Adresse : {service?.establishment?.street} ,
                                 {service?.establishment?.city}{' '}
                                 {service?.establishment?.zipCode}
                             </p>
@@ -411,12 +416,12 @@ export default function Id() {
                             <RatingList />
                         </div>
                         <ReviewsList />
-                        <button
+                        {/*<button
                             className="py-3 px-8 text-base border border-solid border-black rounded-lg font-semibold transition duration-150 ease-in-out transform active:scale-90 hover:bg-[#f7f7f7] mt-8"
                             onClick={() => setMore('feedback')}
                         >
                             Ajouter un avis
-                        </button>
+                        </button>*/}
                     </p>
                 </div>
             </div>
@@ -428,7 +433,7 @@ export default function Id() {
                             <div className="mb-2 block">
                                 <Label
                                     htmlFor=""
-                                    value={`Vous sur le point de reserver un crenau de ${service?.duration} minutes`}
+                                    value={`Vous êtes sur le point de reserver un crénaux de ${hours_service}h${minutes_service}`}
                                     className="text-xl"
                                 />
                             </div>
@@ -439,8 +444,8 @@ export default function Id() {
                                 />
                             </div>
                             <ul className="list-disc pl-5 space-y-2">
-                                <li>Date : {selectedSchedule?.date}</li>
-                                <li>Heure : {selectedSchedule?.time}</li>
+                                <li>Date : {selectedDate}</li>
+                                <li>Heure : {selectedTime}</li>
                                 <li>
                                     Professeur :{' '}
                                     {getTeacherInfo(selectedTeacher)}

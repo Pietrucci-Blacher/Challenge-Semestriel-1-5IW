@@ -42,6 +42,7 @@ export default function ShowService() {
     } = useFeedback();
 
     useEffect(() => {
+        if (!id) return;
         getService(id);
         getFeedbacksFromServiceId(id);
         getServiceNote(id);
@@ -98,7 +99,7 @@ export default function ShowService() {
             </div>
             <img
                 className="w-[500px] rounded"
-                src={`https://localhost/media/${service.imagePath}`}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_API_URL}media/${service.imagePath}`}
                 alt="image"
             />
         </>
