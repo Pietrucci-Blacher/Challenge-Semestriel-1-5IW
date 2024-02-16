@@ -38,14 +38,12 @@ export default function ListEstablishment() {
                 <Table.Cell>{establishment.city}</Table.Cell>
                 <Table.Cell>{establishment.zipCode}</Table.Cell>
                 <Table.Cell>
-                    <Link
-                        href={`/provider/establishment/${establishment.id}`}
-                        passHref
+                    <FlowbiteButton
+                        as={Link}
+                        href="/provider/establishment/${establishment.id}"
                     >
-                        <a className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                            Voir
-                        </a>
-                    </Link>
+                        Voir
+                    </FlowbiteButton>
                 </Table.Cell>
             </Table.Row>
         ));
