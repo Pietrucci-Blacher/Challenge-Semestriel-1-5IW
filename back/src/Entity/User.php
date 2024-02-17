@@ -1,17 +1,17 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Link;
-use src\Controller\UpdateUserRoleController;
-use src\Entity\Establishment;
-use src\Entity\Feedback;
-use src\Entity\Reservation;
-use src\Entity\Schedule;
-use src\Entity\Service;
-use src\Entity\TeamInvitation;
-use src\Repository\UserRepository;
+use App\Controller\UpdateUserRoleController;
+use App\Entity\Establishment;
+use App\Entity\Feedback;
+use App\Entity\Reservation;
+use App\Entity\Schedule;
+use App\Entity\Service;
+use App\Entity\TeamInvitation;
+use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,11 +26,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use src\State\UserPasswordHasher;
+use App\State\UserPasswordHasher;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use src\Controller\Auth\MeController;
-use src\Controller\Auth\EmailConfirmationController;
+use App\Controller\Auth\MeController;
+use App\Controller\Auth\EmailConfirmationController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]

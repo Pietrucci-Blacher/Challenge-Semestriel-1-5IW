@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Controller\Provider;
+namespace App\Controller\Provider;
 
 
 
-use src\Entity\TeamInvitation;
+use App\Entity\TeamInvitation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use src\Service\Email;
+use App\Service\Email;
 
 class ReSendNotificationEmployeeController  extends AbstractController
 {

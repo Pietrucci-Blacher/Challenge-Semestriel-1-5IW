@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Encoder;
+namespace App\Encoder;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Serializer;
+namespace App\Serializer;
 
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;

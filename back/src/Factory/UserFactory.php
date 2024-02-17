@@ -1,9 +1,9 @@
 <?php
 
-namespace src\Factory;
+namespace App\Factory;
 
-use src\Entity\User;
-use src\Repository\UserRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;

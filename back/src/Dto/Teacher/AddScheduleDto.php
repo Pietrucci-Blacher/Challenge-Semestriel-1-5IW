@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Dto\Teacher;
+namespace App\Dto\Teacher;
 
 use DateTimeImmutable;
 

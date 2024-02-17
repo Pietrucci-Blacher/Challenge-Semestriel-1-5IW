@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -9,17 +9,17 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use src\Controller\Provider\InviteTeamInvitationController;
-use src\Controller\Provider\ReSendNotificationEmployeeController;
-use src\Dto\InviteTeamInvitationDto;
-use src\Entity\Establishment;
-use src\Repository\TeamInvitationRepository;
+use App\Controller\Provider\InviteTeamInvitationController;
+use App\Controller\Provider\ReSendNotificationEmployeeController;
+use App\Dto\InviteTeamInvitationDto;
+use App\Entity\Establishment;
+use App\Repository\TeamInvitationRepository;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use src\Entity\User;
+use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use src\Controller\Provider\CountTeamInvitation;
+use App\Controller\Provider\CountTeamInvitation;
 
 #[ORM\Entity(repositoryClass: TeamInvitationRepository::class)]
 #[ApiResource(

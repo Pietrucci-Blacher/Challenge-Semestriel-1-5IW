@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Serializer;
+namespace App\Serializer;
 
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use src\Attributes\UserField;
+use App\Attributes\UserField;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class InjectUserInfoDenormalizer implements DenormalizerInterface

@@ -1,8 +1,8 @@
 <?php
 
-namespace src\Controller\Schedules;
+namespace App\Controller\Schedules;
 
-use src\Repository\ScheduleRepository;
+use App\Repository\ScheduleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GetSchedulesByUserAndEstablishment extends AbstractController

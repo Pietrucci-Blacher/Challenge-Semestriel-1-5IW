@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Controller;
+namespace App\Controller;
 
-use src\Entity\User;
-use src\Repository\EstablishmentRepository;
-use src\Repository\ReservationRepository;
-use src\Repository\ScheduleRepository;
-use src\Repository\ServiceRepository;
-use src\Repository\UserRepository;
+use App\Entity\User;
+use App\Repository\EstablishmentRepository;
+use App\Repository\ReservationRepository;
+use App\Repository\ScheduleRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;

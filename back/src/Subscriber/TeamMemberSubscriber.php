@@ -1,10 +1,10 @@
 <?php
 
-namespace src\Subscriber;
+namespace App\Subscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Subscriber\TeamMember;
-use src\Entity\TeamInvitation;
+use App\Entity\TeamInvitation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

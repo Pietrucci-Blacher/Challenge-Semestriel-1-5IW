@@ -1,11 +1,11 @@
 <?php
 
 
-namespace src\Controller\Auth;
+namespace App\Controller\Auth;
 
-use src\Dto\UpdatePasswordRequestDto;
-use src\Repository\ResetPasswordRepository;
-use src\Repository\UserRepository;
+use App\Dto\UpdatePasswordRequestDto;
+use App\Repository\ResetPasswordRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

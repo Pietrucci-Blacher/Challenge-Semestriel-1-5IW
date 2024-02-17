@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -9,16 +9,16 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Tests\Fixtures\Metadata\Get;
-use src\Attributes\UserField;
-use src\Controller\Reservation\CreateReservation;
-use src\Dto\CreateReservationDto;
-use src\Repository\ReservationRepository;
+use App\Attributes\UserField;
+use App\Controller\Reservation\CreateReservation;
+use App\Dto\CreateReservationDto;
+use App\Repository\ReservationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use src\Entity\Establishment;
-use src\Entity\Schedule;
-use src\Entity\Service;
-use src\Entity\User;
+use App\Entity\Establishment;
+use App\Entity\Schedule;
+use App\Entity\Service;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;

@@ -1,9 +1,9 @@
 <?php
 
-namespace src\Controller\Provider;
+namespace App\Controller\Provider;
 
-use src\Repository\EstablishmentRepository;
-use src\Repository\UserRepository;
+use App\Repository\EstablishmentRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

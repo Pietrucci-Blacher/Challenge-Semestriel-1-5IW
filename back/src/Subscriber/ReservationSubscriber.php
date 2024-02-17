@@ -1,10 +1,10 @@
 <?php
 
-namespace src\Subscriber;
+namespace App\Subscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use Doctrine\ORM\EntityManagerInterface;
-use src\Entity\Reservation;
+use App\Entity\Reservation;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

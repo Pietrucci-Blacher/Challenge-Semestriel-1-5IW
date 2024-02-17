@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\Link;
-use src\Attributes\UserField;
-use src\Controller\Schedules\GetSchedulesByUserAndEstablishment;
-use src\Entity\Establishment;
-use src\Entity\Reservation;
-use src\Repository\ScheduleRepository;
+use App\Attributes\UserField;
+use App\Controller\Schedules\GetSchedulesByUserAndEstablishment;
+use App\Entity\Establishment;
+use App\Entity\Reservation;
+use App\Repository\ScheduleRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
-use src\Entity\User;
+use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;

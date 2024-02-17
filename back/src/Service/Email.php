@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Service;
+namespace App\Service;
 use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\ApiException;
 use Brevo\Client\Configuration as BrevoConfiguration;
 use Brevo\Client\Model\SendSmtpEmail;
 use Exception;
 use GuzzleHttp\Client;
-use src\Entity\User;
+use App\Entity\User;
 
 class Email {
     private BrevoConfiguration $config;

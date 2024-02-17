@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Attributes;
+namespace App\Attributes;
 
 #[\Attribute]
 class UserField

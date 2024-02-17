@@ -1,14 +1,14 @@
 <?php
 
-namespace src\Controller;
+namespace App\Controller;
 
-use src\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Serializer\SerializerInterface;
-use src\Repository\FeedbackRepository;
+use App\Repository\FeedbackRepository;
 
 #[AsController]
 class GetServiceNote extends AbstractController

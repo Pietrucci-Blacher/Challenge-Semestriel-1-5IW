@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Dto;
+namespace App\Dto;
 
 class UpdatePasswordRequestDto
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace src\Story;
+namespace App\Story;
 
 use Zenstruck\Foundry\Story;
-use src\Factory\UserFactory;
+use App\Factory\UserFactory;
 
 final class DefaultUsersStory extends Story
 {

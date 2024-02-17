@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Repository;
+namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

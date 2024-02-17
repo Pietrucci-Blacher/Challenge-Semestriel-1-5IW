@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\Link;
-use src\Entity\Feedback;
-use src\Entity\Schedule;
-use src\Entity\TeamInvitation;
-use src\Repository\EstablishmentRepository;
-use src\Attributes\UserField;
+use App\Entity\Feedback;
+use App\Entity\Schedule;
+use App\Entity\TeamInvitation;
+use App\Repository\EstablishmentRepository;
+use App\Attributes\UserField;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,9 +19,9 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
-use src\Entity\Reservation;
-use src\Entity\Service;
-use src\Entity\User;
+use App\Entity\Reservation;
+use App\Entity\Service;
+use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Controller\Provider;
+namespace App\Controller\Provider;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use src\Entity\Service;
-use src\Repository\ServiceRepository;
+use App\Entity\Service;
+use App\Repository\ServiceRepository;
 
 #[AsController]
 final class UpdateServiceController extends AbstractController

@@ -1,17 +1,17 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use src\Dto\AskResetPasswordDto;
-use src\Dto\UpdatePasswordRequestDto;
-use src\Repository\ResetPasswordRepository;
+use App\Dto\AskResetPasswordDto;
+use App\Dto\UpdatePasswordRequestDto;
+use App\Repository\ResetPasswordRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use src\Controller\Auth\AskResetPasswordController;
-use src\Controller\Auth\UpdatePasswordController;
-use src\Controller\Auth\ValidateResetPasswordController;
+use App\Controller\Auth\AskResetPasswordController;
+use App\Controller\Auth\UpdatePasswordController;
+use App\Controller\Auth\ValidateResetPasswordController;
 
 
 #[ORM\Entity(repositoryClass: ResetPasswordRepository::class)]

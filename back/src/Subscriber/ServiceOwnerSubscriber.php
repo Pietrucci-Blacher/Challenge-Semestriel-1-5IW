@@ -1,10 +1,10 @@
 <?php
 
-namespace src\Subscriber;
+namespace App\Subscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Security;
-use src\Entity\Service;
+use App\Entity\Service;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 
 

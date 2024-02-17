@@ -1,16 +1,16 @@
 <?php
 
-namespace src\Subscriber;
+namespace App\Subscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use src\Entity\ProviderRequest;
+use App\Entity\ProviderRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use src\Service\Email;
-use src\Entity\User;
-use src\Repository\UserRepository;
+use App\Service\Email;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final class ProviderRequestSubscriber implements EventSubscriberInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
@@ -12,23 +12,23 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
-use src\Entity\Establishment;
-use src\Entity\Feedback;
-use src\Entity\Reservation;
-use src\Repository\ServiceRepository;
+use App\Entity\Establishment;
+use App\Entity\Feedback;
+use App\Entity\Reservation;
+use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use src\Entity\User;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
-use src\Controller\Provider\UpdateServiceController;
-use src\Controller\Provider\CreateImageServiceController;
-use src\Attributes\UserField;
+use App\Controller\Provider\UpdateServiceController;
+use App\Controller\Provider\CreateImageServiceController;
+use App\Attributes\UserField;
 
 #[Vich\Uploadable]
 #[ApiResource(

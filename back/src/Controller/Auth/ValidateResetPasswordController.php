@@ -1,9 +1,9 @@
 <?php
 
-namespace src\Controller\Auth;
+namespace App\Controller\Auth;
 
 
-use src\Repository\ResetPasswordRepository;
+use App\Repository\ResetPasswordRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

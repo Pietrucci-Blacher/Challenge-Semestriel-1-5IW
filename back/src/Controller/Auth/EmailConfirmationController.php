@@ -1,15 +1,15 @@
 <?php
 
-namespace src\Controller\Auth;
+namespace App\Controller\Auth;
 
-use src\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Serializer\SerializerInterface;
-use src\Repository\UserRepository;
-use src\Service\Email;
+use App\Repository\UserRepository;
+use App\Service\Email;
 
 #[AsController]
 class EmailConfirmationController extends AbstractController

@@ -1,11 +1,11 @@
 <?php
 
-namespace src\Controller\Auth;
+namespace App\Controller\Auth;
 
-use src\Dto\AskResetPasswordDto;
-use src\Entity\ResetPassword;
-use src\Repository\UserRepository;
-use src\Service\Email;
+use App\Dto\AskResetPasswordDto;
+use App\Entity\ResetPassword;
+use App\Repository\UserRepository;
+use App\Service\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

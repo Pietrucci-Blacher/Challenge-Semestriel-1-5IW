@@ -1,9 +1,9 @@
 <?php
 
-namespace src\Entity;
+namespace App\Entity;
 
-use src\Entity\Establishment;
-use src\Repository\FeedbackRepository;
+use App\Entity\Establishment;
+use App\Repository\FeedbackRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -13,12 +13,12 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
-use src\Entity\Service;
-use src\Entity\User;
+use App\Entity\Service;
+use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Link;
-use src\Controller\GetEstablishmentNote;
-use src\Controller\GetServiceNote;
+use App\Controller\GetEstablishmentNote;
+use App\Controller\GetServiceNote;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 

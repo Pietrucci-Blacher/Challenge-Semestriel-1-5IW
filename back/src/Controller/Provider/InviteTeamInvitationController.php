@@ -1,19 +1,19 @@
 <?php
 
-namespace src\Controller\Provider;
+namespace App\Controller\Provider;
 
-use src\Dto\InviteTeamInvitationDto;
-use src\Entity\TeamInvitation;
-use src\Entity\User;
-use src\Repository\EstablishmentRepository;
-use src\Repository\TeamInvitationRepository;
-use src\Repository\UserRepository;
+use App\Dto\InviteTeamInvitationDto;
+use App\Entity\TeamInvitation;
+use App\Entity\User;
+use App\Repository\EstablishmentRepository;
+use App\Repository\TeamInvitationRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use src\Service\Email;
+use App\Service\Email;
 
 class InviteTeamInvitationController extends AbstractController
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace src\Controller\Reservation;
+namespace App\Controller\Reservation;
 
-use src\Dto\CreateReservationDto;
-use src\Entity\Reservation;
-use src\Entity\Schedule;
-use src\Repository\EstablishmentRepository;
-use src\Repository\ReservationRepository;
-use src\Repository\ScheduleRepository;
-use src\Repository\ServiceRepository;
-use src\Repository\UserRepository;
+use App\Dto\CreateReservationDto;
+use App\Entity\Reservation;
+use App\Entity\Schedule;
+use App\Repository\EstablishmentRepository;
+use App\Repository\ReservationRepository;
+use App\Repository\ScheduleRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
