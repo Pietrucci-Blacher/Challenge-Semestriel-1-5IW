@@ -40,8 +40,10 @@ export const useTeam = () => {
     };
 
     const getEstablishmentTeam = useCallback(async (establishmentId) => {
-        const data =
-            await getEstablishmentTeamInvitationService(establishmentId);
+        const data = await getEstablishmentTeamInvitationService(
+            establishmentId,
+            'Approved',
+        );
         setEstablishmentTeam(data);
         setEstablishmentId(establishmentId);
     }, []);
