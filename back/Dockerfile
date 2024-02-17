@@ -29,6 +29,9 @@ RUN apk add libpq-dev && \
 RUN apk add libzip-dev && apk add zip && \
     docker-php-ext-install zip
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV PATH="${PATH}:/root/.composer/vendor/bin"
+
 # Installing Composer
 COPY --from=composer:2.6.6 /usr/bin/composer /usr/bin/composer
 
