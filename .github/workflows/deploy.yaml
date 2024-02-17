@@ -23,6 +23,9 @@ jobs:
           target: php
           cache-from: type=registry,ref=ossama98/monapp_php:latest
           cache-to: type=inline
+          build-args: |
+            DATABASE_URL=${{secrets.DATABASE_URL}}
+            BREVO_API_KEY: ${{secrets.BREVO_API_KEY}}
           
   deploy_to_ec2:
     needs: build_and_push
