@@ -6,79 +6,43 @@ env:
   IMAGE_NAME: challenge-api
 
 jobs:
-#  build-backend:
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: back
-#    needs: [ ci-back, ci-front ]
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3
-#
-#      - name: Cache Docker layers
-#        uses: actions/cache@v4
-#        with:
-#          path: |
-#            ~/.docker
-#          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
-#          restore-keys: |
-#            ${{ runner.os }}-docker-
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v3
-#        with:
-#            username: ${{ secrets.DOCKERHUB_USERNAME }}
-#            password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Build Docker images
-#        uses: docker/bake-action@v4
-#        with:
-#          workdir: back
-#          pull: true
-#          load: true
-#          files: |
-#            docker-compose.yml
-#            docker-compose.override.yml
-#          set: |
-#            *.cache-from=type=gha,scope=${{ github.ref }}
-#            *.cache-from=type=gha,scope=refs/heads/main
-#            *.cache-to=type=gha,scope=${{ github.ref }},mode=max
 
-#  deploy-backend:
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: back
-#    needs: [ci-back, ci-front, build-backend]
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Docker Buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v3
-#        with:
-#          version: latest
-#
-#      - name: Push
-#        uses: docker/build-push-action@v5
-#        with:
-#            context: back
-#            builder: ${{ steps.buildx.outputs.name }}
-#            push: true
-#            tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-#            cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-#            cache-to: type=inline
-#
-#      - name: Output Image digest
-#        run: echo ${{ steps.docker_build.outputs.digest }}
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Build and push PHP Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./test
+          file: ./test/Dockerfile
+          push: true
+          tags: ossama98/monapp_php:latest
+          target: php
+          cache-from: type=registry,ref=ossama98/monapp_php:latest
+          cache-to: type=inline
+          
+  deploy_to_ec2:
+    needs: build_and_push
+    runs-on: instance-ec2
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull ossama98/monapp_php:latest
+      - name: delete old container
+        run: docker rm -f php
+      - name: launch container php
+        run: docker run --name php -d --network monapp_network ossama98/monapp_php
+      - name: install dependencies
+        run: docker exec php composer install
+      - name: generate keypair
+        run: docker exec php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
 
   deploy-frontend:
     runs-on: ubuntu-latest
