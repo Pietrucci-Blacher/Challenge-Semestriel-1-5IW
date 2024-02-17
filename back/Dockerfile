@@ -1,3 +1,5 @@
+#syntax=docker/dockerfile:1.6
+
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine as php
 FROM composer/composer:2-bin AS composer_upstream
@@ -57,7 +59,7 @@ ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 COPY --from=composer_upstream --link /composer /usr/bin/composer
 
-
+COPY --link composer.* symfony.* ./
 RUN composer install --no-dev --no-scripts
 
 COPY . /srv/app/
@@ -70,7 +72,12 @@ RUN mkdir -p /srv/app/public/media && \
   chown -R www-data:www-data /srv/app/public/media && \
   chmod -R 755 /srv/app/public/media
 
-RUN APP_ENV=prod composer run auto-scripts
+RUN set -eux; \
+	mkdir -p var/cache var/log; \
+	composer dump-autoload --classmap-authoritative --no-dev; \
+	composer dump-env prod; \
+	composer run-script --no-dev post-install-cmd; \
+	chmod +x bin/console; sync;
 
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
 
