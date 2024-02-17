@@ -1,5 +1,6 @@
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine as php
+FROM composer/composer:2-bin AS composer_upstream
 
 RUN apk update
 RUN apk add curl
@@ -49,6 +50,13 @@ WORKDIR /srv/app/
 
 COPY ./composer.json ./composer.lock* /srv/app/
 COPY ./symfony.lock /srv/app/
+
+# https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV PATH="${PATH}:/root/.composer/vendor/bin"
+
+COPY --from=composer_upstream --link /composer /usr/bin/composer
+
 
 RUN composer install --no-dev --no-scripts
 
