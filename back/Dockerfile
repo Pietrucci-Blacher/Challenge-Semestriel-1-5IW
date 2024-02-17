@@ -1,5 +1,3 @@
-#syntax=docker/dockerfile:1.6
-
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine AS php
 FROM composer/composer:2-bin AS composer_upstream
