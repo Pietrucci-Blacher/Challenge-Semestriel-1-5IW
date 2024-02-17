@@ -33,7 +33,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 # Installing Composer
-COPY --from=composer:2.6.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7.1 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir /srv/app/
 
