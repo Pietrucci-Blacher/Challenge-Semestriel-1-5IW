@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('@playwright/back');
 
 test('has title', async ({ page }) => {
     await page.goto('https://playwright.dev/');
