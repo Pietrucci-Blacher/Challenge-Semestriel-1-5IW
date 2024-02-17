@@ -1,6 +1,5 @@
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine AS php
-FROM composer/composer:2-bin AS composer_upstream
 
 RUN apk update
 RUN apk add curl
@@ -30,6 +29,8 @@ RUN apk add libpq-dev && \
 RUN apk add libzip-dev && apk add zip && \
     docker-php-ext-install zip
 
+# Installing Composer
+COPY --from=composer:2.6.6 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir /srv/app/
 
@@ -49,13 +50,6 @@ WORKDIR /srv/app/
 COPY ./composer.json ./composer.lock* /srv/app/
 COPY ./symfony.lock /srv/app/
 
-# https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV PATH="${PATH}:/root/.composer/vendor/bin"
-
-COPY --from=composer_upstream --link /composer /usr/bin/composer
-
-COPY --link composer.* symfony.* ./
 RUN composer install --no-dev --no-scripts
 
 COPY . /srv/app/
@@ -68,12 +62,7 @@ RUN mkdir -p /srv/app/public/media && \
   chown -R www-data:www-data /srv/app/public/media && \
   chmod -R 755 /srv/app/public/media
 
-RUN set -eux; \
-	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer dump-env prod; \
-	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; sync;
+RUN APP_ENV=prod composer run auto-scripts
 
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
 
