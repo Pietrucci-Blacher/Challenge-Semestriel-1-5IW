@@ -1,7 +1,7 @@
 #syntax=docker/dockerfile:1.6
 
 #<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
-FROM php:8.2-fpm-alpine as php
+FROM php:8.2-fpm-alpine AS php
 FROM composer/composer:2-bin AS composer_upstream
 
 RUN apk update
@@ -32,8 +32,6 @@ RUN apk add libpq-dev && \
 RUN apk add libzip-dev && apk add zip && \
     docker-php-ext-install zip
 
-# Installing Composer
-COPY --from=composer:2.6.6 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir /srv/app/
 
@@ -93,7 +91,7 @@ RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} && \
 #<<<<<<<<<<End: PHP-FPM Image For the Dev Environment Target>>>>>>>>>>#
 
 #<<<<<<<<<<Start: Nginx Image Target>>>>>>>>>>#
-FROM nginx:alpine as server
+FROM nginx:alpine AS server
 
 # Supprimer la configuration par défaut de Nginx
 RUN rm /etc/nginx/conf.d/default.conf
