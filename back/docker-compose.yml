@@ -26,7 +26,7 @@ services:
       - ~/.config/composer:/home/prod/.composer
       - .:/srv/app
   database:
-    image: postgres:15.4-alpine
+    image: postgres:15.6-alpine
     environment:
       POSTGRES_DB: symfony
       POSTGRES_PASSWORD: root
