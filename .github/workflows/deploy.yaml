@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -28,7 +29,6 @@ jobs:
             DATABASE_URL=${{secrets.DATABASE_URL}}
             BREVO_API_KEY=${{secrets.BREVO_API_KEY}}
 
-
   deploy_to_ec2:
     needs: build_and_push
     runs-on: instance-ec2
@@ -44,22 +44,20 @@ jobs:
       - name: generate keypair
         run: docker exec php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
 
-
   deploy-frontend:
     runs-on: ubuntu-latest
-    needs: [ ci-front, deploy-to-ec2 ]
+    needs: deploy_to_ec2
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: latest
           run_install: false
 
       - name: Get pnpm store directory
