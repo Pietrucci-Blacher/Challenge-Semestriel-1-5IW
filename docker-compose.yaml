@@ -1,26 +1,26 @@
 services:
   database:
     extends:
-      file: back/docker-compose.yml
+      file: back/docker-compose.yaml
       service: database
 
   php:
     extends:
-      file: back/docker-compose.yml
+      file: back/docker-compose.yaml
       service: php
     volumes:
       - ./back/api:/app
 
   pwa:
     extends:
-      file: back/docker-compose.yml
+      file: back/docker-compose.yaml
       service: pwa
     volumes:
       - ./back/pwa:/srv/app
 
   node:
     extends:
-      file: front/docker-compose.yml
+      file: front/docker-compose.yaml
       service: node
 
   adminer:
