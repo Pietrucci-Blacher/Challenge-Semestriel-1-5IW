@@ -32,7 +32,7 @@
         "flowbite": "^2.2.1",
         "flowbite-react": "^0.7.2",
         "million": "^3.0.0",
-        "next": "14.1.0",
+        "next": "14.1.1",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",
