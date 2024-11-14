@@ -25,7 +25,7 @@
         "@heroicons/react": "^2.1.1",
         "@react-google-maps/api": "^2.19.2",
         "@vercel/speed-insights": "^1.0.9",
-        "axios": "^1.6.5",
+        "axios": "^1.7.4",
         "chart.js": "^4.4.1",
         "chartjs-adapter-dayjs-4": "^1.0.4",
         "dayjs": "^1.11.10",
